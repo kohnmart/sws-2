@@ -4,21 +4,43 @@
     <title>Aufgabe 1</title>
 </head>
 <body>
-    <div style="
-    background-color: grey; 
-    width: 500px; 
-    height: 500px;">
+    <div id="render" style="
+    background-color: grey;">
     </div>
-    <span id="pos">PosX: __ PosY:__</span>
+    <span id="coordinates"></span>
+    <div>
+      <ul id="c-list">
+      </ul>
+    </div>
 </body>
 </html>
 <script>
-  document.addEventListener('mousemove', (e) => {
-    const {clientX: mX, clientY: mY} = e;
-    document.getElementById("pos").innerHTML = `MouseX: ${mX} || MouseY: ${mY}`; 
-  });     
-
-
   
+  const width = 500, height = 500;
+  document.getElementById("render").style.width = width + "px";
+  document.getElementById("render").style.height = height + "px";
 
+  let mX, mY;
+  
+  document.addEventListener('mousemove', (e) => {
+     ({clientX: mX, clientY: mY} = e);
+
+    if(mX <= width && mY <= height)
+    {
+      document.getElementById("coordinates").style.display = "block";
+      document.getElementById("coordinates").innerHTML = `MouseX: ${mX} || MouseY: ${mY}`; 
+    }
+    
+    else 
+    {
+      document.getElementById("coordinates").style.display = "none";
+    }
+  });     
+  
+  const list = document.getElementById("c-list");
+  document.addEventListener("click", () => {
+      const item = document.createElement('li');
+      item.innerHTML = `(MouseX: ${mX} || MouseY: ${mY})`; 
+      list.appendChild(item);
+  });
 </script>
