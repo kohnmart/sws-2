@@ -9,11 +9,16 @@
     width: 500px; 
     height: 500px;">
     </div>
+    <span id="pos">PosX: __ PosY:__</span>
 </body>
 </html>
 <script>
   document.addEventListener('mousemove', (e) => {
-    const {movementX: mX, movementY: mY} = e;
-    console.log(mX); 
+    const {clientX: mX, clientY: mY} = e;
+    document.getElementById("pos").innerHTML = `MouseX: ${mX} || MouseY: ${mY}`; 
   });     
+
+
+  
+
 </script>
