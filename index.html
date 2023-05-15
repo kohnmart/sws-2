@@ -4,9 +4,7 @@
     <title>Aufgabe 1</title>
 </head>
 <body>
-    <div id="render" style="
-    background-color: grey;">
-    </div>
+    <div id="render"></div>
     <span id="coordinates"></span>
     <div>
       <ul id="c-list">
@@ -19,7 +17,7 @@
   const width = 500, height = 500;
   document.getElementById("render").style.width = width + "px";
   document.getElementById("render").style.height = height + "px";
-
+  document.getElementById("render").style.background = "grey";
   let mX, mY;
   
   document.addEventListener('mousemove', (e) => {
