@@ -1,5 +1,3 @@
-import { MenuApi as Menu } from "./menuApi";
-
-
-const menu = new Menu(true).create();
-
+import { MenuApi as Menu } from './menuApi.js';
+const menu = new Menu(true);
+console.log(menu);
