@@ -1,24 +1,25 @@
-"use strict";
-const width = 500, height = 500;
-const render = document.getElementById("render_view");
-render.style.width = width + "px";
-render.style.height = height + "px";
-render.style.backgroundColor = "grey";
-const coordinates = document.getElementById("coordinates_rt_display");
-let mouseX, mouseY;
-document.addEventListener('mousemove', (e) => {
-    ({ clientX: mouseX, clientY: mouseY } = e);
+//define render-View
+var width = 500, height = 500;
+var render = document.getElementById('render_view');
+render.style.width = width + 'px';
+render.style.height = height + 'px';
+render.style.backgroundColor = 'grey';
+//define coordinates
+var coordinates = document.getElementById('coordinates_rt_display');
+var list = document.getElementById('coordinates_list');
+var mouseX, mouseY;
+document.addEventListener('mousemove', function (e) {
+    (mouseX = e.clientX, mouseY = e.clientY);
     if (mouseX <= width && mouseY <= height) {
-        coordinates.style.display = "block";
-        coordinates.querySelector("p").innerHTML = `X: ${mouseX} || Y: ${mouseY}`;
+        coordinates.style.display = 'block';
+        coordinates.textContent = "X: ".concat(mouseX, " || Y: ").concat(mouseY);
     }
     else {
-        coordinates.style.display = "none";
+        coordinates.style.display = 'none';
     }
 });
-const list = document.getElementById("coordinates_list");
-document.addEventListener("click", () => {
-    const item = document.createElement('li');
-    item.innerHTML = `(MouseX: ${mouseX} || MouseY: ${mouseY})`;
+document.addEventListener('click', function () {
+    var item = document.createElement('li');
+    item.innerHTML = "(MouseX: ".concat(mouseX, " || MouseY: ").concat(mouseY, ")");
     list.appendChild(item);
 });
