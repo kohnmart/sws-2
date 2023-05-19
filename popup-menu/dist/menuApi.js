@@ -4,7 +4,6 @@ export class MenuApi {
         // create new list element
         this.list = document.createElement('ul');
         this.is_displayed = false;
-        this.is_moving = false;
         this.display_type = display;
         // list base-style-configuration
         this.list.style.display = 'none';
@@ -36,6 +35,14 @@ export class MenuApi {
             item.style.margin = '5px 0px';
             this.list.appendChild(item);
         });
+    }
+    addSubMenu(itemName) {
+        console.log('test');
+        const list = [...this.list.childNodes];
+        const index = list.findIndex((e) => e.textContent == itemName);
+        const item = list[index];
+        console.log('Found');
+        console.log(item);
     }
     show(event) {
         this.is_displayed = true;
