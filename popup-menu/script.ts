@@ -12,3 +12,5 @@ document.addEventListener('contextmenu', (e) => {
     menu.hide();
   }
 });
+
+menu.addSubMenu('Item-2', 'Auto', 'Fahrrad');
