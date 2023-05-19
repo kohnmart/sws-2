@@ -20,11 +20,6 @@ export class MenuApi {
         this.list.style.backgroundColor = bgcolor;
         this.list.style.textAlign = align;
         this.list.style.padding = padding;
-        // add event listening
-        this.list.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            this.move(e);
-        });
         // append to root div
         (_a = document.getElementById('display')) === null || _a === void 0 ? void 0 : _a.appendChild(this.list);
         return this;
