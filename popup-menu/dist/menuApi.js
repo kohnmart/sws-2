@@ -1,10 +1,9 @@
 export class MenuApi {
-    constructor(bgcolor = 'grey', display = 'flex', padding = '20px', align = 'left') {
+    static createMenu() {
         var _a;
         // create new list element
         this.list = document.createElement('ul');
-        this.is_displayed = false;
-        this.display_type = display;
+        this.display_type = 'flex';
         // list base-style-configuration
         this.list.style.display = 'none';
         this.list.style.position = 'absolute';
@@ -16,46 +15,59 @@ export class MenuApi {
         this.list.style.height = 'auto';
         this.list.style.width = 'auto';
         // optional styling
-        this.list.style.backgroundColor = bgcolor;
-        this.list.style.textAlign = align;
-        this.list.style.padding = padding;
+        this.list.style.backgroundColor = 'grey';
+        this.list.style.textAlign = 'center';
+        this.list.style.padding = '10px';
         // append to root div
         (_a = document.getElementById('display')) === null || _a === void 0 ? void 0 : _a.appendChild(this.list);
-        return this;
+        return new MenuApi();
     }
-    addItems(title, ...inputs) {
-        const items = [...inputs];
-        const headline = document.createElement('h4');
-        headline.innerText = title;
-        this.list.appendChild(headline);
-        items.forEach((el) => {
-            const item = document.createElement('li');
-            item.innerText = el;
-            item.style.listStyle = 'none';
-            item.style.margin = '5px 0px';
-            this.list.appendChild(item);
+    static createItem(item_content, callback) {
+        const element = document.createElement('li');
+        element.style.listStyle = 'none';
+        element.style.margin = '5px 0px';
+        element.innerText = item_content;
+        return new Item(element);
+    }
+    addItem(...items) {
+        items.forEach((item) => {
+            MenuApi.list.appendChild(item.element);
         });
     }
-    addSubMenu(itemName) {
-        console.log('test');
-        const list = [...this.list.childNodes];
-        const index = list.findIndex((e) => e.textContent == itemName);
-        const item = list[index];
-        console.log('Found');
-        console.log(item);
+    static createSeparator() {
+        const separator = document.createElement('hr');
+        return new Item(separator);
     }
-    show(event) {
-        this.is_displayed = true;
-        this.list.style.display = this.display_type;
-        let { clientX: x, clientY: y } = event;
-        this.list.style.transform = `translate(${x}px, ${y}px)`;
+    addItemAt(item, targetIndex) {
+        const list = [...MenuApi.list.childNodes];
+        const itemAtTarget = list[targetIndex];
+        const currentIndex = list.findIndex((e) => e == item.element);
+        list[targetIndex] = item.element;
+        list[currentIndex] = itemAtTarget;
+    }
+    removeItem(item) {
+        const list = [...MenuApi.list.childNodes];
+        const index = list.findIndex((e) => e == item.element);
+        list.splice(index, 0);
+    }
+    show(x, y) {
+        MenuApi.list.style.display = 'block';
+        MenuApi.list.style.transform = `translate(${x}px, ${y}px)`;
     }
     hide() {
-        this.is_displayed = false;
-        this.list.style.display = 'none';
+        MenuApi.list.style.display = 'none';
     }
-    move(event) {
-        let { clientX: x, clientY: y } = event;
-        this.list.style.transform = `translate(${x}px, ${y}px)`;
+}
+MenuApi.list = document.createElement('ul');
+MenuApi.display_type = 'flex';
+export class Item {
+    constructor(element) {
+        this.element = element;
+    }
+    hide() {
+        this.element.style.display = 'none';
+    }
+    show() {
+        this.element.style.display = 'block';
     }
 }
