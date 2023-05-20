@@ -1,16 +1,43 @@
-import { MenuApi as Menu } from './menuApi.js';
+import { MenuApi, Item } from './menuApi.js';
 
-const menu = new Menu('grey');
+const setupContextMenu = (): MenuApi => {
+  const menu = MenuApi.createMenu();
+  const mItem1 = MenuApi.createItem('I 1', (m: Item) => {
+    console.log(m);
+    m.hide();
+  });
 
-menu.addItems('Menu List', 'Item-2', 'Item-3', 'Item-2', 'Item-3');
+  const mItem2 = MenuApi.createItem('I 2', (m: Item) => {
+    console.log(m);
+  });
+
+  const mT1 = MenuApi.createSeparator();
+
+  const mItem3 = MenuApi.createItem('I 3', (m: Item) => {
+    m.hide();
+  });
+
+  menu.addItem(mItem1, mItem2, mT1, mItem3);
+
+  return menu;
+};
+
+const menu = setupContextMenu();
 
 document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
-  if (!menu.is_displayed) {
-    menu.show(e);
-  } else {
-    menu.hide();
-  }
+  let { clientX: x, clientY: y } = e;
+  menu.show(x, y);
 });
 
-menu.addSubMenu('Item-2', 'Auto', 'Fahrrad');
+document.addEventListener('click', (e) => {
+  let { clientX: x, clientY: y } = e;
+  const dynamicItem = MenuApi.createItem('II 5', (m) => {
+    console.log('wow');
+    m.hide();
+  });
+  menu.addItem(dynamicItem);
+  menu.addItemAt(dynamicItem, 2);
+  menu.show(x, y);
+  menu.removeItem(dynamicItem);
+});
