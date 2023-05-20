@@ -1,18 +1,11 @@
 export class MenuApi {
-  list: HTMLElement;
-  is_displayed: boolean;
-  display_type: string;
+  static list: HTMLElement = document.createElement('ul');
+  static display_type: string = 'flex';
 
-  constructor(
-    bgcolor: string = 'grey',
-    display: string = 'flex',
-    padding: string = '20px',
-    align: string = 'left'
-  ) {
+  static createMenu(): MenuApi {
     // create new list element
     this.list = document.createElement('ul');
-    this.is_displayed = false;
-    this.display_type = display;
+    this.display_type = 'flex';
 
     // list base-style-configuration
     this.list.style.display = 'none';
@@ -25,53 +18,76 @@ export class MenuApi {
     this.list.style.height = 'auto';
     this.list.style.width = 'auto';
     // optional styling
-    this.list.style.backgroundColor = bgcolor;
-    this.list.style.textAlign = align;
-    this.list.style.padding = padding;
+    this.list.style.backgroundColor = 'grey';
+    this.list.style.textAlign = 'center';
+    this.list.style.padding = '10px';
 
     // append to root div
     document.getElementById('display')?.appendChild(this.list);
-    return this;
+    return new MenuApi();
   }
 
-  addItems(title: string, ...inputs: string[]) {
-    const items = [...inputs];
+  static createItem(
+    item_content: string,
+    callback: (item: Item) => void
+  ): Item {
+    const element = document.createElement('li');
+    element.style.listStyle = 'none';
+    element.style.margin = '5px 0px';
+    element.innerText = item_content;
+    return new Item(element);
+  }
 
-    const headline: HTMLElement = document.createElement('h4');
-    headline.innerText = title;
-    this.list.appendChild(headline);
-
-    items.forEach((el) => {
-      const item: HTMLElement = document.createElement('li');
-      item.innerText = el;
-      item.style.listStyle = 'none';
-      item.style.margin = '5px 0px';
-      this.list.appendChild(item);
+  addItem(...items: Item[]) {
+    items.forEach((item) => {
+      MenuApi.list.appendChild(item.element);
     });
   }
 
-  addSubMenu(itemName: string, ...inputs: string[]): void {
-    const list = [...this.list.childNodes];
-    const index = list.findIndex((e) => e.textContent == itemName);
-    const item = list[index];
-    console.log('Found');
-    console.log(item);
+  static createSeparator(): Item {
+    const separator: HTMLElement = document.createElement('hr');
+    return new Item(separator);
   }
 
-  show(event: MouseEvent): void {
-    this.is_displayed = true;
-    this.list.style.display = this.display_type;
-    let { clientX: x, clientY: y } = event;
-    this.list.style.transform = `translate(${x}px, ${y}px)`;
+  addItemAt(item: Item, targetIndex: number) {
+    const list = [...MenuApi.list.childNodes];
+
+    const itemAtTarget = list[targetIndex];
+
+    const currentIndex = list.findIndex((e) => e == item.element);
+
+    list[targetIndex] = item.element;
+    list[currentIndex] = itemAtTarget;
+  }
+
+  removeItem(item: Item) {
+    const list = [...MenuApi.list.childNodes];
+    const index = list.findIndex((e) => e == item.element);
+    list.splice(index, 0);
+  }
+
+  show(x: Number, y: Number): void {
+    MenuApi.list.style.display = 'block';
+    MenuApi.list.style.transform = `translate(${x}px, ${y}px)`;
   }
 
   hide(): void {
-    this.is_displayed = false;
-    this.list.style.display = 'none';
+    MenuApi.list.style.display = 'none';
+  }
+}
+
+export class Item {
+  element: HTMLElement;
+
+  constructor(element: HTMLElement) {
+    this.element = element;
   }
 
-  move(event: MouseEvent): void {
-    let { clientX: x, clientY: y } = event;
-    this.list.style.transform = `translate(${x}px, ${y}px)`;
+  hide(): void {
+    this.element.style.display = 'none';
+  }
+
+  show(): void {
+    this.element.style.display = 'block';
   }
 }
