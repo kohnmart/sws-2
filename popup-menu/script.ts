@@ -1,19 +1,19 @@
-import { MenuApi, Item } from './menuApi.js';
+import menuApi, { Item } from './menuApi.js';
 
-const setupContextMenu = (): MenuApi => {
-  const menu = MenuApi.createMenu();
-  const mItem1 = MenuApi.createItem('I 1', (m: Item) => {
+const setupContextMenu = (menuApi: any) => {
+  const menu = menuApi.createMenu();
+  const mItem1 = menuApi.createItem('I 1', (m: Item) => {
     console.log(m);
     m.hide();
   });
 
-  const mItem2 = MenuApi.createItem('I 2', (m: Item) => {
+  const mItem2 = menuApi.createItem('I 2', (m: Item) => {
     console.log(m);
   });
 
-  const mT1 = MenuApi.createSeparator();
+  const mT1 = menuApi.createSeparator();
 
-  const mItem3 = MenuApi.createItem('I 3', (m: Item) => {
+  const mItem3 = menuApi.createItem('I 3', (m: Item) => {
     m.hide();
   });
 
@@ -22,7 +22,7 @@ const setupContextMenu = (): MenuApi => {
   return menu;
 };
 
-const menu = setupContextMenu();
+const menu = setupContextMenu(menuApi);
 
 document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
@@ -32,7 +32,7 @@ document.addEventListener('contextmenu', (e) => {
 
 document.addEventListener('click', (e) => {
   let { clientX: x, clientY: y } = e;
-  const dynamicItem = MenuApi.createItem('II 5', (m) => {
+  const dynamicItem = menuApi.createItem('II 5', (m: Item) => {
     console.log('wow');
     m.hide();
   });
