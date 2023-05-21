@@ -18,7 +18,7 @@ const createMenu = () => {
     list.style.padding = '10px';
     // append to root div
     (_a = document.getElementById('display')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
-    return list;
+    return { list, addItem, addItemAt, removeItem, show };
 };
 const createItem = (item_content, _callback) => {
     const element = document.createElement('li');
@@ -32,22 +32,18 @@ const addItem = (...items) => {
         list.appendChild(item.element);
     });
 };
+const addItemAt = (item, targetIndex) => {
+    // Ref: https://www.w3schools.com/JSREF/met_node_replacechild.asp
+    const element = list.children[targetIndex];
+    list.replaceChild(item.element, list.children[targetIndex]);
+    list.appendChild(element);
+};
+const removeItem = (item) => {
+    list.removeChild(item.element);
+};
 const createSeparator = () => {
     const separator = document.createElement('hr');
     return new Item(separator);
-};
-const addItemAt = (item, targetIndex) => {
-    const tempList = [...list.childNodes];
-    const itemAtTarget = tempList[targetIndex];
-    const currentIndex = tempList.findIndex((e) => e == item.element);
-    tempList[targetIndex] = item.element;
-    tempList[currentIndex] = itemAtTarget;
-};
-const removeItem = (item) => {
-    const temp = [...list.childNodes];
-    const index = temp.findIndex((e) => e == item.element);
-    temp.splice(index, 0);
-    temp[index].remove();
 };
 const show = (x, y) => {
     list.style.display = 'block';
@@ -70,11 +66,7 @@ class Item {
 export default {
     createMenu,
     createItem,
-    addItem,
     createSeparator,
-    addItemAt,
     hide,
-    show,
-    removeItem,
 };
 export { Item };
