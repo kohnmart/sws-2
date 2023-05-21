@@ -6,7 +6,7 @@ const createMenu = () => {
     var _a;
     list = document.createElement('ul');
     (_a = document.getElementById('display')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
-    return { list, addItem, addItemAt, removeItem, show };
+    return { list, addItem, addItems, addItemAt, removeItem, show };
 };
 /* create new item with callback */
 const createItem = (item_content, _callback) => {
@@ -16,8 +16,12 @@ const createItem = (item_content, _callback) => {
     element.innerText = item_content;
     return new Item(element);
 };
+/* append new single item to list */
+const addItem = (item) => {
+    list.appendChild(item.element);
+};
 /* append new items to list */
-const addItem = (...items) => {
+const addItems = (...items) => {
     items.forEach((item) => {
         list.appendChild(item.element);
     });
