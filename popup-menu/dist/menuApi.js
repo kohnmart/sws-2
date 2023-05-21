@@ -9,12 +9,12 @@ const createMenu = () => {
     return { list, addItem, addItems, addItemAt, removeItem, show, hide };
 };
 /* create new item with callback */
-const createItem = (item_content, _callback) => {
+const createItem = (item_content, callback) => {
     const element = document.createElement('li');
-    element.style.listStyle = 'none';
-    element.style.margin = '5px 0px';
     element.innerText = item_content;
-    return new Item(element);
+    const item = new Item(element);
+    callback(item);
+    return item;
 };
 /* append new single item to list */
 const addItem = (item) => {
@@ -56,6 +56,5 @@ export default {
     createMenu,
     createItem,
     createSeparator,
-    hide,
 };
 export { Item };
