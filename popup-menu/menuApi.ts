@@ -1,6 +1,6 @@
 let list: HTMLElement;
 
-const createMenu = (): HTMLElement => {
+const createMenu = (): any => {
   list = document.createElement('ul');
   // list base-style-configuration
   list.style.display = 'none';
@@ -19,7 +19,7 @@ const createMenu = (): HTMLElement => {
 
   // append to root div
   document.getElementById('display')?.appendChild(list);
-  return list;
+  return { list, addItem, addItemAt, removeItem, show };
 };
 
 const createItem = (
@@ -39,27 +39,20 @@ const addItem = (...items: Item[]) => {
   });
 };
 
-const createSeparator = (): Item => {
-  const separator: HTMLElement = document.createElement('hr');
-  return new Item(separator);
-};
-
 const addItemAt = (item: Item, targetIndex: number) => {
-  const tempList = [...list.childNodes];
-
-  const itemAtTarget = tempList[targetIndex];
-
-  const currentIndex = tempList.findIndex((e) => e == item.element);
-
-  tempList[targetIndex] = item.element;
-  tempList[currentIndex] = itemAtTarget;
+  // Ref: https://www.w3schools.com/JSREF/met_node_replacechild.asp
+  const element = list.children[targetIndex];
+  list.replaceChild(item.element, list.children[targetIndex]);
+  list.appendChild(element);
 };
 
 const removeItem = (item: Item) => {
-  const temp = [...list.childNodes];
-  const index = temp.findIndex((e) => e == item.element);
-  temp.splice(index, 0);
-  temp[index].remove();
+  list.removeChild(item.element);
+};
+
+const createSeparator = (): Item => {
+  const separator: HTMLElement = document.createElement('hr');
+  return new Item(separator);
 };
 
 const show = (x: Number, y: Number): void => {
@@ -86,19 +79,11 @@ class Item {
   }
 }
 
-interface Item {
-  element: HTMLElement;
-}
-
 export default {
   createMenu,
   createItem,
-  addItem,
   createSeparator,
-  addItemAt,
   hide,
-  show,
-  removeItem,
 };
 
 export { Item };
