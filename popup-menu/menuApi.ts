@@ -7,13 +7,13 @@ interface MenuOptions {
   addItemAt(item: Item, targetIndex: number): void;
   removeItem(item: Item): void;
   show(x: Number, y: Number): void;
+  hide(): void;
 }
 
 interface MenuApi {
   createMenu(): MenuOptions;
   createItem(item_content: string, _callback: (item: Item) => void): Item;
   createSeparator(): Item;
-  hide(): void;
 }
 
 /* ul-list element */
@@ -23,7 +23,7 @@ let list: HTMLElement;
 const createMenu = (): MenuOptions => {
   list = document.createElement('ul');
   document.getElementById('display')?.appendChild(list);
-  return { list, addItem, addItems, addItemAt, removeItem, show };
+  return { list, addItem, addItems, addItemAt, removeItem, show, hide };
 };
 
 /* create new item with callback */
@@ -85,7 +85,6 @@ export default {
   createMenu,
   createItem,
   createSeparator,
-  hide,
 };
 
 export { MenuApi, Item };
