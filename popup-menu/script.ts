@@ -1,6 +1,6 @@
-import menuApi, { Item } from './menuApi.js';
+import menuApi, { Item, MenuApi } from './menuApi.js';
 
-const setupContextMenu = (menuApi: any) => {
+const setupContextMenu = (menuApi: MenuApi) => {
   const menu = menuApi.createMenu();
   const mItem1 = menuApi.createItem('I 1', (m: Item) => {
     console.log(m);
