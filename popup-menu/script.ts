@@ -24,19 +24,19 @@ const setupContextMenu = (menuApi: any) => {
 
 const menu = setupContextMenu(menuApi);
 
-document.addEventListener('contextmenu', (e) => {
+document.addEventListener('click', (e) => {
   e.preventDefault();
   let { clientX: x, clientY: y } = e;
   menu.show(x, y);
 });
 
 document.addEventListener('click', (e) => {
+  e.preventDefault();
   let { clientX: x, clientY: y } = e;
   const dynamicItem = menuApi.createItem('II 5', (m: Item) => {
     console.log('wow');
     m.hide();
   });
-  menu.addItem(dynamicItem);
   menu.addItemAt(dynamicItem, 2);
   menu.show(x, y);
   menu.removeItem(dynamicItem);
