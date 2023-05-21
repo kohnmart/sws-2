@@ -3,8 +3,23 @@ import { Item } from './item.js';
 /* ul-list element */
 let list: HTMLElement;
 
+interface MenuOptions {
+  list: HTMLElement;
+  addItem(...items: Item[]): void;
+  addItemAt(item: Item, targetIndex: number): void;
+  removeItem(item: Item): void;
+  show(x: Number, y: Number): void;
+}
+
+interface MenuApi {
+  createMenu(): MenuOptions;
+  createItem(item_content: string, _callback: (item: Item) => void): Item;
+  createSeparator(): Item;
+  hide(): void;
+}
+
 /* create new menu and append functionality */
-const createMenu = (): any => {
+const createMenu = (): MenuOptions => {
   list = document.createElement('ul');
   document.getElementById('display')?.appendChild(list);
   return { list, addItem, addItemAt, removeItem, show };
@@ -67,4 +82,4 @@ export default {
   hide,
 };
 
-export { Item };
+export { MenuApi, Item };
