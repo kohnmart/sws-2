@@ -5,7 +5,8 @@ let list: HTMLElement;
 
 interface MenuOptions {
   list: HTMLElement;
-  addItem(...items: Item[]): void;
+  addItem(item: Item): void;
+  addItems(...items: Item[]): void;
   addItemAt(item: Item, targetIndex: number): void;
   removeItem(item: Item): void;
   show(x: Number, y: Number): void;
@@ -22,7 +23,7 @@ interface MenuApi {
 const createMenu = (): MenuOptions => {
   list = document.createElement('ul');
   document.getElementById('display')?.appendChild(list);
-  return { list, addItem, addItemAt, removeItem, show };
+  return { list, addItem, addItems, addItemAt, removeItem, show };
 };
 
 /* create new item with callback */
@@ -37,8 +38,13 @@ const createItem = (
   return new Item(element);
 };
 
+/* append new single item to list */
+const addItem = (item: Item) => {
+  list.appendChild(item.element);
+};
+
 /* append new items to list */
-const addItem = (...items: Item[]) => {
+const addItems = (...items: Item[]) => {
   items.forEach((item) => {
     list.appendChild(item.element);
   });
