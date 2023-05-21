@@ -12,7 +12,7 @@ interface MenuOptions {
 
 interface MenuApi {
   createMenu(): MenuOptions;
-  createItem(item_content: string, _callback: (item: Item) => void): Item;
+  createItem(item_content: string, callback: (item: Item) => void): Item;
   createSeparator(): Item;
 }
 
@@ -29,13 +29,13 @@ const createMenu = (): MenuOptions => {
 /* create new item with callback */
 const createItem = (
   item_content: string,
-  _callback: (item: Item) => void
+  callback: (item: Item) => void
 ): Item => {
   const element = document.createElement('li');
-  element.style.listStyle = 'none';
-  element.style.margin = '5px 0px';
   element.innerText = item_content;
-  return new Item(element);
+  const item = new Item(element);
+  callback(item);
+  return item;
 };
 
 /* append new single item to list */
