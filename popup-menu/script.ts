@@ -17,7 +17,9 @@ const setupContextMenu = (menuApi: MenuApi) => {
     m.hide();
   });
 
-  menu.addItem(mItem1, mItem2, mT1, mItem3);
+  menu.addItems(mItem1, mItem2);
+  menu.addItem(mT1);
+  menu.addItem(mItem3);
 
   return menu;
 };
