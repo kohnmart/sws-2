@@ -6,7 +6,7 @@ const createMenu = () => {
     var _a;
     list = document.createElement('ul');
     (_a = document.getElementById('display')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
-    return { list, addItem, addItems, addItemAt, removeItem, show };
+    return { list, addItem, addItems, addItemAt, removeItem, show, hide };
 };
 /* create new item with callback */
 const createItem = (item_content, _callback) => {
