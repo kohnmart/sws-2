@@ -1,22 +1,8 @@
+import { Item } from './item.js';
 let list;
 const createMenu = () => {
     var _a;
     list = document.createElement('ul');
-    // list base-style-configuration
-    list.style.display = 'none';
-    list.style.position = 'absolute';
-    list.style.left = '0px';
-    list.style.top = '0px';
-    list.style.flexDirection = 'column';
-    list.style.alignItems = 'center';
-    list.style.justifyContent = 'center';
-    list.style.height = 'auto';
-    list.style.width = 'auto';
-    // optional styling
-    list.style.backgroundColor = 'grey';
-    list.style.textAlign = 'center';
-    list.style.padding = '10px';
-    // append to root div
     (_a = document.getElementById('display')) === null || _a === void 0 ? void 0 : _a.appendChild(list);
     return { list, addItem, addItemAt, removeItem, show };
 };
@@ -52,17 +38,6 @@ const show = (x, y) => {
 const hide = () => {
     list.style.display = 'none';
 };
-class Item {
-    constructor(element) {
-        this.element = element;
-    }
-    hide() {
-        this.element.style.display = 'none';
-    }
-    show() {
-        this.element.style.display = 'block';
-    }
-}
 export default {
     createMenu,
     createItem,
