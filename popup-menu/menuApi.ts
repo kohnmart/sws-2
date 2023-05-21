@@ -1,8 +1,5 @@
 import { Item } from './item.js';
 
-/* ul-list element */
-let list: HTMLElement;
-
 interface MenuOptions {
   list: HTMLElement;
   addItem(item: Item): void;
@@ -18,6 +15,9 @@ interface MenuApi {
   createSeparator(): Item;
   hide(): void;
 }
+
+/* ul-list element */
+let list: HTMLElement;
 
 /* create new menu and append functionality */
 const createMenu = (): MenuOptions => {
