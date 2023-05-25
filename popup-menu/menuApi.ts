@@ -34,9 +34,9 @@ export default class MenuApi {
   /* add new item at index */
   addItemAt = (item: Item, targetIndex: number) => {
     // Ref: https://www.w3schools.com/JSREF/met_node_replacechild.asp
-    const element = this.list.children[targetIndex];
+    const swapElement = this.list.children[targetIndex];
     this.list.replaceChild(item.element, this.list.children[targetIndex]);
-    this.list.appendChild(element);
+    this.list.appendChild(swapElement);
   };
 
   /* remove item */
