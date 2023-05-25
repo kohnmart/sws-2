@@ -4,7 +4,7 @@ export class Item {
   /* ul list - element */
   element: HTMLElement;
 
-  /* menu instance to ref on callback */
+  /* menu instance to ref on callback event */
   menuInstance: MenuApi;
 
   /* create new item with callback */
