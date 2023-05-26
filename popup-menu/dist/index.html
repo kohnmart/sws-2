@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>popmenu-api-showcase</title>
+    <title>popup-menu-api-showcase</title>
   </head>
   <body>
-    <h1>popmenu-api</h1>
-    <div>
+    <h1>popup-menu-api</h1>
+    <div id="container">
       <button id="dynamic-item">Dynamic Item</button>
+      <button id="open-menu">Open Menu</button>
     </div>
-    <div id="display"></div>
+    <div id="display-menu"></div>
   </body>
 </html>
 <script type="module" src="script.js"></script>
@@ -18,22 +19,23 @@
     font-family: Helvetica, sans-serif;
   }
 
-  #display > ul {
+  #display-menu > ul {
     position: absolute;
     left: 0px;
     top: 0px;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: auto;
-    width: auto;
+    width: 120px;
     background-color: grey;
     text-align: center;
     padding: 10px;
+    border-radius: 5px;
   }
 
   ul > li {
     list-style: none;
     margin: 5px 0px;
+    width: auto;
   }
 </style>
