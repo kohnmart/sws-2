@@ -1,4 +1,3 @@
-var _a, _b;
 import MenuApi from './menuApi.js';
 const setupContextMenu = (menuApi) => {
     const menu = menuApi.createMenu();
@@ -18,18 +17,34 @@ const setupContextMenu = (menuApi) => {
     return menu;
 };
 const menu = setupContextMenu(new MenuApi());
+/* Span Element to display event-handling on menu-display-sate */
+const consoleState = document.getElementById('console-state');
 /* Apply preventDefault to all child-events of parent-div */
-const container = document.getElementById('container');
-container === null || container === void 0 ? void 0 : container.addEventListener('click', function (event) {
+const popupContainer = document.getElementById('popup-container');
+popupContainer === null || popupContainer === void 0 ? void 0 : popupContainer.addEventListener('click', (event) => {
     event.preventDefault();
+    const { clientX: x, clientY: y } = event;
+    menu.show(x, y);
+});
+/* If menu is displayed => all other events close menu onclick */
+const othersContainer = document.getElementById('others-container');
+othersContainer === null || othersContainer === void 0 ? void 0 : othersContainer.addEventListener('click', () => {
+    if (menu.isdisplayed) {
+        consoleState.innerText = `menu display is ${menu.isdisplayed}, using default event`;
+        menu.hide();
+    }
+});
+const buttonLinkTo = document.getElementById('button-link-to');
+buttonLinkTo === null || buttonLinkTo === void 0 ? void 0 : buttonLinkTo.addEventListener('click', () => {
+    consoleState.innerText = `menu display is ${menu.isdisplayed}, using assigned event`;
 });
 /* open-menu event */
-(_a = document.getElementById('open-menu')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (e) => {
+document.getElementById('menu-open').addEventListener('click', (e) => {
     const { clientX: x, clientY: y } = e;
     menu.show(x, y);
 });
 /* dynamic-item event */
-(_b = document.getElementById('dynamic-item')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', (e) => {
+document.getElementById('item-dynamic').addEventListener('click', (e) => {
     const { clientX: x, clientY: y } = e;
     const dynamicItem = menu.createItem('II 5', (m) => {
         console.log('wow');
