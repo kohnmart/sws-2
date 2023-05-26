@@ -40,14 +40,15 @@ popupContainer?.addEventListener('click', (event) => {
 const othersContainer = document.getElementById('others-container');
 othersContainer?.addEventListener('click', () => {
   if (menu.isdisplayed) {
-    consoleState!.innerText = `menu display is ${menu.isdisplayed}, using default event`;
+    consoleState!.innerText = `menu display is ${menu.isdisplayed}, using default menu-event`;
     menu.hide();
   }
 });
 
+/* Example button to demonstrate event-handling on menu-display-state condition */
 const buttonLinkTo = document.getElementById('button-link-to');
 buttonLinkTo?.addEventListener('click', () => {
-  consoleState!.innerText = `menu display is ${menu.isdisplayed}, using assigned event`;
+  consoleState!.innerText = `menu display is ${menu.isdisplayed}, using custom event`;
 });
 
 /* open-menu event */
