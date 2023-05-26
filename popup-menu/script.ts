@@ -25,19 +25,26 @@ const setupContextMenu = (menuApi: MenuApi) => {
 
 const menu = setupContextMenu(new MenuApi());
 
-document.addEventListener('click', (e) => {
-  e.preventDefault();
-  let { clientX: x, clientY: y } = e;
+/* Apply preventDefault to all child-events of parent-div */
+const container = document.getElementById('container');
+container?.addEventListener('click', function (event) {
+  event.preventDefault();
+});
+
+/* open-menu event */
+document.getElementById('open-menu')?.addEventListener('click', (e) => {
+  const { clientX: x, clientY: y } = e;
   menu.show(x, y);
 });
 
+/* dynamic-item event */
 document.getElementById('dynamic-item')?.addEventListener('click', (e) => {
-  e.preventDefault();
-  let { clientX: x, clientY: y } = e;
-  const dynamicItem = menu.createItem('II 5', () => {
+  const { clientX: x, clientY: y } = e;
+  const dynamicItem = menu.createItem('II 5', (m: MenuApi) => {
     console.log('wow');
-    menu.hide();
+    m.hide();
   });
+  // Order after the call : I 1 , I 2 , dynamicItem , Sep , I 3
   menu.addItemAt(dynamicItem, 2);
   menu.show(x, y);
   menu.removeItem(dynamicItem);
