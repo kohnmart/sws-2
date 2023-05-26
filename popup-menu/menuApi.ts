@@ -5,7 +5,8 @@ export default class MenuApi {
 
   /* create new menu and append functionality */
   createMenu = () => {
-    document.getElementById('display')?.appendChild(this.list);
+    document.getElementById('display-menu')?.appendChild(this.list);
+    this.hide();
     return this;
   };
 
@@ -21,22 +22,26 @@ export default class MenuApi {
 
   /* add single item to list */
   addItem = (item: Item) => {
-    this.list.appendChild(item.element);
+    const li = document.createElement('li');
+    li.appendChild(item.element);
+    this.list.appendChild(li);
   };
 
   /* append new items to list */
   addItems = (...items: Item[]) => {
     items.forEach((item) => {
-      this.list.appendChild(item.element);
+      const li = document.createElement('li');
+      li.appendChild(item.element);
+      this.list.appendChild(li);
     });
   };
 
   /* add new item at index */
   addItemAt = (item: Item, targetIndex: number) => {
     // Ref: https://www.w3schools.com/JSREF/met_node_replacechild.asp
-    const swapElement = this.list.children[targetIndex];
-    this.list.replaceChild(item.element, this.list.children[targetIndex]);
-    this.list.appendChild(swapElement);
+    const li = document.createElement('li');
+    li.appendChild(item.element);
+    this.list.insertBefore(li, this.list.children[targetIndex]);
   };
 
   /* remove item */
