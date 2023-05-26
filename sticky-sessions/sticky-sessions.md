@@ -6,7 +6,7 @@ Sticky Sessions (auch als Session Persistence bezeichnet) sind eine Funktion, di
 
 Quelle: <https://traefik.io/glossary/what-are-sticky-sessions/>
 
-### A. Zweck der Verwendung von Sticky-Sessions in Webanwendungen
+### Zweck der Verwendung von Sticky-Sessions in Webanwendungen
 
 Der Zweck der Verwendung von Sticky-Sessions in Webanwendungen besteht darin, die Konsistenz und Kontinuität der Benutzersitzungen sicherzustellen. Durch das Weiterleiten von Anfragen desselben Clients an denselben Server können Webanwendungen Benutzerpräferenzen, Authentifizierungsstatus und andere zustandsbezogene Informationen beibehalten. Dies ermöglicht eine nahtlose Benutzererfahrung, da Benutzer ihre Sitzungsinformationen nicht bei jedem Serverwechsel erneut eingeben müssen. Sticky-Sessions sind besonders wichtig für Anwendungen, die Benutzerdaten und Zustände speichern müssen, um eine personalisierte Interaktion zu ermöglichen.
 
