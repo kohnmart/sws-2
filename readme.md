@@ -1,3 +1,9 @@
+# Inbetriebnahme
+
+## Install required node_modules
+
+``` npm install ```
+
 ## Start Live-Server
 
 ``` npm start ```
