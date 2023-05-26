@@ -2,10 +2,11 @@ import { Item } from './item.js';
 
 export default class MenuApi {
   list: HTMLUListElement = document.createElement('ul');
+  isdisplayed: boolean = false;
 
   /* create new menu and append functionality */
   createMenu = () => {
-    document.getElementById('display-menu')?.appendChild(this.list);
+    document.getElementById('menu-display')?.appendChild(this.list);
     this.hide();
     return this;
   };
@@ -38,7 +39,7 @@ export default class MenuApi {
 
   /* add new item at index */
   addItemAt = (item: Item, targetIndex: number) => {
-    // Ref: https://www.w3schools.com/JSREF/met_node_replacechild.asp
+    // Ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
     const li = document.createElement('li');
     li.appendChild(item.element);
     this.list.insertBefore(li, this.list.children[targetIndex]);
@@ -46,7 +47,7 @@ export default class MenuApi {
 
   /* remove item */
   removeItem = (item: Item) => {
-    this.list.removeChild(item.element);
+    this.list.removeChild(item.element.parentNode!);
   };
 
   /* display menu instance */
@@ -54,10 +55,12 @@ export default class MenuApi {
     // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
     this.list.style.display = 'block';
     this.list.style.transform = `translate(${x}px, ${y}px)`;
+    this.isdisplayed = true;
   };
 
   /* hide menu instance */
   hide = (): void => {
     this.list.style.display = 'none';
+    this.isdisplayed = false;
   };
 }
