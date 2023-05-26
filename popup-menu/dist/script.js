@@ -17,7 +17,7 @@ const setupContextMenu = (menuApi) => {
     return menu;
 };
 const menu = setupContextMenu(new MenuApi());
-/* Span Element to display event-handling on menu-display-sate */
+/* Span Element to display event-handling on menu-display-state condition */
 const consoleState = document.getElementById('console-state');
 /* Apply preventDefault to all child-events of parent-div */
 const popupContainer = document.getElementById('popup-container');
