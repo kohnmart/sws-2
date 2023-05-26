@@ -30,13 +30,14 @@ popupContainer === null || popupContainer === void 0 ? void 0 : popupContainer.a
 const othersContainer = document.getElementById('others-container');
 othersContainer === null || othersContainer === void 0 ? void 0 : othersContainer.addEventListener('click', () => {
     if (menu.isdisplayed) {
-        consoleState.innerText = `menu display is ${menu.isdisplayed}, using default event`;
+        consoleState.innerText = `menu display is ${menu.isdisplayed}, using default menu-event`;
         menu.hide();
     }
 });
+/* Example button to demonstrate event-handling on menu-display-state condition */
 const buttonLinkTo = document.getElementById('button-link-to');
 buttonLinkTo === null || buttonLinkTo === void 0 ? void 0 : buttonLinkTo.addEventListener('click', () => {
-    consoleState.innerText = `menu display is ${menu.isdisplayed}, using assigned event`;
+    consoleState.innerText = `menu display is ${menu.isdisplayed}, using custom event`;
 });
 /* open-menu event */
 document.getElementById('menu-open').addEventListener('click', (e) => {
