@@ -1,61 +1,59 @@
-export class MenuApi {
-    constructor(bgcolor = 'grey', display = 'flex', padding = '20px', align = 'left') {
-        var _a;
-        // create new list element
+import { Item } from './item.js';
+export default class MenuApi {
+    constructor() {
         this.list = document.createElement('ul');
-        this.is_displayed = false;
-        this.display_type = display;
-        // list base-style-configuration
-        this.list.style.display = 'none';
-        this.list.style.position = 'absolute';
-        this.list.style.left = '0px';
-        this.list.style.top = '0px';
-        this.list.style.flexDirection = 'column';
-        this.list.style.alignItems = 'center';
-        this.list.style.justifyContent = 'center';
-        this.list.style.height = 'auto';
-        this.list.style.width = 'auto';
-        // optional styling
-        this.list.style.backgroundColor = bgcolor;
-        this.list.style.textAlign = align;
-        this.list.style.padding = padding;
-        // append to root div
-        (_a = document.getElementById('display')) === null || _a === void 0 ? void 0 : _a.appendChild(this.list);
-        return this;
-    }
-    addItems(title, ...inputs) {
-        const items = [...inputs];
-        const headline = document.createElement('h4');
-        headline.innerText = title;
-        this.list.appendChild(headline);
-        items.forEach((el) => {
-            const item = document.createElement('li');
-            item.innerText = el;
-            item.style.listStyle = 'none';
-            item.style.margin = '5px 0px';
-            this.list.appendChild(item);
-        });
-    }
-    addSubMenu(itemName) {
-        console.log('test');
-        const list = [...this.list.childNodes];
-        const index = list.findIndex((e) => e.textContent == itemName);
-        const item = list[index];
-        console.log('Found');
-        console.log(item);
-    }
-    show(event) {
-        this.is_displayed = true;
-        this.list.style.display = this.display_type;
-        let { clientX: x, clientY: y } = event;
-        this.list.style.transform = `translate(${x}px, ${y}px)`;
-    }
-    hide() {
-        this.is_displayed = false;
-        this.list.style.display = 'none';
-    }
-    move(event) {
-        let { clientX: x, clientY: y } = event;
-        this.list.style.transform = `translate(${x}px, ${y}px)`;
+        this.isdisplayed = false;
+        /* create new menu and append functionality */
+        this.createMenu = () => {
+            var _a;
+            (_a = document.getElementById('menu-display')) === null || _a === void 0 ? void 0 : _a.appendChild(this.list);
+            this.hide();
+            return this;
+        };
+        /* create new item with callback */
+        this.createItem = (item_content, callback) => {
+            return new Item('button', this, item_content, (m) => callback(m));
+        };
+        /* create separator hr-line */
+        this.createSeparator = () => {
+            return new Item('hr', this);
+        };
+        /* add single item to list */
+        this.addItem = (item) => {
+            const li = document.createElement('li');
+            li.appendChild(item.element);
+            this.list.appendChild(li);
+        };
+        /* append new items to list */
+        this.addItems = (...items) => {
+            items.forEach((item) => {
+                const li = document.createElement('li');
+                li.appendChild(item.element);
+                this.list.appendChild(li);
+            });
+        };
+        /* add new item at index */
+        this.addItemAt = (item, targetIndex) => {
+            // Ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
+            const li = document.createElement('li');
+            li.appendChild(item.element);
+            this.list.insertBefore(li, this.list.children[targetIndex]);
+        };
+        /* remove item */
+        this.removeItem = (item) => {
+            this.list.removeChild(item.element.parentNode);
+        };
+        /* display menu instance */
+        this.show = (x, y) => {
+            // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
+            this.list.style.display = 'block';
+            this.list.style.transform = `translate(${x}px, ${y}px)`;
+            this.isdisplayed = true;
+        };
+        /* hide menu instance */
+        this.hide = () => {
+            this.list.style.display = 'none';
+            this.isdisplayed = false;
+        };
     }
 }
