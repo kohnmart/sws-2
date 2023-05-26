@@ -34,14 +34,10 @@ Quelle: <https://avinetworks.com/glossary/session-persistence/>
 
 ## III. Probleme bei Skalierung und Sticky-Sessions
 
-Bei der Skalierung von Webanwendungen können Probleme auftreten, wenn Sticky-Sessions verwendet werden. Eine Herausforderung besteht darin, dass die Verwendung von Sticky-Sessions zu einer ungleichmäßigen Verteilung der Last auf die Server führen kann. Wenn Anfragen desselben Clients immer an denselben Server gesendet werden, kann dies zu einer Überlastung bestimmter Server führen, während andere unausgelastet bleiben.
+Das Problem bei der Skalierung von Anwendungen mit Sticky-Sessions besteht darin, dass sie die Lastenausgleichsfunktion beeinträchtigen können. Die Persistenz der Sitzungsinformationen führt zu einer ungleichmäßigen Verteilung der Last auf die Server, was die Skalierbarkeit der Anwendung beeinträchtigt. Darüber hinaus können die Ressourcenanforderungen durch die Speicherung der Sitzungsinformationen auf den Servern ansteigen.
 
-Darüber hinaus kann die Verwendung von Sticky-Sessions die Ressourcennutzung beeinflussen. Da die Sitzungsinformationen auf dem Server gespeichert werden müssen, erfordert dies zusätzlichen Speicherplatz und Verwaltungsaufwand.
+Single-Page-Anwendungen können dabei helfen, diese Skalierungsprobleme zu bewältigen. Da Single-Page-Anwendungen auf der Client-Seite ausgeführt werden, sind sie in der Regel zustandslos (stateless). Das bedeutet, dass alle erforderlichen Daten für die Ausführung der Anwendung auf dem Client gespeichert werden und nicht auf dem Server. Daher ist es nicht notwendig, Sitzungsinformationen zwischen verschiedenen Servern zu synchronisieren oder zu persistieren.
 
-### A. Herausforderungen bei der Skalierung von Anwendungen mit Sticky-Sessions
+Durch die Verwendung einer Single-Page-Anwendung wird die Notwendigkeit von Sticky-Sessions verringert oder eliminiert. Jeder Server kann Anfragen unabhängig voneinander bearbeiten, da der Zustand auf dem Client gespeichert wird. Dadurch wird eine bessere Lastenverteilung und Skalierbarkeit erreicht.
 
-Bei der Skalierung von Anwendungen mit Sticky-Sessions treten einige Herausforderungen auf. Eine Hauptherausforderung besteht darin, dass die Verwendung von Sticky-Sessions die Lastenausgleichsfunktion beeinträchtigen kann. Da Anfragen desselben Clients immer an denselben Server weitergeleitet werden, kann dies zu einer ungleichmäßigen Verteilung der Last führen, wenn bestimmte Server stärker belastet sind als andere.
-
-Darüber hinaus kann die Speicherung von Sitzungsinformationen auf dem Server zu einer erhöhten Ressourcennutzung führen. Da jeder Server die Sitzungsdaten für seine zugewiesenen Clients speichern muss, können die Speicheranforderungen und der Speicherbedarf insgesamt zunehmen.
-
-Diese Herausforderungen können die Skalierbarkeit einer Anwendung beeinträchtigen, da die Verteilung der Last und die effiziente Ressourcennutzung erschwert werden.
+Quelle: <https://traefik.io/glossary/what-are-sticky-sessions/>
