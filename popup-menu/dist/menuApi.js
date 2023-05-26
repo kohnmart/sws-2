@@ -5,7 +5,8 @@ export default class MenuApi {
         /* create new menu and append functionality */
         this.createMenu = () => {
             var _a;
-            (_a = document.getElementById('display')) === null || _a === void 0 ? void 0 : _a.appendChild(this.list);
+            (_a = document.getElementById('display-menu')) === null || _a === void 0 ? void 0 : _a.appendChild(this.list);
+            this.hide();
             return this;
         };
         /* create new item with callback */
@@ -18,20 +19,24 @@ export default class MenuApi {
         };
         /* add single item to list */
         this.addItem = (item) => {
-            this.list.appendChild(item.element);
+            const li = document.createElement('li');
+            li.appendChild(item.element);
+            this.list.appendChild(li);
         };
         /* append new items to list */
         this.addItems = (...items) => {
             items.forEach((item) => {
-                this.list.appendChild(item.element);
+                const li = document.createElement('li');
+                li.appendChild(item.element);
+                this.list.appendChild(li);
             });
         };
         /* add new item at index */
         this.addItemAt = (item, targetIndex) => {
             // Ref: https://www.w3schools.com/JSREF/met_node_replacechild.asp
-            const element = this.list.children[targetIndex];
-            this.list.replaceChild(item.element, this.list.children[targetIndex]);
-            this.list.appendChild(element);
+            const li = document.createElement('li');
+            li.appendChild(item.element);
+            this.list.insertBefore(li, this.list.children[targetIndex]);
         };
         /* remove item */
         this.removeItem = (item) => {
@@ -45,7 +50,6 @@ export default class MenuApi {
         };
         /* hide menu instance */
         this.hide = () => {
-            console.log('HIDE');
             this.list.style.display = 'none';
         };
     }
