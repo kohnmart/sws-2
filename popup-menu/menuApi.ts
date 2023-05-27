@@ -14,14 +14,14 @@ export default class MenuApi {
   }
 
   /* create new menu and append functionality */
-  createMenu = () => {
+  createMenu = (): MenuApi => {
     document.getElementById('menu-display')?.appendChild(this.ulList);
     this.hide();
     return this;
   };
 
   /* create new item with callback */
-  createItem = (item_content: string, callback: (m: MenuApi) => void) => {
+  createItem = (item_content: string, callback: (m: MenuApi) => void): Item => {
     return new Item('button', this, item_content, (m) => callback(m));
   };
 
@@ -31,19 +31,19 @@ export default class MenuApi {
   };
 
   /* add single item to list */
-  addItem = (item: Item) => {
+  addItem = (item: Item): void => {
     this.itemList.push(item);
   };
 
   /* append new items to list */
-  addItems = (...items: Item[]) => {
+  addItems = (...items: Item[]): void => {
     items.forEach((item) => {
       this.itemList.push(item);
     });
   };
 
   /* add new item at index */
-  addItemAt = (item: Item, index: number) => {
+  addItemAt = (item: Item, index: number): void => {
     // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice?retiredLocale=de
     const beforeIndex = this.itemList.slice(0, index);
     const afterIndex = this.itemList.slice(index);
@@ -51,7 +51,7 @@ export default class MenuApi {
   };
 
   /* remove item */
-  removeItem = (item: Item) => {
+  removeItem = (item: Item): void => {
     const index = this.itemList.findIndex(
       (e) => e.element.innerText == item.element.innerText
     );
