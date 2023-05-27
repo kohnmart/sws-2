@@ -3,9 +3,15 @@ import { Item } from './item.js';
 export default class MenuApi {
   itemList: Array<Item> = [];
   ulList: HTMLUListElement = document.createElement('ul');
-  eventListener: EventListenerOrEventListenerObject = (e) => {
-    e.preventDefault();
-  };
+  eventListener: EventListenerOrEventListenerObject;
+
+  constructor() {
+    this.itemList = [];
+    this.ulList = document.createElement('ul');
+    this.eventListener = (e) => {
+      e.preventDefault();
+    };
+  }
 
   /* create new menu and append functionality */
   createMenu = () => {
