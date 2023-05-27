@@ -48,11 +48,12 @@ export default class MenuApi {
         };
         /* display menu instance */
         this.show = (x, y) => {
-            /* render list */
+            /* clear ul-list */
             const parent = document.getElementById('menu-display');
             parent === null || parent === void 0 ? void 0 : parent.childNodes[0].remove();
             this.ulList = document.createElement('ul');
             parent === null || parent === void 0 ? void 0 : parent.appendChild(this.ulList);
+            /* render list */
             this.itemList.forEach((item) => {
                 const li = document.createElement('li');
                 li.appendChild(item.element);
