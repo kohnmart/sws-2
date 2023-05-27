@@ -3,7 +3,6 @@ export default class MenuApi {
     constructor() {
         this.itemList = [];
         this.ulList = document.createElement('ul');
-        this.isdisplayed = false;
         this.eventListener = (e) => {
             e.preventDefault();
         };
@@ -35,7 +34,6 @@ export default class MenuApi {
         /* add new item at index */
         this.addItemAt = (item, index) => {
             // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice?retiredLocale=de
-            console.log('Gt');
             const beforeIndex = this.itemList.slice(0, index);
             const afterIndex = this.itemList.slice(index);
             this.itemList = [...beforeIndex, item, ...afterIndex];
@@ -46,8 +44,6 @@ export default class MenuApi {
             const beforeIndex = this.itemList.slice(0, index);
             const afterIndex = this.itemList.slice(index + 1);
             this.itemList = [...beforeIndex, ...afterIndex];
-            console.log('Log');
-            console.log(this.itemList);
         };
         /* display menu instance */
         this.show = (x, y) => {
@@ -56,23 +52,19 @@ export default class MenuApi {
             parent === null || parent === void 0 ? void 0 : parent.childNodes[0].remove();
             this.ulList = document.createElement('ul');
             parent === null || parent === void 0 ? void 0 : parent.appendChild(this.ulList);
-            /* render list */
+            /* render items as elements in ul-list */
             this.itemList.forEach((item) => {
-                const li = document.createElement('li');
-                li.appendChild(item.element);
-                this.ulList.appendChild(li);
+                item.render();
             });
             // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
             this.ulList.style.display = 'block';
             this.ulList.style.transform = `translate(${x}px, ${y}px)`;
-            this.isdisplayed = true;
             /* event-prevent default for all elements */
             document.addEventListener('click', this.eventListener);
         };
         /* hide menu instance */
         this.hide = () => {
             this.ulList.style.display = 'none';
-            this.isdisplayed = false;
             /* remove listener */
             document.removeEventListener('click', this.eventListener);
         };

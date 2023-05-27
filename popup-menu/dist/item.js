@@ -14,6 +14,8 @@ export class Item {
         this.element.style.display = 'none';
     }
     render() {
-        this.element.style.display = 'block';
+        const li = document.createElement('li');
+        li.appendChild(this.element);
+        this.menuInstance.ulList.appendChild(li);
     }
 }
