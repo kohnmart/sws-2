@@ -3,12 +3,20 @@ body {
   font-family: Helvetica, sans-serif;
 }
 
-#popup-container {
-  width: 500px;
+* {
+  margin: 2%;
+}
+
+main {
+  width: 100%;
   height: 500px;
-  padding: 2%;
-  margin-bottom: 2%;
   background-color: rgb(205, 205, 205);
+}
+
+header {
+  width: 100%;
+  height: 100px;
+  background-color: rgb(132, 132, 132);
 }
 
 #menu-display > ul {
