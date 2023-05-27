@@ -3,7 +3,6 @@ import { Item } from './item.js';
 export default class MenuApi {
   itemList: Array<Item> = [];
   ulList: HTMLUListElement = document.createElement('ul');
-  isdisplayed: boolean = false;
   eventListener: EventListenerOrEventListenerObject = (e) => {
     e.preventDefault();
   };
@@ -40,7 +39,6 @@ export default class MenuApi {
   /* add new item at index */
   addItemAt = (item: Item, index: number) => {
     // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice?retiredLocale=de
-    console.log('Gt');
     const beforeIndex = this.itemList.slice(0, index);
     const afterIndex = this.itemList.slice(index);
     this.itemList = [...beforeIndex, item, ...afterIndex];
@@ -54,8 +52,6 @@ export default class MenuApi {
     const beforeIndex = this.itemList.slice(0, index);
     const afterIndex = this.itemList.slice(index + 1);
     this.itemList = [...beforeIndex, ...afterIndex];
-    console.log('Log');
-    console.log(this.itemList);
   };
 
   /* display menu instance */
@@ -66,17 +62,14 @@ export default class MenuApi {
     this.ulList = document.createElement('ul');
     parent?.appendChild(this.ulList);
 
-    /* render list */
+    /* render items as elements in ul-list */
     this.itemList.forEach((item) => {
-      const li = document.createElement('li');
-      li.appendChild(item.element);
-      this.ulList.appendChild(li);
+      item.render();
     });
 
     // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
     this.ulList.style.display = 'block';
     this.ulList.style.transform = `translate(${x}px, ${y}px)`;
-    this.isdisplayed = true;
 
     /* event-prevent default for all elements */
     document.addEventListener('click', this.eventListener);
@@ -85,7 +78,6 @@ export default class MenuApi {
   /* hide menu instance */
   hide = (): void => {
     this.ulList.style.display = 'none';
-    this.isdisplayed = false;
     /* remove listener */
     document.removeEventListener('click', this.eventListener);
   };
