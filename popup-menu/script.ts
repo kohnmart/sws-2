@@ -25,35 +25,11 @@ const setupContextMenu = (menuApi: MenuApi) => {
 
 const menu = setupContextMenu(new MenuApi());
 
-/* Span Element to display event-handling on menu-display-state condition */
-const consoleState = document.getElementById('console-state');
-
 /* Apply preventDefault to all child-events of parent-div */
 const popupContainer = document.getElementById('popup-container');
 popupContainer?.addEventListener('click', (event) => {
   event.preventDefault();
   const { clientX: x, clientY: y } = event;
-  menu.show(x, y);
-});
-
-/* If menu is displayed => all other events close menu onclick */
-const othersContainer = document.getElementById('others-container');
-othersContainer?.addEventListener('click', () => {
-  if (menu.isdisplayed) {
-    consoleState!.innerText = `menu display is ${menu.isdisplayed}, using default menu-event`;
-    menu.hide();
-  }
-});
-
-/* Example button to demonstrate event-handling on menu-display-state condition */
-const buttonLinkTo = document.getElementById('button-link-to');
-buttonLinkTo?.addEventListener('click', () => {
-  consoleState!.innerText = `menu display is ${menu.isdisplayed}, using custom event`;
-});
-
-/* open-menu event */
-document.getElementById('menu-open')!.addEventListener('click', (e) => {
-  const { clientX: x, clientY: y } = e;
   menu.show(x, y);
 });
 
