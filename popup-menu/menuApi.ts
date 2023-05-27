@@ -1,12 +1,13 @@
 import { Item } from './item.js';
 
 export default class MenuApi {
-  list: HTMLUListElement = document.createElement('ul');
+  itemList: Array<Item> = [];
+  ulList: HTMLUListElement = document.createElement('ul');
   isdisplayed: boolean = false;
 
   /* create new menu and append functionality */
   createMenu = () => {
-    document.getElementById('menu-display')?.appendChild(this.list);
+    document.getElementById('menu-display')?.appendChild(this.ulList);
     this.hide();
     return this;
   };
@@ -23,44 +24,63 @@ export default class MenuApi {
 
   /* add single item to list */
   addItem = (item: Item) => {
-    const li = document.createElement('li');
-    li.appendChild(item.element);
-    this.list.appendChild(li);
+    this.itemList.push(item);
   };
 
   /* append new items to list */
   addItems = (...items: Item[]) => {
     items.forEach((item) => {
-      const li = document.createElement('li');
-      li.appendChild(item.element);
-      this.list.appendChild(li);
+      this.itemList.push(item);
     });
   };
 
   /* add new item at index */
-  addItemAt = (item: Item, targetIndex: number) => {
-    // Ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
-    const li = document.createElement('li');
-    li.appendChild(item.element);
-    this.list.insertBefore(li, this.list.children[targetIndex]);
+  addItemAt = (item: Item, index: number) => {
+    // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice?retiredLocale=de
+    console.log('Gt');
+    const beforeIndex = this.itemList.slice(0, index);
+    const afterIndex = this.itemList.slice(index);
+    this.itemList = [...beforeIndex, item, ...afterIndex];
   };
 
   /* remove item */
   removeItem = (item: Item) => {
-    this.list.removeChild(item.element.parentNode!);
+    const index = this.itemList.findIndex(
+      (e) => e.element.innerText == item.element.innerText
+    );
+    const beforeIndex = this.itemList.slice(0, index);
+    const afterIndex = this.itemList.slice(index + 1);
+    this.itemList = [...beforeIndex, ...afterIndex];
+    console.log('Log');
+    console.log(this.itemList);
   };
 
   /* display menu instance */
   show = (x: Number, y: Number): void => {
+    /* render list */
+
+    const parent = document.getElementById('menu-display');
+    parent?.childNodes[0].remove();
+
+    this.ulList = document.createElement('ul');
+
+    parent?.appendChild(this.ulList);
+
+    this.itemList.forEach((item) => {
+      const li = document.createElement('li');
+      li.appendChild(item.element);
+      this.ulList.appendChild(li);
+    });
+
     // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
-    this.list.style.display = 'block';
-    this.list.style.transform = `translate(${x}px, ${y}px)`;
+    this.ulList.style.display = 'block';
+    this.ulList.style.transform = `translate(${x}px, ${y}px)`;
     this.isdisplayed = true;
   };
 
   /* hide menu instance */
   hide = (): void => {
-    this.list.style.display = 'none';
+    this.ulList.style.display = 'none';
     this.isdisplayed = false;
   };
 }
