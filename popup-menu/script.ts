@@ -28,7 +28,6 @@ const menu = setupContextMenu(new MenuApi());
 /* Apply preventDefault to all child-events of main */
 const mainContainer = document.getElementsByTagName('main')[0];
 mainContainer?.addEventListener('click', (event) => {
-  event.preventDefault();
   const { clientX: x, clientY: y } = event;
   menu.show(x, y);
 });
@@ -38,7 +37,6 @@ const headerContainer = document.getElementsByTagName('header')[0];
 headerContainer.addEventListener('click', (e) => {
   const { clientX: x, clientY: y } = e;
   const dynamicItem = menu.createItem('II 5', (m: MenuApi) => {
-    console.log('wow');
     m.hide();
   });
   // Order after the call : I 1 , I 2 , dynamicItem , Sep , I 3
