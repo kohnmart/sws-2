@@ -1,8 +1,8 @@
 import { Item } from './item.js';
 
 export default class MenuApi {
-  itemList: Array<Item> = [];
-  ulList: HTMLUListElement = document.createElement('ul');
+  itemList: Array<Item>;
+  ulList: HTMLUListElement;
   eventListener: EventListenerOrEventListenerObject;
 
   constructor() {
