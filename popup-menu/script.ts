@@ -26,15 +26,17 @@ const setupContextMenu = (menuApi: MenuApi) => {
 const menu = setupContextMenu(new MenuApi());
 
 /* Apply preventDefault to all child-events of parent-div */
-const popupContainer = document.getElementById('popup-container');
-popupContainer?.addEventListener('click', (event) => {
+const mainContainer = document.getElementsByTagName('main')[0];
+mainContainer?.addEventListener('click', (event) => {
   event.preventDefault();
   const { clientX: x, clientY: y } = event;
   menu.show(x, y);
 });
 
 /* dynamic-item event */
-document.getElementById('item-dynamic')!.addEventListener('click', (e) => {
+
+const headerContainer = document.getElementsByTagName('header')[0];
+headerContainer.addEventListener('click', (e) => {
   const { clientX: x, clientY: y } = e;
   const dynamicItem = menu.createItem('II 5', (m: MenuApi) => {
     console.log('wow');
