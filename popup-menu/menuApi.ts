@@ -4,6 +4,9 @@ export default class MenuApi {
   itemList: Array<Item> = [];
   ulList: HTMLUListElement = document.createElement('ul');
   isdisplayed: boolean = false;
+  eventListener: EventListenerOrEventListenerObject = (e) => {
+    e.preventDefault();
+  };
 
   /* create new menu and append functionality */
   createMenu = () => {
@@ -74,11 +77,16 @@ export default class MenuApi {
     this.ulList.style.display = 'block';
     this.ulList.style.transform = `translate(${x}px, ${y}px)`;
     this.isdisplayed = true;
+
+    /* event-prevent default for all elements */
+    document.addEventListener('click', this.eventListener);
   };
 
   /* hide menu instance */
   hide = (): void => {
     this.ulList.style.display = 'none';
     this.isdisplayed = false;
+    /* remove listener */
+    document.removeEventListener('click', this.eventListener);
   };
 }
