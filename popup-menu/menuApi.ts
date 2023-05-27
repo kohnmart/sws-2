@@ -57,15 +57,13 @@ export default class MenuApi {
 
   /* display menu instance */
   show = (x: Number, y: Number): void => {
-    /* render list */
-
+    /* clear ul-list */
     const parent = document.getElementById('menu-display');
     parent?.childNodes[0].remove();
-
     this.ulList = document.createElement('ul');
-
     parent?.appendChild(this.ulList);
 
+    /* render list */
     this.itemList.forEach((item) => {
       const li = document.createElement('li');
       li.appendChild(item.element);
