@@ -19,7 +19,7 @@ header {
   background-color: rgb(132, 132, 132);
 }
 
-#menu-display > ul {
+ul {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -33,8 +33,17 @@ header {
   border-radius: 5px;
 }
 
-ul > li {
+li {
   list-style: none;
   margin: 5px 0px;
-  width: auto;
+}
+
+li > * {
+  width: 100%;
+}
+
+hr {
+  border: none;
+  height: 2px;
+  background-color: #000000; 
 }
