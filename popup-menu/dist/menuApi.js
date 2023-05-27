@@ -4,6 +4,9 @@ export default class MenuApi {
         this.itemList = [];
         this.ulList = document.createElement('ul');
         this.isdisplayed = false;
+        this.eventListener = (e) => {
+            e.preventDefault();
+        };
         /* create new menu and append functionality */
         this.createMenu = () => {
             var _a;
@@ -63,11 +66,15 @@ export default class MenuApi {
             this.ulList.style.display = 'block';
             this.ulList.style.transform = `translate(${x}px, ${y}px)`;
             this.isdisplayed = true;
+            /* event-prevent default for all elements */
+            document.addEventListener('click', this.eventListener);
         };
         /* hide menu instance */
         this.hide = () => {
             this.ulList.style.display = 'none';
             this.isdisplayed = false;
+            /* remove listener */
+            document.removeEventListener('click', this.eventListener);
         };
     }
 }

@@ -17,7 +17,7 @@ const setupContextMenu = (menuApi) => {
     return menu;
 };
 const menu = setupContextMenu(new MenuApi());
-/* Apply preventDefault to all child-events of parent-div */
+/* Apply preventDefault to all child-events of main */
 const mainContainer = document.getElementsByTagName('main')[0];
 mainContainer === null || mainContainer === void 0 ? void 0 : mainContainer.addEventListener('click', (event) => {
     event.preventDefault();
