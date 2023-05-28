@@ -4,7 +4,7 @@ export class Item {
   element: HTMLElement;
   menuInstance: MenuApi;
   static id: string = 'menu-item';
-  /* create new item with callback */
+  /* create new item */
   constructor(
     tagName: string,
     menuInstance: MenuApi,
