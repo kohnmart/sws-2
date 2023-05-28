@@ -8,8 +8,14 @@ export default class MenuApi {
   constructor() {
     this.itemList = [];
     this.ulList = document.createElement('ul');
-    this.eventListener = (e) => {
-      e.preventDefault();
+    this.eventListener = (event: Event): void => {
+      /* check if target is an menu-item */
+      const target = event.target as HTMLElement;
+      if (target.id != Item.id) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.hide();
+      }
     };
   }
 
@@ -78,13 +84,13 @@ export default class MenuApi {
     this.ulList.style.transform = `translate(${x}px, ${y}px)`;
 
     /* event-prevent default for all elements */
-    document.addEventListener('click', this.eventListener);
+    document.addEventListener('click', this.eventListener, true);
   };
 
   /* hide menu instance */
   hide = (): void => {
     this.ulList.style.display = 'none';
     /* remove listener */
-    document.removeEventListener('click', this.eventListener);
+    document.removeEventListener('click', this.eventListener, true);
   };
 }
