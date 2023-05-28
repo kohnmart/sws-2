@@ -1,11 +1,6 @@
 import { Item } from './item.js';
 export default class MenuApi {
     constructor() {
-        this.itemList = [];
-        this.ulList = document.createElement('ul');
-        this.eventListener = (e) => {
-            e.preventDefault();
-        };
         /* create new menu and append functionality */
         this.createMenu = () => {
             var _a;
@@ -60,13 +55,24 @@ export default class MenuApi {
             this.ulList.style.display = 'block';
             this.ulList.style.transform = `translate(${x}px, ${y}px)`;
             /* event-prevent default for all elements */
-            document.addEventListener('click', this.eventListener);
+            document.addEventListener('click', this.eventListener, true);
         };
         /* hide menu instance */
         this.hide = () => {
             this.ulList.style.display = 'none';
             /* remove listener */
-            document.removeEventListener('click', this.eventListener);
+            document.removeEventListener('click', this.eventListener, true);
+        };
+        this.itemList = [];
+        this.ulList = document.createElement('ul');
+        this.eventListener = (event) => {
+            /* check if target is an menu-item */
+            const target = event.target;
+            if (target.id != Item.id) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.hide();
+            }
         };
     }
 }

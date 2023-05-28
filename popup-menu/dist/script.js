@@ -17,16 +17,16 @@ const setupContextMenu = (menuApi) => {
     return menu;
 };
 const menu = setupContextMenu(new MenuApi());
-/* Apply preventDefault to all child-events of main */
+/* apply preventDefault to all child-events of main */
 const mainContainer = document.getElementsByTagName('main')[0];
-mainContainer === null || mainContainer === void 0 ? void 0 : mainContainer.addEventListener('click', (event) => {
+mainContainer.addEventListener('click', (event) => {
     const { clientX: x, clientY: y } = event;
     menu.show(x, y);
 });
 /* dynamic-item event */
 const headerContainer = document.getElementsByTagName('header')[0];
-headerContainer.addEventListener('click', (e) => {
-    const { clientX: x, clientY: y } = e;
+headerContainer.addEventListener('click', (event) => {
+    const { clientX: x, clientY: y } = event;
     const dynamicItem = menu.createItem('II 5', (m) => {
         m.hide();
     });
