@@ -1,5 +1,5 @@
 export class Item {
-    /* create new item with callback */
+    /* create new item */
     constructor(tagName, menuInstance, itemContent, callback) {
         this.element = document.createElement(tagName);
         this.element.id = Item.id;

@@ -66,7 +66,7 @@ export default class MenuApi {
         this.itemList = [];
         this.ulList = document.createElement('ul');
         this.eventListener = (event) => {
-            /* check if target is an menu-item */
+            /* check if target is a menu-item */
             const target = event.target;
             if (target.id != Item.id) {
                 event.preventDefault();
