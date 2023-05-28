@@ -3,7 +3,7 @@ import MenuApi from './menuApi';
 export class Item {
   element: HTMLElement;
   menuInstance: MenuApi;
-
+  static id: string = 'menu-item';
   /* create new item with callback */
   constructor(
     tagName: string,
@@ -12,6 +12,7 @@ export class Item {
     callback?: (m: MenuApi) => void
   ) {
     this.element = document.createElement(tagName);
+    this.element.id = Item.id;
     this.menuInstance = menuInstance;
     if (itemContent) {
       this.element.innerText = itemContent;
