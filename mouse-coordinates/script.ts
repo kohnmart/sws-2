@@ -1,37 +1,37 @@
-/* Create render-view */
-const width: Number = 500,
-  height: Number = 500;
-const render: HTMLElement = document.getElementById('render_view')!;
-render.style.width = width + 'px';
-render.style.height = height + 'px';
-render.style.backgroundColor = 'grey';
+/* create render-view */
+const width: Number = 500;
+const height: Number = 500;
+const renderView: HTMLElement = document.getElementById('render-view')!;
+renderView.style.width = width + 'px';
+renderView.style.height = height + 'px';
+renderView.style.backgroundColor = 'grey';
 
-/* Get span-element to display real-time mouse-coordinates */
+/* store dynamic mouse-coordinates */
+let mX: Number, mY: Number;
+
+/* get span-element to display real-time mouse-coordinates */
 const coordinates: HTMLElement = document.getElementById(
-  'coordinates_rt_display'
+  'coordinates-rt-display'
 )!;
 
-/* Create list-element to store mouse-coordinates on event */
-const list: HTMLElement = document.getElementById('coordinates_list')!;
-
-/* Store dynamic mouse-coordinates */
-let mouseX: Number, mouseY: Number;
-
-/* Display mouse-coordinates if cursor is in given range */
+/* display mouse-coordinates if target is 'render-view' */
 document.addEventListener('mousemove', (e) => {
-  ({ clientX: mouseX, clientY: mouseY } = e);
-
-  if (mouseX <= width && mouseY <= height) {
+  ({ clientX: mX, clientY: mY } = e);
+  const target = e.target as HTMLElement;
+  if (target.id == 'render-view') {
     coordinates.style.display = 'block';
-    coordinates.textContent = `X: ${mouseX} || Y: ${mouseY}`;
+    coordinates.textContent = `X: ${mX} || Y: ${mY}`;
   } else {
     coordinates.style.display = 'none';
   }
 });
 
-/* Create new list element with current mouse-coordinates */
+/* create list-element to store mouse-coordinates */
+const list: HTMLElement = document.getElementById('coordinates-list')!;
+
+/* create new list element with current mouse-coordinates */
 document.addEventListener('click', () => {
   const item: HTMLElement = document.createElement('li');
-  item.innerHTML = `(MouseX: ${mouseX} || MouseY: ${mouseY})`;
+  item.innerHTML = `(X: ${mX} || Y: ${mY})`;
   list.appendChild(item);
 });

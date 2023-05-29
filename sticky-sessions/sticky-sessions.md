@@ -2,7 +2,7 @@
 
 ## I. Einführung
 
-Sticky Sessions (auch als Session Persistence bezeichnet) sind eine Funktion, die häufig in Load Balancern zu finden ist und es einer Webanwendung ermöglicht, Benutzereinstellungen zu speichern, Benutzer authentifiziert zu halten usw. Bei Sticky Sessions kann der Load Balancer Anfragen eines bestimmten Clients identifizieren und diese immer an denselben Server weiterleiten. Bei Sticky Sessions werden alle Benutzerinformationen serverseitig gespeichert, und diese Methode wird häufig bei zustandsbehafteten Diensten verwendet.
+Sticky Sessions sind eine Funktion, die häufig in Load Balancern zu finden ist und es einer Webanwendung ermöglicht, Benutzereinstellungen zu speichern, Benutzer authentifiziert zu halten usw. Bei Sticky Sessions kann der Load Balancer Anfragen eines bestimmten Clients identifizieren und diese immer an denselben Server weiterleiten. Bei Sticky Sessions werden alle Benutzerinformationen serverseitig gespeichert, und diese Methode wird häufig bei zustandsbehafteten Diensten verwendet.
 
 Quelle: <https://traefik.io/glossary/what-are-sticky-sessions/>
 
@@ -26,11 +26,11 @@ Die Funktionsweise von Sticky-Sessions besteht darin, sicherzustellen, dass Anfr
 
 **5. Beibehaltung der Sitzungsinformationen**: Da alle Anfragen desselben Clients an denselben Server gesendet werden, kann der Server die Sitzungsinformationen beibehalten. Dies ermöglicht beispielsweise die Aufrechterhaltung der Benutzeranmeldung oder das Speichern von benutzerspezifischen Einstellungen.
 
-Quelle: <https://avinetworks.com/glossary/session-persistence/>
+Quelle: <https://www.haproxy.com/de/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/>
 
 ### Visualisierung der Funktionsweise
 
-![Sticky-Sessions-Vergleich](sticky-sessions-comparison.svg)
+![Sticky-Sessions-Vergleich](sticky-sessions-compare.svg)
 
 ## III. Probleme bei Skalierung und Sticky-Sessions
 

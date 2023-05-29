@@ -25,43 +25,18 @@ const setupContextMenu = (menuApi: MenuApi) => {
 
 const menu = setupContextMenu(new MenuApi());
 
-/* Span Element to display event-handling on menu-display-state condition */
-const consoleState = document.getElementById('console-state');
-
-/* Apply preventDefault to all child-events of parent-div */
-const popupContainer = document.getElementById('popup-container');
-popupContainer?.addEventListener('click', (event) => {
-  event.preventDefault();
+/* apply preventDefault to all child-events of main */
+const mainContainer = document.getElementsByTagName('main')[0];
+mainContainer.addEventListener('click', (event) => {
   const { clientX: x, clientY: y } = event;
   menu.show(x, y);
 });
 
-/* If menu is displayed => all other events close menu onclick */
-const othersContainer = document.getElementById('others-container');
-othersContainer?.addEventListener('click', () => {
-  if (menu.isdisplayed) {
-    consoleState!.innerText = `menu display is ${menu.isdisplayed}, using default menu-event`;
-    menu.hide();
-  }
-});
-
-/* Example button to demonstrate event-handling on menu-display-state condition */
-const buttonLinkTo = document.getElementById('button-link-to');
-buttonLinkTo?.addEventListener('click', () => {
-  consoleState!.innerText = `menu display is ${menu.isdisplayed}, using custom event`;
-});
-
-/* open-menu event */
-document.getElementById('menu-open')!.addEventListener('click', (e) => {
-  const { clientX: x, clientY: y } = e;
-  menu.show(x, y);
-});
-
 /* dynamic-item event */
-document.getElementById('item-dynamic')!.addEventListener('click', (e) => {
-  const { clientX: x, clientY: y } = e;
+const headerContainer = document.getElementsByTagName('header')[0];
+headerContainer.addEventListener('click', (event) => {
+  const { clientX: x, clientY: y } = event;
   const dynamicItem = menu.createItem('II 5', (m: MenuApi) => {
-    console.log('wow');
     m.hide();
   });
   // Order after the call : I 1 , I 2 , dynamicItem , Sep , I 3

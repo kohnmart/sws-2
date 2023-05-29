@@ -1,34 +1,31 @@
 import MenuApi from './menuApi';
 
 export class Item {
-  /* ul list - element */
+  static id: string = 'menu-item';
   element: HTMLElement;
-
-  /* menu instance to ref on callback event */
   menuInstance: MenuApi;
-
-  /* create new item with callback */
+  /* create new item */
   constructor(
     tagName: string,
     menuInstance: MenuApi,
-    item_content?: string,
+    itemContent?: string,
     callback?: (m: MenuApi) => void
   ) {
     this.element = document.createElement(tagName);
+    this.element.id = Item.id;
     this.menuInstance = menuInstance;
-    if (item_content) {
-      this.element.innerText = item_content;
+    if (itemContent) {
+      this.element.innerText = itemContent;
     }
     if (callback) {
       this.element.addEventListener('click', () => callback(this.menuInstance));
     }
   }
 
-  hide(): void {
-    this.element.style.display = 'none';
-  }
-
+  /* render item in ul-list */
   render(): void {
-    this.element.style.display = 'block';
+    const li = document.createElement('li');
+    li.appendChild(this.element);
+    this.menuInstance.ulList.appendChild(li);
   }
 }

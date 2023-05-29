@@ -1,12 +1,10 @@
 import { Item } from './item.js';
 export default class MenuApi {
     constructor() {
-        this.list = document.createElement('ul');
-        this.isdisplayed = false;
         /* create new menu and append functionality */
         this.createMenu = () => {
             var _a;
-            (_a = document.getElementById('menu-display')) === null || _a === void 0 ? void 0 : _a.appendChild(this.list);
+            (_a = document.getElementById('menu-display')) === null || _a === void 0 ? void 0 : _a.appendChild(this.ulList);
             this.hide();
             return this;
         };
@@ -20,40 +18,63 @@ export default class MenuApi {
         };
         /* add single item to list */
         this.addItem = (item) => {
-            const li = document.createElement('li');
-            li.appendChild(item.element);
-            this.list.appendChild(li);
+            this.itemList.push(item);
         };
         /* append new items to list */
         this.addItems = (...items) => {
             items.forEach((item) => {
-                const li = document.createElement('li');
-                li.appendChild(item.element);
-                this.list.appendChild(li);
+                this.itemList.push(item);
             });
         };
         /* add new item at index */
-        this.addItemAt = (item, targetIndex) => {
-            // Ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
-            const li = document.createElement('li');
-            li.appendChild(item.element);
-            this.list.insertBefore(li, this.list.children[targetIndex]);
+        this.addItemAt = (item, index) => {
+            // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice?retiredLocale=de
+            const beforeIndex = this.itemList.slice(0, index);
+            const afterIndex = this.itemList.slice(index);
+            this.itemList = [...beforeIndex, item, ...afterIndex];
         };
         /* remove item */
         this.removeItem = (item) => {
-            this.list.removeChild(item.element.parentNode);
+            const index = this.itemList.findIndex((e) => e.element.innerText == item.element.innerText);
+            const beforeIndex = this.itemList.slice(0, index);
+            const afterIndex = this.itemList.slice(index + 1);
+            this.itemList = [...beforeIndex, ...afterIndex];
         };
         /* display menu instance */
         this.show = (x, y) => {
+            /* clear ul-list */
+            const parent = document.getElementById('menu-display');
+            parent === null || parent === void 0 ? void 0 : parent.childNodes[0].remove();
+            this.ulList = document.createElement('ul');
+            this.ulList.id = MenuApi.id;
+            parent === null || parent === void 0 ? void 0 : parent.appendChild(this.ulList);
+            /* render items as elements in ul-list */
+            this.itemList.forEach((item) => {
+                item.render();
+            });
             // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
-            this.list.style.display = 'block';
-            this.list.style.transform = `translate(${x}px, ${y}px)`;
-            this.isdisplayed = true;
+            this.ulList.style.display = 'flex';
+            this.ulList.style.transform = `translate(${x}px, ${y}px)`;
+            /* event-prevent default for all elements */
+            document.addEventListener('click', this.eventListener, true);
         };
         /* hide menu instance */
         this.hide = () => {
-            this.list.style.display = 'none';
-            this.isdisplayed = false;
+            this.ulList.style.display = 'none';
+            /* remove listener */
+            document.removeEventListener('click', this.eventListener, true);
+        };
+        this.itemList = [];
+        this.ulList = document.createElement('ul');
+        this.eventListener = (event) => {
+            const target = event.target;
+            /* check if target is menu or menu-item */
+            if (target.id != Item.id && target.id != MenuApi.id) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.hide();
+            }
         };
     }
 }
+MenuApi.id = 'menu';
