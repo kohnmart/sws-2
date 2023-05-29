@@ -10,10 +10,11 @@ renderView.style.backgroundColor = 'grey';
 let mX, mY;
 /* get span-element to display real-time mouse-coordinates */
 const coordinates = document.getElementById('coordinates-rt-display');
-/* display mouse-coordinates if cursor is in given range */
+/* display mouse-coordinates if target is 'render-view' */
 document.addEventListener('mousemove', (e) => {
     ({ clientX: mX, clientY: mY } = e);
-    if (mX <= width && mY <= height) {
+    const target = e.target;
+    if (target.id == 'render-view') {
         coordinates.style.display = 'block';
         coordinates.textContent = `X: ${mX} || Y: ${mY}`;
     }
