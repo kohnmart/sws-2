@@ -2,13 +2,7 @@
 
 ## I. Einführung
 
-Sticky Sessions sind eine Funktion, die häufig in Load Balancern zu finden ist und es einer Webanwendung ermöglicht, Benutzereinstellungen zu speichern, Benutzer authentifiziert zu halten usw. Bei Sticky Sessions kann der Load Balancer Anfragen eines bestimmten Clients identifizieren und diese immer an denselben Server weiterleiten. Bei Sticky Sessions werden alle Benutzerinformationen serverseitig gespeichert, und diese Methode wird häufig bei zustandsbehafteten Diensten verwendet.
-
-Quelle: <https://traefik.io/glossary/what-are-sticky-sessions/>
-
-### Zweck der Verwendung von Sticky-Sessions in Webanwendungen
-
-Der Zweck der Verwendung von Sticky-Sessions in Webanwendungen besteht darin, die Konsistenz und Kontinuität der Benutzersitzungen sicherzustellen. Durch das Weiterleiten von Anfragen desselben Clients an denselben Server können Webanwendungen Benutzerpräferenzen, Authentifizierungsstatus und andere zustandsbezogene Informationen beibehalten. Dies ermöglicht eine nahtlose Benutzererfahrung, da Benutzer ihre Sitzungsinformationen nicht bei jedem Serverwechsel erneut eingeben müssen. Sticky-Sessions sind besonders wichtig für Anwendungen, die Benutzerdaten und Zustände speichern müssen, um eine personalisierte Interaktion zu ermöglichen.
+Sticky-Sessions werden in Webanwendungen eingesetzt, um die Konsistenz und Kontinuität von Benutzersitzungen sicherzustellen. Durch das gezielte Weiterleiten von Anfragen desselben Clients an denselben Server ermöglichen sie Webanwendungen, Benutzerpräferenzen, Authentifizierungsstatus und andere zustandsbezogene Informationen beizubehalten. Dadurch wird eine nahtlose Benutzererfahrung gewährleistet, da Benutzer ihre Sitzungsinformationen nicht bei jedem Serverwechsel erneut eingeben müssen. Insbesondere für Anwendungen, die Benutzerdaten und -zustände speichern müssen, um personalisierte Interaktionen zu ermöglichen, spielen Sticky-Sessions eine wichtige Rolle.
 
 Quelle: <https://traefik.io/glossary/what-are-sticky-sessions/>
 
@@ -26,7 +20,9 @@ Die Funktionsweise von Sticky-Sessions besteht darin, sicherzustellen, dass Anfr
 
 **5. Beibehaltung der Sitzungsinformationen**: Da alle Anfragen desselben Clients an denselben Server gesendet werden, kann der Server die Sitzungsinformationen beibehalten. Dies ermöglicht beispielsweise die Aufrechterhaltung der Benutzeranmeldung oder das Speichern von benutzerspezifischen Einstellungen.
 
-Quelle: <https://www.haproxy.com/de/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/>
+Quelle: <https://traefik.io/glossary/what-are-sticky-sessions/>
+
+Quelle: <https://www.youtube.com/watch?v=LEBjs0aqZQc/>
 
 ### Visualisierung der Funktionsweise
 
@@ -34,10 +30,10 @@ Quelle: <https://www.haproxy.com/de/blog/load-balancing-affinity-persistence-sti
 
 ## III. Probleme bei Skalierung und Sticky-Sessions
 
-Das Problem bei der Skalierung von Anwendungen mit Sticky-Sessions besteht darin, dass sie die Lastenausgleichsfunktion beeinträchtigen können. Die Persistenz der Sitzungsinformationen führt zu einer ungleichmäßigen Verteilung der Last auf die Server, was die Skalierbarkeit der Anwendung beeinträchtigt. Darüber hinaus können die Ressourcenanforderungen durch die Speicherung der Sitzungsinformationen auf den Servern ansteigen.
+Die Skalierung von Anwendungen mit Sticky-Sessions kann zu Herausforderungen bei der Lastverteilung führen. Die persistente Speicherung von Sitzungsinformationen beeinträchtigt die gleichmäßige Verteilung der Last auf die Server und kann die Skalierbarkeit der Anwendung beeinträchtigen. Zudem erhöht sich der Ressourcenbedarf durch die Speicherung der Sitzungsdaten auf den Servern.
 
-Single-Page-Anwendungen können dabei helfen, diese Skalierungsprobleme zu bewältigen. Da Single-Page-Anwendungen auf der Client-Seite ausgeführt werden, sind sie in der Regel zustandslos (stateless). Das bedeutet, dass alle erforderlichen Daten für die Ausführung der Anwendung auf dem Client gespeichert werden und nicht auf dem Server. Daher ist es nicht notwendig, Sitzungsinformationen zwischen verschiedenen Servern zu synchronisieren oder zu persistieren.
+Eine Lösung zur Bewältigung dieser Skalierungsprobleme liegt in der Verwendung von Single-Page-Anwendungen. Diese Anwendungen werden in der Regel clientseitig ausgeführt und sind zustandslos (stateless). Das bedeutet, dass alle benötigten Daten für die Ausführung der Anwendung auf dem Client gespeichert werden und nicht auf dem Server. Dadurch entfällt die Notwendigkeit, Sitzungsinformationen zwischen verschiedenen Servern zu synchronisieren oder zu persistieren.
 
-Durch die Verwendung einer Single-Page-Anwendung wird die Notwendigkeit von Sticky-Sessions verringert oder eliminiert. Jeder Server kann Anfragen unabhängig voneinander bearbeiten, da der Zustand auf dem Client gespeichert wird. Dadurch wird eine bessere Lastenverteilung und Skalierbarkeit erreicht.
+Der Einsatz einer Single-Page-Anwendung reduziert oder eliminiert die Abhängigkeit von Sticky-Sessions. Jeder Server kann Anfragen unabhängig voneinander bearbeiten, da der Zustand auf dem Client gespeichert wird. Dies führt zu einer verbesserten Lastverteilung und Skalierbarkeit der Anwendung.
 
 Quelle: <https://traefik.io/glossary/what-are-sticky-sessions/>
