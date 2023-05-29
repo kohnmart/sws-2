@@ -7,7 +7,11 @@ befinden sich in den jeweiligen ./dist Verzeichnissen. Das komplette Projekt
 kann entweder über das live-server-module gestartet werden oder durch manuelle
 Öffnung der jeweiligen index.html.
 
-## Zur Nutzung der Modules und Live-Server
+## Production
+
+### Install global typescript
+
+``` npm install -g typescript ```
 
 ### Install required node_modules
 
