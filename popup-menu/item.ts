@@ -1,9 +1,9 @@
 import MenuApi from './menuApi';
 
 export class Item {
+  static id: string = 'menu-item';
   element: HTMLElement;
   menuInstance: MenuApi;
-  static id: string = 'menu-item';
   /* create new item */
   constructor(
     tagName: string,
