@@ -9,13 +9,13 @@ kann entweder über das live-server-module gestartet werden oder durch manuelle
 
 ## Production
 
-### Install global typescript
-
-``` npm install -g typescript ```
-
 ### Install required node_modules
 
 ``` npm install ```
+
+### Install live-server (globally)
+
+``` npm install -g live-server ```
 
 ### Start Live-Server
 
