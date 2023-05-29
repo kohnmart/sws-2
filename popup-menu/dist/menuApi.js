@@ -46,13 +46,14 @@ export default class MenuApi {
             const parent = document.getElementById('menu-display');
             parent === null || parent === void 0 ? void 0 : parent.childNodes[0].remove();
             this.ulList = document.createElement('ul');
+            this.ulList.id = MenuApi.id;
             parent === null || parent === void 0 ? void 0 : parent.appendChild(this.ulList);
             /* render items as elements in ul-list */
             this.itemList.forEach((item) => {
                 item.render();
             });
             // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
-            this.ulList.style.display = 'block';
+            this.ulList.style.display = 'flex';
             this.ulList.style.transform = `translate(${x}px, ${y}px)`;
             /* event-prevent default for all elements */
             document.addEventListener('click', this.eventListener, true);
@@ -66,9 +67,9 @@ export default class MenuApi {
         this.itemList = [];
         this.ulList = document.createElement('ul');
         this.eventListener = (event) => {
-            /* check if target is a menu-item */
             const target = event.target;
-            if (target.id != Item.id) {
+            /* check if target is menu or menu-item */
+            if (target.id != Item.id && target.id != MenuApi.id) {
                 event.preventDefault();
                 event.stopPropagation();
                 this.hide();
@@ -76,3 +77,4 @@ export default class MenuApi {
         };
     }
 }
+MenuApi.id = 'menu';
