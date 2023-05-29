@@ -1,6 +1,7 @@
 import { Item } from './item.js';
 
 export default class MenuApi {
+  static id: string = 'menu';
   itemList: Array<Item>;
   ulList: HTMLUListElement;
   eventListener: EventListenerOrEventListenerObject;
@@ -9,9 +10,9 @@ export default class MenuApi {
     this.itemList = [];
     this.ulList = document.createElement('ul');
     this.eventListener = (event: Event): void => {
-      /* check if target is a menu-item */
       const target = event.target as HTMLElement;
-      if (target.id != Item.id) {
+      /* check if target is menu or menu-item */
+      if (target.id != Item.id && target.id != MenuApi.id) {
         event.preventDefault();
         event.stopPropagation();
         this.hide();
@@ -72,6 +73,7 @@ export default class MenuApi {
     const parent = document.getElementById('menu-display');
     parent?.childNodes[0].remove();
     this.ulList = document.createElement('ul');
+    this.ulList.id = MenuApi.id;
     parent?.appendChild(this.ulList);
 
     /* render items as elements in ul-list */
@@ -80,7 +82,7 @@ export default class MenuApi {
     });
 
     // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
-    this.ulList.style.display = 'block';
+    this.ulList.style.display = 'flex';
     this.ulList.style.transform = `translate(${x}px, ${y}px)`;
 
     /* event-prevent default for all elements */
