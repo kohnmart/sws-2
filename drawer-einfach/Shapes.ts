@@ -79,7 +79,7 @@ export class LineFactory extends AbstractFactory<Line> implements ShapeFactory {
     return new Line(from, to);
   }
 }
-class Circle extends AbstractShape implements Shape {
+export class Circle extends AbstractShape implements Shape {
   constructor(readonly center: Point2D, readonly radius: number) {
     super('circle');
   }
@@ -109,7 +109,7 @@ export class CircleFactory
     return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
   }
 }
-class Rectangle extends AbstractShape implements Shape {
+export class Rectangle extends AbstractShape implements Shape {
   constructor(readonly from: Point2D, readonly to: Point2D) {
     super('rectangle');
   }
@@ -138,7 +138,7 @@ export class RectangleFactory
     return new Rectangle(from, to);
   }
 }
-class Triangle extends AbstractShape implements Shape {
+export class Triangle extends AbstractShape implements Shape {
   constructor(
     readonly p1: Point2D,
     readonly p2: Point2D,
