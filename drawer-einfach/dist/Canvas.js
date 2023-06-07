@@ -39,7 +39,7 @@ export class Canvas {
         // draw shapes
         this.ctx.fillStyle = 'black';
         for (let id in this.shapes) {
-            this.shapes[id].draw(this.ctx);
+            this.shapes[id].draw(this.ctx, false);
         }
         return this;
     }
@@ -58,6 +58,9 @@ export class Canvas {
     }
     getShapes() {
         return this.shapes;
+    }
+    getCanvasRenderingContext() {
+        return this.ctx;
     }
 }
 //# sourceMappingURL=Canvas.js.map

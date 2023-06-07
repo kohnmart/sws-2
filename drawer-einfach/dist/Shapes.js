@@ -49,11 +49,15 @@ export class Line extends AbstractShape {
         this.from = from;
         this.to = to;
     }
-    draw(ctx) {
+    draw(ctx, isSelected) {
         ctx.beginPath();
         ctx.moveTo(this.from.x, this.from.y);
         ctx.lineTo(this.to.x, this.to.y);
         ctx.stroke();
+        if (isSelected) {
+            ctx.fillRect(this.from.x, this.from.y, 10, 10);
+            ctx.fillRect(this.to.x, this.to.y, 10, 10);
+        }
     }
 }
 export class LineFactory extends AbstractFactory {

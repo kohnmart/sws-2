@@ -3,6 +3,7 @@ export class Selector {
         this.label = 'Select';
     }
     static iterateShapes(x, y) {
+        const ctx = Selector.canvas.getCanvasRenderingContext();
         const shapes = Selector.canvas.getShapes();
         for (const key in shapes) {
             if (shapes.hasOwnProperty(key)) {
@@ -18,26 +19,12 @@ export class Selector {
                         end_y * start_x) /
                         Math.pow((Math.pow((end_y - start_y), 2) + Math.pow((end_x - start_x), 2)), 0.5);
                     if (Math.abs(distance) <= 10) {
-                        Selector.drawControllRects(start_x, start_y);
-                        Selector.drawControllRects(end_x, end_y);
+                        shape.draw(ctx, true);
                         console.log(`Line is activated`);
                     }
                 }
             }
         }
-    }
-    static drawControllRects(x, y) {
-        console.log(Selector.drawArea);
-        const rectangle = document.createElement('button');
-        rectangle.style.width = '10px'; // Adjust the width as needed
-        rectangle.style.height = '10px'; // Adjust the height as needed
-        rectangle.style.backgroundColor = 'black'; // Adjust the color as desired
-        rectangle.style.borderRadius = '50%'; // Makes the rectangle circular
-        /* Positioning */
-        rectangle.style.position = 'absolute';
-        rectangle.style.left = x + 'px';
-        rectangle.style.top = y + 'px';
-        Selector.drawArea.appendChild(rectangle);
     }
 }
 Selector.isEditMode = false;
