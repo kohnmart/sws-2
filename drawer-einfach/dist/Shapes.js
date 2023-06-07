@@ -30,7 +30,7 @@ class AbstractFactory {
         if (!this.from) {
             return;
         }
-        if (!this.tmpTo || (this.tmpTo.x !== x || this.tmpTo.y !== y)) {
+        if (!this.tmpTo || this.tmpTo.x !== x || this.tmpTo.y !== y) {
             this.tmpTo = new Point2D(x, y);
             if (this.tmpShape) {
                 // remove the old temp line, if there was one
@@ -58,7 +58,7 @@ export class Line extends AbstractShape {
 export class LineFactory extends AbstractFactory {
     constructor(shapeManager) {
         super(shapeManager);
-        this.label = "Linie";
+        this.label = 'Linie';
     }
     createShape(from, to) {
         return new Line(from, to);
@@ -79,13 +79,13 @@ class Circle extends AbstractShape {
 export class CircleFactory extends AbstractFactory {
     constructor(shapeManager) {
         super(shapeManager);
-        this.label = "Kreis";
+        this.label = 'Kreis';
     }
     createShape(from, to) {
         return new Circle(from, CircleFactory.computeRadius(from, to.x, to.y));
     }
     static computeRadius(from, x, y) {
-        const xDiff = (from.x - x), yDiff = (from.y - y);
+        const xDiff = from.x - x, yDiff = from.y - y;
         return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 }
@@ -104,7 +104,7 @@ class Rectangle extends AbstractShape {
 export class RectangleFactory extends AbstractFactory {
     constructor(shapeManager) {
         super(shapeManager);
-        this.label = "Rechteck";
+        this.label = 'Rechteck';
     }
     createShape(from, to) {
         return new Rectangle(from, to);
@@ -129,7 +129,7 @@ class Triangle extends AbstractShape {
 export class TriangleFactory {
     constructor(shapeManager) {
         this.shapeManager = shapeManager;
-        this.label = "Dreieck";
+        this.label = 'Dreieck';
     }
     handleMouseDown(x, y) {
         if (this.tmpShape) {
@@ -161,8 +161,11 @@ export class TriangleFactory {
         if (!this.from) {
             return;
         }
-        if (this.tmpShape) { // second point already defined, update temp triangle
-            if (!this.thirdPoint || (this.thirdPoint.x !== x || this.thirdPoint.y !== y)) {
+        if (this.tmpShape) {
+            // second point already defined, update temp triangle
+            if (!this.thirdPoint ||
+                this.thirdPoint.x !== x ||
+                this.thirdPoint.y !== y) {
                 this.thirdPoint = new Point2D(x, y);
                 if (this.tmpShape) {
                     // remove the old temp line, if there was one
@@ -173,8 +176,9 @@ export class TriangleFactory {
                 this.shapeManager.addShape(this.tmpShape);
             }
         }
-        else { // no second point fixed, update tmp line
-            if (!this.tmpTo || (this.tmpTo.x !== x || this.tmpTo.y !== y)) {
+        else {
+            // no second point fixed, update tmp line
+            if (!this.tmpTo || this.tmpTo.x !== x || this.tmpTo.y !== y) {
                 this.tmpTo = new Point2D(x, y);
                 if (this.tmpLine) {
                     // remove the old temp line, if there was one

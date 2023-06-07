@@ -1,9 +1,10 @@
-import { CircleFactory, LineFactory, RectangleFactory, TriangleFactory } from "./Shapes.js";
-import { ToolArea } from "./ToolArea.js";
-import { Canvas } from "./Canvas.js";
+import { CircleFactory, LineFactory, RectangleFactory, TriangleFactory, } from './Shapes.js';
+import { ToolArea } from './ToolArea.js';
+import { Canvas } from './Canvas.js';
+import { Selector } from './Selector.js';
 function init() {
-    const canvasDomElm = document.getElementById("drawArea");
-    const menu = document.getElementsByClassName("tools");
+    const canvasDomElm = document.getElementById('drawArea');
+    const menu = document.getElementsByClassName('tools');
     // Problem here: Factories needs a way to create new Shapes, so they
     // have to call a method of the canvas.
     // The canvas on the other side wants to call the event methods
@@ -20,17 +21,19 @@ function init() {
         },
         removeShapeWithId(id, rd) {
             return canvas.removeShapeWithId(id, rd);
-        }
+        },
     };
-    const shapesSelector = [
+    const tools = [
         new LineFactory(sm),
         new CircleFactory(sm),
         new RectangleFactory(sm),
-        new TriangleFactory(sm)
+        new TriangleFactory(sm),
+        new Selector(),
     ];
-    const toolArea = new ToolArea(shapesSelector, menu[0]);
+    const toolArea = new ToolArea(tools, menu[0]);
     canvas = new Canvas(canvasDomElm, toolArea);
     canvas.draw();
+    Selector.canvas = canvas;
 }
 init();
 //# sourceMappingURL=init.js.map
