@@ -8,6 +8,7 @@ export class Selector {
   static canvas: Canvas = undefined;
 
   static iterateShapes(x: number, y: number) {
+    const ctx = Selector.canvas.getCanvasRenderingContext();
     const shapes = Selector.canvas.getShapes();
     for (const key in shapes) {
       if (shapes.hasOwnProperty(key)) {
@@ -26,7 +27,7 @@ export class Selector {
             ((end_y - start_y) ** 2 + (end_x - start_x) ** 2) ** 0.5;
 
           if (Math.abs(distance) <= 10) {
-            //shape.draw(ctx, true)
+            shape.draw(ctx, true);
             console.log(`Line is activated`);
           }
         }
