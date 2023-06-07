@@ -5,8 +5,9 @@ class Point2D {
     }
 }
 class AbstractShape {
-    constructor() {
+    constructor(type) {
         this.id = AbstractShape.counter++;
+        this.type = type;
     }
 }
 AbstractShape.counter = 0;
@@ -44,7 +45,7 @@ class AbstractFactory {
 }
 export class Line extends AbstractShape {
     constructor(from, to) {
-        super();
+        super('line');
         this.from = from;
         this.to = to;
     }
@@ -66,7 +67,7 @@ export class LineFactory extends AbstractFactory {
 }
 class Circle extends AbstractShape {
     constructor(center, radius) {
-        super();
+        super('circle');
         this.center = center;
         this.radius = radius;
     }
@@ -91,7 +92,7 @@ export class CircleFactory extends AbstractFactory {
 }
 class Rectangle extends AbstractShape {
     constructor(from, to) {
-        super();
+        super('rectangle');
         this.from = from;
         this.to = to;
     }
@@ -112,7 +113,7 @@ export class RectangleFactory extends AbstractFactory {
 }
 class Triangle extends AbstractShape {
     constructor(p1, p2, p3) {
-        super();
+        super('triangle');
         this.p1 = p1;
         this.p2 = p2;
         this.p3 = p3;
