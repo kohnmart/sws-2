@@ -1,32 +1,42 @@
-import {ShapeFactory} from "./types.js";
+import { Selector } from './Selector.js';
+import { ShapeFactory } from './types.js';
 
 export class ToolArea {
-    private selectedShape: ShapeFactory = undefined;
-    constructor(shapesSelector: ShapeFactory[], menue: Element) {
-        const domElms = [];
-        shapesSelector.forEach(sl => {
-            const domSelElement = document.createElement("li");
-            domSelElement.innerText = sl.label;
-            menue.appendChild(domSelElement);
-            domElms.push(domSelElement);
+  private selectedShape: ShapeFactory = undefined;
+  constructor(shapesSelector: ShapeFactory[], menu: Element) {
+    const list = [];
+    shapesSelector.forEach((shape) => {
+      const listItem = document.createElement('li');
+      listItem.innerText = shape.label;
+      menu.appendChild(listItem);
+      list.push(listItem);
 
-            domSelElement.addEventListener("click", () => {
-                selectFactory.call(this, sl, domSelElement);
-            });
-        });
+      listItem.addEventListener('click', () => {
+        selectTool.call(this, shape, listItem);
+      });
+    });
 
-        function selectFactory(sl: ShapeFactory, domElm: HTMLElement) {
-            // remove class from all elements
-            for (let j = 0; j < domElms.length; j++) {
-                domElms[j].classList.remove("marked");
-            }
-            this.selectedShape = sl;
-            // add class to the one that is selected currently
-            domElm.classList.add("marked");
-        }
+    function selectTool(shape: ShapeFactory, activeListItem: HTMLElement) {
+      // remove class from all elements
+      console.log(shape);
+      list.forEach((item) => {
+        item.classList.remove('marked');
+      });
+
+      if (shape.hasOwnProperty('shapeManager')) {
+        Selector.isEditMode = false;
+        this.selectedShape = shape;
+      } else {
+        console.log('Selection Mode');
+        Selector.isEditMode = true;
+        this.selectedShape = shape;
+      }
+      // add class to the one that is selected currently
+      activeListItem.classList.add('marked');
     }
+  }
 
-    getSelectedShape(): ShapeFactory {
-        return this.selectedShape;
-    }
+  getSelectedShape(): ShapeFactory {
+    return this.selectedShape;
+  }
 }
