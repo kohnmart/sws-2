@@ -6,8 +6,10 @@ class Point2D {
 class AbstractShape {
   private static counter: number = 0;
   readonly id: number;
-  constructor() {
+  readonly type: string;
+  constructor(type: string) {
     this.id = AbstractShape.counter++;
+    this.type = type;
   }
 }
 abstract class AbstractFactory<T extends Shape> {
@@ -51,14 +53,19 @@ abstract class AbstractFactory<T extends Shape> {
 }
 export class Line extends AbstractShape implements Shape {
   constructor(readonly from: Point2D, readonly to: Point2D) {
-    super();
+    super('line');
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
     ctx.beginPath();
     ctx.moveTo(this.from.x, this.from.y);
     ctx.lineTo(this.to.x, this.to.y);
     ctx.stroke();
+
+    if (isSelected) {
+      ctx.fillRect(this.from.x, this.from.y, 10, 10);
+      ctx.fillRect(this.to.x, this.to.y, 10, 10);
+    }
   }
 }
 export class LineFactory extends AbstractFactory<Line> implements ShapeFactory {
@@ -74,7 +81,7 @@ export class LineFactory extends AbstractFactory<Line> implements ShapeFactory {
 }
 class Circle extends AbstractShape implements Shape {
   constructor(readonly center: Point2D, readonly radius: number) {
-    super();
+    super('circle');
   }
   draw(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
@@ -104,7 +111,7 @@ export class CircleFactory
 }
 class Rectangle extends AbstractShape implements Shape {
   constructor(readonly from: Point2D, readonly to: Point2D) {
-    super();
+    super('rectangle');
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -137,7 +144,7 @@ class Triangle extends AbstractShape implements Shape {
     readonly p2: Point2D,
     readonly p3: Point2D
   ) {
-    super();
+    super('triangle');
   }
   draw(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
