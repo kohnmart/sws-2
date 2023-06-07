@@ -3,7 +3,7 @@ import { ToolArea } from './ToolArea.js';
 import { Selector } from './Selector.js';
 
 export class Canvas implements ShapeManager {
-  private ctx: CanvasRenderingContext2D;
+  ctx: CanvasRenderingContext2D;
   private shapes: { [p: number]: Shape } = {};
   private width: number;
   private height: number;
@@ -84,5 +84,9 @@ export class Canvas implements ShapeManager {
 
   getShapes() {
     return this.shapes;
+  }
+
+  getCanvasRenderingContext() {
+    return this.ctx;
   }
 }
