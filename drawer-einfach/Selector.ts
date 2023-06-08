@@ -7,9 +7,35 @@ export class Selector {
   public static canvas: Canvas = undefined;
   private static list: Shape[] = [];
   private static indexer = 0;
+
+  private static drawArea = document.getElementById('drawArea');
+
+  private static eventListener = (event: MouseEvent): void => {
+    Selector.handleShapesList(event);
+  };
+
+  public static enableEditMode() {
+    Selector.isEditMode = true;
+    Selector.drawArea.addEventListener('click', Selector.eventListener);
+    console.log('LISTENER ATTACHED');
+  }
+
+  public static disableEditMode() {
+    Selector.isEditMode = false;
+    Selector.drawArea.removeEventListener('click', Selector.eventListener);
+    console.log('LISTENER REMOVED');
+  }
+
   /* Scanning shapes */
   public static iterateShapes(x: number, y: number) {
     const ctx = Selector.canvas.getCanvasRenderingContext();
+    if (Selector.list.length) {
+      Selector.list.forEach((element) => {
+        element.draw(ctx, false);
+      });
+      Selector.list = [];
+    }
+
     const shapes = Selector.canvas.getShapes();
     /* Iterate over shapes */
     for (const key in shapes) {
@@ -91,18 +117,23 @@ export class Selector {
           }
         }
       }
+      if (Selector.list.length) {
+        const firstElement = Selector.list[0] as Shape;
+        firstElement.draw(ctx, true);
+      }
     }
   }
-  private static handleShapesList(
-    event: MouseEvent,
-    ctx: CanvasRenderingContext2D
-  ) {
-    console.log('is active');
+  private static handleShapesList(event: MouseEvent) {
+    const ctx = Selector.canvas.getCanvasRenderingContext();
     if (event.altKey) {
       this.indexer++;
+      if (this.indexer-- > 0) {
+        const beforeShape = this.list[this.indexer - 1] as Shape;
+        beforeShape.draw(ctx, false);
+      }
       const currentShape = this.list[this.indexer] as Shape;
       currentShape.draw(ctx, true);
-      if (this.indexer == this.list.length) {
+      if (this.indexer >= this.list.length) {
         this.indexer = 0;
       } else {
         this.indexer++;
