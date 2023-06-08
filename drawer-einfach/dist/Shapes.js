@@ -55,8 +55,8 @@ export class Line extends AbstractShape {
         ctx.lineTo(this.to.x, this.to.y);
         ctx.stroke();
         if (isSelected) {
-            ctx.fillRect(this.from.x, this.from.y, 10, 10);
-            ctx.fillRect(this.to.x, this.to.y, 10, 10);
+            ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
+            ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
         }
     }
 }
@@ -75,10 +75,16 @@ export class Circle extends AbstractShape {
         this.center = center;
         this.radius = radius;
     }
-    draw(ctx) {
+    draw(ctx, isSelected) {
         ctx.beginPath();
         ctx.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
         ctx.stroke();
+        if (isSelected) {
+            ctx.fillRect(this.center.x - 5, this.center.y + this.radius - 5, 10, 10);
+            ctx.fillRect(this.center.x - 5, this.center.y - this.radius - 5, 10, 10);
+            ctx.fillRect(this.center.x - 5 - this.radius, this.center.y, 10, 10);
+            ctx.fillRect(this.center.x - 5 + this.radius, this.center.y, 10, 10);
+        }
     }
 }
 export class CircleFactory extends AbstractFactory {
@@ -128,13 +134,18 @@ export class Triangle extends AbstractShape {
         this.p2 = p2;
         this.p3 = p3;
     }
-    draw(ctx) {
+    draw(ctx, isSelected) {
         ctx.beginPath();
         ctx.moveTo(this.p1.x, this.p1.y);
         ctx.lineTo(this.p2.x, this.p2.y);
         ctx.lineTo(this.p3.x, this.p3.y);
         ctx.lineTo(this.p1.x, this.p1.y);
         ctx.stroke();
+        if (isSelected) {
+            ctx.fillRect(this.p1.x - 5, this.p1.y - 5, 10, 10);
+            ctx.fillRect(this.p2.x - 5, this.p2.y - 5, 10, 10);
+            ctx.fillRect(this.p3.x - 5, this.p3.y - 5, 10, 10);
+        }
     }
 }
 export class TriangleFactory {
