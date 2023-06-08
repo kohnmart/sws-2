@@ -114,7 +114,7 @@ export class Rectangle extends AbstractShape implements Shape {
     super('rectangle');
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
     ctx.beginPath();
     ctx.strokeRect(
       this.from.x,
@@ -123,6 +123,12 @@ export class Rectangle extends AbstractShape implements Shape {
       this.to.y - this.from.y
     );
     ctx.stroke();
+    if (isSelected) {
+      ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
+      ctx.fillRect(this.from.x - 5, this.to.y - 5, 10, 10);
+      ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
+      ctx.fillRect(this.to.x - 5, this.from.y - 5, 10, 10);
+    }
   }
 }
 export class RectangleFactory
