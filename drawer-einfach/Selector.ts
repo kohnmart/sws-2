@@ -3,8 +3,10 @@ import { Circle, Triangle, Rectangle, Line } from './Shapes';
 
 export class Selector {
   public static isEditMode: boolean = false;
-  public label = 'Select';
+  public static label = 'Select';
   public static canvas: Canvas = undefined;
+
+  /* Scanning shapes */
   public static iterateShapes(x: number, y: number) {
     const ctx = Selector.canvas.getCanvasRenderingContext();
     const shapes = Selector.canvas.getShapes();
