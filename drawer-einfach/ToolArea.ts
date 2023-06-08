@@ -18,7 +18,6 @@ export class ToolArea {
 
     function selectTool(shape: ShapeFactory, activeListItem: HTMLElement) {
       // remove class from all elements
-      console.log(shape);
       list.forEach((item) => {
         item.classList.remove('marked');
       });
