@@ -2,23 +2,19 @@ export class Selector {
     static enableEditMode() {
         Selector.isEditMode = true;
         Selector.drawArea.addEventListener('click', Selector.eventListener);
-        console.log('LISTENER ATTACHED');
     }
     static disableEditMode() {
         Selector.isEditMode = false;
         Selector.drawArea.removeEventListener('click', Selector.eventListener);
-        console.log('LISTENER REMOVED');
     }
     /* Scanning shapes */
     static iterateShapes(x, y) {
         const ctx = Selector.canvas.getCanvasRenderingContext();
-        if (Selector.list.length) {
-            Selector.list.forEach((element) => {
-                element.draw(ctx, false);
-            });
-            Selector.list = [];
-        }
         const shapes = Selector.canvas.getShapes();
+        console.log('LIST ENTRY');
+        console.log(Selector.list);
+        Selector.canvas.draw();
+        Selector.list = [];
         /* Iterate over shapes */
         for (const key in shapes) {
             if (shapes.hasOwnProperty(key)) {
@@ -88,27 +84,26 @@ export class Selector {
                 }
             }
             if (Selector.list.length) {
-                const firstElement = Selector.list[0];
-                firstElement.draw(ctx, true);
+                const id = Selector.list[0].id;
+                shapes[id].draw(ctx, true);
             }
         }
     }
     static handleShapesList(event) {
+        console.log('HaNDLE ENTRY');
         const ctx = Selector.canvas.getCanvasRenderingContext();
+        const shapes = Selector.canvas.getShapes();
         if (event.altKey) {
             this.indexer++;
-            if (this.indexer-- > 0) {
-                const beforeShape = this.list[this.indexer - 1];
-                beforeShape.draw(ctx, false);
-            }
-            const currentShape = this.list[this.indexer];
-            currentShape.draw(ctx, true);
-            if (this.indexer >= this.list.length) {
+            if (this.indexer >= Selector.list.length) {
                 this.indexer = 0;
             }
-            else {
-                this.indexer++;
+            if (this.indexer > 0) {
+                const idBefore = Selector.list[this.indexer - 1].id;
+                shapes[idBefore].draw(ctx, false);
             }
+            const idCurrent = Selector.list[this.indexer].id;
+            shapes[idCurrent].draw(ctx, true);
         }
     }
 }
@@ -119,6 +114,8 @@ Selector.list = [];
 Selector.indexer = 0;
 Selector.drawArea = document.getElementById('drawArea');
 Selector.eventListener = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     Selector.handleShapesList(event);
 };
 //# sourceMappingURL=Selector.js.map
