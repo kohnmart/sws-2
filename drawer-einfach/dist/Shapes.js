@@ -69,7 +69,7 @@ export class LineFactory extends AbstractFactory {
         return new Line(from, to);
     }
 }
-class Circle extends AbstractShape {
+export class Circle extends AbstractShape {
     constructor(center, radius) {
         super('circle');
         this.center = center;
@@ -94,16 +94,22 @@ export class CircleFactory extends AbstractFactory {
         return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 }
-class Rectangle extends AbstractShape {
+export class Rectangle extends AbstractShape {
     constructor(from, to) {
         super('rectangle');
         this.from = from;
         this.to = to;
     }
-    draw(ctx) {
+    draw(ctx, isSelected) {
         ctx.beginPath();
         ctx.strokeRect(this.from.x, this.from.y, this.to.x - this.from.x, this.to.y - this.from.y);
         ctx.stroke();
+        if (isSelected) {
+            ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
+            ctx.fillRect(this.from.x - 5, this.to.y - 5, 10, 10);
+            ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
+            ctx.fillRect(this.to.x - 5, this.from.y - 5, 10, 10);
+        }
     }
 }
 export class RectangleFactory extends AbstractFactory {
@@ -115,7 +121,7 @@ export class RectangleFactory extends AbstractFactory {
         return new Rectangle(from, to);
     }
 }
-class Triangle extends AbstractShape {
+export class Triangle extends AbstractShape {
     constructor(p1, p2, p3) {
         super('triangle');
         this.p1 = p1;
