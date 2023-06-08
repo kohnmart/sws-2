@@ -17,26 +17,25 @@ export class Selector {
   public static enableEditMode() {
     Selector.isEditMode = true;
     Selector.drawArea.addEventListener('click', Selector.eventListener);
-    console.log('LISTENER ATTACHED');
   }
 
   public static disableEditMode() {
     Selector.isEditMode = false;
     Selector.drawArea.removeEventListener('click', Selector.eventListener);
-    console.log('LISTENER REMOVED');
   }
 
   /* Scanning shapes */
   public static iterateShapes(x: number, y: number) {
     const ctx = Selector.canvas.getCanvasRenderingContext();
-    if (Selector.list.length) {
-      Selector.list.forEach((element) => {
-        element.draw(ctx, false);
-      });
-      Selector.list = [];
-    }
-
     const shapes = Selector.canvas.getShapes();
+
+    console.log('LIST ENTRY');
+    console.log(Selector.list);
+
+    Selector.canvas.draw();
+
+    Selector.list = [];
+
     /* Iterate over shapes */
     for (const key in shapes) {
       if (shapes.hasOwnProperty(key)) {
@@ -118,8 +117,8 @@ export class Selector {
         }
       }
       if (Selector.list.length) {
-        const firstElement = Selector.list[0] as Shape;
-        firstElement.draw(ctx, true);
+        const id = Selector.list[0].id;
+        shapes[id].draw(ctx, true);
       }
     }
   }
