@@ -11,6 +11,8 @@ export class Selector {
   private static drawArea = document.getElementById('drawArea');
 
   private static eventListener = (event: MouseEvent): void => {
+    event.preventDefault();
+    event.stopPropagation();
     Selector.handleShapesList(event);
   };
 
@@ -123,20 +125,22 @@ export class Selector {
     }
   }
   private static handleShapesList(event: MouseEvent) {
+    console.log('HaNDLE ENTRY');
     const ctx = Selector.canvas.getCanvasRenderingContext();
+    const shapes = Selector.canvas.getShapes();
+
     if (event.altKey) {
       this.indexer++;
-      if (this.indexer-- > 0) {
-        const beforeShape = this.list[this.indexer - 1] as Shape;
-        beforeShape.draw(ctx, false);
-      }
-      const currentShape = this.list[this.indexer] as Shape;
-      currentShape.draw(ctx, true);
-      if (this.indexer >= this.list.length) {
+
+      if (this.indexer >= Selector.list.length) {
         this.indexer = 0;
-      } else {
-        this.indexer++;
       }
+      if (this.indexer > 0) {
+        const idBefore = Selector.list[this.indexer - 1].id;
+        shapes[idBefore].draw(ctx, false);
+      }
+      const idCurrent = Selector.list[this.indexer].id;
+      shapes[idCurrent].draw(ctx, true);
     }
   }
 }
