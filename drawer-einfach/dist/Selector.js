@@ -1,7 +1,5 @@
 export class Selector {
-    constructor() {
-        this.label = 'Select';
-    }
+    /* Scanning shapes */
     static iterateShapes(x, y) {
         const ctx = Selector.canvas.getCanvasRenderingContext();
         const shapes = Selector.canvas.getShapes();
@@ -18,7 +16,6 @@ export class Selector {
                     // Calculate the cross product between vectors (start to point) and (start to end)
                     const crossProduct = (x - start_x) * (end_y - start_y) -
                         (y - start_y) * (end_x - start_x);
-                    console.log(crossProduct);
                     // Check if the point is collinear with the line segment
                     if (Math.abs(crossProduct) < 1500) {
                         // Check if the point lies within the bounding box of the line segment
@@ -26,7 +23,8 @@ export class Selector {
                             x <= Math.max(start_x, end_x) &&
                             Math.min(start_y, end_y) <= y &&
                             y <= Math.max(start_y, end_y)) {
-                            shape.draw(ctx, true);
+                            //shape.draw(ctx, true);
+                            Selector.list.push(line);
                         }
                     }
                 }
@@ -44,7 +42,8 @@ export class Selector {
                         distanceToRight <= Math.abs(end_x - start_x) &&
                         distanceToTop <= end_y - start_y &&
                         distanceToBottom <= end_y - start_y) {
-                        rectangle.draw(ctx, true);
+                        //rectangle.draw(ctx, true);
+                        Selector.list.push(rectangle);
                     }
                 }
                 else if (type == 'triangle') {
@@ -57,7 +56,8 @@ export class Selector {
                         ((p2.y - p3.y) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.y - p3.y));
                     const gamma = 1 - alpha - beta;
                     if (alpha >= 0 && beta >= 0 && gamma >= 0) {
-                        triangle.draw(ctx, true);
+                        //triangle.draw(ctx, true);
+                        Selector.list.push(triangle);
                     }
                 }
                 else {
@@ -66,13 +66,31 @@ export class Selector {
                     // Calculate the distance between the point and the center of the circle
                     const distance = Math.sqrt(Math.pow((x - center.x), 2) + Math.pow((y - center.y), 2));
                     if (distance <= radius) {
-                        circle.draw(ctx, true);
+                        // circle.draw(ctx, true);
+                        Selector.list.push(circle);
                     }
                 }
             }
         }
     }
+    static handleShapesList(event, ctx) {
+        console.log('is active');
+        if (event.altKey) {
+            this.indexer++;
+            const currentShape = this.list[this.indexer];
+            currentShape.draw(ctx, true);
+            if (this.indexer == this.list.length) {
+                this.indexer = 0;
+            }
+            else {
+                this.indexer++;
+            }
+        }
+    }
 }
 Selector.isEditMode = false;
+Selector.label = 'Select';
 Selector.canvas = undefined;
+Selector.list = [];
+Selector.indexer = 0;
 //# sourceMappingURL=Selector.js.map

@@ -1,4 +1,3 @@
-import { Selector } from './Selector.js';
 export class Canvas {
     constructor(canvasDomElement, toolarea) {
         this.shapes = {};
@@ -16,15 +15,10 @@ export class Canvas {
                     const btnCode = e.button, x = e.pageX - this.offsetLeft, y = e.pageY - this.offsetTop, ss = toolarea.getSelectedShape();
                     // if left mouse button is pressed,
                     // and if a tool is selected, do something
-                    if (e.button === 0 && ss && !Selector.isEditMode) {
+                    if (e.button === 0 && ss) {
                         const m = ss[methodName];
                         // This in the shapeFactory should be the factory itself.
                         m.call(ss, x, y);
-                    }
-                    else if (methodName == 'handleMouseDown') {
-                        console.log('shapes');
-                        console.log(this.shapes);
-                        Selector.iterateShapes(x, y);
                     }
                 }
             };

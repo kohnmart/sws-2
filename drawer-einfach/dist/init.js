@@ -28,7 +28,7 @@ function init() {
         new CircleFactory(sm),
         new RectangleFactory(sm),
         new TriangleFactory(sm),
-        new Selector(),
+        Selector,
     ];
     const toolArea = new ToolArea(tools, menu[0]);
     canvas = new Canvas(canvasDomElm, toolArea);
