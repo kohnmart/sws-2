@@ -1,11 +1,12 @@
 import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
-
+import { Shape } from './types.js';
 export class Selector {
   public static isEditMode: boolean = false;
   public static label = 'Select';
   public static canvas: Canvas = undefined;
-
+  private static list: Shape[] = [];
+  private static indexer = 0;
   /* Scanning shapes */
   public static iterateShapes(x: number, y: number) {
     const ctx = Selector.canvas.getCanvasRenderingContext();
@@ -36,7 +37,8 @@ export class Selector {
               Math.min(start_y, end_y) <= y &&
               y <= Math.max(start_y, end_y)
             ) {
-              shape.draw(ctx, true);
+              //shape.draw(ctx, true);
+              Selector.list.push(line as Shape);
             }
           }
         } else if (type == 'rectangle') {
@@ -57,7 +59,8 @@ export class Selector {
             distanceToTop <= end_y - start_y &&
             distanceToBottom <= end_y - start_y
           ) {
-            rectangle.draw(ctx, true);
+            //rectangle.draw(ctx, true);
+            Selector.list.push(rectangle as Shape);
           }
         } else if (type == 'triangle') {
           const triangle = shape as Triangle;
@@ -73,7 +76,8 @@ export class Selector {
           const gamma = 1 - alpha - beta;
 
           if (alpha >= 0 && beta >= 0 && gamma >= 0) {
-            triangle.draw(ctx, true);
+            //triangle.draw(ctx, true);
+            Selector.list.push(triangle as Shape);
           }
         } else {
           const circle = shape as Circle;
@@ -82,9 +86,26 @@ export class Selector {
           const distance = Math.sqrt((x - center.x) ** 2 + (y - center.y) ** 2);
 
           if (distance <= radius) {
-            circle.draw(ctx, true);
+            // circle.draw(ctx, true);
+            Selector.list.push(circle as Shape);
           }
         }
+      }
+    }
+  }
+  private static handleShapesList(
+    event: MouseEvent,
+    ctx: CanvasRenderingContext2D
+  ) {
+    console.log('is active');
+    if (event.altKey) {
+      this.indexer++;
+      const currentShape = this.list[this.indexer] as Shape;
+      currentShape.draw(ctx, true);
+      if (this.indexer == this.list.length) {
+        this.indexer = 0;
+      } else {
+        this.indexer++;
       }
     }
   }
