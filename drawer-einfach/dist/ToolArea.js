@@ -18,13 +18,14 @@ export class ToolArea {
                 item.classList.remove('marked');
             });
             if (shape.hasOwnProperty('shapeManager')) {
-                Selector.disableEditMode();
+                //Selector.disableEditMode();
                 this.selectedShape = shape;
             }
             else {
                 console.log('Selection Mode');
-                Selector.enableEditMode();
-                this.selectedShape = shape;
+                //Selector.enableEditMode();
+                const selector = new Selector();
+                this.selectedShape = selector;
             }
             // add class to the one that is selected currently
             activeListItem.classList.add('marked');

@@ -1,12 +1,17 @@
 export class Selector {
-    static enableEditMode() {
-        Selector.isEditMode = true;
-        Selector.drawArea.addEventListener('click', Selector.eventListener);
+    constructor() {
+        this.label = 'Select';
     }
-    static disableEditMode() {
-        Selector.isEditMode = false;
-        Selector.drawArea.removeEventListener('click', Selector.eventListener);
+    handleMouseDown(x, y) {
+        Selector.iterateShapes(x, y);
     }
+    handleAlt() {
+        if (Selector.list.length) {
+            Selector.handleShapesList();
+        }
+    }
+    handleMouseUp(x, y) { }
+    handleMouseMove(x, y) { }
     /* Scanning shapes */
     static iterateShapes(x, y) {
         const ctx = Selector.canvas.getCanvasRenderingContext();
@@ -89,33 +94,26 @@ export class Selector {
             }
         }
     }
-    static handleShapesList(event) {
-        console.log('HaNDLE ENTRY');
+    static handleShapesList() {
         const ctx = Selector.canvas.getCanvasRenderingContext();
         const shapes = Selector.canvas.getShapes();
-        if (event.altKey) {
-            this.indexer++;
-            if (this.indexer >= Selector.list.length) {
-                this.indexer = 0;
-            }
-            if (this.indexer > 0) {
-                const idBefore = Selector.list[this.indexer - 1].id;
-                shapes[idBefore].draw(ctx, false);
-            }
-            const idCurrent = Selector.list[this.indexer].id;
-            shapes[idCurrent].draw(ctx, true);
+        Selector.canvas.draw();
+        if (Selector.indexer < Selector.list.length - 1) {
+            Selector.indexer++;
         }
+        console.log('START');
+        console.log(Selector.indexer + ' || ' + Selector.list.length);
+        const idCurrent = Selector.list[Selector.indexer].id;
+        shapes[idCurrent].draw(ctx, true);
+        if (Selector.indexer == Selector.list.length - 1) {
+            Selector.indexer = -1;
+        }
+        console.log('END');
+        console.log(Selector.indexer + ' || ' + Selector.list.length);
     }
 }
 Selector.isEditMode = false;
-Selector.label = 'Select';
 Selector.canvas = undefined;
 Selector.list = [];
 Selector.indexer = 0;
-Selector.drawArea = document.getElementById('drawArea');
-Selector.eventListener = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    Selector.handleShapesList(event);
-};
 //# sourceMappingURL=Selector.js.map
