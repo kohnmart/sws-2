@@ -1,9 +1,8 @@
 import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
-import { Shape, ShapeFactory } from './types.js';
-export class Selector implements ShapeFactory {
-  label = 'Select';
-  public static isEditMode: boolean = false;
+import { Shape } from './types.js';
+export class Selector {
+  public label = 'Select';
   public static canvas: Canvas = undefined;
   private static list: Shape[] = [];
   private static indexer = 0;
@@ -124,15 +123,12 @@ export class Selector implements ShapeFactory {
     if (Selector.indexer < Selector.list.length - 1) {
       Selector.indexer++;
     }
-    console.log('START');
-    console.log(Selector.indexer + ' || ' + Selector.list.length);
+
     const idCurrent = Selector.list[Selector.indexer].id;
     shapes[idCurrent].draw(ctx, true);
 
     if (Selector.indexer == Selector.list.length - 1) {
       Selector.indexer = -1;
     }
-    console.log('END');
-    console.log(Selector.indexer + ' || ' + Selector.list.length);
   }
 }
