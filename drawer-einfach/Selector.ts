@@ -1,37 +1,31 @@
 import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
-import { Shape } from './types.js';
-export class Selector {
+import { Shape, ShapeFactory } from './types.js';
+export class Selector implements ShapeFactory {
+  label = 'Select';
   public static isEditMode: boolean = false;
-  public static label = 'Select';
   public static canvas: Canvas = undefined;
   private static list: Shape[] = [];
   private static indexer = 0;
 
-  private static drawArea = document.getElementById('drawArea');
-
-  private static eventListener = (event: MouseEvent): void => {
-    Selector.handleShapesList(event);
-  };
-
-  public static enableEditMode() {
-    Selector.isEditMode = true;
-    Selector.drawArea.addEventListener('click', Selector.eventListener);
+  public handleMouseDown(x: number, y: number) {
+    Selector.iterateShapes(x, y);
   }
 
-  public static disableEditMode() {
-    Selector.isEditMode = false;
-    Selector.drawArea.removeEventListener('click', Selector.eventListener);
-    Selector.indexer = 0;
+  public handleAlt() {
+    if (Selector.list.length) {
+      Selector.handleShapesList();
+    }
   }
+
+  public handleMouseUp(x: number, y: number) {}
+
+  public handleMouseMove(x: number, y: number) {}
 
   /* Scanning shapes */
   public static iterateShapes(x: number, y: number) {
     const ctx = Selector.canvas.getCanvasRenderingContext();
     const shapes = Selector.canvas.getShapes();
-
-    console.log('LIST ENTRY');
-    console.log(Selector.list);
 
     Selector.canvas.draw();
 
@@ -123,24 +117,22 @@ export class Selector {
       }
     }
   }
-  private static handleShapesList(event: MouseEvent) {
-    if (event.altKey) {
-      const ctx = Selector.canvas.getCanvasRenderingContext();
-      const shapes = Selector.canvas.getShapes();
-      Selector.canvas.draw();
-      if (Selector.indexer < Selector.list.length - 1) {
-        Selector.indexer++;
-      }
-      console.log('START');
-      console.log(Selector.indexer + ' || ' + Selector.list.length);
-      const idCurrent = Selector.list[Selector.indexer].id;
-      shapes[idCurrent].draw(ctx, true);
-
-      if (Selector.indexer == Selector.list.length - 1) {
-        Selector.indexer = -1;
-      }
-      console.log('END');
-      console.log(Selector.indexer + ' || ' + Selector.list.length);
+  private static handleShapesList() {
+    const ctx = Selector.canvas.getCanvasRenderingContext();
+    const shapes = Selector.canvas.getShapes();
+    Selector.canvas.draw();
+    if (Selector.indexer < Selector.list.length - 1) {
+      Selector.indexer++;
     }
+    console.log('START');
+    console.log(Selector.indexer + ' || ' + Selector.list.length);
+    const idCurrent = Selector.list[Selector.indexer].id;
+    shapes[idCurrent].draw(ctx, true);
+
+    if (Selector.indexer == Selector.list.length - 1) {
+      Selector.indexer = -1;
+    }
+    console.log('END');
+    console.log(Selector.indexer + ' || ' + Selector.list.length);
   }
 }
