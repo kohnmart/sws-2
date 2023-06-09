@@ -15,7 +15,6 @@ export class Canvas {
                 createMouseHandler('handleCtrl').call(this, event);
             }
             else {
-                console.log('HANDLE DOWN');
                 createMouseHandler('handleMouseDown').call(this, event);
             }
         });

@@ -3,14 +3,18 @@ export class Selector {
         this.label = 'Select';
     }
     handleMouseDown(x, y) {
+        console.log('MouseDOWN');
         Selector.iterateShapes(x, y, false);
     }
     handleAlt() {
+        console.log('handleALT');
+        console.log(Selector.list.length);
         if (Selector.list.length) {
             Selector.handleShapesList();
         }
     }
     handleCtrl(x, y) {
+        console.log('handleCTRL');
         Selector.iterateShapes(x, y, true);
     }
     handleMouseUp(x, y) { }
@@ -91,18 +95,17 @@ export class Selector {
                     }
                 }
             }
-            if (Selector.list.length && !isCtrl) {
-                const id = Selector.list[0].id;
-                console.log('TEST');
-                shapes[id].draw(ctx, true);
-                Selector.list = [];
-            }
-            else if (Selector.list.length && isCtrl) {
-                Selector.list.forEach((s) => {
-                    console.log(s);
-                    shapes[s.id].draw(ctx, true);
-                });
-            }
+        }
+        if (Selector.list.length && !isCtrl) {
+            const id = Selector.list[0].id;
+            console.log('TEST');
+            shapes[id].draw(ctx, true);
+        }
+        else if (Selector.list.length && isCtrl) {
+            Selector.list.forEach((s) => {
+                console.log(s);
+                shapes[s.id].draw(ctx, true);
+            });
         }
     }
     static handleShapesList() {
@@ -113,6 +116,8 @@ export class Selector {
             Selector.indexer++;
         }
         const idCurrent = Selector.list[Selector.indexer].id;
+        console.log('CHECK');
+        console.log(idCurrent);
         shapes[idCurrent].draw(ctx, true);
         if (Selector.indexer == Selector.list.length - 1) {
             Selector.indexer = -1;
