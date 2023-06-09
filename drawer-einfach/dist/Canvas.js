@@ -6,11 +6,17 @@ export class Canvas {
         this.height = height;
         this.ctx = canvasDomElement.getContext('2d');
         canvasDomElement.addEventListener('mousemove', createMouseHandler('handleMouseMove'));
-        canvasDomElement.addEventListener('mousedown', createMouseHandler('handleMouseDown'));
         canvasDomElement.addEventListener('mouseup', createMouseHandler('handleMouseUp'));
         canvasDomElement.addEventListener('mousedown', (event) => {
             if (event.altKey) {
                 createMouseHandler('handleAlt').call(this, event);
+            }
+            else if (event.ctrlKey) {
+                createMouseHandler('handleCtrl').call(this, event);
+            }
+            else {
+                console.log('HANDLE DOWN');
+                createMouseHandler('handleMouseDown').call(this, event);
             }
         });
         function createMouseHandler(methodName) {
@@ -26,7 +32,7 @@ export class Canvas {
                         m.call(ss, x, y);
                     }
                 }
-            };
+            }.bind(canvasDomElement);
         }
     }
     draw() {

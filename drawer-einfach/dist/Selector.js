@@ -3,21 +3,26 @@ export class Selector {
         this.label = 'Select';
     }
     handleMouseDown(x, y) {
-        Selector.iterateShapes(x, y);
+        Selector.iterateShapes(x, y, false);
     }
     handleAlt() {
         if (Selector.list.length) {
             Selector.handleShapesList();
         }
     }
+    handleCtrl(x, y) {
+        Selector.iterateShapes(x, y, true);
+    }
     handleMouseUp(x, y) { }
     handleMouseMove(x, y) { }
     /* Scanning shapes */
-    static iterateShapes(x, y) {
+    static iterateShapes(x, y, isCtrl) {
         const ctx = Selector.canvas.getCanvasRenderingContext();
         const shapes = Selector.canvas.getShapes();
-        Selector.canvas.draw();
-        Selector.list = [];
+        if (!isCtrl) {
+            Selector.canvas.draw();
+            Selector.list = [];
+        }
         /* Iterate over shapes */
         for (const key in shapes) {
             if (shapes.hasOwnProperty(key)) {
@@ -86,9 +91,17 @@ export class Selector {
                     }
                 }
             }
-            if (Selector.list.length) {
+            if (Selector.list.length && !isCtrl) {
                 const id = Selector.list[0].id;
+                console.log('TEST');
                 shapes[id].draw(ctx, true);
+                Selector.list = [];
+            }
+            else if (Selector.list.length && isCtrl) {
+                Selector.list.forEach((s) => {
+                    console.log(s);
+                    shapes[s.id].draw(ctx, true);
+                });
             }
         }
     }
