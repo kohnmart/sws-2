@@ -18,7 +18,6 @@ export class Canvas {
                 e = e || window.event;
                 if ('object' === typeof e) {
                     const btnCode = e.button, x = e.pageX - this.offsetLeft, y = e.pageY - this.offsetTop, ss = toolarea.getSelectedShape();
-                    console.log(methodName);
                     // if left mouse button is pressed,
                     // and if a tool is selected, do something
                     if (e.button === 0 && ss) {

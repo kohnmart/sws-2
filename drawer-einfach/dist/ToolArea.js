@@ -18,12 +18,9 @@ export class ToolArea {
                 item.classList.remove('marked');
             });
             if (shape.hasOwnProperty('shapeManager')) {
-                //Selector.disableEditMode();
                 this.selectedShape = shape;
             }
             else {
-                console.log('Selection Mode');
-                //Selector.enableEditMode();
                 const selector = new Selector();
                 this.selectedShape = selector;
             }

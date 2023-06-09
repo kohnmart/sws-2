@@ -16,8 +16,6 @@ export class Selector {
     static iterateShapes(x, y) {
         const ctx = Selector.canvas.getCanvasRenderingContext();
         const shapes = Selector.canvas.getShapes();
-        console.log('LIST ENTRY');
-        console.log(Selector.list);
         Selector.canvas.draw();
         Selector.list = [];
         /* Iterate over shapes */
@@ -101,18 +99,13 @@ export class Selector {
         if (Selector.indexer < Selector.list.length - 1) {
             Selector.indexer++;
         }
-        console.log('START');
-        console.log(Selector.indexer + ' || ' + Selector.list.length);
         const idCurrent = Selector.list[Selector.indexer].id;
         shapes[idCurrent].draw(ctx, true);
         if (Selector.indexer == Selector.list.length - 1) {
             Selector.indexer = -1;
         }
-        console.log('END');
-        console.log(Selector.indexer + ' || ' + Selector.list.length);
     }
 }
-Selector.isEditMode = false;
 Selector.canvas = undefined;
 Selector.list = [];
 Selector.indexer = 0;
