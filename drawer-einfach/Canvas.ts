@@ -15,10 +15,7 @@ export class Canvas implements ShapeManager {
       'mousemove',
       createMouseHandler('handleMouseMove')
     );
-    canvasDomElement.addEventListener(
-      'mousedown',
-      createMouseHandler('handleMouseDown')
-    );
+
     canvasDomElement.addEventListener(
       'mouseup',
       createMouseHandler('handleMouseUp')
@@ -27,6 +24,10 @@ export class Canvas implements ShapeManager {
     canvasDomElement.addEventListener('mousedown', (event) => {
       if (event.altKey) {
         createMouseHandler('handleAlt').call(this, event);
+      } else if (event.ctrlKey) {
+        createMouseHandler('handleCtrl').call(this, event);
+      } else {
+        createMouseHandler('handleMouseDown').call(this, event);
       }
     });
 
@@ -46,7 +47,7 @@ export class Canvas implements ShapeManager {
             m.call(ss, x, y);
           }
         }
-      };
+      }.bind(canvasDomElement);
     }
   }
 
