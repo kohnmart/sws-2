@@ -11,8 +11,6 @@ export class Selector {
   private static drawArea = document.getElementById('drawArea');
 
   private static eventListener = (event: MouseEvent): void => {
-    event.preventDefault();
-    event.stopPropagation();
     Selector.handleShapesList(event);
   };
 
@@ -24,6 +22,7 @@ export class Selector {
   public static disableEditMode() {
     Selector.isEditMode = false;
     Selector.drawArea.removeEventListener('click', Selector.eventListener);
+    Selector.indexer = 0;
   }
 
   /* Scanning shapes */
@@ -125,22 +124,23 @@ export class Selector {
     }
   }
   private static handleShapesList(event: MouseEvent) {
-    console.log('HaNDLE ENTRY');
-    const ctx = Selector.canvas.getCanvasRenderingContext();
-    const shapes = Selector.canvas.getShapes();
-
     if (event.altKey) {
-      this.indexer++;
-
-      if (this.indexer >= Selector.list.length) {
-        this.indexer = 0;
+      const ctx = Selector.canvas.getCanvasRenderingContext();
+      const shapes = Selector.canvas.getShapes();
+      Selector.canvas.draw();
+      if (Selector.indexer < Selector.list.length - 1) {
+        Selector.indexer++;
       }
-      if (this.indexer > 0) {
-        const idBefore = Selector.list[this.indexer - 1].id;
-        shapes[idBefore].draw(ctx, false);
-      }
-      const idCurrent = Selector.list[this.indexer].id;
+      console.log('START');
+      console.log(Selector.indexer + ' || ' + Selector.list.length);
+      const idCurrent = Selector.list[Selector.indexer].id;
       shapes[idCurrent].draw(ctx, true);
+
+      if (Selector.indexer == Selector.list.length - 1) {
+        Selector.indexer = -1;
+      }
+      console.log('END');
+      console.log(Selector.indexer + ' || ' + Selector.list.length);
     }
   }
 }
