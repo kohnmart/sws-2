@@ -1,6 +1,7 @@
 import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
 import { ShapeFactory } from './types.js';
+import MenuApi from './menuApi.js';
 export class Selector implements ShapeFactory {
   public label = 'Select';
   public static isSelectionMode = false;
@@ -8,8 +9,26 @@ export class Selector implements ShapeFactory {
   private static shapeIdList: number[] = [];
   private static indexer = 0;
 
+  private static setupContextMenu = (menuApi: MenuApi) => {
+    const menu = menuApi.createMenu();
+    const mItem1 = menuApi.createItem('Entfernen', (m: MenuApi) => {
+      m.hide();
+      const id = Selector.shapeIdList[0];
+      const shapes = Selector.canvas.getShapes();
+      Selector.canvas.removeShape(shapes[id]);
+    });
+    menu.addItems(mItem1);
+    return menu;
+  };
+
+  private static menu = this.setupContextMenu(new MenuApi());
+
   public handleMouseDown(x: number, y: number) {
     Selector.iterateShapes(x, y, false);
+    if (Selector.shapeIdList.length) {
+      console.log(x + ' || ' + y);
+      Selector.menu.show(x, y);
+    }
   }
 
   public handleAlt() {
@@ -22,11 +41,11 @@ export class Selector implements ShapeFactory {
     Selector.iterateShapes(x, y, true);
   }
 
-  public handleMouseUp(x: number, y: number) {
+  public handleMouseUp() {
     return;
   }
 
-  public handleMouseMove(x: number, y: number) {
+  public handleMouseMove() {
     return;
   }
 
