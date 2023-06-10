@@ -31,7 +31,7 @@ function init() {
     },
   };
 
-  const tools: any[] = [
+  const tools: ShapeFactory[] = [
     new LineFactory(sm),
     new CircleFactory(sm),
     new RectangleFactory(sm),
