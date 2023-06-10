@@ -23,3 +23,32 @@
     border:1px solid #000000;
     background-color: lightgrey;
 }
+
+ #menu-display > ul {
+    padding: 1%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    align-items: center;
+    width: auto;
+    background-color: grey;
+    text-align: center;
+    border-radius: 5px;
+  }
+  #menu-display > ul > li {
+    list-style: none;
+  }
+  
+  #menu-display > ul > li > * {
+    width: 100px;
+  }
+  
+  #menu-display > ul > li > hr {
+    border: none;
+    height: 2px;
+    background-color: #000000; 
+  }
+  

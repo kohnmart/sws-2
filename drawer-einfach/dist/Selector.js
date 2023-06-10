@@ -1,9 +1,15 @@
+var _a;
+import MenuApi from './menuApi.js';
 export class Selector {
     constructor() {
         this.label = 'Select';
     }
     handleMouseDown(x, y) {
         Selector.iterateShapes(x, y, false);
+        if (Selector.shapeIdList.length) {
+            console.log(x + ' || ' + y);
+            Selector.menu.show(x, y);
+        }
     }
     handleAlt() {
         if (Selector.shapeIdList.length) {
@@ -13,10 +19,10 @@ export class Selector {
     handleCtrl(x, y) {
         Selector.iterateShapes(x, y, true);
     }
-    handleMouseUp(x, y) {
+    handleMouseUp() {
         return;
     }
-    handleMouseMove(x, y) {
+    handleMouseMove() {
         return;
     }
     /* Scanning shapes */
@@ -115,8 +121,21 @@ export class Selector {
         }
     }
 }
+_a = Selector;
 Selector.isSelectionMode = false;
 Selector.canvas = undefined;
 Selector.shapeIdList = [];
 Selector.indexer = 0;
+Selector.setupContextMenu = (menuApi) => {
+    const menu = menuApi.createMenu();
+    const mItem1 = menuApi.createItem('Entfernen', (m) => {
+        m.hide();
+        const id = Selector.shapeIdList[0];
+        const shapes = Selector.canvas.getShapes();
+        Selector.canvas.removeShape(shapes[id]);
+    });
+    menu.addItems(mItem1);
+    return menu;
+};
+Selector.menu = _a.setupContextMenu(new MenuApi());
 //# sourceMappingURL=Selector.js.map
