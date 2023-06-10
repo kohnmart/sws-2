@@ -1,8 +1,9 @@
 import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
-import { Shape } from './types.js';
-export class Selector {
+import { Shape, ShapeFactory } from './types.js';
+export class Selector implements ShapeFactory {
   public label = 'Select';
+  public static isSelectionMode = false;
   public static canvas: Canvas = undefined;
   private static list: Shape[] = [];
   private static indexer = 0;
@@ -21,9 +22,13 @@ export class Selector {
     Selector.iterateShapes(x, y, true);
   }
 
-  public handleMouseUp(x: number, y: number) {}
+  public handleMouseUp(x: number, y: number) {
+    return;
+  }
 
-  public handleMouseMove(x: number, y: number) {}
+  public handleMouseMove(x: number, y: number) {
+    return;
+  }
 
   /* Scanning shapes */
   public static iterateShapes(x: number, y: number, isCtrl: boolean) {
