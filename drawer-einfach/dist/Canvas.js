@@ -10,12 +10,15 @@ export class Canvas {
         canvasDomElement.addEventListener('mouseup', createMouseHandler('handleMouseUp'));
         canvasDomElement.addEventListener('mousedown', (event) => {
             if (event.altKey && Selector.isSelectionMode) {
+                /* Execute Selector-Alt-Event */
                 createMouseHandler('handleAlt').call(this, event);
             }
             else if (event.ctrlKey && Selector.isSelectionMode) {
+                /* Execute Selector-CRTL-Event */
                 createMouseHandler('handleCtrl').call(this, event);
             }
             else {
+                /* Execute for all types */
                 createMouseHandler('handleMouseDown').call(this, event);
             }
         });
