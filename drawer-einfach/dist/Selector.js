@@ -3,23 +3,22 @@ export class Selector {
         this.label = 'Select';
     }
     handleMouseDown(x, y) {
-        console.log('MouseDOWN');
         Selector.iterateShapes(x, y, false);
     }
     handleAlt() {
-        console.log('handleALT');
-        console.log(Selector.list.length);
         if (Selector.list.length) {
-            console.log(Selector.list.length);
             Selector.handleShapesList();
         }
     }
     handleCtrl(x, y) {
-        console.log('handleCTRL');
         Selector.iterateShapes(x, y, true);
     }
-    handleMouseUp(x, y) { }
-    handleMouseMove(x, y) { }
+    handleMouseUp(x, y) {
+        return;
+    }
+    handleMouseMove(x, y) {
+        return;
+    }
     /* Scanning shapes */
     static iterateShapes(x, y, isCtrl) {
         const ctx = Selector.canvas.getCanvasRenderingContext();
@@ -43,12 +42,10 @@ export class Selector {
                         (y - start_y) * (end_x - start_x);
                     // Check if the point is collinear with the line segment
                     if (Math.abs(crossProduct) < 1500) {
-                        // Check if the point lies within the bounding box of the line segment
                         if (Math.min(start_x, end_x) <= x &&
                             x <= Math.max(start_x, end_x) &&
                             Math.min(start_y, end_y) <= y &&
                             y <= Math.max(start_y, end_y)) {
-                            //shape.draw(ctx, true);
                             Selector.list.push(line);
                         }
                     }
@@ -67,7 +64,6 @@ export class Selector {
                         distanceToRight <= Math.abs(end_x - start_x) &&
                         distanceToTop <= end_y - start_y &&
                         distanceToBottom <= end_y - start_y) {
-                        //rectangle.draw(ctx, true);
                         Selector.list.push(rectangle);
                     }
                 }
@@ -81,7 +77,6 @@ export class Selector {
                         ((p2.y - p3.y) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.y - p3.y));
                     const gamma = 1 - alpha - beta;
                     if (alpha >= 0 && beta >= 0 && gamma >= 0) {
-                        //triangle.draw(ctx, true);
                         Selector.list.push(triangle);
                     }
                 }
@@ -91,7 +86,6 @@ export class Selector {
                     // Calculate the distance between the point and the center of the circle
                     const distance = Math.sqrt(Math.pow((x - center.x), 2) + Math.pow((y - center.y), 2));
                     if (distance <= radius) {
-                        // circle.draw(ctx, true);
                         Selector.list.push(circle);
                     }
                 }
@@ -99,12 +93,10 @@ export class Selector {
         }
         if (Selector.list.length && !isCtrl) {
             const id = Selector.list[0].id;
-            console.log('TEST');
             shapes[id].draw(ctx, true);
         }
         else if (Selector.list.length && isCtrl) {
             Selector.list.forEach((s) => {
-                console.log(s);
                 shapes[s.id].draw(ctx, true);
             });
         }
@@ -117,14 +109,13 @@ export class Selector {
             Selector.indexer++;
         }
         const idCurrent = Selector.list[Selector.indexer].id;
-        console.log('CHECK');
-        console.log(idCurrent);
         shapes[idCurrent].draw(ctx, true);
         if (Selector.indexer == Selector.list.length - 1) {
             Selector.indexer = -1;
         }
     }
 }
+Selector.isSelectionMode = false;
 Selector.canvas = undefined;
 Selector.list = [];
 Selector.indexer = 0;

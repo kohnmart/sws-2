@@ -1,3 +1,4 @@
+import { Selector } from './Selector.js';
 export class Canvas {
     constructor(canvasDomElement, toolarea) {
         this.shapes = {};
@@ -8,10 +9,10 @@ export class Canvas {
         canvasDomElement.addEventListener('mousemove', createMouseHandler('handleMouseMove'));
         canvasDomElement.addEventListener('mouseup', createMouseHandler('handleMouseUp'));
         canvasDomElement.addEventListener('mousedown', (event) => {
-            if (event.altKey) {
+            if (event.altKey && Selector.isSelectionMode) {
                 createMouseHandler('handleAlt').call(this, event);
             }
-            else if (event.ctrlKey) {
+            else if (event.ctrlKey && Selector.isSelectionMode) {
                 createMouseHandler('handleCtrl').call(this, event);
             }
             else {
@@ -22,13 +23,13 @@ export class Canvas {
             return function (e) {
                 e = e || window.event;
                 if ('object' === typeof e) {
-                    const btnCode = e.button, x = e.pageX - this.offsetLeft, y = e.pageY - this.offsetTop, ss = toolarea.getSelectedShape();
+                    const btnCode = e.button, x = e.pageX - this.offsetLeft, y = e.pageY - this.offsetTop, tool = toolarea.getSelectedTool();
                     // if left mouse button is pressed,
                     // and if a tool is selected, do something
-                    if (e.button === 0 && ss) {
-                        const m = ss[methodName];
+                    if (e.button === 0 && tool) {
+                        const m = tool[methodName];
                         // This in the shapeFactory should be the factory itself.
-                        m.call(ss, x, y);
+                        m.call(tool, x, y);
                     }
                 }
             }.bind(canvasDomElement);
