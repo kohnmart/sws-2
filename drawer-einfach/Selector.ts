@@ -8,20 +8,16 @@ export class Selector {
   private static indexer = 0;
 
   public handleMouseDown(x: number, y: number) {
-    console.log('MouseDOWN');
     Selector.iterateShapes(x, y, false);
   }
 
   public handleAlt() {
-    console.log('handleALT');
-    console.log(Selector.list.length);
     if (Selector.list.length) {
       Selector.handleShapesList();
     }
   }
 
   public handleCtrl(x: number, y: number) {
-    console.log('handleCTRL');
     Selector.iterateShapes(x, y, true);
   }
 
@@ -58,14 +54,12 @@ export class Selector {
 
           // Check if the point is collinear with the line segment
           if (Math.abs(crossProduct) < 1500) {
-            // Check if the point lies within the bounding box of the line segment
             if (
               Math.min(start_x, end_x) <= x &&
               x <= Math.max(start_x, end_x) &&
               Math.min(start_y, end_y) <= y &&
               y <= Math.max(start_y, end_y)
             ) {
-              //shape.draw(ctx, true);
               Selector.list.push(line as Shape);
             }
           }
@@ -87,7 +81,6 @@ export class Selector {
             distanceToTop <= end_y - start_y &&
             distanceToBottom <= end_y - start_y
           ) {
-            //rectangle.draw(ctx, true);
             Selector.list.push(rectangle as Shape);
           }
         } else if (type == 'triangle') {
@@ -104,7 +97,6 @@ export class Selector {
           const gamma = 1 - alpha - beta;
 
           if (alpha >= 0 && beta >= 0 && gamma >= 0) {
-            //triangle.draw(ctx, true);
             Selector.list.push(triangle as Shape);
           }
         } else {
@@ -114,7 +106,6 @@ export class Selector {
           const distance = Math.sqrt((x - center.x) ** 2 + (y - center.y) ** 2);
 
           if (distance <= radius) {
-            // circle.draw(ctx, true);
             Selector.list.push(circle as Shape);
           }
         }
@@ -122,11 +113,9 @@ export class Selector {
     }
     if (Selector.list.length && !isCtrl) {
       const id = Selector.list[0].id;
-      console.log('TEST');
       shapes[id].draw(ctx, true);
     } else if (Selector.list.length && isCtrl) {
       Selector.list.forEach((s) => {
-        console.log(s);
         shapes[s.id].draw(ctx, true);
       });
     }
@@ -140,8 +129,6 @@ export class Selector {
     }
 
     const idCurrent = Selector.list[Selector.indexer].id;
-    console.log('CHECK');
-    console.log(idCurrent);
     shapes[idCurrent].draw(ctx, true);
 
     if (Selector.indexer == Selector.list.length - 1) {
