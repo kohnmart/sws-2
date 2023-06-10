@@ -24,16 +24,18 @@ export class ToolArea {
 
       if (shape.hasOwnProperty('shapeManager')) {
         this.selectedShape = shape;
+        Selector.isSelectionMode = false;
       } else {
         const selector = new Selector();
         this.selectedShape = selector;
+        Selector.isSelectionMode = true;
       }
       // add class to the one that is selected currently
       activeListItem.classList.add('marked');
     }
   }
 
-  getSelectedShape(): ShapeFactory {
+  getSelectedTool(): ShapeFactory {
     return this.selectedShape;
   }
 }
