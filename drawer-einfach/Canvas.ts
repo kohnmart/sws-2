@@ -1,5 +1,6 @@
 import { Shape, ShapeManager } from './types.js';
 import { ToolArea } from './ToolArea.js';
+import { Selector } from './Selector.js';
 export class Canvas implements ShapeManager {
   private ctx: CanvasRenderingContext2D;
   private shapes: { [p: number]: Shape } = {};
@@ -22,11 +23,14 @@ export class Canvas implements ShapeManager {
     );
 
     canvasDomElement.addEventListener('mousedown', (event) => {
-      if (event.altKey) {
+      if (event.altKey && Selector.isSelectionMode) {
+        /* Execute Selector-Alt-Event */
         createMouseHandler('handleAlt').call(this, event);
-      } else if (event.ctrlKey) {
+      } else if (event.ctrlKey && Selector.isSelectionMode) {
+        /* Execute Selector-CRTL-Event */
         createMouseHandler('handleCtrl').call(this, event);
       } else {
+        /* Execute for all types */
         createMouseHandler('handleMouseDown').call(this, event);
       }
     });
@@ -38,13 +42,14 @@ export class Canvas implements ShapeManager {
           const btnCode = e.button,
             x = e.pageX - this.offsetLeft,
             y = e.pageY - this.offsetTop,
-            ss = toolarea.getSelectedShape();
+            tool = toolarea.getSelectedTool();
+
           // if left mouse button is pressed,
           // and if a tool is selected, do something
-          if (e.button === 0 && ss) {
-            const m = ss[methodName];
+          if (e.button === 0 && tool) {
+            const m = tool[methodName];
             // This in the shapeFactory should be the factory itself.
-            m.call(ss, x, y);
+            m.call(tool, x, y);
           }
         }
       }.bind(canvasDomElement);
