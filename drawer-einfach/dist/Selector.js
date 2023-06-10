@@ -10,6 +10,7 @@ export class Selector {
         console.log('handleALT');
         console.log(Selector.list.length);
         if (Selector.list.length) {
+            console.log(Selector.list.length);
             Selector.handleShapesList();
         }
     }
