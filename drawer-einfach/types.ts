@@ -1,7 +1,7 @@
 export interface Shape {
   readonly id: number;
   readonly type: string;
-  draw(ctx: CanvasRenderingContext2D, isSeleted: boolean);
+  draw(ctx: CanvasRenderingContext2D, isSeleted: boolean): void;
 }
 
 export interface ShapeManager {
@@ -12,7 +12,7 @@ export interface ShapeManager {
 
 export interface ShapeFactory {
   label: string;
-  handleMouseDown(x: number, y: number);
-  handleMouseUp(x: number, y: number);
-  handleMouseMove(x: number, y: number);
+  handleMouseDown(x: number, y: number): void;
+  handleMouseUp(x: number, y: number): void;
+  handleMouseMove(x: number, y: number): void;
 }
