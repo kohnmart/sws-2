@@ -5,7 +5,7 @@ export class Selector implements ShapeFactory {
   public label = 'Select';
   public static isSelectionMode = false;
   public static canvas: Canvas = undefined;
-  private static list: Shape[] = [];
+  private static shapeIdList: number[] = [];
   private static indexer = 0;
 
   public handleMouseDown(x: number, y: number) {
@@ -13,7 +13,7 @@ export class Selector implements ShapeFactory {
   }
 
   public handleAlt() {
-    if (Selector.list.length) {
+    if (Selector.shapeIdList.length) {
       Selector.handleShapesList();
     }
   }
@@ -37,7 +37,7 @@ export class Selector implements ShapeFactory {
 
     if (!isCtrl) {
       Selector.canvas.draw();
-      Selector.list = [];
+      Selector.shapeIdList = [];
     }
 
     /* Iterate over shapes */
@@ -65,7 +65,7 @@ export class Selector implements ShapeFactory {
               Math.min(start_y, end_y) <= y &&
               y <= Math.max(start_y, end_y)
             ) {
-              Selector.list.push(line as Shape);
+              Selector.shapeIdList.push(line.id);
             }
           }
         } else if (type == 'rectangle') {
@@ -86,7 +86,7 @@ export class Selector implements ShapeFactory {
             distanceToTop <= end_y - start_y &&
             distanceToBottom <= end_y - start_y
           ) {
-            Selector.list.push(rectangle as Shape);
+            Selector.shapeIdList.push(rectangle.id);
           }
         } else if (type == 'triangle') {
           const triangle = shape as Triangle;
@@ -102,7 +102,7 @@ export class Selector implements ShapeFactory {
           const gamma = 1 - alpha - beta;
 
           if (alpha >= 0 && beta >= 0 && gamma >= 0) {
-            Selector.list.push(triangle as Shape);
+            Selector.shapeIdList.push(triangle.id);
           }
         } else {
           const circle = shape as Circle;
@@ -111,17 +111,17 @@ export class Selector implements ShapeFactory {
           const distance = Math.sqrt((x - center.x) ** 2 + (y - center.y) ** 2);
 
           if (distance <= radius) {
-            Selector.list.push(circle as Shape);
+            Selector.shapeIdList.push(circle.id);
           }
         }
       }
     }
-    if (Selector.list.length && !isCtrl) {
-      const id = Selector.list[0].id;
+    if (Selector.shapeIdList.length && !isCtrl) {
+      const id = Selector.shapeIdList[0];
       shapes[id].draw(ctx, true);
-    } else if (Selector.list.length && isCtrl) {
-      Selector.list.forEach((s) => {
-        shapes[s.id].draw(ctx, true);
+    } else if (Selector.shapeIdList.length && isCtrl) {
+      Selector.shapeIdList.forEach((id) => {
+        shapes[id].draw(ctx, true);
       });
     }
   }
@@ -129,14 +129,14 @@ export class Selector implements ShapeFactory {
     const ctx = Selector.canvas.getCanvasRenderingContext();
     const shapes = Selector.canvas.getShapes();
     Selector.canvas.draw();
-    if (Selector.indexer < Selector.list.length - 1) {
+    if (Selector.indexer < Selector.shapeIdList.length - 1) {
       Selector.indexer++;
     }
 
-    const idCurrent = Selector.list[Selector.indexer].id;
+    const idCurrent = Selector.shapeIdList[Selector.indexer];
     shapes[idCurrent].draw(ctx, true);
 
-    if (Selector.indexer == Selector.list.length - 1) {
+    if (Selector.indexer == Selector.shapeIdList.length - 1) {
       Selector.indexer = -1;
     }
   }
