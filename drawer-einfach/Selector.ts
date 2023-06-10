@@ -1,6 +1,6 @@
 import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
-import { Shape, ShapeFactory } from './types.js';
+import { ShapeFactory } from './types.js';
 export class Selector implements ShapeFactory {
   public label = 'Select';
   public static isSelectionMode = false;
