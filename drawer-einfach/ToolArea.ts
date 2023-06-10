@@ -26,8 +26,7 @@ export class ToolArea {
         this.selectedShape = shape;
         Selector.isSelectionMode = false;
       } else {
-        const selector = new Selector();
-        this.selectedShape = selector;
+        this.selectedShape = shape;
         Selector.isSelectionMode = true;
       }
       // add class to the one that is selected currently
