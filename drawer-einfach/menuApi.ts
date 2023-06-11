@@ -12,6 +12,7 @@ export default class MenuApi {
     this.eventListener = (event: Event): void => {
       const target = event.target as HTMLElement;
       /* check if target is menu or menu-item */
+      console.log(target.id);
       if (target.id != Item.id && target.id != MenuApi.id) {
         event.preventDefault();
         event.stopPropagation();
@@ -100,7 +101,8 @@ export default class MenuApi {
   createRadioOption = (
     type: string,
     colorOptions: { [key: string]: string },
-    defaultColor?: string
+    defaultColor?: string,
+    callback?: (m: MenuApi) => void
   ): void => {
     const header = new Item('p', this, type);
     this.addItem(header);
@@ -112,9 +114,7 @@ export default class MenuApi {
           key,
           colorOptions[key],
           defaultColor ?? undefined,
-          () => {
-            console.log('test');
-          }
+          (m) => callback(m)
         );
 
         const separator = this.createSeparator();
