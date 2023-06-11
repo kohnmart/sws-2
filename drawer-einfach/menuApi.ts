@@ -102,6 +102,8 @@ export default class MenuApi {
     colorOptions: { [key: string]: string },
     defaultColor?: string
   ): void => {
+    const header = new Item('p', this, type);
+    this.addItem(header);
     for (const key in colorOptions) {
       if (colorOptions.hasOwnProperty(key)) {
         const color = new ItemColor(
@@ -109,7 +111,7 @@ export default class MenuApi {
           this,
           key,
           colorOptions[key],
-          defaultColor,
+          defaultColor ?? undefined,
           () => {
             console.log('test');
           }
