@@ -45,7 +45,7 @@ export class ItemColor extends Item {
     menuInstance: MenuApi,
     key: string,
     value: string,
-    defaultColor: string,
+    defaultColor: string | undefined,
     callback?: (m: MenuApi) => void
   ) {
     super(tagName, menuInstance, null, callback);
