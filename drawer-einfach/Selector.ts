@@ -18,6 +18,25 @@ export class Selector implements ShapeFactory {
       Selector.canvas.removeShape(shapes[id]);
     });
     menu.addItems(mItem1);
+    menuApi.createRadioOption(
+      'Hintergrundfarbe',
+      {
+        transparent: 'transparent',
+        red: 'rot',
+        green: 'grün',
+        yellow: 'gelb',
+        blue: 'blau',
+        black: 'schwarz',
+      },
+      'red'
+    );
+
+    return menu;
+  };
+
+  private static setupColorMenu = (menuApi: MenuApi) => {
+    const menu = menuApi.createMenu();
+
     return menu;
   };
 
@@ -26,7 +45,6 @@ export class Selector implements ShapeFactory {
   public handleMouseDown(x: number, y: number) {
     Selector.iterateShapes(x, y, false);
     if (Selector.shapeIdList.length) {
-      console.log(x + ' || ' + y);
       Selector.menu.show(x, y);
     }
   }
