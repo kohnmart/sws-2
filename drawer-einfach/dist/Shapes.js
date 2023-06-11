@@ -8,6 +8,8 @@ class AbstractShape {
     constructor(type) {
         this.id = AbstractShape.counter++;
         this.type = type;
+        this.backgroundColor = 'red';
+        this.strokeColor = 'blue';
     }
 }
 AbstractShape.counter = 0;
@@ -108,7 +110,14 @@ export class Rectangle extends AbstractShape {
     }
     draw(ctx, isSelected) {
         ctx.beginPath();
-        ctx.strokeRect(this.from.x, this.from.y, this.to.x - this.from.x, this.to.y - this.from.y);
+        ctx.fillStyle = this.backgroundColor;
+        ctx.strokeStyle = this.strokeColor;
+        if (ctx.fillStyle !== 'transparent') {
+            ctx.fillRect(this.from.x, this.from.y, this.to.x - this.from.x, this.to.y - this.from.y);
+        }
+        if (ctx.strokeStyle !== 'transparent') {
+            ctx.strokeRect(this.from.x, this.from.y, this.to.x - this.from.x, this.to.y - this.from.y);
+        }
         ctx.stroke();
         if (isSelected) {
             ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);

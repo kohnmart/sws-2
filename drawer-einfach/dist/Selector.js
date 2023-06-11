@@ -141,11 +141,14 @@ Selector.setupContextMenu = (menuApi) => {
         yellow: 'gelb',
         blue: 'blau',
         black: 'schwarz',
-    }, 'red');
-    return menu;
-};
-Selector.setupColorMenu = (menuApi) => {
-    const menu = menuApi.createMenu();
+    }, 'red', (m) => {
+        console.log('IODD');
+        const shapes = Selector.canvas.getShapes();
+        const shape = shapes[Selector.shapeIdList[0]];
+        shape.backgroundColor = 'green';
+        shape.strokeColor = 'blue';
+        Selector.canvas.draw();
+    });
     return menu;
 };
 Selector.menu = _a.setupContextMenu(new MenuApi());

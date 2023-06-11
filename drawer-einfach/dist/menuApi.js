@@ -65,14 +65,12 @@ export default class MenuApi {
             /* remove listener */
             document.removeEventListener('mousedown', this.eventListener, true);
         };
-        this.createRadioOption = (type, colorOptions, defaultColor) => {
+        this.createRadioOption = (type, colorOptions, defaultColor, callback) => {
             const header = new Item('p', this, type);
             this.addItem(header);
             for (const key in colorOptions) {
                 if (colorOptions.hasOwnProperty(key)) {
-                    const color = new ItemColor('div', this, key, colorOptions[key], defaultColor !== null && defaultColor !== void 0 ? defaultColor : undefined, () => {
-                        console.log('test');
-                    });
+                    const color = new ItemColor('div', this, key, colorOptions[key], defaultColor !== null && defaultColor !== void 0 ? defaultColor : undefined, (m) => callback(m));
                     const separator = this.createSeparator();
                     this.addItems(separator, color);
                 }
@@ -83,6 +81,7 @@ export default class MenuApi {
         this.eventListener = (event) => {
             const target = event.target;
             /* check if target is menu or menu-item */
+            console.log(target.id);
             if (target.id != Item.id && target.id != MenuApi.id) {
                 event.preventDefault();
                 event.stopPropagation();
