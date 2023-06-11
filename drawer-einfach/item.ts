@@ -18,7 +18,7 @@ export class Item {
       this.container.innerText = itemContent;
     }
     if (callback) {
-      this.container.addEventListener('click', () =>
+      this.container.addEventListener('mousedown', () =>
         callback(this.menuInstance)
       );
     }
@@ -55,6 +55,7 @@ export class ItemColor extends Item {
     this.inputElement.type = 'radio';
     this.inputElement.name = key;
     this.inputElement.value = value;
+    this.inputElement.id = Item.id;
 
     if (this.key === this.defaultColor) {
       this.inputElement.checked = true;
@@ -63,7 +64,7 @@ export class ItemColor extends Item {
     this.labelElement = document.createElement('label');
     this.labelElement.textContent = value;
     this.labelElement.htmlFor = value;
-
+    this.labelElement.id = Item.id;
     this.container.append(this.inputElement);
     this.container.append(this.labelElement);
   }
