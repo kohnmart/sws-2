@@ -7,16 +7,19 @@ class AbstractShape {
   private static counter: number = 0;
   readonly id: number;
   readonly type: string;
+  readonly backgroundColor: string;
+  readonly strokeColor: string;
   constructor(type: string) {
     this.id = AbstractShape.counter++;
     this.type = type;
+    this.backgroundColor = 'red';
+    this.strokeColor = 'blue';
   }
 }
 abstract class AbstractFactory<T extends Shape> {
   private from: Point2D;
   private tmpTo: Point2D;
   private tmpShape: T;
-
   constructor(readonly shapeManager: ShapeManager) {}
 
   abstract createShape(from: Point2D, to: Point2D): T;
@@ -122,12 +125,27 @@ export class Rectangle extends AbstractShape implements Shape {
 
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
     ctx.beginPath();
-    ctx.strokeRect(
-      this.from.x,
-      this.from.y,
-      this.to.x - this.from.x,
-      this.to.y - this.from.y
-    );
+    ctx.fillStyle = this.backgroundColor;
+    ctx.strokeStyle = this.strokeColor;
+
+    if (ctx.fillStyle !== 'transparent') {
+      ctx.fillRect(
+        this.from.x,
+        this.from.y,
+        this.to.x - this.from.x,
+        this.to.y - this.from.y
+      );
+    }
+
+    if (ctx.strokeStyle !== 'transparent') {
+      ctx.strokeRect(
+        this.from.x,
+        this.from.y,
+        this.to.x - this.from.x,
+        this.to.y - this.from.y
+      );
+    }
+
     ctx.stroke();
     if (isSelected) {
       ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
