@@ -1,6 +1,6 @@
 import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
-import { ShapeFactory } from './types.js';
+import { Shape, ShapeFactory } from './types.js';
 import MenuApi from './menuApi.js';
 export class Selector implements ShapeFactory {
   public label = 'Select';
@@ -28,14 +28,17 @@ export class Selector implements ShapeFactory {
         blue: 'blau',
         black: 'schwarz',
       },
-      'red'
+      'red',
+      (m: MenuApi) => {
+        console.log('IODD');
+        const shapes = Selector.canvas.getShapes();
+        const shape = shapes[Selector.shapeIdList[0]];
+
+        shape.backgroundColor = 'green';
+        shape.strokeColor = 'blue';
+        Selector.canvas.draw();
+      }
     );
-
-    return menu;
-  };
-
-  private static setupColorMenu = (menuApi: MenuApi) => {
-    const menu = menuApi.createMenu();
 
     return menu;
   };
