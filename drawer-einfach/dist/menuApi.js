@@ -1,4 +1,4 @@
-import { Item } from './item.js';
+import { Item, ItemColor } from './item.js';
 export default class MenuApi {
     constructor() {
         /* create new menu and append functionality */
@@ -35,7 +35,7 @@ export default class MenuApi {
         };
         /* remove item */
         this.removeItem = (item) => {
-            const index = this.itemList.findIndex((e) => e.element.innerText == item.element.innerText);
+            const index = this.itemList.findIndex((e) => e.container.innerText == item.container.innerText);
             const beforeIndex = this.itemList.slice(0, index);
             const afterIndex = this.itemList.slice(index + 1);
             this.itemList = [...beforeIndex, ...afterIndex];
@@ -65,12 +65,22 @@ export default class MenuApi {
             /* remove listener */
             document.removeEventListener('mousedown', this.eventListener, true);
         };
+        this.createRadioOption = (type, colorOptions, defaultColor) => {
+            for (const key in colorOptions) {
+                if (colorOptions.hasOwnProperty(key)) {
+                    const color = new ItemColor('div', this, key, colorOptions[key], defaultColor, () => {
+                        console.log('test');
+                    });
+                    const separator = this.createSeparator();
+                    this.addItems(separator, color);
+                }
+            }
+        };
         this.itemList = [];
         this.ulList = document.createElement('ul');
         this.eventListener = (event) => {
             const target = event.target;
             /* check if target is menu or menu-item */
-            console.log(target);
             if (target.id != Item.id && target.id != MenuApi.id) {
                 event.preventDefault();
                 event.stopPropagation();

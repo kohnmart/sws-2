@@ -7,7 +7,6 @@ export class Selector {
     handleMouseDown(x, y) {
         Selector.iterateShapes(x, y, false);
         if (Selector.shapeIdList.length) {
-            console.log(x + ' || ' + y);
             Selector.menu.show(x, y);
         }
     }
@@ -135,6 +134,18 @@ Selector.setupContextMenu = (menuApi) => {
         Selector.canvas.removeShape(shapes[id]);
     });
     menu.addItems(mItem1);
+    menuApi.createRadioOption('Hintergrundfarbe', {
+        transparent: 'transparent',
+        red: 'rot',
+        green: 'grün',
+        yellow: 'gelb',
+        blue: 'blau',
+        black: 'schwarz',
+    }, 'red');
+    return menu;
+};
+Selector.setupColorMenu = (menuApi) => {
+    const menu = menuApi.createMenu();
     return menu;
 };
 Selector.menu = _a.setupContextMenu(new MenuApi());
