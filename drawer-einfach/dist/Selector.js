@@ -134,7 +134,7 @@ Selector.setupContextMenu = (menuApi) => {
         Selector.canvas.removeShape(shapes[id]);
     });
     menu.addItems(mItem1);
-    menuApi.createRadioOption('Hintergrundfarbe', {
+    menuApi.createRadioOption('Hintergrundfarben', {
         transparent: 'transparent',
         red: 'rot',
         green: 'grün',

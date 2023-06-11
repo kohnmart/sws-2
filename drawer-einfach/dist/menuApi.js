@@ -66,9 +66,11 @@ export default class MenuApi {
             document.removeEventListener('mousedown', this.eventListener, true);
         };
         this.createRadioOption = (type, colorOptions, defaultColor) => {
+            const header = new Item('p', this, type);
+            this.addItem(header);
             for (const key in colorOptions) {
                 if (colorOptions.hasOwnProperty(key)) {
-                    const color = new ItemColor('div', this, key, colorOptions[key], defaultColor, () => {
+                    const color = new ItemColor('div', this, key, colorOptions[key], defaultColor !== null && defaultColor !== void 0 ? defaultColor : undefined, () => {
                         console.log('test');
                     });
                     const separator = this.createSeparator();
