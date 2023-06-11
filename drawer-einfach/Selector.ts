@@ -19,7 +19,7 @@ export class Selector implements ShapeFactory {
     });
     menu.addItems(mItem1);
     menuApi.createRadioOption(
-      'Hintergrundfarbe',
+      'Hintergrundfarben',
       {
         transparent: 'transparent',
         red: 'rot',
