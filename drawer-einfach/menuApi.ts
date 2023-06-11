@@ -1,4 +1,4 @@
-import { Item } from './item.js';
+import { Item, ItemColor } from './item.js';
 
 export default class MenuApi {
   static id: string = 'menu';
@@ -12,7 +12,6 @@ export default class MenuApi {
     this.eventListener = (event: Event): void => {
       const target = event.target as HTMLElement;
       /* check if target is menu or menu-item */
-      console.log(target);
       if (target.id != Item.id && target.id != MenuApi.id) {
         event.preventDefault();
         event.stopPropagation();
@@ -61,7 +60,7 @@ export default class MenuApi {
   /* remove item */
   removeItem = (item: Item): void => {
     const index = this.itemList.findIndex(
-      (e) => e.element.innerText == item.element.innerText
+      (e) => e.container.innerText == item.container.innerText
     );
     const beforeIndex = this.itemList.slice(0, index);
     const afterIndex = this.itemList.slice(index + 1);
@@ -96,5 +95,29 @@ export default class MenuApi {
     this.ulList.style.display = 'none';
     /* remove listener */
     document.removeEventListener('mousedown', this.eventListener, true);
+  };
+
+  createRadioOption = (
+    type: string,
+    colorOptions: { [key: string]: string },
+    defaultColor?: string
+  ): void => {
+    for (const key in colorOptions) {
+      if (colorOptions.hasOwnProperty(key)) {
+        const color = new ItemColor(
+          'div',
+          this,
+          key,
+          colorOptions[key],
+          defaultColor,
+          () => {
+            console.log('test');
+          }
+        );
+
+        const separator = this.createSeparator();
+        this.addItems(separator, color);
+      }
+    }
   };
 }
