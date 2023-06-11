@@ -1,7 +1,9 @@
 export interface Shape {
   readonly id: number;
   readonly type: string;
-  draw(ctx: CanvasRenderingContext2D, isSeleted: boolean): void;
+  backgroundColor: string;
+  strokeColor: string;
+  draw(ctx: CanvasRenderingContext2D, isSelected: boolean): void;
 }
 
 export interface ShapeManager {
