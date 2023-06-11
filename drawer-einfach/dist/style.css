@@ -31,23 +31,24 @@
     top: 0px;
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
-    align-items: center;
-    width: auto;
+    width: 200px;
     background-color: grey;
     text-align: center;
     border-radius: 5px;
   }
   #menu-display > ul > li {
     list-style: none;
+    text-align: left;
   }
   
   #menu-display > ul > li > * {
-    width: 100px;
+    width: auto;
+  
   }
   
   #menu-display > ul > li > hr {
     border: none;
+    width: 200px;
     height: 2px;
     background-color: #000000; 
   }
