@@ -20,14 +20,17 @@ export class Item {
 }
 Item.id = 'menu-item';
 export class ItemColor extends Item {
-    constructor(tagName, menuInstance, key, value, selectedColor, callback) {
+    constructor(tagName, menuInstance, key, value, defaultColor, callback) {
         super(tagName, menuInstance, null, callback);
         this.key = key;
-        this.defaultColor = selectedColor;
+        this.defaultColor = defaultColor;
         this.inputElement = document.createElement('input');
         this.inputElement.type = 'radio';
         this.inputElement.name = key;
         this.inputElement.value = value;
+        if (this.key === this.defaultColor) {
+            this.inputElement.checked = true;
+        }
         this.labelElement = document.createElement('label');
         this.labelElement.textContent = value;
         this.labelElement.htmlFor = value;
