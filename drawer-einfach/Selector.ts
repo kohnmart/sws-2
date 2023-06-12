@@ -34,11 +34,22 @@ export class Selector implements ShapeFactory {
         const shapes = Selector.canvas.getShapes();
         const shape = shapes[Selector.shapeIdList[0]];
         if (item.inputElement.name === Types.Hintergrund) {
-          shape.backgroundColor = item.key;
+          if (shape) {
+            const ctx = Selector.canvas.getCanvasRenderingContext();
+            shape.backgroundColor = item.key;
+            shape.draw(ctx, true);
+          } else {
+            item.setColorOption(true);
+          }
         } else {
-          shape.strokeColor = item.key;
+          if (shape) {
+            const ctx = Selector.canvas.getCanvasRenderingContext();
+            shape.strokeColor = item.key;
+            shape.draw(ctx, true);
+          } else {
+            item.setColorOption(false);
+          }
         }
-        Selector.canvas.draw();
       }
     );
     return menu;
@@ -61,9 +72,7 @@ export class Selector implements ShapeFactory {
   }
 
   public handleRightClick(x: number, y: number) {
-    if (Selector.shapeIdList.length) {
-      Selector.menu.show(x, y);
-    }
+    Selector.menu.show(x, y);
   }
 
   public handleMouseUp() {
