@@ -148,29 +148,26 @@ Selector.setupContextMenu = (menuApi) => {
         black: 'schwarz',
     }, 'red', (item) => {
         const shapes = Selector.canvas.getShapes();
-        const shape = shapes[Selector.shapeIdList[0]];
-        if (item.inputElement.name === Types.Hintergrund) {
+        console.log('IDES');
+        Selector.shapeIdList.forEach((id) => {
+            console.log(id);
+            const shape = shapes[Selector.shapeIdList[id]];
             if (shape) {
                 const ctx = Selector.canvas.getCanvasRenderingContext();
-                shape.backgroundColor = item.key;
+                if (item.inputElement.name === Types.Hintergrund) {
+                    shape.backgroundColor = item.key;
+                    item.setColorOption(true);
+                }
+                else {
+                    shape.strokeColor = item.key;
+                    item.setColorOption(false);
+                }
                 shape.draw(ctx, true);
-                item.setColorOption(true);
             }
             else {
-                item.setColorOption(true);
+                item.setColorOption(item.inputElement.name === Types.Hintergrund);
             }
-        }
-        else {
-            if (shape) {
-                const ctx = Selector.canvas.getCanvasRenderingContext();
-                shape.strokeColor = item.key;
-                shape.draw(ctx, true);
-                item.setColorOption(false);
-            }
-            else {
-                item.setColorOption(false);
-            }
-        }
+        });
     });
     return menu;
 };
