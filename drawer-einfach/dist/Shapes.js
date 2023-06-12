@@ -5,11 +5,11 @@ class Point2D {
     }
 }
 class AbstractShape {
-    constructor(type) {
+    constructor(type, backgroundColor = 'black', strokeColor = 'black') {
         this.id = AbstractShape.counter++;
         this.type = type;
-        this.backgroundColor = 'red';
-        this.strokeColor = 'blue';
+        this.backgroundColor = backgroundColor;
+        this.strokeColor = strokeColor;
     }
 }
 AbstractShape.counter = 0;

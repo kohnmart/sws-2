@@ -21,16 +21,19 @@ export class Item {
 Item.id = 'menu-item';
 export class ItemColor extends Item {
     constructor(tagName, menuInstance, key, value, defaultColor, callback) {
-        super(tagName, menuInstance, null, callback);
+        super(tagName, menuInstance);
         this.key = key;
         this.defaultColor = defaultColor;
         this.inputElement = document.createElement('input');
         this.inputElement.type = 'radio';
-        this.inputElement.name = key;
+        this.inputElement.name = 'Hintergrundfarbe';
         this.inputElement.value = value;
         this.inputElement.id = Item.id;
         if (this.key === this.defaultColor) {
             this.inputElement.checked = true;
+        }
+        if (callback) {
+            this.container.addEventListener('mousedown', () => callback(this));
         }
         this.labelElement = document.createElement('label');
         this.labelElement.textContent = value;

@@ -22,6 +22,12 @@ export class Canvas {
                 createMouseHandler('handleMouseDown').call(this, event);
             }
         });
+        canvasDomElement.addEventListener('contextmenu', (event) => {
+            if (event.button === 2 && Selector.isSelectionMode) {
+                event.preventDefault();
+                createMouseHandler('handleRightClick').call(this, event);
+            }
+        });
         function createMouseHandler(methodName) {
             return function (e) {
                 e = e || window.event;
@@ -29,7 +35,7 @@ export class Canvas {
                     const btnCode = e.button, x = e.pageX - this.offsetLeft, y = e.pageY - this.offsetTop, tool = toolarea.getSelectedTool();
                     // if left mouse button is pressed,
                     // and if a tool is selected, do something
-                    if (e.button === 0 && tool) {
+                    if (tool) {
                         const m = tool[methodName];
                         // This in the shapeFactory should be the factory itself.
                         m.call(tool, x, y);

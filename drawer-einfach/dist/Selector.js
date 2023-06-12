@@ -6,9 +6,6 @@ export class Selector {
     }
     handleMouseDown(x, y) {
         Selector.iterateShapes(x, y, false);
-        if (Selector.shapeIdList.length) {
-            Selector.menu.show(x, y);
-        }
     }
     handleAlt() {
         if (Selector.shapeIdList.length) {
@@ -17,6 +14,11 @@ export class Selector {
     }
     handleCtrl(x, y) {
         Selector.iterateShapes(x, y, true);
+    }
+    handleRightClick(x, y) {
+        if (Selector.shapeIdList.length) {
+            Selector.menu.show(x, y);
+        }
     }
     handleMouseUp() {
         return;
@@ -141,12 +143,10 @@ Selector.setupContextMenu = (menuApi) => {
         yellow: 'gelb',
         blue: 'blau',
         black: 'schwarz',
-    }, 'red', (m) => {
-        console.log('IODD');
+    }, 'red', (item) => {
         const shapes = Selector.canvas.getShapes();
         const shape = shapes[Selector.shapeIdList[0]];
-        shape.backgroundColor = 'green';
-        shape.strokeColor = 'blue';
+        shape.backgroundColor = item.key;
         Selector.canvas.draw();
     });
     return menu;
