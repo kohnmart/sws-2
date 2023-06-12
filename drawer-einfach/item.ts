@@ -46,19 +46,23 @@ export class ItemColor extends Item {
     key: string,
     value: string,
     defaultColor: string | undefined,
-    callback?: (m: MenuApi) => void
+    callback?: (m: ItemColor) => void
   ) {
-    super(tagName, menuInstance, null, callback);
+    super(tagName, menuInstance);
     this.key = key;
     this.defaultColor = defaultColor;
     this.inputElement = document.createElement('input');
     this.inputElement.type = 'radio';
-    this.inputElement.name = key;
+    this.inputElement.name = 'Hintergrundfarbe';
     this.inputElement.value = value;
     this.inputElement.id = Item.id;
 
     if (this.key === this.defaultColor) {
       this.inputElement.checked = true;
+    }
+
+    if (callback) {
+      this.container.addEventListener('mousedown', () => callback(this));
     }
 
     this.labelElement = document.createElement('label');
