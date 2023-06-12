@@ -11,7 +11,9 @@ export class Selector implements ShapeFactory {
   private static indexer = 0;
 
   private static setupContextMenu = (menuApi: MenuApi) => {
+    /* Setup new Menu */
     const menu = menuApi.createMenu();
+    /* Add Entfernen-Button */
     const mItem1 = menuApi.createItem('Entfernen', (m: MenuApi) => {
       m.hide();
       const id = Selector.shapeIdList[0];
@@ -19,6 +21,8 @@ export class Selector implements ShapeFactory {
       Selector.canvas.removeShape(shapes[id]);
     });
     menu.addItems(mItem1);
+    /* Create radio options for color-selection */
+    /* Eigene Klasse? */
     menuApi.createRadioOption(
       [Types.Vordergrund, Types.Hintergrund],
       {
@@ -38,6 +42,7 @@ export class Selector implements ShapeFactory {
             const ctx = Selector.canvas.getCanvasRenderingContext();
             shape.backgroundColor = item.key;
             shape.draw(ctx, true);
+            item.setColorOption(true);
           } else {
             item.setColorOption(true);
           }
@@ -46,6 +51,7 @@ export class Selector implements ShapeFactory {
             const ctx = Selector.canvas.getCanvasRenderingContext();
             shape.strokeColor = item.key;
             shape.draw(ctx, true);
+            item.setColorOption(false);
           } else {
             item.setColorOption(false);
           }
