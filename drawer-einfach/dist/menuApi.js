@@ -35,7 +35,7 @@ export default class MenuApi {
         };
         /* remove item */
         this.removeItem = (item) => {
-            const index = this.itemList.findIndex((e) => e.container.innerText == item.container.innerText);
+            const index = this.itemList.findIndex((e) => e.element.innerText == item.element.innerText);
             const beforeIndex = this.itemList.slice(0, index);
             const afterIndex = this.itemList.slice(index + 1);
             this.itemList = [...beforeIndex, ...afterIndex];
@@ -65,16 +65,17 @@ export default class MenuApi {
             /* remove listener */
             document.removeEventListener('mousedown', this.eventListener, true);
         };
-        this.createRadioOption = (type, colorOptions, defaultColor, callback) => {
-            const header = new Item('p', this, type);
-            this.addItem(header);
-            for (const key in colorOptions) {
-                if (colorOptions.hasOwnProperty(key)) {
-                    const color = new ItemColor('div', this, key, colorOptions[key], defaultColor !== null && defaultColor !== void 0 ? defaultColor : undefined, (m) => callback(m));
-                    const separator = this.createSeparator();
-                    this.addItems(separator, color);
+        this.createRadioOption = (colorTypes, colorOptions, defaultColor, callback) => {
+            colorTypes.forEach((type) => {
+                this.addItem(new Item('p', this, type));
+                for (const key in colorOptions) {
+                    if (colorOptions.hasOwnProperty(key)) {
+                        const color = new ItemColor(type, 'div', this, key, colorOptions[key], defaultColor !== null && defaultColor !== void 0 ? defaultColor : undefined, (m) => callback(m));
+                        const separator = this.createSeparator();
+                        this.addItems(separator, color);
+                    }
                 }
-            }
+            });
         };
         this.itemList = [];
         this.ulList = document.createElement('ul');

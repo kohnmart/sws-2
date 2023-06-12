@@ -1,5 +1,6 @@
 var _a;
 import MenuApi from './menuApi.js';
+import { Types } from './item.js';
 export class Selector {
     constructor() {
         this.label = 'Select';
@@ -136,7 +137,7 @@ Selector.setupContextMenu = (menuApi) => {
         Selector.canvas.removeShape(shapes[id]);
     });
     menu.addItems(mItem1);
-    menuApi.createRadioOption('Hintergrundfarben', {
+    menuApi.createRadioOption([Types.Vordergrund, Types.Hintergrund], {
         transparent: 'transparent',
         red: 'rot',
         green: 'grün',
@@ -146,7 +147,12 @@ Selector.setupContextMenu = (menuApi) => {
     }, 'red', (item) => {
         const shapes = Selector.canvas.getShapes();
         const shape = shapes[Selector.shapeIdList[0]];
-        shape.backgroundColor = item.key;
+        if (item.inputElement.name === Types.Hintergrund) {
+            shape.backgroundColor = item.key;
+        }
+        else {
+            shape.strokeColor = item.key;
+        }
         Selector.canvas.draw();
     });
     return menu;

@@ -1,50 +1,55 @@
 export class Item {
     /* create new item */
     constructor(tagName, menuInstance, itemContent, callback) {
-        this.container = document.createElement(tagName);
-        this.container.id = Item.id;
+        this.element = document.createElement(tagName);
+        this.element.id = Item.id;
         this.menuInstance = menuInstance;
         if (itemContent) {
-            this.container.innerText = itemContent;
+            this.element.innerText = itemContent;
         }
         if (callback) {
-            this.container.addEventListener('mousedown', () => callback(this.menuInstance));
+            this.element.addEventListener('mousedown', () => callback(this.menuInstance));
         }
     }
     /* render item in ul-list */
     render() {
         const li = document.createElement('li');
-        li.appendChild(this.container);
+        li.appendChild(this.element);
         this.menuInstance.ulList.appendChild(li);
     }
 }
 Item.id = 'menu-item';
 export class ItemColor extends Item {
-    constructor(tagName, menuInstance, key, value, defaultColor, callback) {
+    constructor(type, tagName, menuInstance, key, value, defaultColor, callback) {
         super(tagName, menuInstance);
         this.key = key;
         this.defaultColor = defaultColor;
         this.inputElement = document.createElement('input');
         this.inputElement.type = 'radio';
-        this.inputElement.name = 'Hintergrundfarbe';
+        this.inputElement.name = type;
         this.inputElement.value = value;
         this.inputElement.id = Item.id;
         if (this.key === this.defaultColor) {
             this.inputElement.checked = true;
         }
         if (callback) {
-            this.container.addEventListener('mousedown', () => callback(this));
+            this.inputElement.addEventListener('mousedown', () => callback(this));
         }
         this.labelElement = document.createElement('label');
         this.labelElement.textContent = value;
         this.labelElement.htmlFor = value;
         this.labelElement.id = Item.id;
-        this.container.append(this.inputElement);
-        this.container.append(this.labelElement);
+        this.element.append(this.inputElement);
+        this.element.append(this.labelElement);
     }
     setColorOption(color) {
         this.defaultColor = color;
         // Additional logic related to color setting
     }
 }
+export var Types;
+(function (Types) {
+    Types["Vordergrund"] = "Vordergrund";
+    Types["Hintergrund"] = "Hintergrund";
+})(Types || (Types = {}));
 //# sourceMappingURL=item.js.map
