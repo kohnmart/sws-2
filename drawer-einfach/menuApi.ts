@@ -102,7 +102,7 @@ export default class MenuApi {
     type: string,
     colorOptions: { [key: string]: string },
     defaultColor?: string,
-    callback?: (m: MenuApi) => void
+    callback?: (m: ItemColor) => void
   ): void => {
     const header = new Item('p', this, type);
     this.addItem(header);
