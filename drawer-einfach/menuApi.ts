@@ -105,9 +105,12 @@ export default class MenuApi {
     callback?: (m: ItemColor) => void
   ): void => {
     colorTypes.forEach((type) => {
+      /* Create headerline */
       this.addItem(new Item('p', this, type));
+      /*  Loop over color-map */
       for (const key in colorOptions) {
         if (colorOptions.hasOwnProperty(key)) {
+          /* Create new ItemColor */
           const color = new ItemColor(
             type,
             'div',
@@ -118,6 +121,7 @@ export default class MenuApi {
             (m) => callback(m)
           );
 
+          /* Add separator and append both to menulist */
           const separator = this.createSeparator();
           this.addItems(separator, color);
         }
