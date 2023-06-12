@@ -35,6 +35,13 @@ export class Canvas implements ShapeManager {
       }
     });
 
+    canvasDomElement.addEventListener('contextmenu', (event) => {
+      if (event.button === 2 && Selector.isSelectionMode) {
+        event.preventDefault();
+        createMouseHandler('handleRightClick').call(this, event);
+      }
+    });
+
     function createMouseHandler(methodName: string) {
       return function (e) {
         e = e || window.event;
@@ -46,7 +53,7 @@ export class Canvas implements ShapeManager {
 
           // if left mouse button is pressed,
           // and if a tool is selected, do something
-          if (e.button === 0 && tool) {
+          if (tool) {
             const m = tool[methodName];
             // This in the shapeFactory should be the factory itself.
             m.call(tool, x, y);
