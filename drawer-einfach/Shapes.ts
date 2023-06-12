@@ -1,3 +1,4 @@
+import { ItemColor } from './item.js';
 import { Shape, ShapeFactory, ShapeManager } from './types.js';
 
 class Point2D {
@@ -11,8 +12,8 @@ class AbstractShape {
   readonly strokeColor: string;
   constructor(
     type: string,
-    backgroundColor: string = 'black',
-    strokeColor: string = 'black'
+    backgroundColor: string = ItemColor.defaultBackground,
+    strokeColor: string = ItemColor.defaultForground
   ) {
     this.id = AbstractShape.counter++;
     this.type = type;
@@ -64,6 +65,8 @@ export class Line extends AbstractShape implements Shape {
   }
 
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
+    ctx.strokeStyle = this.strokeColor;
+
     ctx.beginPath();
     ctx.moveTo(this.from.x, this.from.y);
     ctx.lineTo(this.to.x, this.to.y);
@@ -91,10 +94,17 @@ export class Circle extends AbstractShape implements Shape {
     super('circle');
   }
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
+    ctx.fillStyle = this.backgroundColor;
+    ctx.strokeStyle = this.strokeColor;
+
     ctx.beginPath();
     ctx.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI);
     ctx.stroke();
+    ctx.fill();
+    ctx.stroke();
+
     if (isSelected) {
+      ctx.fillStyle = 'red';
       ctx.fillRect(this.center.x - 5, this.center.y + this.radius - 5, 10, 10);
       ctx.fillRect(this.center.x - 5, this.center.y - this.radius - 5, 10, 10);
       ctx.fillRect(this.center.x - 5 - this.radius, this.center.y, 10, 10);
@@ -128,10 +138,16 @@ export class Rectangle extends AbstractShape implements Shape {
   }
 
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
-    ctx.beginPath();
     ctx.fillStyle = this.backgroundColor;
     ctx.strokeStyle = this.strokeColor;
-
+    ctx.beginPath();
+    ctx.strokeRect(
+      this.from.x,
+      this.from.y,
+      this.to.x - this.from.x,
+      this.to.y - this.from.y
+    );
+    ctx.stroke();
     ctx.fillRect(
       this.from.x,
       this.from.y,
@@ -147,7 +163,7 @@ export class Rectangle extends AbstractShape implements Shape {
     );
 
     if (isSelected) {
-      ctx.stroke();
+      ctx.fillStyle = 'red';
       ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
       ctx.fillRect(this.from.x - 5, this.to.y - 5, 10, 10);
       ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
@@ -182,8 +198,14 @@ export class Triangle extends AbstractShape implements Shape {
     ctx.lineTo(this.p2.x, this.p2.y);
     ctx.lineTo(this.p3.x, this.p3.y);
     ctx.lineTo(this.p1.x, this.p1.y);
+    ctx.closePath(); // Close the path
+    ctx.fillStyle = this.backgroundColor;
+    ctx.fill(); // Fill the triangle
+    ctx.strokeStyle = this.strokeColor;
     ctx.stroke();
+
     if (isSelected) {
+      ctx.fillStyle = 'red';
       ctx.fillRect(this.p1.x - 5, this.p1.y - 5, 10, 10);
       ctx.fillRect(this.p2.x - 5, this.p2.y - 5, 10, 10);
       ctx.fillRect(this.p3.x - 5, this.p3.y - 5, 10, 10);
