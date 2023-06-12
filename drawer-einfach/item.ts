@@ -1,4 +1,4 @@
-import MenuApi from './menuApi';
+import MenuApi from './menuApi.js';
 
 export class Item {
   public static id: string = 'menu-item';
@@ -33,9 +33,10 @@ export class Item {
 }
 
 export class ItemColor extends Item {
+  public static defaultBackground: string | undefined;
+  public static defaultForground: string | undefined;
   public type: Types;
   public key: string;
-  public defaultColor: string;
   public inputElement: HTMLInputElement;
   private labelElement: HTMLLabelElement;
 
@@ -50,14 +51,14 @@ export class ItemColor extends Item {
   ) {
     super(tagName, menuInstance);
     this.key = key;
-    this.defaultColor = defaultColor;
+    ItemColor.defaultBackground = defaultColor;
     this.inputElement = document.createElement('input');
     this.inputElement.type = 'radio';
     this.inputElement.name = type;
     this.inputElement.value = value;
     this.inputElement.id = Item.id;
 
-    if (this.key === this.defaultColor) {
+    if (this.key === ItemColor.defaultBackground) {
       this.inputElement.checked = true;
     }
 
@@ -73,8 +74,13 @@ export class ItemColor extends Item {
     this.element.append(this.labelElement);
   }
 
-  setColorOption(color: string): void {
-    this.defaultColor = color;
+  setColorOption(isBackground: boolean): void {
+    console.log('COLOR');
+    if (isBackground) {
+      ItemColor.defaultBackground = this.key;
+    } else {
+      ItemColor.defaultForground = this.key;
+    }
     // Additional logic related to color setting
   }
 }
