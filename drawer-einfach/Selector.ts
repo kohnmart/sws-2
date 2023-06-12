@@ -1,8 +1,8 @@
 import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
-import { Shape, ShapeFactory } from './types.js';
+import { ShapeFactory } from './types.js';
 import MenuApi from './menuApi.js';
-import { ItemColor } from './item';
+import { ItemColor, Types } from './item.js';
 export class Selector implements ShapeFactory {
   public label = 'Select';
   public static isSelectionMode = false;
@@ -20,7 +20,7 @@ export class Selector implements ShapeFactory {
     });
     menu.addItems(mItem1);
     menuApi.createRadioOption(
-      'Hintergrundfarben',
+      [Types.Vordergrund, Types.Hintergrund],
       {
         transparent: 'transparent',
         red: 'rot',
@@ -33,12 +33,14 @@ export class Selector implements ShapeFactory {
       (item: ItemColor) => {
         const shapes = Selector.canvas.getShapes();
         const shape = shapes[Selector.shapeIdList[0]];
-
-        shape.backgroundColor = item.key;
+        if (item.inputElement.name === Types.Hintergrund) {
+          shape.backgroundColor = item.key;
+        } else {
+          shape.strokeColor = item.key;
+        }
         Selector.canvas.draw();
       }
     );
-
     return menu;
   };
 
