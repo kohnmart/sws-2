@@ -2,6 +2,7 @@ import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
 import { Shape, ShapeFactory } from './types.js';
 import MenuApi from './menuApi.js';
+import { ItemColor } from './item';
 export class Selector implements ShapeFactory {
   public label = 'Select';
   public static isSelectionMode = false;
@@ -29,13 +30,11 @@ export class Selector implements ShapeFactory {
         black: 'schwarz',
       },
       'red',
-      (m: MenuApi) => {
-        console.log('IODD');
+      (item: ItemColor) => {
         const shapes = Selector.canvas.getShapes();
         const shape = shapes[Selector.shapeIdList[0]];
 
-        shape.backgroundColor = 'green';
-        shape.strokeColor = 'blue';
+        shape.backgroundColor = item.key;
         Selector.canvas.draw();
       }
     );
@@ -47,9 +46,6 @@ export class Selector implements ShapeFactory {
 
   public handleMouseDown(x: number, y: number) {
     Selector.iterateShapes(x, y, false);
-    if (Selector.shapeIdList.length) {
-      Selector.menu.show(x, y);
-    }
   }
 
   public handleAlt() {
@@ -60,6 +56,12 @@ export class Selector implements ShapeFactory {
 
   public handleCtrl(x: number, y: number) {
     Selector.iterateShapes(x, y, true);
+  }
+
+  public handleRightClick(x: number, y: number) {
+    if (Selector.shapeIdList.length) {
+      Selector.menu.show(x, y);
+    }
   }
 
   public handleMouseUp() {
