@@ -1,4 +1,4 @@
-import { Item, ItemColor } from './item.js';
+import { Item, ItemColor, Types } from './item.js';
 
 export default class MenuApi {
   static id: string = 'menu';
@@ -61,7 +61,7 @@ export default class MenuApi {
   /* remove item */
   removeItem = (item: Item): void => {
     const index = this.itemList.findIndex(
-      (e) => e.container.innerText == item.container.innerText
+      (e) => e.element.innerText == item.element.innerText
     );
     const beforeIndex = this.itemList.slice(0, index);
     const afterIndex = this.itemList.slice(index + 1);
@@ -99,27 +99,29 @@ export default class MenuApi {
   };
 
   createRadioOption = (
-    type: string,
+    colorTypes: Types[],
     colorOptions: { [key: string]: string },
     defaultColor?: string,
     callback?: (m: ItemColor) => void
   ): void => {
-    const header = new Item('p', this, type);
-    this.addItem(header);
-    for (const key in colorOptions) {
-      if (colorOptions.hasOwnProperty(key)) {
-        const color = new ItemColor(
-          'div',
-          this,
-          key,
-          colorOptions[key],
-          defaultColor ?? undefined,
-          (m) => callback(m)
-        );
+    colorTypes.forEach((type) => {
+      this.addItem(new Item('p', this, type));
+      for (const key in colorOptions) {
+        if (colorOptions.hasOwnProperty(key)) {
+          const color = new ItemColor(
+            type,
+            'div',
+            this,
+            key,
+            colorOptions[key],
+            defaultColor ?? undefined,
+            (m) => callback(m)
+          );
 
-        const separator = this.createSeparator();
-        this.addItems(separator, color);
+          const separator = this.createSeparator();
+          this.addItems(separator, color);
+        }
       }
-    }
+    });
   };
 }
