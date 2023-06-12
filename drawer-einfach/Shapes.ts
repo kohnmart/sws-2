@@ -9,11 +9,15 @@ class AbstractShape {
   readonly type: string;
   readonly backgroundColor: string;
   readonly strokeColor: string;
-  constructor(type: string) {
+  constructor(
+    type: string,
+    backgroundColor: string = 'black',
+    strokeColor: string = 'black'
+  ) {
     this.id = AbstractShape.counter++;
     this.type = type;
-    this.backgroundColor = 'red';
-    this.strokeColor = 'blue';
+    this.backgroundColor = backgroundColor;
+    this.strokeColor = strokeColor;
   }
 }
 abstract class AbstractFactory<T extends Shape> {
