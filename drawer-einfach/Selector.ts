@@ -37,24 +37,18 @@ export class Selector implements ShapeFactory {
       (item: ItemColor) => {
         const shapes = Selector.canvas.getShapes();
         const shape = shapes[Selector.shapeIdList[0]];
-        if (item.inputElement.name === Types.Hintergrund) {
-          if (shape) {
-            const ctx = Selector.canvas.getCanvasRenderingContext();
+        if (shape) {
+          const ctx = Selector.canvas.getCanvasRenderingContext();
+          if (item.inputElement.name === Types.Hintergrund) {
             shape.backgroundColor = item.key;
-            shape.draw(ctx, true);
             item.setColorOption(true);
           } else {
-            item.setColorOption(true);
-          }
-        } else {
-          if (shape) {
-            const ctx = Selector.canvas.getCanvasRenderingContext();
             shape.strokeColor = item.key;
-            shape.draw(ctx, true);
-            item.setColorOption(false);
-          } else {
             item.setColorOption(false);
           }
+          shape.draw(ctx, true);
+        } else {
+          item.setColorOption(item.inputElement.name === Types.Hintergrund);
         }
       }
     );
