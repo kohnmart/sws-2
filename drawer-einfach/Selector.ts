@@ -36,20 +36,24 @@ export class Selector implements ShapeFactory {
       'red',
       (item: ItemColor) => {
         const shapes = Selector.canvas.getShapes();
-        const shape = shapes[Selector.shapeIdList[0]];
-        if (shape) {
-          const ctx = Selector.canvas.getCanvasRenderingContext();
-          if (item.inputElement.name === Types.Hintergrund) {
-            shape.backgroundColor = item.key;
-            item.setColorOption(true);
+        console.log('IDES');
+        Selector.shapeIdList.forEach((id) => {
+          console.log(id);
+          const shape = shapes[Selector.shapeIdList[id]];
+          if (shape) {
+            const ctx = Selector.canvas.getCanvasRenderingContext();
+            if (item.inputElement.name === Types.Hintergrund) {
+              shape.backgroundColor = item.key;
+              item.setColorOption(true);
+            } else {
+              shape.strokeColor = item.key;
+              item.setColorOption(false);
+            }
+            shape.draw(ctx, true);
           } else {
-            shape.strokeColor = item.key;
-            item.setColorOption(false);
+            item.setColorOption(item.inputElement.name === Types.Hintergrund);
           }
-          shape.draw(ctx, true);
-        } else {
-          item.setColorOption(item.inputElement.name === Types.Hintergrund);
-        }
+        });
       }
     );
     return menu;
