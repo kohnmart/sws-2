@@ -2,71 +2,21 @@ import { Canvas } from './Canvas.js';
 import { Circle, Triangle, Rectangle, Line } from './Shapes';
 import { ShapeFactory } from './types.js';
 import MenuApi from './menuApi.js';
-import { ItemColor, Types } from './item.js';
+import { setupContextMenu } from './menuInit.js';
 export class Selector implements ShapeFactory {
   public label = 'Select';
   public static isSelectionMode = false;
   public static canvas: Canvas = undefined;
-  private static shapeIdList: number[] = [];
-  private static indexer = 0;
-
-  private static setupContextMenu = (menuApi: MenuApi) => {
-    /* Setup new Menu */
-    const menu = menuApi.createMenu();
-    /* Add Entfernen-Button */
-    const mItem1 = menuApi.createItem('Entfernen', (m: MenuApi) => {
-      m.hide();
-      const id = Selector.shapeIdList[0];
-      const shapes = Selector.canvas.getShapes();
-      Selector.canvas.removeShape(shapes[id]);
-    });
-    menu.addItems(mItem1);
-    /* Create radio options for color-selection */
-    /* Eigene Klasse? */
-    menuApi.createRadioOption(
-      [Types.Vordergrund, Types.Hintergrund],
-      {
-        transparent: 'transparent',
-        red: 'rot',
-        green: 'grün',
-        yellow: 'gelb',
-        blue: 'blau',
-        black: 'schwarz',
-      },
-      'red',
-      (item: ItemColor) => {
-        const shapes = Selector.canvas.getShapes();
-        console.log('IDES');
-        Selector.shapeIdList.forEach((id) => {
-          console.log(id);
-          const shape = shapes[Selector.shapeIdList[id]];
-          if (shape) {
-            const ctx = Selector.canvas.getCanvasRenderingContext();
-            if (item.inputElement.name === Types.Hintergrund) {
-              shape.backgroundColor = item.key;
-              item.setColorOption(true);
-            } else {
-              shape.strokeColor = item.key;
-              item.setColorOption(false);
-            }
-            shape.draw(ctx, true);
-          } else {
-            item.setColorOption(item.inputElement.name === Types.Hintergrund);
-          }
-        });
-      }
-    );
-    return menu;
-  };
-
-  private static menu = this.setupContextMenu(new MenuApi());
+  public static shapeListId: number[] = [];
+  private static shapeListIndexer = 0;
+  private static menu = setupContextMenu(new MenuApi());
 
   public handleMouseDown(x: number, y: number) {
     Selector.iterateShapes(x, y, false);
   }
 
   public handleAlt() {
-    if (Selector.shapeIdList.length) {
+    if (Selector.shapeListId.length) {
       Selector.handleShapesList();
     }
   }
@@ -94,7 +44,7 @@ export class Selector implements ShapeFactory {
 
     if (!isCtrl) {
       Selector.canvas.draw();
-      Selector.shapeIdList = [];
+      Selector.shapeListId = [];
     }
 
     /* Iterate over shapes */
@@ -122,7 +72,7 @@ export class Selector implements ShapeFactory {
               Math.min(start_y, end_y) <= y &&
               y <= Math.max(start_y, end_y)
             ) {
-              Selector.shapeIdList.push(line.id);
+              Selector.shapeListId.push(line.id);
             }
           }
         } else if (type == 'rectangle') {
@@ -143,7 +93,7 @@ export class Selector implements ShapeFactory {
             distanceToTop <= end_y - start_y &&
             distanceToBottom <= end_y - start_y
           ) {
-            Selector.shapeIdList.push(rectangle.id);
+            Selector.shapeListId.push(rectangle.id);
           }
         } else if (type == 'triangle') {
           const triangle = shape as Triangle;
@@ -159,7 +109,7 @@ export class Selector implements ShapeFactory {
           const gamma = 1 - alpha - beta;
 
           if (alpha >= 0 && beta >= 0 && gamma >= 0) {
-            Selector.shapeIdList.push(triangle.id);
+            Selector.shapeListId.push(triangle.id);
           }
         } else {
           const circle = shape as Circle;
@@ -168,16 +118,16 @@ export class Selector implements ShapeFactory {
           const distance = Math.sqrt((x - center.x) ** 2 + (y - center.y) ** 2);
 
           if (distance <= radius) {
-            Selector.shapeIdList.push(circle.id);
+            Selector.shapeListId.push(circle.id);
           }
         }
       }
     }
-    if (Selector.shapeIdList.length && !isCtrl) {
-      const id = Selector.shapeIdList[0];
+    if (Selector.shapeListId.length && !isCtrl) {
+      const id = Selector.shapeListId[0];
       shapes[id].draw(ctx, true);
-    } else if (Selector.shapeIdList.length && isCtrl) {
-      Selector.shapeIdList.forEach((id) => {
+    } else if (Selector.shapeListId.length && isCtrl) {
+      Selector.shapeListId.forEach((id) => {
         shapes[id].draw(ctx, true);
       });
     }
@@ -186,15 +136,15 @@ export class Selector implements ShapeFactory {
     const ctx = Selector.canvas.getCanvasRenderingContext();
     const shapes = Selector.canvas.getShapes();
     Selector.canvas.draw();
-    if (Selector.indexer < Selector.shapeIdList.length - 1) {
-      Selector.indexer++;
+    if (Selector.shapeListIndexer < Selector.shapeListId.length - 1) {
+      Selector.shapeListIndexer++;
     }
 
-    const idCurrent = Selector.shapeIdList[Selector.indexer];
+    const idCurrent = Selector.shapeListId[Selector.shapeListIndexer];
     shapes[idCurrent].draw(ctx, true);
 
-    if (Selector.indexer == Selector.shapeIdList.length - 1) {
-      Selector.indexer = -1;
+    if (Selector.shapeListIndexer == Selector.shapeListId.length - 1) {
+      Selector.shapeListIndexer = -1;
     }
   }
 }
