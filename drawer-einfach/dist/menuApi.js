@@ -67,10 +67,14 @@ export default class MenuApi {
         };
         this.createRadioOption = (colorTypes, colorOptions, defaultColor, callback) => {
             colorTypes.forEach((type) => {
+                /* Create headerline */
                 this.addItem(new Item('p', this, type));
+                /*  Loop over color-map */
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
+                        /* Create new ItemColor */
                         const color = new ItemColor(type, 'div', this, key, colorOptions[key], defaultColor !== null && defaultColor !== void 0 ? defaultColor : undefined, (m) => callback(m));
+                        /* Add separator and append both to menulist */
                         const separator = this.createSeparator();
                         this.addItems(separator, color);
                     }

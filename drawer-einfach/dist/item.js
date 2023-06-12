@@ -23,13 +23,13 @@ export class ItemColor extends Item {
     constructor(type, tagName, menuInstance, key, value, defaultColor, callback) {
         super(tagName, menuInstance);
         this.key = key;
-        this.defaultColor = defaultColor;
+        ItemColor.defaultBackground = defaultColor;
         this.inputElement = document.createElement('input');
         this.inputElement.type = 'radio';
         this.inputElement.name = type;
         this.inputElement.value = value;
         this.inputElement.id = Item.id;
-        if (this.key === this.defaultColor) {
+        if (this.key === ItemColor.defaultBackground) {
             this.inputElement.checked = true;
         }
         if (callback) {
@@ -42,8 +42,14 @@ export class ItemColor extends Item {
         this.element.append(this.inputElement);
         this.element.append(this.labelElement);
     }
-    setColorOption(color) {
-        this.defaultColor = color;
+    setColorOption(isBackground) {
+        console.log('COLOR');
+        if (isBackground) {
+            ItemColor.defaultBackground = this.key;
+        }
+        else {
+            ItemColor.defaultForground = this.key;
+        }
         // Additional logic related to color setting
     }
 }

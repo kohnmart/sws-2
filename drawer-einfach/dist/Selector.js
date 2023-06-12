@@ -17,9 +17,7 @@ export class Selector {
         Selector.iterateShapes(x, y, true);
     }
     handleRightClick(x, y) {
-        if (Selector.shapeIdList.length) {
-            Selector.menu.show(x, y);
-        }
+        Selector.menu.show(x, y);
     }
     handleMouseUp() {
         return;
@@ -148,12 +146,25 @@ Selector.setupContextMenu = (menuApi) => {
         const shapes = Selector.canvas.getShapes();
         const shape = shapes[Selector.shapeIdList[0]];
         if (item.inputElement.name === Types.Hintergrund) {
-            shape.backgroundColor = item.key;
+            if (shape) {
+                const ctx = Selector.canvas.getCanvasRenderingContext();
+                shape.backgroundColor = item.key;
+                shape.draw(ctx, true);
+            }
+            else {
+                item.setColorOption(true);
+            }
         }
         else {
-            shape.strokeColor = item.key;
+            if (shape) {
+                const ctx = Selector.canvas.getCanvasRenderingContext();
+                shape.strokeColor = item.key;
+                shape.draw(ctx, true);
+            }
+            else {
+                item.setColorOption(false);
+            }
         }
-        Selector.canvas.draw();
     });
     return menu;
 };
