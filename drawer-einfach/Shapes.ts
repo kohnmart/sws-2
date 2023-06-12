@@ -132,26 +132,22 @@ export class Rectangle extends AbstractShape implements Shape {
     ctx.fillStyle = this.backgroundColor;
     ctx.strokeStyle = this.strokeColor;
 
-    if (ctx.fillStyle !== 'transparent') {
-      ctx.fillRect(
-        this.from.x,
-        this.from.y,
-        this.to.x - this.from.x,
-        this.to.y - this.from.y
-      );
-    }
+    ctx.fillRect(
+      this.from.x,
+      this.from.y,
+      this.to.x - this.from.x,
+      this.to.y - this.from.y
+    );
 
-    if (ctx.strokeStyle !== 'transparent') {
-      ctx.strokeRect(
-        this.from.x,
-        this.from.y,
-        this.to.x - this.from.x,
-        this.to.y - this.from.y
-      );
-    }
+    ctx.strokeRect(
+      this.from.x,
+      this.from.y,
+      this.to.x - this.from.x,
+      this.to.y - this.from.y
+    );
 
-    ctx.stroke();
     if (isSelected) {
+      ctx.stroke();
       ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
       ctx.fillRect(this.from.x - 5, this.to.y - 5, 10, 10);
       ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
