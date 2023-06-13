@@ -1,5 +1,5 @@
-import MenuApi from './menuApi.js';
 import { setupContextMenu } from './menuInit.js';
+import MenuApi from './menuApi.js';
 import ShapesInteraction from './ShapesInteraction.js';
 export class Selector {
     constructor() {

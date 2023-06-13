@@ -22,21 +22,22 @@ export function setupContextMenu(menuApi) {
         black: 'schwarz',
     }, 'red', (item) => {
         const shapes = ShapesInteraction.canvas.getShapes();
-        const shape = shapes[ShapesInteraction.shapeListId[0]];
-        if (shape) {
+        ShapesInteraction.shapeListId.forEach((id) => {
+            const shape = shapes[id];
             const ctx = ShapesInteraction.canvas.getCanvasRenderingContext();
             if (item.inputElement.name === Types.Hintergrund) {
                 shape.backgroundColor = item.key;
-                item.setColorOption(true);
             }
             else {
                 shape.strokeColor = item.key;
-                item.setColorOption(false);
             }
             shape.draw(ctx, true);
+        });
+        if (item.inputElement.name === Types.Hintergrund) {
+            item.setColorOption(true);
         }
         else {
-            item.setColorOption(item.inputElement.name === Types.Hintergrund);
+            item.setColorOption(false);
         }
     });
     return menu;

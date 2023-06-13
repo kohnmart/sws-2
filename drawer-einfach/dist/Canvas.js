@@ -9,17 +9,19 @@ export class Canvas {
         canvasDomElement.addEventListener('mousemove', createMouseHandler('handleMouseMove'));
         canvasDomElement.addEventListener('mouseup', createMouseHandler('handleMouseUp'));
         canvasDomElement.addEventListener('mousedown', (event) => {
-            if (event.altKey && Selector.isSelectionMode) {
-                /* Execute Selector-Alt-Event */
-                createMouseHandler('handleAlt').call(this, event);
-            }
-            else if (event.ctrlKey && Selector.isSelectionMode) {
-                /* Execute Selector-CRTL-Event */
-                createMouseHandler('handleCtrl').call(this, event);
-            }
-            else {
-                /* Execute for all types */
-                createMouseHandler('handleMouseDown').call(this, event);
+            if (event.button === 0) {
+                if (event.altKey && Selector.isSelectionMode) {
+                    /* Execute Selector-Alt-Event */
+                    createMouseHandler('handleAlt').call(this, event);
+                }
+                else if (event.ctrlKey && Selector.isSelectionMode) {
+                    /* Execute Selector-CRTL-Event */
+                    createMouseHandler('handleCtrl').call(this, event);
+                }
+                else {
+                    /* Execute for all types */
+                    createMouseHandler('handleMouseDown').call(this, event);
+                }
             }
         });
         canvasDomElement.addEventListener('contextmenu', (event) => {
@@ -33,8 +35,6 @@ export class Canvas {
                 e = e || window.event;
                 if ('object' === typeof e) {
                     const btnCode = e.button, x = e.pageX - this.offsetLeft, y = e.pageY - this.offsetTop, tool = toolarea.getSelectedTool();
-                    // if left mouse button is pressed,
-                    // and if a tool is selected, do something
                     if (tool) {
                         const m = tool[methodName];
                         // This in the shapeFactory should be the factory itself.
