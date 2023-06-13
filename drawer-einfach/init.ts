@@ -8,7 +8,7 @@ import {
 import { ToolArea } from './ToolArea.js';
 import { Canvas } from './Canvas.js';
 import { Selector } from './Selector.js';
-
+import ShapesInteraction from './ShapesInteraction.js';
 function init() {
   const canvasDomElm = document.getElementById('drawArea') as HTMLCanvasElement;
   const menu = document.getElementsByClassName('tools');
@@ -41,6 +41,6 @@ function init() {
   const toolArea = new ToolArea(tools, menu[0]);
   canvas = new Canvas(canvasDomElm, toolArea);
   canvas.draw();
-  Selector.canvas = canvas;
+  ShapesInteraction.canvas = canvas;
 }
 init();
