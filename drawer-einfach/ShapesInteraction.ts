@@ -4,6 +4,7 @@ import { Canvas } from './Canvas.js';
 export default class ShapesInteraction {
   static shapeListId: number[] = [];
   static shapeListIndexer = 0;
+  static shapesSelected: number[] = [];
   static canvas: Canvas = undefined;
 
   public static iterateShapes(x: number, y: number, isCtrl: boolean) {
@@ -13,6 +14,7 @@ export default class ShapesInteraction {
     if (!isCtrl) {
       ShapesInteraction.canvas.draw();
       ShapesInteraction.shapeListId = [];
+      ShapesInteraction.shapesSelected = [];
     }
 
     /* Iterate over shapes */
@@ -64,6 +66,8 @@ export default class ShapesInteraction {
     }
 
     if (ShapesInteraction.shapeListId.length) {
+      const firstId = ShapesInteraction.shapeListId[0];
+      ShapesInteraction.shapesSelected.push(firstId);
       if (!isCtrl) {
         const id = ShapesInteraction.shapeListId[0];
         shapes[id].draw(ctx, true);
@@ -175,9 +179,12 @@ export default class ShapesInteraction {
       ShapesInteraction.shapeListIndexer++;
     }
 
-    const idCurrent =
+    const handleIdCurrent =
       ShapesInteraction.shapeListId[ShapesInteraction.shapeListIndexer];
-    shapes[idCurrent].draw(ctx, true);
+    shapes[handleIdCurrent].draw(ctx, true);
+
+    ShapesInteraction.shapesSelected = [];
+    ShapesInteraction.shapesSelected.push(handleIdCurrent);
 
     if (
       ShapesInteraction.shapeListIndexer ==
@@ -185,5 +192,13 @@ export default class ShapesInteraction {
     ) {
       ShapesInteraction.shapeListIndexer = -1;
     }
+  }
+
+  public static deleteShapesFromList() {
+    const shapes = ShapesInteraction.canvas.getShapes();
+    ShapesInteraction.shapeListId.forEach((id: number) => {
+      const shape = shapes[id];
+      ShapesInteraction.canvas.removeShape(shape);
+    });
   }
 }
