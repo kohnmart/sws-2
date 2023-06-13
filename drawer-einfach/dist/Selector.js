@@ -8,7 +8,8 @@ export class Selector {
     handleMouseDown(x, y) {
         ShapesInteraction.iterateShapes(x, y, false);
     }
-    handleAlt() {
+    handleAlt(x, y) {
+        ShapesInteraction.iterateShapes(x, y, false);
         if (ShapesInteraction.shapeListId.length) {
             ShapesInteraction.handleShapesList();
         }

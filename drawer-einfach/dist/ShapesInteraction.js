@@ -5,6 +5,7 @@ export default class ShapesInteraction {
         if (!isCtrl) {
             ShapesInteraction.canvas.draw();
             ShapesInteraction.shapeListId = [];
+            ShapesInteraction.shapesSelected = [];
         }
         /* Iterate over shapes */
         for (const key in shapes) {
@@ -44,6 +45,8 @@ export default class ShapesInteraction {
             }
         }
         if (ShapesInteraction.shapeListId.length) {
+            const firstId = ShapesInteraction.shapeListId[0];
+            ShapesInteraction.shapesSelected.push(firstId);
             if (!isCtrl) {
                 const id = ShapesInteraction.shapeListId[0];
                 shapes[id].draw(ctx, true);
@@ -110,15 +113,25 @@ export default class ShapesInteraction {
             ShapesInteraction.shapeListId.length - 1) {
             ShapesInteraction.shapeListIndexer++;
         }
-        const idCurrent = ShapesInteraction.shapeListId[ShapesInteraction.shapeListIndexer];
-        shapes[idCurrent].draw(ctx, true);
+        const handleIdCurrent = ShapesInteraction.shapeListId[ShapesInteraction.shapeListIndexer];
+        shapes[handleIdCurrent].draw(ctx, true);
+        ShapesInteraction.shapesSelected = [];
+        ShapesInteraction.shapesSelected.push(handleIdCurrent);
         if (ShapesInteraction.shapeListIndexer ==
             ShapesInteraction.shapeListId.length - 1) {
             ShapesInteraction.shapeListIndexer = -1;
         }
     }
+    static deleteShapesFromList() {
+        const shapes = ShapesInteraction.canvas.getShapes();
+        ShapesInteraction.shapeListId.forEach((id) => {
+            const shape = shapes[id];
+            ShapesInteraction.canvas.removeShape(shape);
+        });
+    }
 }
 ShapesInteraction.shapeListId = [];
 ShapesInteraction.shapeListIndexer = 0;
+ShapesInteraction.shapesSelected = [];
 ShapesInteraction.canvas = undefined;
 //# sourceMappingURL=ShapesInteraction.js.map
