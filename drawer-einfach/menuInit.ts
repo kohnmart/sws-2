@@ -12,8 +12,6 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
     ShapesInteraction.canvas.removeShape(shapes[id]);
   });
   menu.addItems(mItem1);
-  /* Create radio options for color-selection */
-  /* Eigene Klasse? */
   menuApi.createRadioOption(
     [Types.Vordergrund, Types.Hintergrund],
     {
@@ -27,19 +25,21 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
     'red',
     (item: ItemColor) => {
       const shapes = ShapesInteraction.canvas.getShapes();
-      const shape = shapes[ShapesInteraction.shapeListId[0]];
-      if (shape) {
+      ShapesInteraction.shapeListId.forEach((id: number) => {
+        const shape = shapes[id];
         const ctx = ShapesInteraction.canvas.getCanvasRenderingContext();
         if (item.inputElement.name === Types.Hintergrund) {
           shape.backgroundColor = item.key;
-          item.setColorOption(true);
         } else {
           shape.strokeColor = item.key;
-          item.setColorOption(false);
         }
         shape.draw(ctx, true);
+      });
+
+      if (item.inputElement.name === Types.Hintergrund) {
+        item.setColorOption(true);
       } else {
-        item.setColorOption(item.inputElement.name === Types.Hintergrund);
+        item.setColorOption(false);
       }
     }
   );
