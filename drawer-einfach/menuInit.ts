@@ -2,14 +2,10 @@ import { Types, ItemColor } from './item.js';
 import MenuApi from './menuApi.js';
 import ShapesInteraction from './ShapesInteraction.js';
 export function setupContextMenu(menuApi: MenuApi): MenuApi {
-  /* Setup new Menu */
   const menu = menuApi.createMenu();
-  /* Add Entfernen-Button */
   const mItem1 = menuApi.createItem('Entfernen', (m: MenuApi) => {
     m.hide();
-    const id = ShapesInteraction.shapeListId[0];
-    const shapes = ShapesInteraction.canvas.getShapes();
-    ShapesInteraction.canvas.removeShape(shapes[id]);
+    ShapesInteraction.deleteShapesFromList();
   });
   menu.addItems(mItem1);
   menuApi.createRadioOption(
@@ -22,10 +18,10 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
       blue: 'blau',
       black: 'schwarz',
     },
-    'red',
+    'transparent',
     (item: ItemColor) => {
       const shapes = ShapesInteraction.canvas.getShapes();
-      ShapesInteraction.shapeListId.forEach((id: number) => {
+      ShapesInteraction.shapesSelected.forEach((id: number) => {
         const shape = shapes[id];
         const ctx = ShapesInteraction.canvas.getCanvasRenderingContext();
         if (item.inputElement.name === Types.Hintergrund) {
