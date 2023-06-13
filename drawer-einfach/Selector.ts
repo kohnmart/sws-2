@@ -12,7 +12,8 @@ export class Selector implements ShapeFactory {
     ShapesInteraction.iterateShapes(x, y, false);
   }
 
-  public handleAlt() {
+  public handleAlt(x: number, y: number) {
+    ShapesInteraction.iterateShapes(x, y, false);
     if (ShapesInteraction.shapeListId.length) {
       ShapesInteraction.handleShapesList();
     }
