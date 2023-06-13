@@ -48,8 +48,7 @@ export default class ShapesInteraction {
             const firstId = ShapesInteraction.shapeListId[0];
             ShapesInteraction.shapesSelected.push(firstId);
             if (!isCtrl) {
-                const id = ShapesInteraction.shapeListId[0];
-                shapes[id].draw(ctx, true);
+                shapes[firstId].draw(ctx, true);
             }
             else {
                 ShapesInteraction.shapeListId.forEach((id) => {
