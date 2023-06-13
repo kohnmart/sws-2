@@ -52,6 +52,7 @@ export default class ShapesInteraction {
             }
             else {
                 ShapesInteraction.shapeListId.forEach((id) => {
+                    ShapesInteraction.shapesSelected.push(id);
                     shapes[id].draw(ctx, true);
                 });
             }
