@@ -106,7 +106,7 @@ export default class MenuApi {
   ): void => {
     colorTypes.forEach((type) => {
       /* Create headerline */
-      this.addItem(new Item('p', this, type));
+      const headerItem = new Item('p', this, type);
       /*  Loop over color-map */
       for (const key in colorOptions) {
         if (colorOptions.hasOwnProperty(key)) {
@@ -123,8 +123,9 @@ export default class MenuApi {
 
           /* Add separator and append both to menulist */
           const separator = this.createSeparator();
-          this.addItems(separator, color);
+          headerItem.container.push(separator, color);
         }
+        this.addItems(headerItem);
       }
     });
   };
