@@ -39,5 +39,18 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
       }
     }
   );
+
+  const itemMoveUp = menuApi.createItem('MoveUp', () => {
+    const selected = ShapesInteraction.shapesSelected[0];
+    ShapesInteraction.canvas.updateShapesOrder(selected, true);
+  });
+
+  const itemMoveDown = menuApi.createItem('MoveDown', () => {
+    const selected = ShapesInteraction.shapesSelected[0];
+    ShapesInteraction.canvas.updateShapesOrder(selected, false);
+  });
+
+  menu.addItems(itemMoveUp, itemMoveDown);
+
   return menu;
 }
