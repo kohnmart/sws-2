@@ -3,8 +3,8 @@ import { Canvas } from './Canvas.js';
 
 export default class ShapesInteraction {
   static shapeListId: number[] = [];
-  static shapeListIndexer = 0;
   static shapesSelected: number[] = [];
+  static shapeListIndexer: number = 0;
   static canvas: Canvas = undefined;
 
   public static iterateShapes(x: number, y: number, isCtrl: boolean) {
