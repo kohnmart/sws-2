@@ -1,55 +1,68 @@
 .tools {
-    width: 100px;
-    float: left;
-    padding: 5px;
+  width: 100px;
+  float: left;
+  padding: 5px;
 }
 
 .tools li {
-    padding: 5px;
-    list-style: none;
+  padding: 5px;
+  list-style: none;
 }
 
 .tools li:hover {
-    color: cornflowerblue;
-    cursor: pointer;
+  color: cornflowerblue;
+  cursor: pointer;
 }
 
 .tools li.marked {
-    background-color: cornflowerblue;
-    color: white;
+  background-color: cornflowerblue;
+  color: white;
 }
 
 #drawArea {
-    border:1px solid #000000;
-    background-color: lightgrey;
+  border: 1px solid #000000;
+  background-color: lightgrey;
 }
 
- #menu-display > ul {
-    padding: 1%;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    background-color: grey;
-    text-align: center;
-    border-radius: 5px;
-  }
-  #menu-display > ul > li {
-    list-style: none;
-    text-align: left;
-  }
-  
-  #menu-display > ul > li > * {
-    width: auto;
-  
-  }
-  
-  #menu-display > ul > li > hr {
-    border: none;
-    width: 200px;
-    height: 2px;
-    background-color: #000000; 
-  }
-  
+#menu-display>ul {
+  padding: 1%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: auto;
+  background-color: rgba(128, 128, 128, 1);
+  text-align: center;
+  border-radius: 5px;
+
+
+}
+
+#menu-display>ul :first-child {
+  margin: 5px
+}
+
+#menu-display>ul>li {
+  list-style: none;
+  text-align: left;
+}
+
+#item-list {
+  padding: 0px 5px;
+  margin: 0px 5px;
+  background-color: rgb(155, 155, 155);
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  column-gap: 10px;
+}
+
+#item-list>#menu-item:hover {
+  background-color: rgb(205, 205, 205);
+}
+
+#menu-display>ul>li>hr {
+  border: none;
+  height: 20px;
+  width: 2px;
+  background-color: #00000022;
+}
