@@ -68,7 +68,7 @@ export default class MenuApi {
         this.createRadioOption = (colorTypes, colorOptions, defaultColor, callback) => {
             colorTypes.forEach((type) => {
                 /* Create headerline */
-                this.addItem(new Item('p', this, type));
+                const headerItem = new Item('p', this, type);
                 /*  Loop over color-map */
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
@@ -76,8 +76,9 @@ export default class MenuApi {
                         const color = new ItemColor(type, 'div', this, key, colorOptions[key], defaultColor !== null && defaultColor !== void 0 ? defaultColor : undefined, (m) => callback(m));
                         /* Add separator and append both to menulist */
                         const separator = this.createSeparator();
-                        this.addItems(separator, color);
+                        headerItem.container.push(separator, color);
                     }
+                    this.addItems(headerItem);
                 }
             });
         };

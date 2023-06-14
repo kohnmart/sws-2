@@ -1,6 +1,7 @@
 export class Item {
     /* create new item */
     constructor(tagName, menuInstance, itemContent, callback) {
+        this.container = [];
         this.element = document.createElement(tagName);
         this.element.id = Item.id;
         this.menuInstance = menuInstance;
@@ -15,6 +16,12 @@ export class Item {
     render() {
         const li = document.createElement('li');
         li.appendChild(this.element);
+        if (this.container) {
+            this.container.forEach((subItem) => {
+                li.appendChild(subItem.element);
+                li.id = 'item-list';
+            });
+        }
         this.menuInstance.ulList.appendChild(li);
     }
 }
@@ -43,14 +50,12 @@ export class ItemColor extends Item {
         this.element.append(this.labelElement);
     }
     setColorOption(isBackground) {
-        console.log('COLOR');
         if (isBackground) {
             ItemColor.defaultBackground = this.key;
         }
         else {
             ItemColor.defaultForground = this.key;
         }
-        // Additional logic related to color setting
     }
 }
 export var Types;

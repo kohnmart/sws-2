@@ -131,7 +131,7 @@ export default class ShapesInteraction {
     }
 }
 ShapesInteraction.shapeListId = [];
-ShapesInteraction.shapeListIndexer = 0;
 ShapesInteraction.shapesSelected = [];
+ShapesInteraction.shapeListIndexer = 0;
 ShapesInteraction.canvas = undefined;
 //# sourceMappingURL=ShapesInteraction.js.map
