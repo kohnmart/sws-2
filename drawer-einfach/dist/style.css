@@ -1,3 +1,8 @@
+html,
+body {
+  font-family: Helvetica, sans-serif;
+}
+
 .tools {
   width: 100px;
   float: left;
@@ -27,18 +32,16 @@
 #menu-display>ul {
   padding: 1%;
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   width: auto;
   background-color: rgba(128, 128, 128, 1);
   text-align: center;
   border-radius: 5px;
-
-
 }
 
 #menu-display>ul :first-child {
-  margin: 5px
+  margin: 5px;
 }
 
 #menu-display>ul>li {
@@ -47,17 +50,18 @@
 }
 
 #item-list {
-  padding: 0px 5px;
-  margin: 0px 5px;
+  padding: 0 5px;
+  margin: 0 5px;
   background-color: rgb(155, 155, 155);
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 6px;
+  font-size: 12px;
 }
 
-#item-list>#menu-item:hover {
-  background-color: rgb(205, 205, 205);
+#item-list>p {
+  font-weight: bold;
 }
 
 #menu-display>ul>li>hr {
