@@ -3,6 +3,7 @@ import MenuApi from './menuApi.js';
 export class Item {
   public static id: string = 'menu-item';
   public element: HTMLElement;
+  public container: Item[] = [];
   private menuInstance: MenuApi;
   /* create new item */
   constructor(
@@ -28,6 +29,12 @@ export class Item {
   render(): void {
     const li = document.createElement('li');
     li.appendChild(this.element);
+    if (this.container) {
+      this.container.forEach((subItem) => {
+        li.appendChild(subItem.element);
+        li.id = 'item-list';
+      });
+    }
     this.menuInstance.ulList.appendChild(li);
   }
 }
@@ -75,13 +82,11 @@ export class ItemColor extends Item {
   }
 
   setColorOption(isBackground: boolean): void {
-    console.log('COLOR');
     if (isBackground) {
       ItemColor.defaultBackground = this.key;
     } else {
       ItemColor.defaultForground = this.key;
     }
-    // Additional logic related to color setting
   }
 }
 export enum Types {
