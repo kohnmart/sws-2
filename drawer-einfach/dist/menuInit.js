@@ -34,6 +34,15 @@ export function setupContextMenu(menuApi) {
             item.setColorOption(false);
         }
     });
+    const itemMoveUp = menuApi.createItem('MoveUp', () => {
+        console.log('TEST');
+        const selected = ShapesInteraction.shapesSelected;
+        ShapesInteraction.canvas.updateShapesOrder(selected[0], true);
+    });
+    const itemMoveDown = menuApi.createItem('MoveDown', () => {
+        ShapesInteraction.deleteShapesFromList();
+    });
+    menu.addItems(itemMoveUp, itemMoveDown);
     return menu;
 }
 //# sourceMappingURL=menuInit.js.map

@@ -73,6 +73,18 @@ export class Canvas {
     getShapes() {
         return this.shapes;
     }
+    updateShapesOrder(shapeId, moveUp) {
+        if (moveUp) {
+            for (const key in this.shapes) {
+                if (this.shapes.hasOwnProperty(key)) {
+                    const shape = this.shapes[key];
+                    if (shape.id === shapeId) {
+                        console.log(this.shapes[key]);
+                    }
+                }
+            }
+        }
+    }
     getCanvasRenderingContext() {
         return this.ctx;
     }
