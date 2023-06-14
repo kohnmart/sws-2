@@ -97,6 +97,7 @@ export class Canvas implements ShapeManager {
     return this.shapes;
   }
 
+  /* moveUp-boolean is used to determine up or down direction */
   updateShapesOrder(shapeId: number, moveUp: boolean) {
     const shapeKeys = Object.keys(this.shapes);
     const shapeIndex = shapeKeys.findIndex(
