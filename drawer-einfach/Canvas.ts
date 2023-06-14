@@ -97,6 +97,31 @@ export class Canvas implements ShapeManager {
     return this.shapes;
   }
 
+  updateShapesOrder(shapeId: number, moveUp: boolean) {
+    const shapeKeys = Object.keys(this.shapes);
+    const shapeIndex = shapeKeys.findIndex(
+      (key) => this.shapes[key].id === shapeId
+    );
+
+    if (moveUp && shapeIndex > 0) {
+      const currentShapeKey = shapeKeys[shapeIndex];
+      const previousShapeKey = shapeKeys[shapeIndex - 1];
+
+      [this.shapes[currentShapeKey], this.shapes[previousShapeKey]] = [
+        this.shapes[previousShapeKey],
+        this.shapes[currentShapeKey],
+      ];
+    } else if (!moveUp && shapeIndex < shapeKeys.length - 1) {
+      const currentShapeKey = shapeKeys[shapeIndex];
+      const nextShapeKey = shapeKeys[shapeIndex + 1];
+
+      [this.shapes[currentShapeKey], this.shapes[nextShapeKey]] = [
+        this.shapes[nextShapeKey],
+        this.shapes[currentShapeKey],
+      ];
+    }
+  }
+
   getCanvasRenderingContext() {
     return this.ctx;
   }
