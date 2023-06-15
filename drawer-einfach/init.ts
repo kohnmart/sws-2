@@ -41,6 +41,6 @@ function init() {
   const toolArea = new ToolArea(tools, menu[0]);
   canvas = new Canvas(canvasDomElm, toolArea);
   canvas.draw();
-  ShapesInteraction.canvas = canvas;
+  ShapesInteraction.canvasRef = canvas;
 }
 init();
