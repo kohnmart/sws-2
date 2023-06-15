@@ -5,14 +5,22 @@ export default class ShapesInteraction {
   static shapeListId: number[] = [];
   static shapesSelected: number[] = [];
   static shapeListIndexer: number = 0;
-  static canvas: Canvas = undefined;
+  static canvasRef: Canvas = undefined;
 
+  /***
+   * The iterateShapes function is responsible for
+   * iterating over shapes, determining if a given point
+   * (specified by the x and y coordinates) is within the
+   * boundaries of each shape, and updating the selected
+   * shapes accordingly. The function also handles rendering
+   * the selected shapes on the canvas.
+   */
   public static iterateShapes(x: number, y: number, isCtrl: boolean) {
-    const ctx = ShapesInteraction.canvas.getCanvasRenderingContext();
-    const shapes = ShapesInteraction.canvas.getShapes();
+    const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
+    const shapes = ShapesInteraction.canvasRef.getShapes();
 
     if (!isCtrl) {
-      ShapesInteraction.canvas.draw();
+      ShapesInteraction.canvasRef.draw();
       ShapesInteraction.shapeListId = [];
       ShapesInteraction.shapesSelected = [];
     }
@@ -65,12 +73,18 @@ export default class ShapesInteraction {
       }
     }
 
+    /* check if shapes have been detected */
     if (ShapesInteraction.shapeListId.length) {
       const firstId = ShapesInteraction.shapeListId[0];
+      /* push first shape to selectedShapes list */
       ShapesInteraction.shapesSelected.push(firstId);
       if (!isCtrl) {
+        /* if controll-key hasnt been pressed */
+        /* render only first shape */
         shapes[firstId].draw(ctx, true);
       } else {
+        /* control-key pressed -> then loop over all selected shapes */
+        /* render */
         ShapesInteraction.shapeListId.forEach((id) => {
           ShapesInteraction.shapesSelected.push(id);
           shapes[id].draw(ctx, true);
@@ -168,10 +182,14 @@ export default class ShapesInteraction {
     return false;
   }
 
+  /***
+   * The handleShapesList function is responsible for
+   * managing the display and selection of shapes.
+   */
   public static handleShapesList() {
-    const ctx = ShapesInteraction.canvas.getCanvasRenderingContext();
-    const shapes = ShapesInteraction.canvas.getShapes();
-    ShapesInteraction.canvas.draw();
+    const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
+    const shapes = ShapesInteraction.canvasRef.getShapes();
+    ShapesInteraction.canvasRef.draw();
     if (
       ShapesInteraction.shapeListIndexer <
       ShapesInteraction.shapeListId.length - 1
@@ -195,10 +213,10 @@ export default class ShapesInteraction {
   }
 
   public static deleteShapesFromList() {
-    const shapes = ShapesInteraction.canvas.getShapes();
+    const shapes = ShapesInteraction.canvasRef.getShapes();
     ShapesInteraction.shapeListId.forEach((id: number) => {
       const shape = shapes[id];
-      ShapesInteraction.canvas.removeShape(shape);
+      ShapesInteraction.canvasRef.removeShape(shape);
     });
   }
 }
