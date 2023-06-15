@@ -108,6 +108,7 @@ export class Canvas implements ShapeManager {
       const currentShapeKey = shapeKeys[shapeIndex];
       const previousShapeKey = shapeKeys[shapeIndex - 1];
 
+      /* switch positions */
       [this.shapes[currentShapeKey], this.shapes[previousShapeKey]] = [
         this.shapes[previousShapeKey],
         this.shapes[currentShapeKey],
@@ -116,6 +117,7 @@ export class Canvas implements ShapeManager {
       const currentShapeKey = shapeKeys[shapeIndex];
       const nextShapeKey = shapeKeys[shapeIndex + 1];
 
+      /* switch positions */
       [this.shapes[currentShapeKey], this.shapes[nextShapeKey]] = [
         this.shapes[nextShapeKey],
         this.shapes[currentShapeKey],
