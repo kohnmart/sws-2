@@ -12,7 +12,6 @@ export default class MenuApi {
     this.eventListener = (event: Event): void => {
       const target = event.target as HTMLElement;
       /* check if target is menu or menu-item */
-      console.log(target.id);
       if (target.id != Item.id && target.id != MenuApi.id) {
         event.preventDefault();
         event.stopPropagation();
