@@ -20,10 +20,10 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
     },
     'transparent',
     (item: ItemColor) => {
-      const shapes = ShapesInteraction.canvas.getShapes();
+      const shapes = ShapesInteraction.canvasRef.getShapes();
       ShapesInteraction.shapesSelected.forEach((id: number) => {
         const shape = shapes[id];
-        const ctx = ShapesInteraction.canvas.getCanvasRenderingContext();
+        const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
         if (item.inputElement.name === Types.Hintergrund) {
           shape.backgroundColor = item.key;
         } else {
@@ -42,12 +42,12 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
 
   const itemMoveUp = menuApi.createItem('MoveUp', () => {
     const selected = ShapesInteraction.shapesSelected[0];
-    ShapesInteraction.canvas.updateShapesOrder(selected, true);
+    ShapesInteraction.canvasRef.updateShapesOrder(selected, true);
   });
 
   const itemMoveDown = menuApi.createItem('MoveDown', () => {
     const selected = ShapesInteraction.shapesSelected[0];
-    ShapesInteraction.canvas.updateShapesOrder(selected, false);
+    ShapesInteraction.canvasRef.updateShapesOrder(selected, false);
   });
 
   menu.addItems(itemMoveUp, itemMoveDown);
