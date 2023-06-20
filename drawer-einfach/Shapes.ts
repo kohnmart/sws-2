@@ -1,4 +1,4 @@
-import { ItemColor } from './item.js';
+import { ItemRadio } from './item.js';
 import { Shape, ShapeFactory, ShapeManager } from './types.js';
 
 class Point2D {
@@ -12,8 +12,8 @@ class AbstractShape {
   readonly strokeColor: string;
   constructor(
     type: string,
-    backgroundColor: string = ItemColor.defaultBackground,
-    strokeColor: string = ItemColor.defaultForground
+    backgroundColor: string = ItemRadio.defaultBackground,
+    strokeColor: string = ItemRadio.defaultForground
   ) {
     this.id = AbstractShape.counter++;
     this.type = type;

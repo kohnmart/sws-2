@@ -8,7 +8,7 @@ export class Item {
   /* create new item */
   constructor(
     tagName: string,
-    menuInstance: MenuApi,
+    menuInstance?: MenuApi,
     itemContent?: string,
     callback?: (m: MenuApi) => void
   ) {
@@ -39,57 +39,27 @@ export class Item {
   }
 }
 
-export class ItemColor extends Item {
+export class ItemRadio extends Item {
   public static defaultBackground: string | undefined;
   public static defaultForground: string | undefined;
-  public type: Types;
   public key: string;
   public inputElement: HTMLInputElement;
   private labelElement: HTMLLabelElement;
 
-  constructor(
-    type: Types,
-    tagName: string,
-    menuInstance: MenuApi,
-    key: string,
-    value: string,
-    defaultColor: string | undefined,
-    callback?: (m: ItemColor) => void
-  ) {
+  constructor(tagName: string, key: string, menuInstance: MenuApi) {
     super(tagName, menuInstance);
     this.key = key;
-    ItemColor.defaultBackground = defaultColor;
+
     this.inputElement = document.createElement('input');
     this.inputElement.type = 'radio';
-    this.inputElement.name = type;
-    this.inputElement.value = value;
+    this.inputElement.value = key;
     this.inputElement.id = Item.id;
 
-    if (this.key === ItemColor.defaultBackground) {
-      this.inputElement.checked = true;
-    }
-
-    if (callback) {
-      this.inputElement.addEventListener('mousedown', () => callback(this));
-    }
-
     this.labelElement = document.createElement('label');
-    this.labelElement.textContent = value;
-    this.labelElement.htmlFor = value;
+    this.labelElement.textContent = key;
+    this.labelElement.htmlFor = key;
     this.labelElement.id = Item.id;
     this.element.append(this.inputElement);
     this.element.append(this.labelElement);
   }
-
-  setColorOption(isBackground: boolean): void {
-    if (isBackground) {
-      ItemColor.defaultBackground = this.key;
-    } else {
-      ItemColor.defaultForground = this.key;
-    }
-  }
-}
-export enum Types {
-  Vordergrund = 'Vordergrund',
-  Hintergrund = 'Hintergrund',
 }

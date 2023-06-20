@@ -1,4 +1,4 @@
-import { Types, ItemColor } from './item.js';
+import { Color, Types } from './ColorPalette.js';
 import MenuApi from './menuApi.js';
 import ShapesInteraction from './ShapesInteraction.js';
 export function setupContextMenu(menuApi: MenuApi): MenuApi {
@@ -9,22 +9,21 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
   });
   menu.addItems(mItem1);
   menuApi.createRadioOption(
-    [Types.Vordergrund, Types.Hintergrund],
+    [Types.Outline, Types.Hintergrund],
     {
-      transparent: 'transparent',
       red: 'rot',
       green: 'grün',
       yellow: 'gelb',
       blue: 'blau',
       black: 'schwarz',
     },
-    'transparent',
-    (item: ItemColor) => {
+    'red',
+    (item: Color) => {
       const shapes = ShapesInteraction.canvasRef.getShapes();
       ShapesInteraction.shapesSelected.forEach((id: number) => {
         const shape = shapes[id];
         const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
-        if (item.inputElement.name === Types.Hintergrund) {
+        if (item.radioButton.inputElement.name === Types.Hintergrund) {
           shape.backgroundColor = item.key;
         } else {
           shape.strokeColor = item.key;
@@ -32,7 +31,7 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
         shape.draw(ctx, true);
       });
 
-      if (item.inputElement.name === Types.Hintergrund) {
+      if (item.radioButton.inputElement.name === Types.Hintergrund) {
         item.setColorOption(true);
       } else {
         item.setColorOption(false);

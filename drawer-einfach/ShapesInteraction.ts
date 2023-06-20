@@ -1,4 +1,4 @@
-import { Line, Rectangle, Triangle, Circle } from './Shapes';
+import { Line, Rectangle, Triangle, Circle } from './Shapes.js';
 import { Canvas } from './Canvas.js';
 
 export default class ShapesInteraction {
@@ -7,7 +7,7 @@ export default class ShapesInteraction {
   static shapeListIndexer: number = 0;
   static canvasRef: Canvas = undefined;
 
-  /***
+  /**
    * The iterateShapes function is responsible for
    * iterating over shapes, determining if a given point
    * (specified by the x and y coordinates) is within the
