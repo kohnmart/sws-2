@@ -26,41 +26,20 @@ export class Item {
     }
 }
 Item.id = 'menu-item';
-export class ItemColor extends Item {
-    constructor(type, tagName, menuInstance, key, value, defaultColor, callback) {
+export class ItemRadio extends Item {
+    constructor(tagName, key, menuInstance) {
         super(tagName, menuInstance);
         this.key = key;
-        ItemColor.defaultBackground = defaultColor;
         this.inputElement = document.createElement('input');
         this.inputElement.type = 'radio';
-        this.inputElement.name = type;
-        this.inputElement.value = value;
+        this.inputElement.value = key;
         this.inputElement.id = Item.id;
-        if (this.key === ItemColor.defaultBackground) {
-            this.inputElement.checked = true;
-        }
-        if (callback) {
-            this.inputElement.addEventListener('mousedown', () => callback(this));
-        }
         this.labelElement = document.createElement('label');
-        this.labelElement.textContent = value;
-        this.labelElement.htmlFor = value;
+        this.labelElement.textContent = key;
+        this.labelElement.htmlFor = key;
         this.labelElement.id = Item.id;
         this.element.append(this.inputElement);
         this.element.append(this.labelElement);
     }
-    setColorOption(isBackground) {
-        if (isBackground) {
-            ItemColor.defaultBackground = this.key;
-        }
-        else {
-            ItemColor.defaultForground = this.key;
-        }
-    }
 }
-export var Types;
-(function (Types) {
-    Types["Vordergrund"] = "Vordergrund";
-    Types["Hintergrund"] = "Hintergrund";
-})(Types || (Types = {}));
 //# sourceMappingURL=item.js.map

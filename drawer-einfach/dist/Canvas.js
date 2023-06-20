@@ -73,16 +73,27 @@ export class Canvas {
     getShapes() {
         return this.shapes;
     }
+    /* moveUp-boolean is used to determine up or down direction */
     updateShapesOrder(shapeId, moveUp) {
-        if (moveUp) {
-            for (const key in this.shapes) {
-                if (this.shapes.hasOwnProperty(key)) {
-                    const shape = this.shapes[key];
-                    if (shape.id === shapeId) {
-                        console.log(this.shapes[key]);
-                    }
-                }
-            }
+        const shapeKeys = Object.keys(this.shapes);
+        const shapeIndex = shapeKeys.findIndex((key) => this.shapes[key].id === shapeId);
+        if (moveUp && shapeIndex > 0) {
+            const currentShapeKey = shapeKeys[shapeIndex];
+            const previousShapeKey = shapeKeys[shapeIndex - 1];
+            /* switch positions */
+            [this.shapes[currentShapeKey], this.shapes[previousShapeKey]] = [
+                this.shapes[previousShapeKey],
+                this.shapes[currentShapeKey],
+            ];
+        }
+        else if (!moveUp && shapeIndex < shapeKeys.length - 1) {
+            const currentShapeKey = shapeKeys[shapeIndex];
+            const nextShapeKey = shapeKeys[shapeIndex + 1];
+            /* switch positions */
+            [this.shapes[currentShapeKey], this.shapes[nextShapeKey]] = [
+                this.shapes[nextShapeKey],
+                this.shapes[currentShapeKey],
+            ];
         }
     }
     getCanvasRenderingContext() {

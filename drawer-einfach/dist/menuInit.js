@@ -1,4 +1,4 @@
-import { Types } from './item.js';
+import { Types } from './ColorPalette.js';
 import ShapesInteraction from './ShapesInteraction.js';
 export function setupContextMenu(menuApi) {
     const menu = menuApi.createMenu();
@@ -7,19 +7,18 @@ export function setupContextMenu(menuApi) {
         ShapesInteraction.deleteShapesFromList();
     });
     menu.addItems(mItem1);
-    menuApi.createRadioOption([Types.Vordergrund, Types.Hintergrund], {
-        transparent: 'transparent',
+    menuApi.createRadioOption([Types.Outline, Types.Hintergrund], {
         red: 'rot',
         green: 'grün',
         yellow: 'gelb',
         blue: 'blau',
         black: 'schwarz',
-    }, 'transparent', (item) => {
-        const shapes = ShapesInteraction.canvas.getShapes();
+    }, 'red', (item) => {
+        const shapes = ShapesInteraction.canvasRef.getShapes();
         ShapesInteraction.shapesSelected.forEach((id) => {
             const shape = shapes[id];
-            const ctx = ShapesInteraction.canvas.getCanvasRenderingContext();
-            if (item.inputElement.name === Types.Hintergrund) {
+            const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
+            if (item.radioButton.inputElement.name === Types.Hintergrund) {
                 shape.backgroundColor = item.key;
             }
             else {
@@ -27,7 +26,7 @@ export function setupContextMenu(menuApi) {
             }
             shape.draw(ctx, true);
         });
-        if (item.inputElement.name === Types.Hintergrund) {
+        if (item.radioButton.inputElement.name === Types.Hintergrund) {
             item.setColorOption(true);
         }
         else {
@@ -35,12 +34,12 @@ export function setupContextMenu(menuApi) {
         }
     });
     const itemMoveUp = menuApi.createItem('MoveUp', () => {
-        console.log('TEST');
-        const selected = ShapesInteraction.shapesSelected;
-        ShapesInteraction.canvas.updateShapesOrder(selected[0], true);
+        const selected = ShapesInteraction.shapesSelected[0];
+        ShapesInteraction.canvasRef.updateShapesOrder(selected, true);
     });
     const itemMoveDown = menuApi.createItem('MoveDown', () => {
-        ShapesInteraction.deleteShapesFromList();
+        const selected = ShapesInteraction.shapesSelected[0];
+        ShapesInteraction.canvasRef.updateShapesOrder(selected, false);
     });
     menu.addItems(itemMoveUp, itemMoveDown);
     return menu;

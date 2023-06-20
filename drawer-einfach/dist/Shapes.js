@@ -1,4 +1,4 @@
-import { ItemColor } from './item.js';
+import { ItemRadio } from './item.js';
 class Point2D {
     constructor(x, y) {
         this.x = x;
@@ -6,7 +6,7 @@ class Point2D {
     }
 }
 class AbstractShape {
-    constructor(type, backgroundColor = ItemColor.defaultBackground, strokeColor = ItemColor.defaultForground) {
+    constructor(type, backgroundColor = ItemRadio.defaultBackground, strokeColor = ItemRadio.defaultForground) {
         this.id = AbstractShape.counter++;
         this.type = type;
         this.backgroundColor = backgroundColor;

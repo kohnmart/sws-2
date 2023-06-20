@@ -1,4 +1,5 @@
-import { Item, ItemColor } from './item.js';
+import { Item } from './item.js';
+import ColorPalette, { Color, ColorPaletteGroup, Types, } from './ColorPalette.js';
 export default class MenuApi {
     constructor() {
         /* create new menu and append functionality */
@@ -52,6 +53,7 @@ export default class MenuApi {
             this.itemList.forEach((item) => {
                 item.render();
             });
+            ColorPaletteGroup.renderColorPalettes();
             // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
             //this.ulList.style.transform = `translate(${x}px, ${y}px)`;
             this.ulList.style.left = `${x}px`;
@@ -67,27 +69,32 @@ export default class MenuApi {
         };
         this.createRadioOption = (colorTypes, colorOptions, defaultColor, callback) => {
             colorTypes.forEach((type) => {
-                /* Create headerline */
-                const headerItem = new Item('p', this, type);
+                /* Create new ColorPalette */
+                const palette = new ColorPalette(type);
                 /*  Loop over color-map */
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
-                        /* Create new ItemColor */
-                        const color = new ItemColor(type, 'div', this, key, colorOptions[key], defaultColor !== null && defaultColor !== void 0 ? defaultColor : undefined, (m) => callback(m));
-                        /* Add separator and append both to menulist */
-                        const separator = this.createSeparator();
-                        headerItem.container.push(separator, color);
+                        /* Create new Color */
+                        const color = new Color(this, key, { red: 255, green: 0, blue: 128, alpha: 0.5 }, (m) => callback(m));
+                        console.log(color);
+                        palette.addNewColor(color);
                     }
-                    this.addItems(headerItem);
                 }
+                // this.addItems(headerItem);
+                //const index = palette.getColorByKey(defaultColor);
+                //console.log(index);
+                //palette.colors[index].defaultColor = defaultColor;
+                ColorPaletteGroup.addColorPalette(type, palette);
             });
+            const palette = ColorPaletteGroup.group[Types.Hintergrund];
+            palette.addNewColor(new Color(this, 'transparent', { red: 0, green: 0, blue: 0, alpha: 0 }, (m) => callback(m)));
+            ColorPaletteGroup.menuApi = this;
         };
         this.itemList = [];
         this.ulList = document.createElement('ul');
         this.eventListener = (event) => {
             const target = event.target;
             /* check if target is menu or menu-item */
-            console.log(target.id);
             if (target.id != Item.id && target.id != MenuApi.id) {
                 event.preventDefault();
                 event.stopPropagation();
