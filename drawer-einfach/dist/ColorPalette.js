@@ -29,6 +29,7 @@ export default class ColorPalette {
             container.append(header);
             this.colors.forEach((element) => {
                 container.appendChild(element.radioButton.element);
+                element.radioButton.inputElement.name = this.type;
                 ColorPaletteGroup.menuApi.createSeparator();
             });
             ColorPaletteGroup.menuApi.ulList.appendChild(container);

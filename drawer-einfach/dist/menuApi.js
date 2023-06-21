@@ -75,15 +75,10 @@ export default class MenuApi {
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
                         /* Create new Color */
-                        const color = new Color(this, key, { red: 255, green: 0, blue: 128, alpha: 0.5 }, (m) => callback(m));
-                        console.log(color);
+                        const color = new Color(this, key, colorOptions[key].value, (m) => callback(m));
                         palette.addNewColor(color);
                     }
                 }
-                // this.addItems(headerItem);
-                //const index = palette.getColorByKey(defaultColor);
-                //console.log(index);
-                //palette.colors[index].defaultColor = defaultColor;
                 ColorPaletteGroup.addColorPalette(type, palette);
             });
             const palette = ColorPaletteGroup.group[Types.Hintergrund];
