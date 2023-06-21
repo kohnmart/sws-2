@@ -44,6 +44,7 @@ export default class ColorPalette {
 
     this.colors.forEach((element) => {
       container.appendChild(element.radioButton.element);
+      element.radioButton.inputElement.name = this.type;
       ColorPaletteGroup.menuApi.createSeparator();
     });
 
@@ -95,7 +96,7 @@ export class Color {
   }
 }
 
-type IColorValue = {
+export type IColorValue = {
   red: number;
   green: number;
   blue: number;

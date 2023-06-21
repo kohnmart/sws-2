@@ -1,8 +1,9 @@
-import { Item, ItemRadio } from './item.js';
+import { Item } from './item.js';
 import ColorPalette, {
   Color,
   ColorPaletteGroup,
   Types,
+  IColorValue,
 } from './ColorPalette.js';
 export default class MenuApi {
   static id: string = 'menu';
@@ -105,7 +106,7 @@ export default class MenuApi {
 
   createRadioOption = (
     colorTypes: Types[],
-    colorOptions: { [key: string]: string },
+    colorOptions: { [key: string]: { name: string; value: IColorValue } },
     defaultColor?: string,
     callback?: (m: Color) => void
   ): void => {
@@ -119,17 +120,12 @@ export default class MenuApi {
           const color = new Color(
             this,
             key,
-            { red: 255, green: 0, blue: 128, alpha: 0.5 },
+            colorOptions[key].value,
             (m: Color) => callback(m)
           );
-          console.log(color);
           palette.addNewColor(color);
         }
       }
-      // this.addItems(headerItem);
-      //const index = palette.getColorByKey(defaultColor);
-      //console.log(index);
-      //palette.colors[index].defaultColor = defaultColor;
       ColorPaletteGroup.addColorPalette(type, palette);
     });
 
