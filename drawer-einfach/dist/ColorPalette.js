@@ -17,12 +17,13 @@ export default class ColorPalette {
         this.colors = [];
         this.addNewColor = (color) => {
             this.colors.push(color);
-            console.log(color.key);
         };
         this.setDefaultColor = (key) => {
             const index = this.colors.findIndex((el) => el.key === key);
             this.defaultRGBA = this.colors[index].colorAsRGBA();
-            this.colors[index].defaultColor = key;
+            //this.colors[index].defaultColor = key;
+            console.log('TEST');
+            console.log(this.colors[index].radioButton.inputElement.name);
             this.colors[index].radioButton.inputElement.checked = true;
             if (this.colors[index].radioButton.inputElement.name === Types.Hintergrund) {
                 this.colors[index].setColorOption(true);

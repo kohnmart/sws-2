@@ -26,20 +26,21 @@ export function setupContextMenu(menuApi) {
     }, 
     /* SET DEFAULT COLOR */
     {
-        Hintergrund: {
-            type: Types.Hintergrund,
-            key: 'transparent',
-        },
         Outline: {
             type: Types.Outline,
             key: 'black',
+        },
+        Hintergrund: {
+            type: Types.Hintergrund,
+            key: 'transparent',
         },
     }, (colorItem) => {
         const shapes = ShapesInteraction.canvasRef.getShapes();
         ShapesInteraction.shapesSelected.forEach((id) => {
             const shape = shapes[id];
             const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
-            if (colorItem.radioButton.inputElement.name === Types.Hintergrund) {
+            console.log(colorItem.paletteInstance.type + ' test');
+            if (colorItem.paletteInstance.type === Types.Hintergrund) {
                 shape.backgroundColor = colorItem.colorAsRGBA();
             }
             else {

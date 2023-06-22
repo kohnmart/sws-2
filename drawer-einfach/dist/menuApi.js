@@ -80,7 +80,7 @@ export default class MenuApi {
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
                         /* Create new Color */
-                        const color = new Color(this, ColorPaletteGroup.group[Types.Hintergrund], key, colorOptions[key].name, colorOptions[key].value, (m) => callback(m));
+                        const color = new Color(this, ColorPaletteGroup.group[type], key, colorOptions[key].name, colorOptions[key].value, (m) => callback(m));
                         ColorPaletteGroup.group[type].addNewColor(color);
                     }
                 }
