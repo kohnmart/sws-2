@@ -1,4 +1,4 @@
-import { ItemRadio } from './item.js';
+import { ColorPaletteGroup } from './ColorPalette.js';
 import { Shape, ShapeFactory, ShapeManager } from './types.js';
 
 class Point2D {
@@ -12,13 +12,14 @@ class AbstractShape {
   readonly strokeColor: string;
   constructor(
     type: string,
-    backgroundColor: string = ItemRadio.defaultBackground,
-    strokeColor: string = ItemRadio.defaultForground
+    backgroundColor: string = ColorPaletteGroup.group['Hintergrund']
+      .defaultRGBA,
+    outlineColor: string = ColorPaletteGroup.group['Outline'].defaultRGBA
   ) {
     this.id = AbstractShape.counter++;
     this.type = type;
     this.backgroundColor = backgroundColor;
-    this.strokeColor = strokeColor;
+    this.strokeColor = outlineColor;
   }
 }
 abstract class AbstractFactory<T extends Shape> {

@@ -21,7 +21,7 @@ export class ColorPaletteGroup {
 export default class ColorPalette {
   public type: Types;
   public colors: Color[] = [];
-
+  public defaultRGBA: string;
   constructor(type: Types) {
     this.type = type;
   }
@@ -31,8 +31,19 @@ export default class ColorPalette {
     console.log(color.key);
   };
 
-  getColorByKey = (key: string): number | undefined => {
-    return this.colors.findIndex((el) => el.key === key);
+  setDefaultColor = (key: string): void => {
+    const index = this.colors.findIndex((el) => el.key === key);
+    this.defaultRGBA = this.colors[index].colorAsRGBA();
+    this.colors[index].defaultColor = key;
+    this.colors[index].radioButton.inputElement.checked = true;
+
+    if (
+      this.colors[index].radioButton.inputElement.name === Types.Hintergrund
+    ) {
+      this.colors[index].setColorOption(true);
+    } else {
+      this.colors[index].setColorOption(false);
+    }
   };
 
   render = () => {
@@ -49,7 +60,6 @@ export default class ColorPalette {
     });
 
     ColorPaletteGroup.menuApi.ulList.appendChild(container);
-    console.log(container);
   };
 }
 
@@ -60,26 +70,25 @@ export class Color {
   public colorValue: IColorValue;
   public defaultColor: string | undefined;
   public radioButton: ItemRadio;
+  public paletteInstance: ColorPalette;
   constructor(
     menuApi: MenuApi,
+    paletteInstance: ColorPalette,
     key: string,
+    name: string,
     value: IColorValue,
     callback: (m: Color) => void
   ) {
+    this.paletteInstance = paletteInstance;
     this.key = key;
     this.colorValue = value;
     this.radioButton = new ItemRadio('div', key, menuApi);
-
-    if (this.key === ItemRadio.defaultBackground) {
-      this.radioButton.inputElement.checked = true;
-    }
 
     if (callback) {
       this.radioButton.inputElement.addEventListener('mousedown', () =>
         callback(this)
       );
     }
-    ItemRadio.defaultBackground = this.defaultColor;
   }
 
   setColorOption(isBackground: boolean): void {
@@ -90,9 +99,12 @@ export class Color {
     }
   }
 
-  setDefaultBackground(defaultColor: string) {
-    this.defaultColor = defaultColor;
-    ItemRadio.defaultBackground = defaultColor;
+  colorAsRGBA() {
+    return `rgba(
+      ${this.colorValue.red}, 
+      ${this.colorValue.green}, 
+      ${this.colorValue.blue}, 
+      ${this.colorValue.alpha})`;
   }
 }
 

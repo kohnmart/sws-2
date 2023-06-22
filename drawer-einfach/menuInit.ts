@@ -1,4 +1,4 @@
-import { Color, Types } from './ColorPalette.js';
+import ColorPalette, { Color, Types } from './ColorPalette.js';
 import MenuApi from './menuApi.js';
 import ShapesInteraction from './ShapesInteraction.js';
 export function setupContextMenu(menuApi: MenuApi): MenuApi {
@@ -9,7 +9,9 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
   });
   menu.addItems(mItem1);
   menuApi.createRadioOption(
+    /* DEFINE COLOR PALETTES */
     [Types.Outline, Types.Hintergrund],
+    /* DEFINE BASE COLORS */
     {
       red: { name: 'rot', value: { red: 255, green: 0, blue: 0, alpha: 1 } },
       green: { name: 'grün', value: { red: 0, green: 255, blue: 0, alpha: 1 } },
@@ -19,29 +21,36 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
       },
       blue: { name: 'gelb', value: { red: 0, green: 0, blue: 255, alpha: 1 } },
       black: {
-        name: 'gelb',
-        value: { red: 255, green: 255, blue: 255, alpha: 1 },
+        name: 'schwarz',
+        value: { red: 0, green: 0, blue: 0, alpha: 1 },
       },
     },
-    'red',
-    (item: Color) => {
+    /* SET DEFAULT COLOR */
+    {
+      Hintergrund: {
+        type: Types.Hintergrund,
+        key: 'transparent',
+      },
+      Outline: {
+        type: Types.Outline,
+        key: 'black',
+      },
+    },
+
+    (colorItem: Color) => {
       const shapes = ShapesInteraction.canvasRef.getShapes();
       ShapesInteraction.shapesSelected.forEach((id: number) => {
         const shape = shapes[id];
         const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
-        if (item.radioButton.inputElement.name === Types.Hintergrund) {
-          shape.backgroundColor = item.key;
+        if (colorItem.radioButton.inputElement.name === Types.Hintergrund) {
+          shape.backgroundColor = colorItem.colorAsRGBA();
         } else {
-          shape.strokeColor = item.key;
+          shape.strokeColor = colorItem.colorAsRGBA();
         }
         shape.draw(ctx, true);
       });
 
-      if (item.radioButton.inputElement.name === Types.Hintergrund) {
-        item.setColorOption(true);
-      } else {
-        item.setColorOption(false);
-      }
+      colorItem.paletteInstance.setDefaultColor(colorItem.key);
     }
   );
 

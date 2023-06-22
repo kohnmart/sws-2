@@ -107,37 +107,49 @@ export default class MenuApi {
   createRadioOption = (
     colorTypes: Types[],
     colorOptions: { [key: string]: { name: string; value: IColorValue } },
-    defaultColor?: string,
+    defaultColor?: {
+      [key: string]: { type: Types; key: string };
+    },
     callback?: (m: Color) => void
   ): void => {
+    /* CREATE COLOR PALETTES */
     colorTypes.forEach((type) => {
-      /* Create new ColorPalette */
-      const palette = new ColorPalette(type);
+      ColorPaletteGroup.addColorPalette(type, new ColorPalette(type));
+    });
+
+    ColorPaletteGroup.menuApi = this;
+
+    /* ADD INDIVIDUAL COLOR */
+    ColorPaletteGroup.group[Types.Hintergrund].addNewColor(
+      new Color(
+        this,
+        ColorPaletteGroup.group[Types.Hintergrund],
+        'transparent',
+        'transparent',
+        { red: 0, green: 0, blue: 0, alpha: 0 },
+        (m: Color) => callback(m)
+      )
+    );
+
+    colorTypes.forEach((type) => {
       /*  Loop over color-map */
       for (const key in colorOptions) {
         if (colorOptions.hasOwnProperty(key)) {
           /* Create new Color */
           const color = new Color(
             this,
+            ColorPaletteGroup.group[Types.Hintergrund],
             key,
+            colorOptions[key].name,
             colorOptions[key].value,
             (m: Color) => callback(m)
           );
-          palette.addNewColor(color);
+          ColorPaletteGroup.group[type].addNewColor(color);
         }
       }
-      ColorPaletteGroup.addColorPalette(type, palette);
+      if (defaultColor[type].type === type) {
+        ColorPaletteGroup.group[type].setDefaultColor(defaultColor[type].key);
+      }
     });
-
-    const palette = ColorPaletteGroup.group[Types.Hintergrund];
-    palette.addNewColor(
-      new Color(
-        this,
-        'transparent',
-        { red: 0, green: 0, blue: 0, alpha: 0 },
-        (m: Color) => callback(m)
-      )
-    );
-    ColorPaletteGroup.menuApi = this;
   };
 }

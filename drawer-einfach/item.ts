@@ -40,8 +40,6 @@ export class Item {
 }
 
 export class ItemRadio extends Item {
-  public static defaultBackground: string | undefined;
-  public static defaultForground: string | undefined;
   public key: string;
   public inputElement: HTMLInputElement;
   private labelElement: HTMLLabelElement;
