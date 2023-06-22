@@ -12,6 +12,14 @@ export interface ShapeManager {
   removeShapeWithId(id: number, redraw?: boolean): this;
 }
 
+export interface SelectorManager {
+  getShapes();
+  getCtx();
+  draw();
+  updateOrder(n: number, dir: boolean);
+  removeShape(s, rd);
+}
+
 export interface ShapeFactory {
   label: string;
   handleMouseDown(x: number, y: number): void;

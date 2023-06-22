@@ -5,6 +5,7 @@ import ColorPalette, {
   Types,
   IColorValue,
 } from './ColorPalette.js';
+import { Selector } from './Selector.js';
 export default class MenuApi {
   static id: string = 'menu';
   itemList: Array<Item>;
@@ -33,7 +34,10 @@ export default class MenuApi {
   };
 
   /* create new item with callback */
-  createItem = (item_content: string, callback: (m: MenuApi) => void): Item => {
+  createItem = (
+    item_content: string,
+    callback: (m: MenuApi | Selector) => void
+  ): Item => {
     return new Item('button', this, item_content, (m) => callback(m));
   };
 

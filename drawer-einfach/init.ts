@@ -1,4 +1,4 @@
-import { ShapeFactory, ShapeManager } from './types.js';
+import { ShapeFactory, ShapeManager, SelectorManager } from './types.js';
 import {
   CircleFactory,
   LineFactory,
@@ -8,7 +8,6 @@ import {
 import { ToolArea } from './ToolArea.js';
 import { Canvas } from './Canvas.js';
 import { Selector } from './Selector.js';
-import ShapesInteraction from './ShapesInteraction.js';
 function init() {
   const canvasDomElm = document.getElementById('drawArea') as HTMLCanvasElement;
   const menu = document.getElementsByClassName('tools');
@@ -31,16 +30,33 @@ function init() {
     },
   };
 
+  const slm: SelectorManager = {
+    getShapes() {
+      return canvas.getShapes();
+    },
+    getCtx() {
+      return canvas.getCanvasRenderingContext();
+    },
+    draw() {
+      return canvas.draw();
+    },
+    updateOrder(n: number, dir: boolean) {
+      return canvas.updateShapesOrder(n, dir);
+    },
+    removeShape(s, rd) {
+      return canvas.removeShape(s, rd);
+    },
+  };
+
   const tools: ShapeFactory[] = [
     new LineFactory(sm),
     new CircleFactory(sm),
     new RectangleFactory(sm),
     new TriangleFactory(sm),
-    new Selector(),
+    new Selector(slm),
   ];
   const toolArea = new ToolArea(tools, menu[0]);
   canvas = new Canvas(canvasDomElm, toolArea);
   canvas.draw();
-  ShapesInteraction.canvasRef = canvas;
 }
 init();

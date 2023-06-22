@@ -24,10 +24,10 @@ export class Canvas implements ShapeManager {
 
     canvasDomElement.addEventListener('mousedown', (event) => {
       if (event.button === 0) {
-        if (event.altKey && Selector.isSelectionMode) {
+        if (event.altKey) {
           /* Execute Selector-Alt-Event */
           createMouseHandler('handleAlt').call(this, event);
-        } else if (event.ctrlKey && Selector.isSelectionMode) {
+        } else if (event.ctrlKey) {
           /* Execute Selector-CRTL-Event */
           createMouseHandler('handleCtrl').call(this, event);
         } else {
@@ -38,7 +38,7 @@ export class Canvas implements ShapeManager {
     });
 
     canvasDomElement.addEventListener('contextmenu', (event) => {
-      if (event.button === 2 && Selector.isSelectionMode) {
+      if (event.button === 2) {
         event.preventDefault();
         createMouseHandler('handleRightClick').call(this, event);
       }
