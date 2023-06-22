@@ -79,11 +79,15 @@ export class Selector {
          */
         this.handleShapesList = () => {
             const shapes = this.sm.getShapes();
+            const ctx = this.sm.getCtx();
+            console.log('INDEXER: ' + this.shapeListIndexer);
+            console.log('INDEXER: ' + this.shapeListId);
             if (this.shapeListIndexer < this.shapeListId.length - 1) {
                 this.shapeListIndexer++;
             }
+            this.sm.draw();
             const handleIdCurrent = this.shapeListId[this.shapeListIndexer];
-            shapes[handleIdCurrent].draw(this.sm.getCtx(), true);
+            shapes[handleIdCurrent].draw(ctx, true);
             this.shapesSelected = [];
             this.shapesSelected.push(handleIdCurrent);
             if (this.shapeListIndexer == this.shapeListId.length - 1) {
