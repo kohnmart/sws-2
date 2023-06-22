@@ -1,4 +1,3 @@
-import { Selector } from './Selector.js';
 export class ToolArea {
     constructor(shapesSelector, menu) {
         this.selectedShape = undefined;
@@ -19,11 +18,9 @@ export class ToolArea {
             });
             if (shape.hasOwnProperty('shapeManager')) {
                 this.selectedShape = shape;
-                Selector.isSelectionMode = false;
             }
             else {
                 this.selectedShape = shape;
-                Selector.isSelectionMode = true;
             }
             // add class to the one that is selected currently
             activeListItem.classList.add('marked');

@@ -16,15 +16,15 @@ export function setupContextMenu(menuApi) {
         green: { name: 'grün', value: { red: 0, green: 255, blue: 0, alpha: 1 } },
         yellow: {
             name: 'gelb',
-            value: { red: 200, green: 0, blue: 100, alpha: 1 },
+            value: { red: 255, green: 255, blue: 0, alpha: 1 },
         },
-        blue: { name: 'gelb', value: { red: 0, green: 0, blue: 255, alpha: 1 } },
+        blue: { name: 'blau', value: { red: 0, green: 0, blue: 255, alpha: 1 } },
         black: {
             name: 'schwarz',
             value: { red: 0, green: 0, blue: 0, alpha: 1 },
         },
     }, 
-    /* SET DEFAULT COLOR */
+    /* SET DEFAULT COLORS */
     {
         Outline: {
             type: Types.Outline,
@@ -39,7 +39,6 @@ export function setupContextMenu(menuApi) {
         ShapesInteraction.shapesSelected.forEach((id) => {
             const shape = shapes[id];
             const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
-            console.log(colorItem.paletteInstance.type + ' test');
             if (colorItem.paletteInstance.type === Types.Hintergrund) {
                 shape.backgroundColor = colorItem.colorAsRGBA();
             }

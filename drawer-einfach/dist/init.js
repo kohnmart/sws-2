@@ -2,7 +2,6 @@ import { CircleFactory, LineFactory, RectangleFactory, TriangleFactory, } from '
 import { ToolArea } from './ToolArea.js';
 import { Canvas } from './Canvas.js';
 import { Selector } from './Selector.js';
-import ShapesInteraction from './ShapesInteraction.js';
 function init() {
     const canvasDomElm = document.getElementById('drawArea');
     const menu = document.getElementsByClassName('tools');
@@ -24,17 +23,33 @@ function init() {
             return canvas.removeShapeWithId(id, rd);
         },
     };
+    const slm = {
+        getShapes() {
+            return canvas.getShapes();
+        },
+        getCtx() {
+            return canvas.getCanvasRenderingContext();
+        },
+        draw() {
+            return canvas.draw();
+        },
+        updateOrder(n, dir) {
+            return canvas.updateShapesOrder(n, dir);
+        },
+        removeShape(s, rd) {
+            return canvas.removeShape(s, rd);
+        },
+    };
     const tools = [
         new LineFactory(sm),
         new CircleFactory(sm),
         new RectangleFactory(sm),
         new TriangleFactory(sm),
-        new Selector(),
+        new Selector(slm),
     ];
     const toolArea = new ToolArea(tools, menu[0]);
     canvas = new Canvas(canvasDomElm, toolArea);
     canvas.draw();
-    ShapesInteraction.canvasRef = canvas;
 }
 init();
 //# sourceMappingURL=init.js.map
