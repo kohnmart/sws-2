@@ -1,19 +1,12 @@
-import { ItemRadio } from './item.js';
+import { Item, ItemRadio } from './item.js';
 export class ColorPaletteGroup {
     static addColorPalette(key, palette) {
         ColorPaletteGroup.group[key] = palette;
     }
 }
 ColorPaletteGroup.group = {};
-ColorPaletteGroup.renderColorPalettes = () => {
-    /* for (const key in ColorPaletteGroup.group) {
-      if (ColorPaletteGroup.group.hasOwnProperty(key)) {
-        ColorPaletteGroup.group[key].render();
-      }
-    } */
-};
 export default class ColorPalette {
-    constructor(type) {
+    constructor(type, menuApi) {
         this.colors = [];
         this.addNewColor = (color) => {
             this.colors.push(color);
@@ -30,7 +23,7 @@ export default class ColorPalette {
             }
         };
         this.render = () => {
-            const container = document.createElement('div');
+            const container = document.createElement('li');
             const header = document.createElement('p');
             header.innerHTML = this.type;
             container.append(header);
@@ -42,6 +35,8 @@ export default class ColorPalette {
             ColorPaletteGroup.menuApi.ulList.appendChild(container);
         };
         this.type = type;
+        this.container = new Item('div', menuApi);
+        menuApi.addItem(this.container);
     }
 }
 export class Color {
@@ -51,7 +46,7 @@ export class Color {
         this.colorValue = value;
         this.radioButton = new ItemRadio('div', name, menuApi);
         this.radioButton.inputElement.name = this.paletteInstance.type;
-        menuApi.addItems(this.radioButton, menuApi.createSeparator());
+        paletteInstance.container.container.push(this.radioButton, menuApi.createSeparator(false));
         if (callback) {
             this.radioButton.inputElement.addEventListener('mousedown', () => callback(this));
         }

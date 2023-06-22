@@ -14,8 +14,17 @@ export default class MenuApi {
             return new Item('button', this, item_content, (m) => callback(m));
         };
         /* create separator hr-line */
-        this.createSeparator = () => {
-            return new Item('hr', this);
+        this.createSeparator = (isMode = true) => {
+            const item = new Item('hr', this);
+            if (!isMode) {
+                item.element.style.height = '25px';
+                item.element.style.width = '3px';
+            }
+            else {
+                item.element.style.width = '100%';
+                item.element.style.height = '3px';
+            }
+            return item;
         };
         /* add single item to list */
         this.addItem = (item) => {
@@ -53,7 +62,6 @@ export default class MenuApi {
             this.itemList.forEach((item) => {
                 item.render();
             });
-            ColorPaletteGroup.renderColorPalettes();
             // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
             //this.ulList.style.transform = `translate(${x}px, ${y}px)`;
             this.ulList.style.left = `${x}px`;
@@ -70,8 +78,10 @@ export default class MenuApi {
         this.createRadioOption = (colorTypes, colorOptions, defaultColor, callback) => {
             /* CREATE COLOR PALETTES */
             colorTypes.forEach((type) => {
-                ColorPaletteGroup.addColorPalette(type, new ColorPalette(type));
+                this.addItem(this.createSeparator());
+                ColorPaletteGroup.addColorPalette(type, new ColorPalette(type, this));
             });
+            this.addItem(this.createSeparator());
             ColorPaletteGroup.menuApi = this;
             /* ADD INDIVIDUAL COLOR */
             ColorPaletteGroup.group[Types.Hintergrund].addNewColor(new Color(this, ColorPaletteGroup.group[Types.Hintergrund], 'transparent', 'transparent', { red: 0, green: 0, blue: 0, alpha: 0 }, (m) => callback(m)));
