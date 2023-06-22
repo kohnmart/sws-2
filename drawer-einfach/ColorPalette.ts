@@ -1,4 +1,4 @@
-import { ItemRadio } from './item.js';
+import { Item, ItemRadio } from './item.js';
 import MenuApi from './menuApi.js';
 
 export class ColorPaletteGroup {
@@ -8,22 +8,17 @@ export class ColorPaletteGroup {
   static addColorPalette(key: string, palette: ColorPalette) {
     ColorPaletteGroup.group[key] = palette;
   }
-
-  static renderColorPalettes = () => {
-    /* for (const key in ColorPaletteGroup.group) {
-      if (ColorPaletteGroup.group.hasOwnProperty(key)) {
-        ColorPaletteGroup.group[key].render();
-      }
-    } */
-  };
 }
 
 export default class ColorPalette {
   public type: Types;
+  public container: Item;
   public colors: Color[] = [];
   public defaultRGBA: string;
-  constructor(type: Types) {
+  constructor(type: Types, menuApi: MenuApi) {
     this.type = type;
+    this.container = new Item('div', menuApi);
+    menuApi.addItem(this.container);
   }
 
   addNewColor = (color: Color): void => {
@@ -45,7 +40,7 @@ export default class ColorPalette {
   };
 
   render = () => {
-    const container = document.createElement('div');
+    const container = document.createElement('li');
     const header = document.createElement('p');
     header.innerHTML = this.type;
 
@@ -64,9 +59,9 @@ export default class ColorPalette {
 export class Color {
   public static defaultBackground: string | undefined;
   public static defaultForground: string | undefined;
+  public defaultColor: string | undefined;
   public key: string;
   public colorValue: IColorValue;
-  public defaultColor: string | undefined;
   public radioButton: ItemRadio;
   public paletteInstance: ColorPalette;
   constructor(
@@ -82,8 +77,10 @@ export class Color {
     this.colorValue = value;
     this.radioButton = new ItemRadio('div', name, menuApi);
     this.radioButton.inputElement.name = this.paletteInstance.type;
-    menuApi.addItems(this.radioButton, menuApi.createSeparator());
-
+    paletteInstance.container.container.push(
+      this.radioButton,
+      menuApi.createSeparator(false)
+    );
     if (callback) {
       this.radioButton.inputElement.addEventListener('mousedown', () =>
         callback(this)

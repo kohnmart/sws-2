@@ -42,8 +42,16 @@ export default class MenuApi {
   };
 
   /* create separator hr-line */
-  createSeparator = (): Item => {
-    return new Item('hr', this);
+  createSeparator = (isMode: boolean = true): Item => {
+    const item = new Item('hr', this);
+    if (!isMode) {
+      item.element.style.height = '25px';
+      item.element.style.width = '3px';
+    } else {
+      item.element.style.width = '100%';
+      item.element.style.height = '3px';
+    }
+    return item;
   };
 
   /* add single item to list */
@@ -90,8 +98,6 @@ export default class MenuApi {
       item.render();
     });
 
-    ColorPaletteGroup.renderColorPalettes();
-
     // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
     //this.ulList.style.transform = `translate(${x}px, ${y}px)`;
     this.ulList.style.left = `${x}px`;
@@ -118,9 +124,10 @@ export default class MenuApi {
   ): void => {
     /* CREATE COLOR PALETTES */
     colorTypes.forEach((type) => {
-      ColorPaletteGroup.addColorPalette(type, new ColorPalette(type));
+      this.addItem(this.createSeparator());
+      ColorPaletteGroup.addColorPalette(type, new ColorPalette(type, this));
     });
-
+    this.addItem(this.createSeparator());
     ColorPaletteGroup.menuApi = this;
 
     /* ADD INDIVIDUAL COLOR */
