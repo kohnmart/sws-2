@@ -19,8 +19,17 @@ export default class ColorPalette {
             this.colors.push(color);
             console.log(color.key);
         };
-        this.getColorByKey = (key) => {
-            return this.colors.findIndex((el) => el.key === key);
+        this.setDefaultColor = (key) => {
+            const index = this.colors.findIndex((el) => el.key === key);
+            this.defaultRGBA = this.colors[index].colorAsRGBA();
+            this.colors[index].defaultColor = key;
+            this.colors[index].radioButton.inputElement.checked = true;
+            if (this.colors[index].radioButton.inputElement.name === Types.Hintergrund) {
+                this.colors[index].setColorOption(true);
+            }
+            else {
+                this.colors[index].setColorOption(false);
+            }
         };
         this.render = () => {
             const container = document.createElement('div');
@@ -33,23 +42,19 @@ export default class ColorPalette {
                 ColorPaletteGroup.menuApi.createSeparator();
             });
             ColorPaletteGroup.menuApi.ulList.appendChild(container);
-            console.log(container);
         };
         this.type = type;
     }
 }
 export class Color {
-    constructor(menuApi, key, value, callback) {
+    constructor(menuApi, paletteInstance, key, name, value, callback) {
+        this.paletteInstance = paletteInstance;
         this.key = key;
         this.colorValue = value;
         this.radioButton = new ItemRadio('div', key, menuApi);
-        if (this.key === ItemRadio.defaultBackground) {
-            this.radioButton.inputElement.checked = true;
-        }
         if (callback) {
             this.radioButton.inputElement.addEventListener('mousedown', () => callback(this));
         }
-        ItemRadio.defaultBackground = this.defaultColor;
     }
     setColorOption(isBackground) {
         if (isBackground) {
@@ -59,9 +64,12 @@ export class Color {
             Color.defaultForground = this.key;
         }
     }
-    setDefaultBackground(defaultColor) {
-        this.defaultColor = defaultColor;
-        ItemRadio.defaultBackground = defaultColor;
+    colorAsRGBA() {
+        return `rgba(
+      ${this.colorValue.red}, 
+      ${this.colorValue.green}, 
+      ${this.colorValue.blue}, 
+      ${this.colorValue.alpha})`;
     }
 }
 export var Types;

@@ -1,4 +1,4 @@
-import { ItemRadio } from './item.js';
+import { ColorPaletteGroup } from './ColorPalette.js';
 class Point2D {
     constructor(x, y) {
         this.x = x;
@@ -6,11 +6,12 @@ class Point2D {
     }
 }
 class AbstractShape {
-    constructor(type, backgroundColor = ItemRadio.defaultBackground, strokeColor = ItemRadio.defaultForground) {
+    constructor(type, backgroundColor = ColorPaletteGroup.group['Hintergrund']
+        .defaultRGBA, outlineColor = ColorPaletteGroup.group['Outline'].defaultRGBA) {
         this.id = AbstractShape.counter++;
         this.type = type;
         this.backgroundColor = backgroundColor;
-        this.strokeColor = strokeColor;
+        this.strokeColor = outlineColor;
     }
 }
 AbstractShape.counter = 0;

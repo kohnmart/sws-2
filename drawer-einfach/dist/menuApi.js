@@ -68,22 +68,26 @@ export default class MenuApi {
             document.removeEventListener('mousedown', this.eventListener, true);
         };
         this.createRadioOption = (colorTypes, colorOptions, defaultColor, callback) => {
+            /* CREATE COLOR PALETTES */
             colorTypes.forEach((type) => {
-                /* Create new ColorPalette */
-                const palette = new ColorPalette(type);
+                ColorPaletteGroup.addColorPalette(type, new ColorPalette(type));
+            });
+            ColorPaletteGroup.menuApi = this;
+            /* ADD INDIVIDUAL COLOR */
+            ColorPaletteGroup.group[Types.Hintergrund].addNewColor(new Color(this, ColorPaletteGroup.group[Types.Hintergrund], 'transparent', 'transparent', { red: 0, green: 0, blue: 0, alpha: 0 }, (m) => callback(m)));
+            colorTypes.forEach((type) => {
                 /*  Loop over color-map */
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
                         /* Create new Color */
-                        const color = new Color(this, key, colorOptions[key].value, (m) => callback(m));
-                        palette.addNewColor(color);
+                        const color = new Color(this, ColorPaletteGroup.group[Types.Hintergrund], key, colorOptions[key].name, colorOptions[key].value, (m) => callback(m));
+                        ColorPaletteGroup.group[type].addNewColor(color);
                     }
                 }
-                ColorPaletteGroup.addColorPalette(type, palette);
+                if (defaultColor[type].type === type) {
+                    ColorPaletteGroup.group[type].setDefaultColor(defaultColor[type].key);
+                }
             });
-            const palette = ColorPaletteGroup.group[Types.Hintergrund];
-            palette.addNewColor(new Color(this, 'transparent', { red: 0, green: 0, blue: 0, alpha: 0 }, (m) => callback(m)));
-            ColorPaletteGroup.menuApi = this;
         };
         this.itemList = [];
         this.ulList = document.createElement('ul');
