@@ -6,11 +6,11 @@ export class ColorPaletteGroup {
 }
 ColorPaletteGroup.group = {};
 ColorPaletteGroup.renderColorPalettes = () => {
-    for (const key in ColorPaletteGroup.group) {
-        if (ColorPaletteGroup.group.hasOwnProperty(key)) {
-            ColorPaletteGroup.group[key].render();
-        }
-    }
+    /* for (const key in ColorPaletteGroup.group) {
+      if (ColorPaletteGroup.group.hasOwnProperty(key)) {
+        ColorPaletteGroup.group[key].render();
+      }
+    } */
 };
 export default class ColorPalette {
     constructor(type) {
@@ -50,6 +50,8 @@ export class Color {
         this.key = key;
         this.colorValue = value;
         this.radioButton = new ItemRadio('div', name, menuApi);
+        this.radioButton.inputElement.name = this.paletteInstance.type;
+        menuApi.addItems(this.radioButton, menuApi.createSeparator());
         if (callback) {
             this.radioButton.inputElement.addEventListener('mousedown', () => callback(this));
         }

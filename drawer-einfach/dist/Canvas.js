@@ -94,6 +94,7 @@ export class Canvas {
                 this.shapes[currentShapeKey],
             ];
         }
+        this.draw();
     }
     getCanvasRenderingContext() {
         return this.ctx;

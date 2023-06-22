@@ -16,7 +16,7 @@ export class Selector {
             menu.addItems(mItem1);
             menuApi.createRadioOption(
             /* DEFINE COLOR PALETTES */
-            [Types.Outline, Types.Hintergrund], 
+            [Types.Hintergrund, Types.Outline], 
             /* DEFINE BASE COLORS */
             {
                 red: { name: 'rot', value: { red: 255, green: 0, blue: 0, alpha: 1 } },
@@ -78,14 +78,12 @@ export class Selector {
          * managing the display and selection of shapes.
          */
         this.handleShapesList = () => {
-            const ctx = this.sm.getCtx();
             const shapes = this.sm.getShapes();
-            ctx.draw();
             if (this.shapeListIndexer < this.shapeListId.length - 1) {
                 this.shapeListIndexer++;
             }
             const handleIdCurrent = this.shapeListId[this.shapeListIndexer];
-            shapes[handleIdCurrent].draw(ctx, true);
+            shapes[handleIdCurrent].draw(this.sm.getCtx(), true);
             this.shapesSelected = [];
             this.shapesSelected.push(handleIdCurrent);
             if (this.shapeListIndexer == this.shapeListId.length - 1) {
