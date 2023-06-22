@@ -29,7 +29,7 @@ export class Selector implements ShapeFactory {
     menu.addItems(mItem1);
     menuApi.createRadioOption(
       /* DEFINE COLOR PALETTES */
-      [Types.Outline, Types.Hintergrund],
+      [Types.Hintergrund, Types.Outline],
       /* DEFINE BASE COLORS */
       {
         red: { name: 'rot', value: { red: 255, green: 0, blue: 0, alpha: 1 } },

@@ -1,6 +1,5 @@
 import { Shape, ShapeManager } from './types.js';
 import { ToolArea } from './ToolArea.js';
-import { Selector } from './Selector.js';
 export class Canvas implements ShapeManager {
   private ctx: CanvasRenderingContext2D;
   private shapes: { [p: number]: Shape } = {};
@@ -123,6 +122,8 @@ export class Canvas implements ShapeManager {
         this.shapes[currentShapeKey],
       ];
     }
+
+    this.draw();
   }
 
   getCanvasRenderingContext() {
