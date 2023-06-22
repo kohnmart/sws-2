@@ -138,7 +138,7 @@ export default class MenuApi {
           /* Create new Color */
           const color = new Color(
             this,
-            ColorPaletteGroup.group[Types.Hintergrund],
+            ColorPaletteGroup.group[type],
             key,
             colorOptions[key].name,
             colorOptions[key].value,

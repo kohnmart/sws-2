@@ -1,4 +1,4 @@
-import ColorPalette, { Color, Types } from './ColorPalette.js';
+import { Color, Types } from './ColorPalette.js';
 import MenuApi from './menuApi.js';
 import ShapesInteraction from './ShapesInteraction.js';
 export function setupContextMenu(menuApi: MenuApi): MenuApi {
@@ -27,13 +27,13 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
     },
     /* SET DEFAULT COLOR */
     {
-      Hintergrund: {
-        type: Types.Hintergrund,
-        key: 'transparent',
-      },
       Outline: {
         type: Types.Outline,
         key: 'black',
+      },
+      Hintergrund: {
+        type: Types.Hintergrund,
+        key: 'transparent',
       },
     },
 
@@ -42,7 +42,8 @@ export function setupContextMenu(menuApi: MenuApi): MenuApi {
       ShapesInteraction.shapesSelected.forEach((id: number) => {
         const shape = shapes[id];
         const ctx = ShapesInteraction.canvasRef.getCanvasRenderingContext();
-        if (colorItem.radioButton.inputElement.name === Types.Hintergrund) {
+        console.log(colorItem.paletteInstance.type + ' test');
+        if (colorItem.paletteInstance.type === Types.Hintergrund) {
           shape.backgroundColor = colorItem.colorAsRGBA();
         } else {
           shape.strokeColor = colorItem.colorAsRGBA();

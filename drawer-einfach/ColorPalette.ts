@@ -28,13 +28,14 @@ export default class ColorPalette {
 
   addNewColor = (color: Color): void => {
     this.colors.push(color);
-    console.log(color.key);
   };
 
   setDefaultColor = (key: string): void => {
     const index = this.colors.findIndex((el) => el.key === key);
     this.defaultRGBA = this.colors[index].colorAsRGBA();
-    this.colors[index].defaultColor = key;
+    //this.colors[index].defaultColor = key;
+    console.log('TEST');
+    console.log(this.colors[index].radioButton.inputElement.name);
     this.colors[index].radioButton.inputElement.checked = true;
 
     if (
