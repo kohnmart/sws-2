@@ -60,8 +60,10 @@ export class Line extends AbstractShape {
         ctx.lineTo(this.to.x, this.to.y);
         ctx.stroke();
         if (isSelected) {
+            ctx.fillStyle = 'purple';
             ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
             ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
+            ctx.fill();
         }
     }
 }

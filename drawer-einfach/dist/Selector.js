@@ -86,6 +86,11 @@ export class Selector {
             menu.addItems(itemMoveUp, menuApi.createSeparator(), itemMoveDown);
             return menu;
         };
+        /**
+         * This method is used to iterate through the shapes in a cyclic manner,
+         * selecting and highlighting each shape one by one on the canvas.
+         * It provides a way to cycle through the shapes and perform actions on the selected shape.
+         */
         this.iterateShapesLevels = () => {
             const shapes = this.sm.getShapes();
             const ctx = this.sm.getCtx();
