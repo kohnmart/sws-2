@@ -1,4 +1,4 @@
-import { ShapeFactory, ShapeManager, SelectorManager } from './types.js';
+import { ShapeFactory, ShapeManager, SelectorManager, Shape } from './types.js';
 import {
   CircleFactory,
   LineFactory,
@@ -43,8 +43,8 @@ function init() {
     updateOrder(n: number, dir: boolean) {
       return canvas.updateShapesOrder(n, dir);
     },
-    removeShape(s, rd) {
-      return canvas.removeShape(s, rd);
+    removeShapeWithId(id, rd) {
+      return canvas.removeShapeWithId(id, rd);
     },
   };
 

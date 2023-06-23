@@ -139,27 +139,26 @@ export class Rectangle extends AbstractShape implements Shape {
   }
 
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
-    if (!isSelected) {
-      ctx.fillStyle = this.backgroundColor;
-      ctx.strokeStyle = this.strokeColor;
-      ctx.beginPath();
-      ctx.strokeRect(
-        this.from.x,
-        this.from.y,
-        this.to.x - this.from.x,
-        this.to.y - this.from.y
-      );
-      ctx.stroke();
+    ctx.fillStyle = this.backgroundColor;
+    ctx.strokeStyle = this.strokeColor;
+    ctx.beginPath();
+    ctx.strokeRect(
+      this.from.x,
+      this.from.y,
+      this.to.x - this.from.x,
+      this.to.y - this.from.y
+    );
+    ctx.stroke();
 
-      ctx.fillRect(
-        this.from.x,
-        this.from.y,
-        this.to.x - this.from.x,
-        this.to.y - this.from.y
-      );
+    ctx.fillRect(
+      this.from.x,
+      this.from.y,
+      this.to.x - this.from.x,
+      this.to.y - this.from.y
+    );
 
-      ctx.fill();
-    } else {
+    ctx.fill();
+    if (isSelected) {
       ctx.fillStyle = 'red';
       ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
       ctx.fillRect(this.from.x - 5, this.to.y - 5, 10, 10);

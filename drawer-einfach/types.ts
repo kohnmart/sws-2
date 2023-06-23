@@ -17,7 +17,7 @@ export interface SelectorManager {
   getCtx();
   draw();
   updateOrder(n: number, dir: boolean);
-  removeShape(s, rd);
+  removeShapeWithId(id: number, redraw?: boolean);
 }
 
 export interface ShapeFactory {

@@ -24,7 +24,9 @@ export class Selector implements ShapeFactory {
     const menu = menuApi.createMenu();
     const mItem1 = menuApi.createItem('Entfernen', (m: MenuApi) => {
       m.hide();
-      this.deleteShapesFromList();
+      this.shapesSelected.forEach((id: number) => {
+        this.sm.removeShapeWithId(id, true);
+      });
     });
     menu.addItems(mItem1);
     menuApi.createRadioOption(
@@ -226,12 +228,4 @@ export class Selector implements ShapeFactory {
       this.shapeListIndexer = -1;
     }
   };
-
-  deleteShapesFromList() {
-    const shapes = this.sm.getShapes();
-    this.shapesSelected.forEach((id: number) => {
-      const shape = shapes[id];
-      this.sm.removeShape(shape, true);
-    });
-  }
 }
