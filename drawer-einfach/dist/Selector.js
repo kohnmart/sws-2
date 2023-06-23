@@ -75,11 +75,7 @@ export class Selector {
             menu.addItems(itemMoveUp, menuApi.createSeparator(), itemMoveDown);
             return menu;
         };
-        /***
-         * The handleShapesList function is responsible for
-         * managing the display and selection of shapes.
-         */
-        this.handleShapesList = () => {
+        this.iterateShapesLevels = () => {
             const shapes = this.sm.getShapes();
             const ctx = this.sm.getCtx();
             this.sm.draw();
@@ -87,7 +83,20 @@ export class Selector {
                 this.shapeListIndexer++;
             }
             const idCurrent = this.shapeListId[this.shapeListIndexer];
-            shapes[idCurrent].draw(ctx, true);
+            for (const key in shapes) {
+                if (shapes.hasOwnProperty(key)) {
+                    const id = shapes[key].id;
+                    // Check if the current shape id matches the iteration level
+                    if (id === idCurrent) {
+                        // Draw the shape with ctx and true flag
+                        shapes[key].draw(ctx, true);
+                    }
+                    else {
+                        // Draw the shape with ctx and false flag
+                        shapes[key].draw(ctx, false);
+                    }
+                }
+            }
             this.shapesSelected = [];
             this.shapesSelected.push(idCurrent);
             if (this.shapeListIndexer == this.shapeListId.length - 1) {
@@ -102,7 +111,7 @@ export class Selector {
     }
     handleAlt(x, y) {
         if (this.shapeListId.length) {
-            this.handleShapesList();
+            this.iterateShapesLevels();
         }
     }
     handleCtrl(x, y) {
@@ -174,21 +183,28 @@ export class Selector {
         if (this.shapeListId.length) {
             const firstId = this.shapeListId[this.shapeListId.length - 1];
             if (!isCtrl) {
+                // Iterate over each shapes object
                 for (const key in shapes) {
                     if (shapes.hasOwnProperty(key)) {
                         const id = shapes[key].id;
+                        // Check if the current shape id matches the firstId
                         if (id === firstId) {
+                            // Add the id to the shapesSelected array
                             this.shapesSelected.push(id);
+                            // Draw the shape with ctx and true flag
                             shapes[key].draw(ctx, true);
                         }
                         else {
+                            // Draw the shape with ctx and false flag
                             shapes[key].draw(ctx, false);
                         }
                     }
                 }
             }
             else {
+                // Iterate over each id in shapeListId array
                 this.shapeListId.forEach((id) => {
+                    // Add the id to the shapesSelected array
                     this.shapesSelected.push(id);
                     shapes[id].draw(ctx, true);
                 });
