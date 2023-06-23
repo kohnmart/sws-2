@@ -267,10 +267,8 @@ export class Selector implements ShapeFactory {
       }
     }
 
-    this.shapesSelected = []; // Clear the array if you want to store only the current selection
+    this.shapesSelected = [];
     this.shapesSelected.push(idCurrent);
-
-    // Optionally, you may perform actions on the selected shape here
   };
 
   /* -------------------------------------- */
