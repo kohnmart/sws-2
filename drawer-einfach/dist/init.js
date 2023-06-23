@@ -31,13 +31,13 @@ function init() {
             return canvas.getCanvasRenderingContext();
         },
         draw() {
-            return canvas.draw();
+            canvas.draw();
         },
         updateOrder(n, dir) {
-            return canvas.updateShapesOrder(n, dir);
+            canvas.updateShapesOrder(n, dir);
         },
         removeShapeWithId(id, rd) {
-            return canvas.removeShapeWithId(id, rd);
+            canvas.removeShapeWithId(id, rd);
         },
     };
     const tools = [
