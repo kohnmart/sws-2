@@ -80,16 +80,14 @@ export class Selector {
         this.handleShapesList = () => {
             const shapes = this.sm.getShapes();
             const ctx = this.sm.getCtx();
-            console.log('INDEXER: ' + this.shapeListIndexer);
-            console.log('INDEXER: ' + this.shapeListId);
+            this.sm.draw();
             if (this.shapeListIndexer < this.shapeListId.length - 1) {
                 this.shapeListIndexer++;
             }
-            this.sm.draw();
-            const handleIdCurrent = this.shapeListId[this.shapeListIndexer];
-            shapes[handleIdCurrent].draw(ctx, true);
+            const idCurrent = this.shapeListId[this.shapeListIndexer];
+            shapes[idCurrent].draw(ctx, true);
             this.shapesSelected = [];
-            this.shapesSelected.push(handleIdCurrent);
+            this.shapesSelected.push(idCurrent);
             if (this.shapeListIndexer == this.shapeListId.length - 1) {
                 this.shapeListIndexer = -1;
             }
@@ -98,16 +96,15 @@ export class Selector {
         this.menu = this.createMenu(new MenuApi());
     }
     handleMouseDown(x, y) {
-        this.iterateShapes(x, y, false);
+        this.checkShapeCollision(x, y, false);
     }
     handleAlt(x, y) {
-        this.iterateShapes(x, y, false);
         if (this.shapeListId.length) {
             this.handleShapesList();
         }
     }
     handleCtrl(x, y) {
-        this.iterateShapes(x, y, true);
+        this.checkShapeCollision(x, y, true);
     }
     handleRightClick(x, y) {
         this.menu.show(x, y);
@@ -126,7 +123,7 @@ export class Selector {
      * shapes accordingly. The function also handles rendering
      * the selected shapes on the canvas.
      */
-    iterateShapes(x, y, isCtrl) {
+    checkShapeCollision(x, y, isCtrl) {
         const ctx = this.sm.getCtx();
         const shapes = this.sm.getShapes();
         if (!isCtrl) {

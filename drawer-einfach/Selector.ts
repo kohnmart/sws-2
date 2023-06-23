@@ -95,18 +95,17 @@ export class Selector implements ShapeFactory {
   };
 
   public handleMouseDown(x: number, y: number) {
-    this.iterateShapes(x, y, false);
+    this.checkShapeCollision(x, y, false);
   }
 
   public handleAlt(x: number, y: number) {
-    this.iterateShapes(x, y, false);
     if (this.shapeListId.length) {
       this.handleShapesList();
     }
   }
 
   public handleCtrl(x: number, y: number) {
-    this.iterateShapes(x, y, true);
+    this.checkShapeCollision(x, y, true);
   }
 
   public handleRightClick(x: number, y: number) {
@@ -129,7 +128,7 @@ export class Selector implements ShapeFactory {
    * shapes accordingly. The function also handles rendering
    * the selected shapes on the canvas.
    */
-  iterateShapes(x: number, y: number, isCtrl: boolean) {
+  checkShapeCollision(x: number, y: number, isCtrl: boolean) {
     const ctx = this.sm.getCtx();
     const shapes = this.sm.getShapes();
 
@@ -212,17 +211,16 @@ export class Selector implements ShapeFactory {
   handleShapesList = () => {
     const shapes = this.sm.getShapes();
     const ctx = this.sm.getCtx();
+    this.sm.draw();
     if (this.shapeListIndexer < this.shapeListId.length - 1) {
       this.shapeListIndexer++;
     }
 
-    this.sm.draw();
-
-    const handleIdCurrent = this.shapeListId[this.shapeListIndexer];
-    shapes[handleIdCurrent].draw(ctx, true);
+    const idCurrent = this.shapeListId[this.shapeListIndexer];
+    shapes[idCurrent].draw(ctx, true);
 
     this.shapesSelected = [];
-    this.shapesSelected.push(handleIdCurrent);
+    this.shapesSelected.push(idCurrent);
 
     if (this.shapeListIndexer == this.shapeListId.length - 1) {
       this.shapeListIndexer = -1;
