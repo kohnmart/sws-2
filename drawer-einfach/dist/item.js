@@ -1,5 +1,4 @@
 export class Item {
-    /* create new item */
     constructor(tagName, menuInstance, itemContent, callback) {
         this.container = [];
         this.element = document.createElement(tagName);
@@ -14,15 +13,15 @@ export class Item {
     }
     /* render item in ul-list */
     render() {
-        const li = document.createElement('li');
-        li.appendChild(this.element);
+        const listElement = document.createElement('li');
+        listElement.appendChild(this.element);
         if (this.container.length > 0) {
             this.container.forEach((subItem) => {
                 this.element.appendChild(subItem.element);
-                li.id = 'item-list';
+                listElement.id = 'item-list';
             });
         }
-        this.menuInstance.ulList.appendChild(li);
+        this.menuInstance.ulList.appendChild(listElement);
     }
 }
 Item.id = 'menu-item';
@@ -30,16 +29,18 @@ export class ItemRadio extends Item {
     constructor(tagName, key, menuInstance) {
         super(tagName, menuInstance);
         this.key = key;
+        /* Create input element */
         this.inputElement = document.createElement('input');
         this.inputElement.type = 'radio';
         this.inputElement.value = key;
         this.inputElement.id = Item.id;
+        /* Create corresponding label */
         this.labelElement = document.createElement('label');
         this.labelElement.textContent = key;
         this.labelElement.htmlFor = key;
         this.labelElement.id = Item.id;
-        this.element.append(this.inputElement);
-        this.element.append(this.labelElement);
+        /* Add nodes to parent-element */
+        this.element.append(this.inputElement, this.labelElement);
     }
 }
 //# sourceMappingURL=item.js.map
