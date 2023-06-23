@@ -6,15 +6,15 @@ import {
   checkPointInCircle,
   checkPointInRectangle,
   checkPointInTriangle,
-} from './ShapesInteraction.js';
+} from './shapesInteractionUtils.js';
 import { Color } from './ColorPalette.js';
 export class Selector implements ShapeFactory {
-  public label = 'Select';
+  public readonly label = 'Select';
+  private readonly slm: SelectorManager;
+  private readonly menu: MenuApi;
   private shapeListId: number[] = [];
   private shapesSelected: number[] = [];
   private shapeListIndexer: number = 0;
-  private slm: SelectorManager;
-  private menu: MenuApi;
   constructor(slm: SelectorManager) {
     this.slm = slm;
     this.menu = this.createMenu(new MenuApi());
@@ -23,13 +23,13 @@ export class Selector implements ShapeFactory {
   /* ------------ CREATE - MENU ------------ */
   createMenu = (menuApi: MenuApi): MenuApi => {
     const menu = menuApi.createMenu();
-    const mItem1 = menuApi.createItem('Entfernen', (m: MenuApi) => {
+    const deleteShapesItem = menuApi.createItem('Entfernen', (m: MenuApi) => {
       m.hide();
       this.shapesSelected.forEach((id: number) => {
         this.slm.removeShapeWithId(id, true);
       });
     });
-    menu.addItems(mItem1);
+    menu.addItems(deleteShapesItem);
     menuApi.createRadioOption(
       /* DEFINE COLOR PALETTES */
       [PLT_TYPES.Hintergrund, PLT_TYPES.Outline],
@@ -79,30 +79,31 @@ export class Selector implements ShapeFactory {
         const shapes = this.slm.getShapes();
         this.shapesSelected.forEach((id: number) => {
           const shape = shapes[id];
-          const ctx = this.slm.getCtx();
           if (colorItem.paletteInstance.type === PLT_TYPES.Hintergrund) {
             shape.backgroundColor = colorItem.colorFormatAsRGBA();
           } else {
             shape.strokeColor = colorItem.colorFormatAsRGBA();
           }
-          shape.draw(ctx, true);
+          this.slm.draw();
         });
-
         colorItem.paletteInstance.setDefaultColor(colorItem.key);
       }
     );
 
-    const itemMoveUp = menuApi.createItem('MoveUp', () => {
-      const selected = this.shapesSelected[0];
-      this.slm.updateOrder(selected, false);
+    const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
+      this.slm.updateOrder(this.shapesSelected[0], false);
     });
 
-    const itemMoveDown = menuApi.createItem('MoveDown', () => {
-      const selected = this.shapesSelected[0];
-      this.slm.updateOrder(selected, true);
-    });
+    const shapeMoveBackwardItem = menuApi.createItem(
+      'Shape nach hinten',
+      () => {
+        this.slm.updateOrder(this.shapesSelected[0], true);
+      }
+    );
 
-    menu.addItems(itemMoveUp, menuApi.createSeparator(), itemMoveDown);
+    const separator = menuApi.createSeparator();
+
+    menu.addItems(shapeMoveForwardItem, separator, shapeMoveBackwardItem);
 
     return menu;
   };
@@ -205,27 +206,26 @@ export class Selector implements ShapeFactory {
 
     /* check if shapes have been detected */
     if (this.shapeListId.length) {
-      const firstId = this.shapeListId[this.shapeListId.length - 1];
+      const firstId = this.shapeListId[this.shapeListId.length - 1]; // firstId => Shape in front
 
+      /* If single selection */
       if (!isCtrl) {
         // Iterate over each shapes object
+        this.slm.draw();
         for (const key in shapes) {
           if (shapes.hasOwnProperty(key)) {
             const id = shapes[key].id;
-
             // Check if the current shape id matches the firstId
             if (id === firstId) {
               // Add the id to the shapesSelected array
               this.shapesSelected.push(id);
               // Draw the shape with ctx and true flag
               shapes[key].draw(ctx, true);
-            } else {
-              // Draw the shape with ctx and false flag
-              shapes[key].draw(ctx, false);
             }
           }
         }
       } else {
+        // If multi-selection
         // Iterate over each id in shapeListId array
         this.shapeListId.forEach((id) => {
           // Add the id to the shapesSelected array
@@ -248,7 +248,6 @@ export class Selector implements ShapeFactory {
     if (this.shapeListIndexer < this.shapeListId.length - 1) {
       this.shapeListIndexer++;
     }
-
     const idCurrent = this.shapeListId[this.shapeListIndexer];
     for (const key in shapes) {
       if (shapes.hasOwnProperty(key)) {
@@ -257,9 +256,6 @@ export class Selector implements ShapeFactory {
         if (id === idCurrent) {
           // Draw the shape with ctx and true flag
           shapes[key].draw(ctx, true);
-        } else {
-          // Draw the shape with ctx and false flag
-          shapes[key].draw(ctx, false);
         }
       }
     }
