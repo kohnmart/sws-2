@@ -22,21 +22,10 @@ export default class ColorPalette {
                 this.colors[index].setColorOption(false);
             }
         };
-        this.render = () => {
-            const container = document.createElement('li');
-            const header = document.createElement('p');
-            header.innerHTML = this.type;
-            container.append(header);
-            this.colors.forEach((element) => {
-                container.appendChild(element.radioButton.element);
-                element.radioButton.inputElement.name = this.type;
-                ColorPaletteGroup.menuApi.createSeparator();
-            });
-            ColorPaletteGroup.menuApi.ulList.appendChild(container);
-        };
         this.type = type;
         this.container = new Item('div', menuApi);
         menuApi.addItem(this.container);
+        this.container.container.push(new Item('p', menuApi, type));
     }
 }
 export class Color {
