@@ -94,8 +94,14 @@ export class Selector {
             const shapes = this.slm.getShapes();
             const ctx = this.slm.getCtx();
             this.slm.draw();
-            if (this.shapeListIndexer < this.shapeListId.length - 1) {
-                this.shapeListIndexer++;
+            if (this.shapeListIndexer === undefined) {
+                this.shapeListIndexer = this.shapeListId.length - 1;
+            }
+            else {
+                this.shapeListIndexer--;
+                if (this.shapeListIndexer < 0) {
+                    this.shapeListIndexer = this.shapeListId.length - 1;
+                }
             }
             const idCurrent = this.shapeListId[this.shapeListIndexer];
             for (const key in shapes) {
@@ -108,11 +114,9 @@ export class Selector {
                     }
                 }
             }
-            this.shapesSelected = [];
+            this.shapesSelected = []; // Clear the array if you want to store only the current selection
             this.shapesSelected.push(idCurrent);
-            if (this.shapeListIndexer == this.shapeListId.length - 1) {
-                this.shapeListIndexer = -1;
-            }
+            // Optionally, you may perform actions on the selected shape here
         };
         this.slm = slm;
         this.menu = this.createMenu(new MenuApi());
