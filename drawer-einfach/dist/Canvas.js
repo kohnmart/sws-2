@@ -74,26 +74,27 @@ export class Canvas {
     }
     /* moveUp-boolean is used to determine up or down direction */
     updateShapesOrder(shapeId, moveUp) {
-        const shapeKeys = Object.keys(this.shapes);
-        const shapeIndex = shapeKeys.findIndex((key) => this.shapes[key].id === shapeId);
+        const shapesMap = new Map(Object.entries(this.shapes));
+        const shapeKeys = Array.from(shapesMap.keys());
+        const shapeIndex = shapeKeys.findIndex((key) => shapesMap.get(key).id === shapeId);
         if (moveUp && shapeIndex > 0) {
             const currentShapeKey = shapeKeys[shapeIndex];
             const previousShapeKey = shapeKeys[shapeIndex - 1];
-            /* switch positions */
-            [this.shapes[currentShapeKey], this.shapes[previousShapeKey]] = [
-                this.shapes[previousShapeKey],
-                this.shapes[currentShapeKey],
-            ];
+            // Swap the positions within the Map
+            const tempShape = shapesMap.get(currentShapeKey);
+            shapesMap.set(currentShapeKey, shapesMap.get(previousShapeKey));
+            shapesMap.set(previousShapeKey, tempShape);
         }
         else if (!moveUp && shapeIndex < shapeKeys.length - 1) {
             const currentShapeKey = shapeKeys[shapeIndex];
             const nextShapeKey = shapeKeys[shapeIndex + 1];
-            /* switch positions */
-            [this.shapes[currentShapeKey], this.shapes[nextShapeKey]] = [
-                this.shapes[nextShapeKey],
-                this.shapes[currentShapeKey],
-            ];
+            // Swap the positions within the Map
+            const tempShape = shapesMap.get(currentShapeKey);
+            shapesMap.set(currentShapeKey, shapesMap.get(nextShapeKey));
+            shapesMap.set(nextShapeKey, tempShape);
         }
+        // Update the original shapes object with the modified order
+        this.shapes = Object.fromEntries(shapesMap);
         this.draw();
     }
     getCanvasRenderingContext() {
