@@ -1,5 +1,6 @@
 import { Item, ItemRadio } from './item.js';
 import MenuApi from './menuApi.js';
+import { PLT_TYPES, ColorValue } from './types.js';
 
 export class ColorPaletteGroup {
   static menuApi: MenuApi;
@@ -11,12 +12,12 @@ export class ColorPaletteGroup {
 }
 
 export default class ColorPalette {
-  public type: Types;
+  public type: PLT_TYPES;
   public item: Item;
   public colors: Color[] = [];
   public defaultRGBA: string;
 
-  constructor(type: Types, menuApi: MenuApi) {
+  constructor(type: PLT_TYPES, menuApi: MenuApi) {
     this.type = type;
     this.item = new Item('ul', menuApi);
     this.item.container.push(new Item('li', menuApi, type));
@@ -30,10 +31,10 @@ export default class ColorPalette {
   setDefaultColor = (key: string): void => {
     const color = this.colors.find((el) => el.key === key);
     if (color) {
-      this.defaultRGBA = color.colorAsRGBA();
+      this.defaultRGBA = color.colorFormatAsRGBA();
       color.radioButton.inputElement.checked = true;
       color.setColorOption(
-        color.radioButton.inputElement.name === Types.Hintergrund
+        color.radioButton.inputElement.name === PLT_TYPES.Hintergrund
       );
     }
   };
@@ -44,7 +45,7 @@ export class Color {
   public static defaultForground: string | undefined;
   public defaultColor: string | undefined;
   public key: string;
-  public colorValue: IColorValue;
+  public colorValue: ColorValue;
   public radioButton: ItemRadio;
   public paletteInstance: ColorPalette;
 
@@ -53,7 +54,7 @@ export class Color {
     paletteInstance: ColorPalette,
     key: string,
     name: string,
-    value: IColorValue,
+    value: ColorValue,
     callback: (m: Color) => void
   ) {
     this.paletteInstance = paletteInstance;
@@ -74,20 +75,8 @@ export class Color {
     Color.defaultForground = !isBackground ? this.key : Color.defaultForground;
   }
 
-  colorAsRGBA(): string {
+  colorFormatAsRGBA(): string {
     const { red, green, blue, alpha } = this.colorValue;
     return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
   }
-}
-
-export type IColorValue = {
-  red: number;
-  green: number;
-  blue: number;
-  alpha: number;
-};
-
-export enum Types {
-  Outline = 'Outline',
-  Hintergrund = 'Hintergrund',
 }

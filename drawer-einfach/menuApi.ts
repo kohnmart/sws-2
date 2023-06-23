@@ -1,11 +1,7 @@
 import { Item } from './item.js';
-import ColorPalette, {
-  Color,
-  ColorPaletteGroup,
-  Types,
-  IColorValue,
-} from './ColorPalette.js';
+import ColorPalette, { Color, ColorPaletteGroup } from './ColorPalette.js';
 import { Selector } from './Selector.js';
+import { PLT_TYPES, ColorValue } from './types.js';
 export default class MenuApi {
   static id: string = 'menu';
   itemList: Array<Item>;
@@ -115,11 +111,11 @@ export default class MenuApi {
   };
 
   createRadioOption = (
-    colorTypes: Types[],
-    colorOptions: { [key: string]: { name: string; value: IColorValue } },
-    defaultColor?: { [key: string]: { type: Types; key: string } },
+    colorTypes: PLT_TYPES[],
+    colorOptions: { [key: string]: { name: string; value: ColorValue } },
+    defaultColor?: { [key: string]: { type: PLT_TYPES; key: string } },
     specialColor?: {
-      [key: string]: { type: Types; name: string; value: IColorValue };
+      [key: string]: { type: PLT_TYPES; name: string; value: ColorValue };
     },
     callback?: (m: Color) => void
   ): void => {

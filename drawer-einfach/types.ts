@@ -1,5 +1,3 @@
-import { Canvas } from './Canvas';
-
 export interface Shape {
   readonly id: number;
   readonly type: string;
@@ -27,4 +25,16 @@ export interface ShapeFactory {
   handleMouseDown(x: number, y: number): void;
   handleMouseUp(x: number, y: number): void;
   handleMouseMove(x: number, y: number): void;
+}
+
+export type ColorValue = {
+  red: number;
+  green: number;
+  blue: number;
+  alpha: number;
+};
+
+export enum PLT_TYPES {
+  Outline = 'Outline',
+  Hintergrund = 'Hintergrund',
 }
