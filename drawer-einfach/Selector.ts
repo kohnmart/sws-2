@@ -13,19 +13,20 @@ export class Selector implements ShapeFactory {
   private shapeListId: number[] = [];
   private shapesSelected: number[] = [];
   private shapeListIndexer: number = 0;
-  private sm: SelectorManager;
+  private slm: SelectorManager;
   private menu: MenuApi;
-  constructor(ss: SelectorManager) {
-    this.sm = ss;
+  constructor(slm: SelectorManager) {
+    this.slm = slm;
     this.menu = this.createMenu(new MenuApi());
   }
 
+  /* ------------ CREATE - MENU ------------ */
   createMenu = (menuApi: MenuApi): MenuApi => {
     const menu = menuApi.createMenu();
     const mItem1 = menuApi.createItem('Entfernen', (m: MenuApi) => {
       m.hide();
       this.shapesSelected.forEach((id: number) => {
-        this.sm.removeShapeWithId(id, true);
+        this.slm.removeShapeWithId(id, true);
       });
     });
     menu.addItems(mItem1);
@@ -75,10 +76,10 @@ export class Selector implements ShapeFactory {
         },
       },
       (colorItem: Color) => {
-        const shapes = this.sm.getShapes();
+        const shapes = this.slm.getShapes();
         this.shapesSelected.forEach((id: number) => {
           const shape = shapes[id];
-          const ctx = this.sm.getCtx();
+          const ctx = this.slm.getCtx();
           if (colorItem.paletteInstance.type === PLT_TYPES.Hintergrund) {
             shape.backgroundColor = colorItem.colorFormatAsRGBA();
           } else {
@@ -93,18 +94,21 @@ export class Selector implements ShapeFactory {
 
     const itemMoveUp = menuApi.createItem('MoveUp', () => {
       const selected = this.shapesSelected[0];
-      this.sm.updateOrder(selected, false);
+      this.slm.updateOrder(selected, false);
     });
 
     const itemMoveDown = menuApi.createItem('MoveDown', () => {
       const selected = this.shapesSelected[0];
-      this.sm.updateOrder(selected, true);
+      this.slm.updateOrder(selected, true);
     });
 
     menu.addItems(itemMoveUp, menuApi.createSeparator(), itemMoveDown);
 
     return menu;
   };
+  /* -------------------------------------- */
+
+  /* ------------ HANDLER - SECTION ------------ */
 
   public handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
@@ -132,6 +136,9 @@ export class Selector implements ShapeFactory {
     return;
   }
 
+  /* -------------------------------------- */
+
+  /* ------- INTERACTION - SECTION -------- */
   /**
    * The iterateShapes function is responsible for
    * iterating over shapes, determining if a given point
@@ -141,11 +148,11 @@ export class Selector implements ShapeFactory {
    * the selected shapes on the canvas.
    */
   checkShapeCollision(x: number, y: number, isCtrl: boolean) {
-    const ctx = this.sm.getCtx();
-    const shapes = this.sm.getShapes();
+    const ctx = this.slm.getCtx();
+    const shapes = this.slm.getShapes();
 
     if (!isCtrl) {
-      this.sm.draw();
+      this.slm.draw();
       this.shapeListId = [];
       this.shapesSelected = [];
     }
@@ -235,9 +242,9 @@ export class Selector implements ShapeFactory {
    * It provides a way to cycle through the shapes and perform actions on the selected shape.
    */
   iterateShapesLevels = () => {
-    const shapes = this.sm.getShapes();
-    const ctx = this.sm.getCtx();
-    this.sm.draw();
+    const shapes = this.slm.getShapes();
+    const ctx = this.slm.getCtx();
+    this.slm.draw();
     if (this.shapeListIndexer < this.shapeListId.length - 1) {
       this.shapeListIndexer++;
     }
@@ -263,4 +270,5 @@ export class Selector implements ShapeFactory {
       this.shapeListIndexer = -1;
     }
   };
+  /* -------------------------------------- */
 }
