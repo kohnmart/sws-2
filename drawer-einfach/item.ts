@@ -31,7 +31,6 @@ export class Item {
     li.appendChild(this.element);
     if (this.container.length > 0) {
       this.container.forEach((subItem) => {
-        console.log(subItem);
         this.element.appendChild(subItem.element);
         li.id = 'item-list';
       });
