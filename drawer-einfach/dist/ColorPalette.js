@@ -1,4 +1,5 @@
 import { Item, ItemRadio } from './item.js';
+import { PLT_TYPES } from './types.js';
 export class ColorPaletteGroup {
     static addColorPalette(key, palette) {
         ColorPaletteGroup.group[key] = palette;
@@ -14,9 +15,9 @@ export default class ColorPalette {
         this.setDefaultColor = (key) => {
             const color = this.colors.find((el) => el.key === key);
             if (color) {
-                this.defaultRGBA = color.colorAsRGBA();
+                this.defaultRGBA = color.colorFormatAsRGBA();
                 color.radioButton.inputElement.checked = true;
-                color.setColorOption(color.radioButton.inputElement.name === Types.Hintergrund);
+                color.setColorOption(color.radioButton.inputElement.name === PLT_TYPES.Hintergrund);
             }
         };
         this.type = type;
@@ -41,14 +42,9 @@ export class Color {
         Color.defaultBackground = isBackground ? this.key : Color.defaultBackground;
         Color.defaultForground = !isBackground ? this.key : Color.defaultForground;
     }
-    colorAsRGBA() {
+    colorFormatAsRGBA() {
         const { red, green, blue, alpha } = this.colorValue;
         return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
     }
 }
-export var Types;
-(function (Types) {
-    Types["Outline"] = "Outline";
-    Types["Hintergrund"] = "Hintergrund";
-})(Types || (Types = {}));
 //# sourceMappingURL=ColorPalette.js.map

@@ -1,5 +1,5 @@
 import { Item } from './item.js';
-import ColorPalette, { Color, ColorPaletteGroup, } from './ColorPalette.js';
+import ColorPalette, { Color, ColorPaletteGroup } from './ColorPalette.js';
 export default class MenuApi {
     constructor() {
         /* create new menu and append functionality */

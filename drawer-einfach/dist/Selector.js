@@ -1,6 +1,6 @@
+import { PLT_TYPES } from './types.js';
 import MenuApi from './menuApi.js';
 import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, } from './ShapesInteraction.js';
-import { Types } from './ColorPalette.js';
 export class Selector {
     constructor(ss) {
         this.label = 'Select';
@@ -18,7 +18,7 @@ export class Selector {
             menu.addItems(mItem1);
             menuApi.createRadioOption(
             /* DEFINE COLOR PALETTES */
-            [Types.Hintergrund, Types.Outline], 
+            [PLT_TYPES.Hintergrund, PLT_TYPES.Outline], 
             /* DEFINE BASE COLORS */
             {
                 red: {
@@ -45,18 +45,18 @@ export class Selector {
             /* SET DEFAULT COLORS */
             {
                 Outline: {
-                    type: Types.Outline,
+                    type: PLT_TYPES.Outline,
                     key: 'black',
                 },
                 Hintergrund: {
-                    type: Types.Hintergrund,
+                    type: PLT_TYPES.Hintergrund,
                     key: 'transparent',
                 },
             }, 
             /* SET SPECIAL COLORS */
             {
                 transparent: {
-                    type: Types.Hintergrund,
+                    type: PLT_TYPES.Hintergrund,
                     name: 'transparent',
                     value: { red: 0, green: 0, blue: 0, alpha: 0 },
                 },
@@ -65,11 +65,11 @@ export class Selector {
                 this.shapesSelected.forEach((id) => {
                     const shape = shapes[id];
                     const ctx = this.sm.getCtx();
-                    if (colorItem.paletteInstance.type === Types.Hintergrund) {
-                        shape.backgroundColor = colorItem.colorAsRGBA();
+                    if (colorItem.paletteInstance.type === PLT_TYPES.Hintergrund) {
+                        shape.backgroundColor = colorItem.colorFormatAsRGBA();
                     }
                     else {
-                        shape.strokeColor = colorItem.colorAsRGBA();
+                        shape.strokeColor = colorItem.colorFormatAsRGBA();
                     }
                     shape.draw(ctx, true);
                 });
