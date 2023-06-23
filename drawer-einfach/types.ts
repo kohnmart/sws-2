@@ -1,3 +1,5 @@
+import { Canvas } from './Canvas';
+
 export interface Shape {
   readonly id: number;
   readonly type: string;
@@ -13,11 +15,11 @@ export interface ShapeManager {
 }
 
 export interface SelectorManager {
-  getShapes();
-  getCtx();
-  draw();
-  updateOrder(n: number, dir: boolean);
-  removeShapeWithId(id: number, redraw?: boolean);
+  getShapes(): { [p: number]: Shape };
+  getCtx(): CanvasRenderingContext2D;
+  draw(): void;
+  updateOrder(n: number, dir: boolean): void;
+  removeShapeWithId(id: number, redraw?: boolean): void;
 }
 
 export interface ShapeFactory {

@@ -83,15 +83,15 @@ export class Selector implements ShapeFactory {
 
     const itemMoveUp = menuApi.createItem('MoveUp', () => {
       const selected = this.shapesSelected[0];
-      this.sm.updateOrder(selected, true);
+      this.sm.updateOrder(selected, false);
     });
 
     const itemMoveDown = menuApi.createItem('MoveDown', () => {
       const selected = this.shapesSelected[0];
-      this.sm.updateOrder(selected, false);
+      this.sm.updateOrder(selected, true);
     });
 
-    menu.addItems(itemMoveUp, itemMoveDown);
+    menu.addItems(itemMoveUp, menuApi.createSeparator(), itemMoveDown);
 
     return menu;
   };
@@ -188,16 +188,20 @@ export class Selector implements ShapeFactory {
 
     /* check if shapes have been detected */
     if (this.shapeListId.length) {
-      const firstId = this.shapeListId[0];
-      /* push first shape to selectedShapes list */
-      this.shapesSelected.push(firstId);
+      const firstId = this.shapeListId[this.shapeListId.length - 1];
       if (!isCtrl) {
-        /* if controll-key hasnt been pressed */
-        /* render only first shape */
-        shapes[firstId].draw(ctx, true);
+        for (const key in shapes) {
+          if (shapes.hasOwnProperty(key)) {
+            const id = shapes[key].id;
+            if (id === firstId) {
+              this.shapesSelected.push(id);
+              shapes[key].draw(ctx, true);
+            } else {
+              shapes[key].draw(ctx, false);
+            }
+          }
+        }
       } else {
-        /* control-key pressed -> then loop over all selected shapes */
-        /* render */
         this.shapeListId.forEach((id) => {
           this.shapesSelected.push(id);
           shapes[id].draw(ctx, true);
