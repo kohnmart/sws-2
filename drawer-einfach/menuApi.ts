@@ -119,15 +119,17 @@ export default class MenuApi {
     },
     callback?: (m: Color) => void
   ): void => {
-    // CREATE COLOR PALETTES
+    /* CREATE COLOR PALETTES */
+    /* set reference to menuapi.this */
     ColorPaletteGroup.menuApi = this;
     this.addItem(this.createSeparator());
+    /* init palettes per type */
     colorTypes.forEach((type) => {
       ColorPaletteGroup.addColorPalette(type, new ColorPalette(type, this));
     });
     this.addItem(this.createSeparator());
 
-    // ADD INDIVIDUAL COLOR
+    /* ADD INDIVIDUAL PALETTE COLORS */
     for (const key in specialColor) {
       if (specialColor.hasOwnProperty(key)) {
         const { type, name, value } = specialColor[key];
@@ -144,6 +146,7 @@ export default class MenuApi {
       }
     }
 
+    /* ADD ALL MAIN COLORS TO THE PALETTES */
     colorTypes.forEach((type) => {
       for (const key in colorOptions) {
         if (colorOptions.hasOwnProperty(key)) {
@@ -160,6 +163,7 @@ export default class MenuApi {
           );
         }
       }
+      /* SET THE DEFAULT COLOR */
       if (defaultColor?.[type]?.type === type) {
         ColorPaletteGroup.group[type].setDefaultColor(defaultColor[type].key);
       }
