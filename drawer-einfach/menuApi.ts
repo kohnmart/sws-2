@@ -95,7 +95,6 @@ export default class MenuApi {
     });
 
     // Ref: https://www.w3schools.com/JSREF/canvas_translate.asp
-    //this.ulList.style.transform = `translate(${x}px, ${y}px)`;
     this.ulList.style.left = `${x}px`;
     this.ulList.style.top = `${y}px`;
 
