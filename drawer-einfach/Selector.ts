@@ -34,7 +34,10 @@ export class Selector implements ShapeFactory {
       [Types.Hintergrund, Types.Outline],
       /* DEFINE BASE COLORS */
       {
-        red: { name: 'rot', value: { red: 255, green: 0, blue: 0, alpha: 1 } },
+        red: {
+          name: 'rot',
+          value: { red: 255, green: 0, blue: 0, alpha: 1 },
+        },
         green: {
           name: 'grün',
           value: { red: 0, green: 255, blue: 0, alpha: 1 },
@@ -63,7 +66,14 @@ export class Selector implements ShapeFactory {
           key: 'transparent',
         },
       },
-
+      /* SET SPECIAL COLORS */
+      {
+        transparent: {
+          type: Types.Hintergrund,
+          name: 'transparent',
+          value: { red: 0, green: 0, blue: 0, alpha: 0 },
+        },
+      },
       (colorItem: Color) => {
         const shapes = this.sm.getShapes();
         this.shapesSelected.forEach((id: number) => {
