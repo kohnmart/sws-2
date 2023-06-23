@@ -89,7 +89,7 @@ export class Circle extends AbstractShape {
         ctx.fill();
         ctx.stroke();
         if (isSelected) {
-            ctx.fillStyle = 'red';
+            ctx.fillStyle = 'purple';
             ctx.fillRect(this.center.x - 5, this.center.y + this.radius - 5, 10, 10);
             ctx.fillRect(this.center.x - 5, this.center.y - this.radius - 5, 10, 10);
             ctx.fillRect(this.center.x - 5 - this.radius, this.center.y, 10, 10);
@@ -125,7 +125,7 @@ export class Rectangle extends AbstractShape {
         ctx.fillRect(this.from.x, this.from.y, this.to.x - this.from.x, this.to.y - this.from.y);
         ctx.fill();
         if (isSelected) {
-            ctx.fillStyle = 'red';
+            ctx.fillStyle = 'purple';
             ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
             ctx.fillRect(this.from.x - 5, this.to.y - 5, 10, 10);
             ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
@@ -161,7 +161,7 @@ export class Triangle extends AbstractShape {
         ctx.strokeStyle = this.strokeColor;
         ctx.stroke();
         if (isSelected) {
-            ctx.fillStyle = 'red';
+            ctx.fillStyle = 'purple';
             ctx.fillRect(this.p1.x - 5, this.p1.y - 5, 10, 10);
             ctx.fillRect(this.p2.x - 5, this.p2.y - 5, 10, 10);
             ctx.fillRect(this.p3.x - 5, this.p3.y - 5, 10, 10);

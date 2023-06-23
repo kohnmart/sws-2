@@ -1,5 +1,5 @@
 import { Item } from './item.js';
-import ColorPalette, { Color, ColorPaletteGroup, Types, } from './ColorPalette.js';
+import ColorPalette, { Color, ColorPaletteGroup, } from './ColorPalette.js';
 export default class MenuApi {
     constructor() {
         /* create new menu and append functionality */
@@ -75,26 +75,31 @@ export default class MenuApi {
             /* remove listener */
             document.removeEventListener('mousedown', this.eventListener, true);
         };
-        this.createRadioOption = (colorTypes, colorOptions, defaultColor, callback) => {
-            /* CREATE COLOR PALETTES */
+        this.createRadioOption = (colorTypes, colorOptions, defaultColor, specialColor, callback) => {
+            // CREATE COLOR PALETTES
             colorTypes.forEach((type) => {
                 this.addItem(this.createSeparator());
                 ColorPaletteGroup.addColorPalette(type, new ColorPalette(type, this));
             });
             this.addItem(this.createSeparator());
             ColorPaletteGroup.menuApi = this;
-            /* ADD INDIVIDUAL COLOR */
-            ColorPaletteGroup.group[Types.Hintergrund].addNewColor(new Color(this, ColorPaletteGroup.group[Types.Hintergrund], 'transparent', 'transparent', { red: 0, green: 0, blue: 0, alpha: 0 }, (m) => callback(m)));
+            // ADD INDIVIDUAL COLOR
+            for (const key in specialColor) {
+                if (specialColor.hasOwnProperty(key)) {
+                    const { type, name, value } = specialColor[key];
+                    ColorPaletteGroup.group[type].addNewColor(new Color(this, ColorPaletteGroup.group[type], key, name, value, callback));
+                }
+            }
             colorTypes.forEach((type) => {
-                /*  Loop over color-map */
+                var _a;
+                // Loop over color-map
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
-                        /* Create new Color */
-                        const color = new Color(this, ColorPaletteGroup.group[type], key, colorOptions[key].name, colorOptions[key].value, (m) => callback(m));
-                        ColorPaletteGroup.group[type].addNewColor(color);
+                        const { name, value } = colorOptions[key];
+                        ColorPaletteGroup.group[type].addNewColor(new Color(this, ColorPaletteGroup.group[type], key, name, value, callback));
                     }
                 }
-                if (defaultColor[type].type === type) {
+                if (((_a = defaultColor === null || defaultColor === void 0 ? void 0 : defaultColor[type]) === null || _a === void 0 ? void 0 : _a.type) === type) {
                     ColorPaletteGroup.group[type].setDefaultColor(defaultColor[type].key);
                 }
             });
