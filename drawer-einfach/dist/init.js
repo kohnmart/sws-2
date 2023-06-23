@@ -36,8 +36,8 @@ function init() {
         updateOrder(n, dir) {
             return canvas.updateShapesOrder(n, dir);
         },
-        removeShape(s, rd) {
-            return canvas.removeShape(s, rd);
+        removeShapeWithId(id, rd) {
+            return canvas.removeShapeWithId(id, rd);
         },
     };
     const tools = [

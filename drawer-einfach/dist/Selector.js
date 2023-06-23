@@ -11,7 +11,9 @@ export class Selector {
             const menu = menuApi.createMenu();
             const mItem1 = menuApi.createItem('Entfernen', (m) => {
                 m.hide();
-                this.deleteShapesFromList();
+                this.shapesSelected.forEach((id) => {
+                    this.sm.removeShapeWithId(id, true);
+                });
             });
             menu.addItems(mItem1);
             menuApi.createRadioOption(
@@ -187,13 +189,6 @@ export class Selector {
                 });
             }
         }
-    }
-    deleteShapesFromList() {
-        const shapes = this.sm.getShapes();
-        this.shapeListId.forEach((id) => {
-            const shape = shapes[id];
-            this.sm.removeShape(shape, true);
-        });
     }
 }
 //# sourceMappingURL=Selector.js.map
