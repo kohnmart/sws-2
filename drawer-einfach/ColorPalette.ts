@@ -4,7 +4,7 @@ import { PLT_TYPES, ColorValue } from './types.js';
 
 export class ColorPaletteGroup {
   static menuApi: MenuApi;
-  static group: { [key: string]: ColorPalette } = {};
+  static readonly group: { [key: string]: ColorPalette } = {};
 
   static addColorPalette(key: string, palette: ColorPalette) {
     ColorPaletteGroup.group[key] = palette;
@@ -12,9 +12,9 @@ export class ColorPaletteGroup {
 }
 
 export default class ColorPalette {
-  public type: PLT_TYPES;
-  public item: Item;
-  public colors: Color[] = [];
+  public readonly type: PLT_TYPES;
+  public readonly item: Item;
+  public readonly colors: Color[] = [];
   public defaultRGBA: string;
 
   constructor(type: PLT_TYPES, menuApi: MenuApi) {
@@ -33,21 +33,15 @@ export default class ColorPalette {
     if (color) {
       this.defaultRGBA = color.colorFormatAsRGBA();
       color.radioButton.inputElement.checked = true;
-      color.setColorOption(
-        color.radioButton.inputElement.name === PLT_TYPES.Hintergrund
-      );
     }
   };
 }
 
 export class Color {
-  public static defaultBackground: string | undefined;
-  public static defaultForground: string | undefined;
-  public defaultColor: string | undefined;
-  public key: string;
-  public colorValue: ColorValue;
-  public radioButton: ItemRadio;
-  public paletteInstance: ColorPalette;
+  public readonly key: string;
+  public readonly colorValue: ColorValue;
+  public readonly radioButton: ItemRadio;
+  public readonly paletteInstance: ColorPalette;
 
   constructor(
     menuApi: MenuApi,
@@ -63,16 +57,9 @@ export class Color {
     this.radioButton = new ItemRadio('li', name, menuApi);
     this.radioButton.inputElement.name = this.paletteInstance.type;
     this.paletteInstance.item.container.push(this.radioButton);
-    if (callback) {
-      this.radioButton.inputElement.addEventListener('mousedown', () =>
-        callback(this)
-      );
-    }
-  }
-
-  setColorOption(isBackground: boolean): void {
-    Color.defaultBackground = isBackground ? this.key : Color.defaultBackground;
-    Color.defaultForground = !isBackground ? this.key : Color.defaultForground;
+    this.radioButton.inputElement.addEventListener('mousedown', () =>
+      callback(this)
+    );
   }
 
   colorFormatAsRGBA(): string {
