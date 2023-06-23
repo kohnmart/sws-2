@@ -96,29 +96,31 @@ export class Canvas implements ShapeManager {
     return this.shapes;
   }
 
-  /* moveUp-boolean is used to determine up or down direction */
-  // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map?retiredLocale=de
-  // Ref: https://stackoverflow.com/questions/872310/javascript-swap-array-elements
-  /**
-    Use of Map and Object.entries: The this.shapes object is converted into 
-    a Map using Object.entries, which allows for efficient manipulation of 
-    key-value pairs. This is beneficial when dealing with a large number of shape objects.
+  /** Explanation:
+   Use of Map and Object.entries: The this.shapes object is converted into 
+   a Map using Object.entries, which allows for efficient manipulation of 
+   key-value pairs. This is beneficial when dealing with a large number of shape objects.
+   
+   Finding the index of the shape: The shapeIndex is determined by finding the index in 
+   the shapeKeys array where the shape's ID matches the given shapeId. This index 
+   is used to determine the current position of the shape in the z-order.
+   
+   Swapping positions within the Map: If moveUp is true and the shape is 
+   not already at the top, or if moveUp is false and the shape is not already at 
+   the bottom, the positions of the current shape and the adjacent shape 
+   are swapped within the Map using Map.set(). 
+   
+   Updating the original shapes object: 
+   The modified shapesMap is converted back to an object using Object.fromEntries(), and the 
+   this.shapes object is updated with the new order of shapes.
+   
+   Redrawing the canvas: Finally, the draw() method is called to redraw the canvas
+   with the updated shape order, reflecting the changes made to the z-order.
 
-    Finding the index of the shape: The shapeIndex is determined by finding the index in 
-    the shapeKeys array where the shape's ID matches the given shapeId. This index 
-    is used to determine the current position of the shape in the z-order.
-
-    Swapping positions within the Map: If moveUp is true and the shape is 
-    not already at the top, or if moveUp is false and the shape is not already at 
-    the bottom, the positions of the current shape and the adjacent shape 
-    are swapped within the Map using Map.set(). 
-    
-    Updating the original shapes object: 
-    The modified shapesMap is converted back to an object using Object.fromEntries(), and the 
-    this.shapes object is updated with the new order of shapes.
-    
-    Redrawing the canvas: Finally, the draw() method is called to redraw the canvas
-    with the updated shape order, reflecting the changes made to the z-order.
+   ~ Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map?retiredLocale=de
+   ~ Ref: https://www.digitalocean.com/community/tutorials/understanding-map-and-set-objects-in-javascript
+   ~ Ref: https://javascript.info/map-set
+   ~ Ref: https://de.wikipedia.org/wiki/Z-Ordnung
    * 
    */
   updateShapesOrder(shapeId: number, moveUp: boolean) {
@@ -148,7 +150,7 @@ export class Canvas implements ShapeManager {
 
     // Update the original shapes object with the modified order
     this.shapes = Object.fromEntries(shapesMap);
-
+    // Redraw to new shape order
     this.draw();
   }
 
