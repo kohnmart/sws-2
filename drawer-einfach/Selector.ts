@@ -229,6 +229,11 @@ export class Selector implements ShapeFactory {
     }
   }
 
+  /**
+   * This method is used to iterate through the shapes in a cyclic manner,
+   * selecting and highlighting each shape one by one on the canvas.
+   * It provides a way to cycle through the shapes and perform actions on the selected shape.
+   */
   iterateShapesLevels = () => {
     const shapes = this.sm.getShapes();
     const ctx = this.sm.getCtx();
