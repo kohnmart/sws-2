@@ -14,9 +14,9 @@ export default class MenuApi {
             return new Item('button', this, item_content, (m) => callback(m));
         };
         /* create separator hr-line */
-        this.createSeparator = (isMode = true) => {
+        this.createSeparator = (isHorizontal = true) => {
             const item = new Item('hr', this);
-            if (!isMode) {
+            if (!isHorizontal) {
                 item.element.style.height = '25px';
                 item.element.style.width = '3px';
             }
@@ -77,12 +77,12 @@ export default class MenuApi {
         };
         this.createRadioOption = (colorTypes, colorOptions, defaultColor, specialColor, callback) => {
             // CREATE COLOR PALETTES
+            ColorPaletteGroup.menuApi = this;
+            this.addItem(this.createSeparator());
             colorTypes.forEach((type) => {
-                this.addItem(this.createSeparator());
                 ColorPaletteGroup.addColorPalette(type, new ColorPalette(type, this));
             });
             this.addItem(this.createSeparator());
-            ColorPaletteGroup.menuApi = this;
             // ADD INDIVIDUAL COLOR
             for (const key in specialColor) {
                 if (specialColor.hasOwnProperty(key)) {
@@ -92,7 +92,6 @@ export default class MenuApi {
             }
             colorTypes.forEach((type) => {
                 var _a;
-                // Loop over color-map
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
                         const { name, value } = colorOptions[key];

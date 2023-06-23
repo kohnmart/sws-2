@@ -16,9 +16,10 @@ export class Item {
     render() {
         const li = document.createElement('li');
         li.appendChild(this.element);
-        if (this.container) {
+        if (this.container.length > 0) {
             this.container.forEach((subItem) => {
-                li.appendChild(subItem.element);
+                console.log(subItem);
+                this.element.appendChild(subItem.element);
                 li.id = 'item-list';
             });
         }
