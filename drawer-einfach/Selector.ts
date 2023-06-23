@@ -229,7 +229,7 @@ export class Selector implements ShapeFactory {
 
   deleteShapesFromList() {
     const shapes = this.sm.getShapes();
-    this.shapeListId.forEach((id: number) => {
+    this.shapesSelected.forEach((id: number) => {
       const shape = shapes[id];
       this.sm.removeShape(shape, true);
     });
