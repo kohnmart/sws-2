@@ -42,9 +42,9 @@ export default class MenuApi {
   };
 
   /* create separator hr-line */
-  createSeparator = (isMode: boolean = true): Item => {
+  createSeparator = (isHorizontal: boolean = true): Item => {
     const item = new Item('hr', this);
-    if (!isMode) {
+    if (!isHorizontal) {
       item.element.style.height = '25px';
       item.element.style.width = '3px';
     } else {
@@ -124,12 +124,12 @@ export default class MenuApi {
     callback?: (m: Color) => void
   ): void => {
     // CREATE COLOR PALETTES
+    ColorPaletteGroup.menuApi = this;
+    this.addItem(this.createSeparator());
     colorTypes.forEach((type) => {
-      this.addItem(this.createSeparator());
       ColorPaletteGroup.addColorPalette(type, new ColorPalette(type, this));
     });
     this.addItem(this.createSeparator());
-    ColorPaletteGroup.menuApi = this;
 
     // ADD INDIVIDUAL COLOR
     for (const key in specialColor) {
@@ -149,7 +149,6 @@ export default class MenuApi {
     }
 
     colorTypes.forEach((type) => {
-      // Loop over color-map
       for (const key in colorOptions) {
         if (colorOptions.hasOwnProperty(key)) {
           const { name, value } = colorOptions[key];
