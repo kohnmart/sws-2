@@ -1,5 +1,4 @@
 import { Item, ItemRadio } from './item.js';
-import { PLT_TYPES } from './types.js';
 export class ColorPaletteGroup {
     static addColorPalette(key, palette) {
         ColorPaletteGroup.group[key] = palette;
@@ -17,7 +16,6 @@ export default class ColorPalette {
             if (color) {
                 this.defaultRGBA = color.colorFormatAsRGBA();
                 color.radioButton.inputElement.checked = true;
-                color.setColorOption(color.radioButton.inputElement.name === PLT_TYPES.Hintergrund);
             }
         };
         this.type = type;
@@ -34,13 +32,7 @@ export class Color {
         this.radioButton = new ItemRadio('li', name, menuApi);
         this.radioButton.inputElement.name = this.paletteInstance.type;
         this.paletteInstance.item.container.push(this.radioButton);
-        if (callback) {
-            this.radioButton.inputElement.addEventListener('mousedown', () => callback(this));
-        }
-    }
-    setColorOption(isBackground) {
-        Color.defaultBackground = isBackground ? this.key : Color.defaultBackground;
-        Color.defaultForground = !isBackground ? this.key : Color.defaultForground;
+        this.radioButton.inputElement.addEventListener('mousedown', () => callback(this));
     }
     colorFormatAsRGBA() {
         const { red, green, blue, alpha } = this.colorValue;

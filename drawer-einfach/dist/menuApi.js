@@ -76,20 +76,23 @@ export default class MenuApi {
             document.removeEventListener('mousedown', this.eventListener, true);
         };
         this.createRadioOption = (colorTypes, colorOptions, defaultColor, specialColor, callback) => {
-            // CREATE COLOR PALETTES
+            /* CREATE COLOR PALETTES */
+            /* set reference to menuapi.this */
             ColorPaletteGroup.menuApi = this;
             this.addItem(this.createSeparator());
+            /* init palettes per type */
             colorTypes.forEach((type) => {
                 ColorPaletteGroup.addColorPalette(type, new ColorPalette(type, this));
             });
             this.addItem(this.createSeparator());
-            // ADD INDIVIDUAL COLOR
+            /* ADD INDIVIDUAL PALETTE COLORS */
             for (const key in specialColor) {
                 if (specialColor.hasOwnProperty(key)) {
                     const { type, name, value } = specialColor[key];
                     ColorPaletteGroup.group[type].addNewColor(new Color(this, ColorPaletteGroup.group[type], key, name, value, callback));
                 }
             }
+            /* ADD ALL MAIN COLORS TO THE PALETTES */
             colorTypes.forEach((type) => {
                 var _a;
                 for (const key in colorOptions) {
@@ -98,6 +101,7 @@ export default class MenuApi {
                         ColorPaletteGroup.group[type].addNewColor(new Color(this, ColorPaletteGroup.group[type], key, name, value, callback));
                     }
                 }
+                /* SET THE DEFAULT COLOR */
                 if (((_a = defaultColor === null || defaultColor === void 0 ? void 0 : defaultColor[type]) === null || _a === void 0 ? void 0 : _a.type) === type) {
                     ColorPaletteGroup.group[type].setDefaultColor(defaultColor[type].key);
                 }

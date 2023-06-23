@@ -1,21 +1,22 @@
 import { PLT_TYPES } from './types.js';
 import MenuApi from './menuApi.js';
-import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, } from './ShapesInteraction.js';
+import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, } from './shapesInteractionUtils.js';
 export class Selector {
-    constructor(ss) {
+    constructor(slm) {
         this.label = 'Select';
         this.shapeListId = [];
         this.shapesSelected = [];
         this.shapeListIndexer = 0;
+        /* ------------ CREATE - MENU ------------ */
         this.createMenu = (menuApi) => {
             const menu = menuApi.createMenu();
-            const mItem1 = menuApi.createItem('Entfernen', (m) => {
+            const deleteShapesItem = menuApi.createItem('Entfernen', (m) => {
                 m.hide();
                 this.shapesSelected.forEach((id) => {
-                    this.sm.removeShapeWithId(id, true);
+                    this.slm.removeShapeWithId(id, true);
                 });
             });
-            menu.addItems(mItem1);
+            menu.addItems(deleteShapesItem);
             menuApi.createRadioOption(
             /* DEFINE COLOR PALETTES */
             [PLT_TYPES.Hintergrund, PLT_TYPES.Outline], 
@@ -61,29 +62,27 @@ export class Selector {
                     value: { red: 0, green: 0, blue: 0, alpha: 0 },
                 },
             }, (colorItem) => {
-                const shapes = this.sm.getShapes();
+                const shapes = this.slm.getShapes();
                 this.shapesSelected.forEach((id) => {
                     const shape = shapes[id];
-                    const ctx = this.sm.getCtx();
                     if (colorItem.paletteInstance.type === PLT_TYPES.Hintergrund) {
                         shape.backgroundColor = colorItem.colorFormatAsRGBA();
                     }
                     else {
                         shape.strokeColor = colorItem.colorFormatAsRGBA();
                     }
-                    shape.draw(ctx, true);
+                    this.slm.draw();
                 });
                 colorItem.paletteInstance.setDefaultColor(colorItem.key);
             });
-            const itemMoveUp = menuApi.createItem('MoveUp', () => {
-                const selected = this.shapesSelected[0];
-                this.sm.updateOrder(selected, false);
+            const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
+                this.slm.updateOrder(this.shapesSelected[0], false);
             });
-            const itemMoveDown = menuApi.createItem('MoveDown', () => {
-                const selected = this.shapesSelected[0];
-                this.sm.updateOrder(selected, true);
+            const shapeMoveBackwardItem = menuApi.createItem('Shape nach hinten', () => {
+                this.slm.updateOrder(this.shapesSelected[0], true);
             });
-            menu.addItems(itemMoveUp, menuApi.createSeparator(), itemMoveDown);
+            const separator = menuApi.createSeparator();
+            menu.addItems(shapeMoveForwardItem, separator, shapeMoveBackwardItem);
             return menu;
         };
         /**
@@ -92,9 +91,9 @@ export class Selector {
          * It provides a way to cycle through the shapes and perform actions on the selected shape.
          */
         this.iterateShapesLevels = () => {
-            const shapes = this.sm.getShapes();
-            const ctx = this.sm.getCtx();
-            this.sm.draw();
+            const shapes = this.slm.getShapes();
+            const ctx = this.slm.getCtx();
+            this.slm.draw();
             if (this.shapeListIndexer < this.shapeListId.length - 1) {
                 this.shapeListIndexer++;
             }
@@ -107,10 +106,6 @@ export class Selector {
                         // Draw the shape with ctx and true flag
                         shapes[key].draw(ctx, true);
                     }
-                    else {
-                        // Draw the shape with ctx and false flag
-                        shapes[key].draw(ctx, false);
-                    }
                 }
             }
             this.shapesSelected = [];
@@ -119,9 +114,11 @@ export class Selector {
                 this.shapeListIndexer = -1;
             }
         };
-        this.sm = ss;
+        this.slm = slm;
         this.menu = this.createMenu(new MenuApi());
     }
+    /* -------------------------------------- */
+    /* ------------ HANDLER - SECTION ------------ */
     handleMouseDown(x, y) {
         this.checkShapeCollision(x, y, false);
     }
@@ -142,6 +139,8 @@ export class Selector {
     handleMouseMove() {
         return;
     }
+    /* -------------------------------------- */
+    /* ------- INTERACTION - SECTION -------- */
     /**
      * The iterateShapes function is responsible for
      * iterating over shapes, determining if a given point
@@ -151,10 +150,10 @@ export class Selector {
      * the selected shapes on the canvas.
      */
     checkShapeCollision(x, y, isCtrl) {
-        const ctx = this.sm.getCtx();
-        const shapes = this.sm.getShapes();
+        const ctx = this.slm.getCtx();
+        const shapes = this.slm.getShapes();
         if (!isCtrl) {
-            this.sm.draw();
+            this.slm.draw();
             this.shapeListId = [];
             this.shapesSelected = [];
         }
@@ -197,9 +196,11 @@ export class Selector {
         }
         /* check if shapes have been detected */
         if (this.shapeListId.length) {
-            const firstId = this.shapeListId[this.shapeListId.length - 1];
+            const firstId = this.shapeListId[this.shapeListId.length - 1]; // firstId => Shape in front
+            /* If single selection */
             if (!isCtrl) {
                 // Iterate over each shapes object
+                this.slm.draw();
                 for (const key in shapes) {
                     if (shapes.hasOwnProperty(key)) {
                         const id = shapes[key].id;
@@ -210,14 +211,11 @@ export class Selector {
                             // Draw the shape with ctx and true flag
                             shapes[key].draw(ctx, true);
                         }
-                        else {
-                            // Draw the shape with ctx and false flag
-                            shapes[key].draw(ctx, false);
-                        }
                     }
                 }
             }
             else {
+                // If multi-selection
                 // Iterate over each id in shapeListId array
                 this.shapeListId.forEach((id) => {
                     // Add the id to the shapesSelected array
