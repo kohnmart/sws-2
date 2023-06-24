@@ -1,6 +1,7 @@
 import { PLT_TYPES } from './types.js';
 import MenuApi from './menuApi.js';
 import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, } from './shapesInteractionUtils.js';
+import { ColorPaletteGroup } from './ColorPalette.js';
 export class Selector {
     constructor(slm) {
         this.label = 'Select';
@@ -67,9 +68,11 @@ export class Selector {
                     const shape = shapes[id];
                     if (colorItem.paletteInstance.type === PLT_TYPES.Hintergrund) {
                         shape.backgroundColor = colorItem.colorFormatAsRGBA();
+                        shape.backgroundColorKey = colorItem.key;
                     }
                     else {
                         shape.strokeColor = colorItem.colorFormatAsRGBA();
+                        shape.strokeColorKey = colorItem.key;
                     }
                     this.slm.draw();
                 });
@@ -114,9 +117,8 @@ export class Selector {
                     }
                 }
             }
-            this.shapesSelected = []; // Clear the array if you want to store only the current selection
+            this.shapesSelected = [];
             this.shapesSelected.push(idCurrent);
-            // Optionally, you may perform actions on the selected shape here
         };
         this.slm = slm;
         this.menu = this.createMenu(new MenuApi());
@@ -214,6 +216,9 @@ export class Selector {
                             this.shapesSelected.push(id);
                             // Draw the shape with ctx and true flag
                             shapes[key].draw(ctx, true);
+                            // Set color pickers
+                            ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(shapes[key].backgroundColorKey);
+                            ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(shapes[key].strokeColorKey);
                         }
                     }
                 }

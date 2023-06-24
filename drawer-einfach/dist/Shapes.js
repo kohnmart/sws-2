@@ -7,11 +7,14 @@ class Point2D {
 }
 class AbstractShape {
     constructor(type, backgroundColor = ColorPaletteGroup.group['Hintergrund']
-        .defaultRGBA, outlineColor = ColorPaletteGroup.group['Outline'].defaultRGBA) {
+        .defaultRGBA, outlineColor = ColorPaletteGroup.group['Outline'].defaultRGBA, backgroundColorKey = ColorPaletteGroup.group['Hintergrund']
+        .colorKey, strokeColorKey = ColorPaletteGroup.group['Outline'].colorKey) {
         this.id = AbstractShape.counter++;
         this.type = type;
         this.backgroundColor = backgroundColor;
+        this.backgroundColorKey = backgroundColorKey;
         this.strokeColor = outlineColor;
+        this.strokeColorKey = strokeColorKey;
     }
 }
 AbstractShape.counter = 0;

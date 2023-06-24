@@ -15,6 +15,7 @@ export default class ColorPalette {
             const color = this.colors.find((el) => el.key === key);
             if (color) {
                 this.defaultRGBA = color.colorFormatAsRGBA();
+                this.colorKey = color.key;
                 color.radioButton.inputElement.checked = true;
             }
         };
@@ -22,6 +23,16 @@ export default class ColorPalette {
         this.item = new Item('ul', menuApi);
         this.item.container.push(new Item('li', menuApi, type));
         menuApi.addItem(this.item);
+    }
+    setColorPicker(shapesColorKey) {
+        this.colors.forEach((cl) => {
+            if (shapesColorKey === cl.key) {
+                cl.radioButton.inputElement.checked = true;
+            }
+            else {
+                cl.radioButton.inputElement.checked = false;
+            }
+        });
     }
 }
 export class Color {
