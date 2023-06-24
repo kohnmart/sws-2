@@ -1,10 +1,10 @@
 export interface Shape {
   readonly id: number;
   readonly type: string;
-  backgroundColor: string;
-  strokeColor: string;
-  backgroundColorKey: string;
-  strokeColorKey: string;
+  readonly backgroundColor: string;
+  readonly backgroundColorKey: string;
+  readonly strokeColor: string;
+  readonly strokeColorKey: string;
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean): void;
 }
 
