@@ -11,6 +11,7 @@ export default class ColorPalette {
         this.addNewColor = (color) => {
             this.colors.push(color);
         };
+        // Set new default color
         this.setDefaultColor = (key) => {
             const color = this.colors.find((el) => el.key === key);
             if (color) {
@@ -24,10 +25,16 @@ export default class ColorPalette {
         this.item.container.push(new Item('li', menuApi, type));
         menuApi.addItem(this.item);
     }
-    setColorPicker(shapesColorKey) {
+    // Set colorpicker to be the selected shapes color
+    setColorPicker(isSingleSelect, shapesColorKey) {
         this.colors.forEach((cl) => {
-            if (shapesColorKey === cl.key) {
-                cl.radioButton.inputElement.checked = true;
+            if (isSingleSelect) {
+                if (shapesColorKey === cl.key) {
+                    cl.radioButton.inputElement.checked = true;
+                }
+                else {
+                    cl.radioButton.inputElement.checked = false;
+                }
             }
             else {
                 cl.radioButton.inputElement.checked = false;
