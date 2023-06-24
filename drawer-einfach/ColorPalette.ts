@@ -16,6 +16,7 @@ export default class ColorPalette {
   public readonly item: Item;
   public readonly colors: Color[] = [];
   public defaultRGBA: string;
+  public colorKey: string;
 
   constructor(type: PLT_TYPES, menuApi: MenuApi) {
     this.type = type;
@@ -32,9 +33,20 @@ export default class ColorPalette {
     const color = this.colors.find((el) => el.key === key);
     if (color) {
       this.defaultRGBA = color.colorFormatAsRGBA();
+      this.colorKey = color.key;
       color.radioButton.inputElement.checked = true;
     }
   };
+
+  setColorPicker(shapesColorKey: string) {
+    this.colors.forEach((cl) => {
+      if (shapesColorKey === cl.key) {
+        cl.radioButton.inputElement.checked = true;
+      } else {
+        cl.radioButton.inputElement.checked = false;
+      }
+    });
+  }
 }
 
 export class Color {
