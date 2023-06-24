@@ -88,7 +88,6 @@ export class Selector implements ShapeFactory {
           }
           this.slm.draw();
         });
-        //colorItem.paletteInstance.setDefaultColor(colorItem.key);
       }
     );
 
