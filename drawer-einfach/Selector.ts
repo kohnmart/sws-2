@@ -8,7 +8,7 @@ import {
   checkPointInTriangle,
   checkShapeColorsConsistency,
 } from './shapesInteractionUtils.js';
-import { Color, ColorPaletteGroup } from './ColorPalette.js';
+import { ColorPicker, ColorPaletteGroup } from './ColorPalette.js';
 export class Selector implements ShapeFactory {
   public readonly label = 'Select';
   private readonly slm: SelectorManager;
@@ -76,16 +76,16 @@ export class Selector implements ShapeFactory {
           value: { red: 0, green: 0, blue: 0, alpha: 0 },
         },
       },
-      (colorItem: Color) => {
+      (colorPicker: ColorPicker) => {
         const shapes = this.slm.getShapes();
         this.shapesSelected.forEach((id: number) => {
           const shape = shapes[id];
-          if (colorItem.paletteInstance.type === PLT_TYPES.Hintergrund) {
-            shape.backgroundColor = colorItem.colorFormatAsRGBA();
-            shape.backgroundColorKey = colorItem.key;
+          if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
+            shape.backgroundColor = colorPicker.colorFormatAsRGBA();
+            shape.backgroundColorKey = colorPicker.key;
           } else {
-            shape.strokeColor = colorItem.colorFormatAsRGBA();
-            shape.strokeColorKey = colorItem.key;
+            shape.strokeColor = colorPicker.colorFormatAsRGBA();
+            shape.strokeColorKey = colorPicker.key;
           }
           this.slm.draw();
         });

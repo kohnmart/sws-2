@@ -1,5 +1,8 @@
 import { Item } from './item.js';
-import ColorPalette, { Color, ColorPaletteGroup } from './ColorPalette.js';
+import ColorPalette, {
+  ColorPicker,
+  ColorPaletteGroup,
+} from './ColorPalette.js';
 import { Selector } from './Selector.js';
 import { PLT_TYPES, ColorValue } from './types.js';
 export default class MenuApi {
@@ -116,7 +119,7 @@ export default class MenuApi {
     specialColor?: {
       [key: string]: { type: PLT_TYPES; name: string; value: ColorValue };
     },
-    callback?: (m: Color) => void
+    callback?: (m: ColorPicker) => void
   ): void => {
     /* CREATE COLOR PALETTES */
     /* set reference to menuapi.this */
@@ -133,7 +136,7 @@ export default class MenuApi {
       if (specialColor.hasOwnProperty(key)) {
         const { type, name, value } = specialColor[key];
         ColorPaletteGroup.group[type].addNewColor(
-          new Color(
+          new ColorPicker(
             this,
             ColorPaletteGroup.group[type],
             key,
@@ -151,7 +154,7 @@ export default class MenuApi {
         if (colorOptions.hasOwnProperty(key)) {
           const { name, value } = colorOptions[key];
           ColorPaletteGroup.group[type].addNewColor(
-            new Color(
+            new ColorPicker(
               this,
               ColorPaletteGroup.group[type],
               key,

@@ -14,7 +14,7 @@ export class ColorPaletteGroup {
 export default class ColorPalette {
   public readonly type: PLT_TYPES;
   public readonly item: Item;
-  public readonly colors: Color[] = [];
+  public readonly colors: ColorPicker[] = [];
   public defaultRGBA: string;
   public colorKey: string;
 
@@ -25,7 +25,7 @@ export default class ColorPalette {
     menuApi.addItem(this.item);
   }
 
-  addNewColor = (color: Color): void => {
+  addNewColor = (color: ColorPicker): void => {
     this.colors.push(color);
   };
 
@@ -56,7 +56,7 @@ export default class ColorPalette {
   }
 }
 
-export class Color {
+export class ColorPicker {
   public readonly key: string;
   public readonly colorValue: ColorValue;
   public readonly radioButton: ItemRadio;
@@ -68,7 +68,7 @@ export class Color {
     key: string,
     name: string,
     value: ColorValue,
-    callback: (m: Color) => void
+    callback: (m: ColorPicker) => void
   ) {
     this.paletteInstance = paletteInstance;
     this.key = key;
