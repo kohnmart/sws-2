@@ -1,6 +1,6 @@
 import { PLT_TYPES } from './types.js';
 import MenuApi from './menuApi.js';
-import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColors, } from './shapesInteractionUtils.js';
+import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from './shapesInteractionUtils.js';
 import { ColorPaletteGroup } from './ColorPalette.js';
 export class Selector {
     constructor(slm) {
@@ -235,18 +235,17 @@ export class Selector {
                 const bgKey = shapes[this.shapeListId[0]].backgroundColorKey;
                 const strKey = shapes[this.shapeListId[0]].strokeColorKey;
                 // Check if shape colors are consistent
-                const res = checkShapeColors(shapes, this.shapeListId, bgKey, strKey);
-                if (!res[0]) {
+                const consistent = checkShapeColorsConsistency(shapes, this.shapeListId, bgKey, strKey);
+                if (!consistent[0]) {
                     ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(true, bgKey);
                 }
                 else {
                     ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(false);
                 }
-                if (!res[1]) {
+                if (!consistent[1]) {
                     ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(true, strKey);
                 }
                 else {
-                    // If shapes color vary -> uncheck all colorpickers
                     ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(false);
                 }
             }

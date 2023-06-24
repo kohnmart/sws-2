@@ -45,7 +45,7 @@ const checkPointInCircle = (x, y, center, radius) => {
     }
     return false;
 };
-const checkShapeColors = (shapes, list, bg, str) => {
+const checkShapeColorsConsistency = (shapes, list, bg, str) => {
     const val = [false, false];
     list.forEach((id) => {
         if (shapes[id].backgroundColorKey !== bg && val[0] != true) {
@@ -62,7 +62,7 @@ export default {
     checkPointInCircle,
     checkPointInRectangle,
     checkPointInTriangle,
-    checkShapeColors,
+    checkShapeColorsConsistency,
 };
-export { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColors, };
+export { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, };
 //# sourceMappingURL=shapesInteractionUtils.js.map
