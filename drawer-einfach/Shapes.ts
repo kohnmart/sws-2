@@ -9,17 +9,24 @@ class AbstractShape {
   readonly id: number;
   readonly type: string;
   readonly backgroundColor: string;
+  readonly backgroundColorKey: string;
   readonly strokeColor: string;
+  readonly strokeColorKey: string;
   constructor(
     type: string,
     backgroundColor: string = ColorPaletteGroup.group['Hintergrund']
       .defaultRGBA,
-    outlineColor: string = ColorPaletteGroup.group['Outline'].defaultRGBA
+    outlineColor: string = ColorPaletteGroup.group['Outline'].defaultRGBA,
+    backgroundColorKey: string = ColorPaletteGroup.group['Hintergrund']
+      .colorKey,
+    strokeColorKey: string = ColorPaletteGroup.group['Outline'].colorKey
   ) {
     this.id = AbstractShape.counter++;
     this.type = type;
     this.backgroundColor = backgroundColor;
+    this.backgroundColorKey = backgroundColorKey;
     this.strokeColor = outlineColor;
+    this.strokeColorKey = strokeColorKey;
   }
 }
 abstract class AbstractFactory<T extends Shape> {
