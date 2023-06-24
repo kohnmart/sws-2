@@ -88,7 +88,7 @@ export class Selector implements ShapeFactory {
           }
           this.slm.draw();
         });
-        colorItem.paletteInstance.setDefaultColor(colorItem.key);
+        //colorItem.paletteInstance.setDefaultColor(colorItem.key);
       }
     );
 
@@ -225,9 +225,11 @@ export class Selector implements ShapeFactory {
               shapes[key].draw(ctx, true);
               // Set color pickers
               ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(
+                true,
                 shapes[key].backgroundColorKey
               );
               ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(
+                true,
                 shapes[key].strokeColorKey
               );
             }
@@ -240,6 +242,9 @@ export class Selector implements ShapeFactory {
           // Add the id to the shapesSelected array
           this.shapesSelected.push(id);
           shapes[id].draw(ctx, true);
+          // Set color pickers
+          ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(false);
+          ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(false);
         });
       }
     }
