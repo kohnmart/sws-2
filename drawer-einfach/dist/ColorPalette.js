@@ -12,6 +12,7 @@ export default class ColorPalette {
             this.colors.push(color);
         };
         // Set new default color
+        // Currently not in use
         this.setDefaultColor = (key) => {
             const color = this.colors.find((el) => el.key === key);
             if (color) {

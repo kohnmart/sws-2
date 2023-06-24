@@ -76,7 +76,6 @@ export class Selector {
                     }
                     this.slm.draw();
                 });
-                //colorItem.paletteInstance.setDefaultColor(colorItem.key);
             });
             const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
                 this.slm.updateOrder(this.shapesSelected[0], false);
