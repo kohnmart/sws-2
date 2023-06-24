@@ -1,3 +1,5 @@
+import { Shape } from './types';
+
 const checkLineIntersection = (
   x: number,
   y: number,
@@ -87,11 +89,32 @@ const checkPointInCircle = (
   return false;
 };
 
+const checkShapeColors = (
+  shapes: {
+    [p: number]: Shape;
+  },
+  list: number[],
+  bg: string,
+  str: string
+): boolean[] => {
+  const val = [false, false];
+  list.forEach((id) => {
+    if (shapes[id].backgroundColorKey !== bg && val[0] != true) {
+      val[0] = true;
+    }
+    if (shapes[id].strokeColorKey !== str && val[1] != true) {
+      val[1] = true;
+    }
+  });
+  return val;
+};
+
 export default {
   checkLineIntersection,
   checkPointInCircle,
   checkPointInRectangle,
   checkPointInTriangle,
+  checkShapeColors,
 };
 
 export {
@@ -99,4 +122,5 @@ export {
   checkPointInCircle,
   checkPointInRectangle,
   checkPointInTriangle,
+  checkShapeColors,
 };
