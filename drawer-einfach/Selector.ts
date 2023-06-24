@@ -7,7 +7,7 @@ import {
   checkPointInRectangle,
   checkPointInTriangle,
 } from './shapesInteractionUtils.js';
-import { Color } from './ColorPalette.js';
+import ColorPalette, { Color, ColorPaletteGroup } from './ColorPalette.js';
 export class Selector implements ShapeFactory {
   public readonly label = 'Select';
   private readonly slm: SelectorManager;
@@ -81,8 +81,10 @@ export class Selector implements ShapeFactory {
           const shape = shapes[id];
           if (colorItem.paletteInstance.type === PLT_TYPES.Hintergrund) {
             shape.backgroundColor = colorItem.colorFormatAsRGBA();
+            shape.backgroundColorKey = colorItem.key;
           } else {
             shape.strokeColor = colorItem.colorFormatAsRGBA();
+            shape.strokeColorKey = colorItem.key;
           }
           this.slm.draw();
         });
@@ -221,6 +223,13 @@ export class Selector implements ShapeFactory {
               this.shapesSelected.push(id);
               // Draw the shape with ctx and true flag
               shapes[key].draw(ctx, true);
+              // Set color pickers
+              ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(
+                shapes[key].backgroundColorKey
+              );
+              ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(
+                shapes[key].strokeColorKey
+              );
             }
           }
         }
