@@ -3,6 +3,8 @@ export interface Shape {
   readonly type: string;
   backgroundColor: string;
   strokeColor: string;
+  backgroundColorKey: string;
+  strokeColorKey: string;
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean): void;
 }
 
