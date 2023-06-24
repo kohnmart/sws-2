@@ -89,7 +89,7 @@ const checkPointInCircle = (
   return false;
 };
 
-const checkShapeColors = (
+const checkShapeColorsConsistency = (
   shapes: {
     [p: number]: Shape;
   },
@@ -114,7 +114,7 @@ export default {
   checkPointInCircle,
   checkPointInRectangle,
   checkPointInTriangle,
-  checkShapeColors,
+  checkShapeColorsConsistency,
 };
 
 export {
@@ -122,5 +122,5 @@ export {
   checkPointInCircle,
   checkPointInRectangle,
   checkPointInTriangle,
-  checkShapeColors,
+  checkShapeColorsConsistency,
 };
