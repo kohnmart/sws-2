@@ -62,17 +62,17 @@ export class Selector {
                     name: 'transparent',
                     value: { red: 0, green: 0, blue: 0, alpha: 0 },
                 },
-            }, (colorItem) => {
+            }, (colorPicker) => {
                 const shapes = this.slm.getShapes();
                 this.shapesSelected.forEach((id) => {
                     const shape = shapes[id];
-                    if (colorItem.paletteInstance.type === PLT_TYPES.Hintergrund) {
-                        shape.backgroundColor = colorItem.colorFormatAsRGBA();
-                        shape.backgroundColorKey = colorItem.key;
+                    if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
+                        shape.backgroundColor = colorPicker.colorFormatAsRGBA();
+                        shape.backgroundColorKey = colorPicker.key;
                     }
                     else {
-                        shape.strokeColor = colorItem.colorFormatAsRGBA();
-                        shape.strokeColorKey = colorItem.key;
+                        shape.strokeColor = colorPicker.colorFormatAsRGBA();
+                        shape.strokeColorKey = colorPicker.key;
                     }
                     this.slm.draw();
                 });

@@ -43,7 +43,7 @@ export default class ColorPalette {
         });
     }
 }
-export class Color {
+export class ColorPicker {
     constructor(menuApi, paletteInstance, key, name, value, callback) {
         this.paletteInstance = paletteInstance;
         this.key = key;

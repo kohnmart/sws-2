@@ -1,5 +1,5 @@
 import { Item } from './item.js';
-import ColorPalette, { Color, ColorPaletteGroup } from './ColorPalette.js';
+import ColorPalette, { ColorPicker, ColorPaletteGroup, } from './ColorPalette.js';
 export default class MenuApi {
     constructor() {
         /* create new menu and append functionality */
@@ -88,7 +88,7 @@ export default class MenuApi {
             for (const key in specialColor) {
                 if (specialColor.hasOwnProperty(key)) {
                     const { type, name, value } = specialColor[key];
-                    ColorPaletteGroup.group[type].addNewColor(new Color(this, ColorPaletteGroup.group[type], key, name, value, callback));
+                    ColorPaletteGroup.group[type].addNewColor(new ColorPicker(this, ColorPaletteGroup.group[type], key, name, value, callback));
                 }
             }
             /* ADD ALL MAIN COLORS TO THE PALETTES */
@@ -97,7 +97,7 @@ export default class MenuApi {
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
                         const { name, value } = colorOptions[key];
-                        ColorPaletteGroup.group[type].addNewColor(new Color(this, ColorPaletteGroup.group[type], key, name, value, callback));
+                        ColorPaletteGroup.group[type].addNewColor(new ColorPicker(this, ColorPaletteGroup.group[type], key, name, value, callback));
                     }
                 }
                 /* SET THE DEFAULT COLOR */
