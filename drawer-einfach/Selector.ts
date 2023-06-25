@@ -254,6 +254,7 @@ export class Selector implements ShapeFactory {
           bgKey,
           strKey
         );
+        // check on selected background colors
         if (!consistent[0]) {
           ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(
             true,
@@ -262,6 +263,7 @@ export class Selector implements ShapeFactory {
         } else {
           ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(false);
         }
+        // check on selected outline colors
         if (!consistent[1]) {
           ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(
             true,
@@ -284,11 +286,14 @@ export class Selector implements ShapeFactory {
     const ctx = this.slm.getCtx();
     this.slm.draw();
 
+    // if indexer is smaller zero, take the last index
     if (this.shapeListIndexer < 0) {
       this.shapeListIndexer = this.shapeListId.length - 1;
     }
 
     const idCurrent = this.shapeListId[this.shapeListIndexer];
+    // Maybe this can be done even more efficiently
+    // Questionable on large amount of objects
     for (const key in shapes) {
       if (shapes.hasOwnProperty(key)) {
         const id = shapes[key].id;
