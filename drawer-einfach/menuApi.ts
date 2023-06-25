@@ -115,9 +115,12 @@ export default class MenuApi {
   createRadioOption = (
     colorTypes: PLT_TYPES[],
     colorOptions: { [key: string]: { name: string; value: ColorValue } },
-    defaultColor?: { [key: string]: { type: PLT_TYPES; key: string } },
-    specialColor?: {
+    defaultColor: { [key: string]: { type: PLT_TYPES; key: string } },
+    specialColor: {
       [key: string]: { type: PLT_TYPES; name: string; value: ColorValue };
+    },
+    shapeConstraints: {
+      [key: string]: { type: PLT_TYPES; shapeType: string };
     },
     callback?: (m: ColorPicker) => void
   ): void => {
@@ -170,5 +173,13 @@ export default class MenuApi {
         ColorPaletteGroup.group[type].setDefaultColor(defaultColor[type].key);
       }
     });
+
+    /* SET CONSTRAINTS */
+    for (const key in shapeConstraints) {
+      if (shapeConstraints.hasOwnProperty(key)) {
+        const { type, shapeType } = shapeConstraints[key];
+        ColorPaletteGroup.group[type].shapeConstraints.push(shapeType);
+      }
+    }
   };
 }
