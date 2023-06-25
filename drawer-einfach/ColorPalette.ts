@@ -43,12 +43,14 @@ export default class ColorPalette {
 
   // Set colorpicker to be the selected shapes color
   setColorPicker(
-    shapeType: string,
+    shapeTypeConstraint: string,
     isSingleSelect: boolean,
     shapesColorKey?: string
   ) {
     this.colors.forEach((cl) => {
-      if (!this.shapeConstraints.includes(shapeType)) {
+      // check for constraints
+      if (!this.shapeConstraints.includes(shapeTypeConstraint)) {
+        // enable all inputs
         cl.radioButton.inputElement.disabled = false;
         if (isSingleSelect) {
           if (shapesColorKey === cl.key) {
@@ -60,6 +62,7 @@ export default class ColorPalette {
           cl.radioButton.inputElement.checked = false;
         }
       } else {
+        // disable all inputs for this shape
         cl.radioButton.inputElement.disabled = true;
       }
     });
