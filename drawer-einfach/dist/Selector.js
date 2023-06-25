@@ -96,14 +96,8 @@ export class Selector {
             const shapes = this.slm.getShapes();
             const ctx = this.slm.getCtx();
             this.slm.draw();
-            if (this.shapeListIndexer === undefined) {
+            if (this.shapeListIndexer < 0) {
                 this.shapeListIndexer = this.shapeListId.length - 1;
-            }
-            else {
-                this.shapeListIndexer--;
-                if (this.shapeListIndexer < 0) {
-                    this.shapeListIndexer = this.shapeListId.length - 1;
-                }
             }
             const idCurrent = this.shapeListId[this.shapeListIndexer];
             for (const key in shapes) {
@@ -118,6 +112,7 @@ export class Selector {
             }
             this.shapesSelected = [];
             this.shapesSelected.push(idCurrent);
+            this.shapeListIndexer--;
         };
         this.slm = slm;
         this.menu = this.createMenu(new MenuApi());
@@ -200,8 +195,9 @@ export class Selector {
             }
         }
         /* check if shapes have been detected */
-        if (this.shapeListId.length) {
+        if (this.shapeListId.length > 0) {
             const firstId = this.shapeListId[this.shapeListId.length - 1]; // firstId => Shape in front
+            this.shapeListIndexer = this.shapeListId.length - 2;
             /* If single selection */
             if (!isCtrl) {
                 // Iterate over each shapes object
