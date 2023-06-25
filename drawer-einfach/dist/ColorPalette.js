@@ -28,9 +28,11 @@ export default class ColorPalette {
         menuApi.addItem(this.item);
     }
     // Set colorpicker to be the selected shapes color
-    setColorPicker(shapeType, isSingleSelect, shapesColorKey) {
+    setColorPicker(shapeTypeConstraint, isSingleSelect, shapesColorKey) {
         this.colors.forEach((cl) => {
-            if (!this.shapeConstraints.includes(shapeType)) {
+            // check for constraints
+            if (!this.shapeConstraints.includes(shapeTypeConstraint)) {
+                // enable all inputs
                 cl.radioButton.inputElement.disabled = false;
                 if (isSingleSelect) {
                     if (shapesColorKey === cl.key) {
@@ -45,6 +47,7 @@ export default class ColorPalette {
                 }
             }
             else {
+                // disable all inputs for this shape
                 cl.radioButton.inputElement.disabled = true;
             }
         });
