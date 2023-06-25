@@ -220,12 +220,10 @@ export class Selector {
             }
             else {
                 // If multi-selection
-                // Iterate over each id in shapeListId array
                 // Add the id to the shapesSelected array
                 const firstId = this.shapeListId[this.shapeListId.length - 1];
                 this.shapesSelected.push(firstId);
                 shapes[firstId].draw(ctx, true);
-                // Set color pickers
                 // Check colors of first shape
                 const bgKey = shapes[this.shapeListId[0]].backgroundColorKey;
                 const strKey = shapes[this.shapeListId[0]].strokeColorKey;

@@ -21,11 +21,16 @@ AbstractShape.counter = 0;
 class AbstractFactory {
     constructor(shapeManager) {
         this.shapeManager = shapeManager;
+        this.tmpShape = null;
     }
     handleMouseDown(x, y) {
         this.from = new Point2D(x, y);
     }
     handleMouseUp(x, y) {
+        // Abort the drawing process if `this.from` is undefined
+        if (!this.from) {
+            return;
+        }
         // remove the temp line, if there was one
         if (this.tmpShape) {
             this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
@@ -48,6 +53,14 @@ class AbstractFactory {
             this.tmpShape = this.createShape(this.from, new Point2D(x, y));
             this.shapeManager.addShape(this.tmpShape);
         }
+    }
+    handleCtrl(x, y) {
+        // Behave like normal mousedown
+        this.from = undefined;
+    }
+    handleAlt(x, y) {
+        // Behave like normal mousedown
+        this.handleMouseDown(x, y);
     }
 }
 export class Line extends AbstractShape {
