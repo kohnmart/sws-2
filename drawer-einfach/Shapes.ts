@@ -90,7 +90,6 @@ export class Line extends AbstractShape implements Shape {
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
     if (!isSelected) {
       ctx.strokeStyle = this.strokeColor;
-      ctx.fillStyle = undefined;
       ctx.beginPath();
       ctx.moveTo(this.from.x, this.from.y);
       ctx.lineTo(this.to.x, this.to.y);
@@ -99,7 +98,6 @@ export class Line extends AbstractShape implements Shape {
       ctx.fillStyle = 'purple';
       ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
       ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
-      ctx.fill();
     }
   }
 }
