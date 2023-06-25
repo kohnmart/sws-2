@@ -1,0 +1,98 @@
+html,
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+* {
+  list-style-type: none;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.tools {
+  width: 100px;
+  float: left;
+  padding: 5px;
+}
+
+.tools li {
+  padding: 5px;
+  list-style: none;
+}
+
+.tools li:hover {
+  color: cornflowerblue;
+  cursor: pointer;
+}
+
+.tools li.marked {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+#drawArea {
+  border: 1px solid #000000;
+  background-color: lightgrey;
+}
+
+#menu-display>ul {
+  padding: 1%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: rgba(128, 128, 128, 1);
+  text-align: center;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2px;
+}
+
+#menu-display>ul :first-child {
+  margin: 5px;
+}
+
+#item-list>ul {
+  padding: 0px 10px;
+  margin: 0px 5px;
+  background-color: rgb(155, 155, 155);
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  flex-direction: row;
+  height: 40px;
+  width: 450px;
+  column-gap: 5px;
+}
+
+#item-list>ul>li:first-child {
+  font-weight: bold;
+  width: 70px;
+}
+
+#item-list>ul>li {
+  text-align: left;
+}
+
+#item-list>ul>li:hover {
+  background-color: rgb(145, 145, 145);
+  padding: 2px;
+}
+
+button {
+  width: 100%;
+  background-color: rgb(110, 110, 110);
+  border-color: rgba(128, 128, 128, 1);
+  padding: 5px;
+}
+
+button:hover {
+  color: white;
+  background-color: rgb(134, 134, 134);
+  border-color: #000000;
+}
+
+
+hr {
+  background-color: rgb(111, 111, 111);
+}
