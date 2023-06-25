@@ -32,7 +32,7 @@ class AbstractShape {
 abstract class AbstractFactory<T extends Shape> {
   private from: Point2D;
   private tmpTo: Point2D;
-  private tmpShape: T;
+  private tmpShape: T = null;
   constructor(readonly shapeManager: ShapeManager) {}
 
   abstract createShape(from: Point2D, to: Point2D): T;
@@ -42,6 +42,11 @@ abstract class AbstractFactory<T extends Shape> {
   }
 
   handleMouseUp(x: number, y: number) {
+    // Abort the drawing process if `this.from` is undefined
+    if (!this.from) {
+      return;
+    }
+
     // remove the temp line, if there was one
     if (this.tmpShape) {
       this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
@@ -65,6 +70,16 @@ abstract class AbstractFactory<T extends Shape> {
       this.tmpShape = this.createShape(this.from, new Point2D(x, y));
       this.shapeManager.addShape(this.tmpShape);
     }
+  }
+
+  handleCtrl(x: number, y: number) {
+    // Currently no logic
+    return;
+  }
+
+  handleAlt(x: number, y: number) {
+    // Currently no logic
+    return;
   }
 }
 export class Line extends AbstractShape implements Shape {
