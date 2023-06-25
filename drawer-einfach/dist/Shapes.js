@@ -72,6 +72,7 @@ export class Line extends AbstractShape {
     draw(ctx, isSelected) {
         if (!isSelected) {
             ctx.strokeStyle = this.strokeColor;
+            ctx.fillStyle = undefined;
             ctx.beginPath();
             ctx.moveTo(this.from.x, this.from.y);
             ctx.lineTo(this.to.x, this.to.y);

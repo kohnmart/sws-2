@@ -74,7 +74,7 @@ export default class MenuApi {
             /* remove listener */
             document.removeEventListener('mousedown', this.eventListener, true);
         };
-        this.createRadioOption = (colorTypes, colorOptions, defaultColor, specialColor, callback) => {
+        this.createRadioOption = (colorTypes, colorOptions, defaultColor, specialColor, shapeConstraints, callback) => {
             /* CREATE COLOR PALETTES */
             /* set reference to menuapi.this */
             ColorPaletteGroup.menuApi = this;
@@ -105,6 +105,13 @@ export default class MenuApi {
                     ColorPaletteGroup.group[type].setDefaultColor(defaultColor[type].key);
                 }
             });
+            /* SET CONSTRAINTS */
+            for (const key in shapeConstraints) {
+                if (shapeConstraints.hasOwnProperty(key)) {
+                    const { type, shapeType } = shapeConstraints[key];
+                    ColorPaletteGroup.group[type].shapeConstraints.push(shapeType);
+                }
+            }
         };
         this.itemList = [];
         this.ulList = document.createElement('ul');

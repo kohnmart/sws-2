@@ -8,6 +8,7 @@ ColorPaletteGroup.group = {};
 export default class ColorPalette {
     constructor(type, menuApi) {
         this.colors = [];
+        this.shapeConstraints = [];
         this.addNewColor = (color) => {
             this.colors.push(color);
         };
@@ -27,18 +28,24 @@ export default class ColorPalette {
         menuApi.addItem(this.item);
     }
     // Set colorpicker to be the selected shapes color
-    setColorPicker(isSingleSelect, shapesColorKey) {
+    setColorPicker(shapeType, isSingleSelect, shapesColorKey) {
         this.colors.forEach((cl) => {
-            if (isSingleSelect) {
-                if (shapesColorKey === cl.key) {
-                    cl.radioButton.inputElement.checked = true;
+            if (!this.shapeConstraints.includes(shapeType)) {
+                cl.radioButton.inputElement.disabled = false;
+                if (isSingleSelect) {
+                    if (shapesColorKey === cl.key) {
+                        cl.radioButton.inputElement.checked = true;
+                    }
+                    else {
+                        cl.radioButton.inputElement.checked = false;
+                    }
                 }
                 else {
                     cl.radioButton.inputElement.checked = false;
                 }
             }
             else {
-                cl.radioButton.inputElement.checked = false;
+                cl.radioButton.inputElement.disabled = true;
             }
         });
     }

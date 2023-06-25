@@ -62,10 +62,19 @@ export class Selector {
                     name: 'transparent',
                     value: { red: 0, green: 0, blue: 0, alpha: 0 },
                 },
+            }, 
+            /* SET SHAPE CONSTRAINTS */
+            {
+                line: {
+                    type: PLT_TYPES.Hintergrund,
+                    shapeType: 'line',
+                },
             }, (colorPicker) => {
                 const shapes = this.slm.getShapes();
+                const ctx = this.slm.getCtx();
                 this.shapesSelected.forEach((id) => {
                     const shape = shapes[id];
+                    console.log(shape);
                     if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
                         shape.backgroundColor = colorPicker.colorFormatAsRGBA();
                         shape.backgroundColorKey = colorPicker.key;
@@ -75,6 +84,7 @@ export class Selector {
                         shape.strokeColorKey = colorPicker.key;
                     }
                     this.slm.draw();
+                    shape.draw(ctx, true);
                 });
             });
             const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
@@ -217,8 +227,8 @@ export class Selector {
                             // Draw the shape with ctx and true flag
                             shapes[key].draw(ctx, true);
                             // Set color pickers
-                            ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(true, shapes[key].backgroundColorKey);
-                            ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(true, shapes[key].strokeColorKey);
+                            ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(shapes[key].type, true, shapes[key].backgroundColorKey);
+                            ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(shapes[key].type, true, shapes[key].strokeColorKey);
                         }
                     }
                 }
@@ -226,7 +236,6 @@ export class Selector {
             else {
                 // If multi-selection
                 // Add the id to the shapesSelected array
-                const firstId = this.shapeListId[this.shapeListId.length - 1];
                 this.shapesSelected.push(firstId);
                 shapes[firstId].draw(ctx, true);
                 // Check colors of first shape
@@ -236,17 +245,17 @@ export class Selector {
                 const consistent = checkShapeColorsConsistency(shapes, this.shapeListId, bgKey, strKey);
                 // check on selected background colors
                 if (!consistent[0]) {
-                    ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(true, bgKey);
+                    ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(shapes[firstId].type, true, bgKey);
                 }
                 else {
-                    ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(false);
+                    ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(shapes[firstId].type, false);
                 }
                 // check on selected outline colors
                 if (!consistent[1]) {
-                    ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(true, strKey);
+                    ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(shapes[firstId].type, true, strKey);
                 }
                 else {
-                    ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(false);
+                    ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(shapes[firstId].type, false);
                 }
             }
         }
