@@ -1,5 +1,5 @@
 import { ColorPaletteGroup } from './ColorPalette.js';
-import { Shape, ShapeFactory, ShapeManager } from './types.js';
+import { PLT_TYPES, Shape, ShapeFactory, ShapeManager } from './types.js';
 
 class Point2D {
   constructor(readonly x: number, readonly y: number) {}
@@ -90,6 +90,7 @@ export class Line extends AbstractShape implements Shape {
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean) {
     if (!isSelected) {
       ctx.strokeStyle = this.strokeColor;
+      ctx.fillStyle = undefined;
       ctx.beginPath();
       ctx.moveTo(this.from.x, this.from.y);
       ctx.lineTo(this.to.x, this.to.y);
