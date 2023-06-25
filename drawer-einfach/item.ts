@@ -24,7 +24,6 @@ export class Item {
     }
   }
 
-  /* render item in ul-list */
   render(): void {
     const listElement = document.createElement('li');
     listElement.appendChild(this.element);
