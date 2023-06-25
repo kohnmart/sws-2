@@ -17,6 +17,7 @@ export default class ColorPalette {
   public readonly colors: ColorPicker[] = [];
   public defaultRGBA: string;
   public colorKey: string;
+  public shapeConstraints: string[] = [];
 
   constructor(type: PLT_TYPES, menuApi: MenuApi) {
     this.type = type;
@@ -41,16 +42,25 @@ export default class ColorPalette {
   };
 
   // Set colorpicker to be the selected shapes color
-  setColorPicker(isSingleSelect: boolean, shapesColorKey?: string) {
+  setColorPicker(
+    shapeType: string,
+    isSingleSelect: boolean,
+    shapesColorKey?: string
+  ) {
     this.colors.forEach((cl) => {
-      if (isSingleSelect) {
-        if (shapesColorKey === cl.key) {
-          cl.radioButton.inputElement.checked = true;
+      if (!this.shapeConstraints.includes(shapeType)) {
+        cl.radioButton.inputElement.disabled = false;
+        if (isSingleSelect) {
+          if (shapesColorKey === cl.key) {
+            cl.radioButton.inputElement.checked = true;
+          } else {
+            cl.radioButton.inputElement.checked = false;
+          }
         } else {
           cl.radioButton.inputElement.checked = false;
         }
       } else {
-        cl.radioButton.inputElement.checked = false;
+        cl.radioButton.inputElement.disabled = true;
       }
     });
   }
