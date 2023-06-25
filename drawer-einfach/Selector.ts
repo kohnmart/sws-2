@@ -113,29 +113,31 @@ export class Selector implements ShapeFactory {
 
   /* ------------ HANDLER - SECTION ------------ */
 
-  public handleMouseDown(x: number, y: number) {
+  handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
   }
 
-  public handleAlt(x: number, y: number) {
+  handleAlt(x: number, y: number) {
     if (this.shapeListId.length) {
       this.iterateShapesLevels();
     }
   }
 
-  public handleCtrl(x: number, y: number) {
+  handleCtrl(x: number, y: number) {
     this.checkShapeCollision(x, y, true);
   }
 
-  public handleRightClick(x: number, y: number) {
+  handleRightClick(x: number, y: number) {
     this.menu.show(x, y);
   }
 
-  public handleMouseUp() {
+  handleMouseUp() {
+    // Currently no logic
     return;
   }
 
-  public handleMouseMove() {
+  handleMouseMove() {
+    // Currently no logic
     return;
   }
 
