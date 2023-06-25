@@ -55,12 +55,12 @@ class AbstractFactory {
         }
     }
     handleCtrl(x, y) {
-        // Behave like normal mousedown
-        this.from = undefined;
+        // Currently no logic
+        return;
     }
     handleAlt(x, y) {
-        // Behave like normal mousedown
-        this.handleMouseDown(x, y);
+        // Currently no logic
+        return;
     }
 }
 export class Line extends AbstractShape {

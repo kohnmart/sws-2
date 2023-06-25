@@ -11,7 +11,6 @@ export class Item {
             this.element.addEventListener('mousedown', () => callback(this.menuInstance));
         }
     }
-    /* render item in ul-list */
     render() {
         const listElement = document.createElement('li');
         listElement.appendChild(this.element);

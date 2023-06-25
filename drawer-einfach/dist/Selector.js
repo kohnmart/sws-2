@@ -96,10 +96,13 @@ export class Selector {
             const shapes = this.slm.getShapes();
             const ctx = this.slm.getCtx();
             this.slm.draw();
+            // if indexer is smaller zero, take the last index
             if (this.shapeListIndexer < 0) {
                 this.shapeListIndexer = this.shapeListId.length - 1;
             }
             const idCurrent = this.shapeListId[this.shapeListIndexer];
+            // Maybe this can be done even more efficiently
+            // Questionable on large amount of objects
             for (const key in shapes) {
                 if (shapes.hasOwnProperty(key)) {
                     const id = shapes[key].id;
@@ -134,9 +137,11 @@ export class Selector {
         this.menu.show(x, y);
     }
     handleMouseUp() {
+        // Currently no logic
         return;
     }
     handleMouseMove() {
+        // Currently no logic
         return;
     }
     /* -------------------------------------- */
@@ -229,12 +234,14 @@ export class Selector {
                 const strKey = shapes[this.shapeListId[0]].strokeColorKey;
                 // Check if shape colors are consistent
                 const consistent = checkShapeColorsConsistency(shapes, this.shapeListId, bgKey, strKey);
+                // check on selected background colors
                 if (!consistent[0]) {
                     ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(true, bgKey);
                 }
                 else {
                     ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(false);
                 }
+                // check on selected outline colors
                 if (!consistent[1]) {
                     ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(true, strKey);
                 }
