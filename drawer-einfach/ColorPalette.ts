@@ -21,6 +21,7 @@ export default class ColorPalette {
   constructor(type: PLT_TYPES, menuApi: MenuApi) {
     this.type = type;
     this.item = new Item('ul', menuApi);
+    // create new sublist for colorpickers
     this.item.container.push(new Item('li', menuApi, type));
     menuApi.addItem(this.item);
   }
@@ -29,8 +30,7 @@ export default class ColorPalette {
     this.colors.push(color);
   };
 
-  // Set new default color
-  // Currently not in use
+  // Set new default color initially
   setDefaultColor = (key: string): void => {
     const color = this.colors.find((el) => el.key === key);
     if (color) {
