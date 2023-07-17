@@ -71,7 +71,6 @@ export class Selector {
                 },
             }, (colorPicker) => {
                 const shapes = this.slm.getShapes();
-                const ctx = this.slm.getCtx();
                 this.shapesSelected.forEach((id) => {
                     const shape = shapes[id];
                     console.log(shape);
@@ -84,7 +83,6 @@ export class Selector {
                         shape.strokeColorKey = colorPicker.key;
                     }
                     this.slm.draw();
-                    shape.draw(ctx, true);
                 });
             });
             const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
@@ -102,10 +100,12 @@ export class Selector {
          * selecting and highlighting each shape one by one on the canvas.
          * It provides a way to cycle through the shapes and perform actions on the selected shape.
          */
-        this.iterateShapesLevels = () => {
+        this.iterateShapesLevels = (withSelection = false) => {
             const shapes = this.slm.getShapes();
             const ctx = this.slm.getCtx();
-            this.slm.draw();
+            if (!withSelection) {
+                this.slm.draw();
+            }
             // if indexer is smaller zero, take the last index
             if (this.shapeListIndexer < 0) {
                 this.shapeListIndexer = this.shapeListId.length - 1;
@@ -123,7 +123,9 @@ export class Selector {
                     }
                 }
             }
-            this.shapesSelected = [];
+            if (!withSelection) {
+                this.shapesSelected = [];
+            }
             this.shapesSelected.push(idCurrent);
             this.shapeListIndexer--;
         };
@@ -133,11 +135,17 @@ export class Selector {
     /* -------------------------------------- */
     /* ------------ HANDLER - SECTION ------------ */
     handleMouseDown(x, y) {
-        this.checkShapeCollision(x, y, false);
+        this.checkShapeCollision(x, y);
     }
     handleAlt(x, y) {
         if (this.shapeListId.length) {
             this.iterateShapesLevels();
+        }
+    }
+    handleAltWithSelection(x, y) {
+        console.log('CALL');
+        if (this.shapeListId.length) {
+            this.iterateShapesLevels(true);
         }
     }
     handleCtrl(x, y) {
@@ -164,10 +172,10 @@ export class Selector {
      * shapes accordingly. The function also handles rendering
      * the selected shapes on the canvas.
      */
-    checkShapeCollision(x, y, isCtrl) {
+    checkShapeCollision(x, y, isCrtl = false) {
         const ctx = this.slm.getCtx();
         const shapes = this.slm.getShapes();
-        if (!isCtrl) {
+        if (isCrtl) {
             this.slm.draw();
             this.shapeListId = [];
             this.shapesSelected = [];
@@ -214,7 +222,7 @@ export class Selector {
             const firstId = this.shapeListId[this.shapeListId.length - 1]; // firstId => Shape in front
             this.shapeListIndexer = this.shapeListId.length - 2;
             /* If single selection */
-            if (!isCtrl) {
+            if (!isCrtl) {
                 // Iterate over each shapes object
                 this.slm.draw();
                 for (const key in shapes) {

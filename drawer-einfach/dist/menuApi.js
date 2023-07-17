@@ -82,8 +82,8 @@ export default class MenuApi {
             /* init palettes per type */
             colorTypes.forEach((type) => {
                 ColorPaletteGroup.addColorPalette(type, new ColorPalette(type, this));
+                this.addItem(this.createSeparator());
             });
-            this.addItem(this.createSeparator());
             /* ADD INDIVIDUAL PALETTE COLORS */
             for (const key in specialColor) {
                 if (specialColor.hasOwnProperty(key)) {

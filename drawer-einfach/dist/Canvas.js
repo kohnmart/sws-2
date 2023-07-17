@@ -9,7 +9,10 @@ export class Canvas {
         canvasDomElement.addEventListener('mouseup', createMouseHandler('handleMouseUp'));
         canvasDomElement.addEventListener('mousedown', (event) => {
             if (event.button === 0) {
-                if (event.altKey) {
+                if (event.altKey && event.ctrlKey) {
+                    createMouseHandler('handleAltWithSelection').call(this, event);
+                }
+                else if (event.altKey) {
                     /* Execute Selector-Alt-Event */
                     createMouseHandler('handleAlt').call(this, event);
                 }

@@ -12,6 +12,7 @@ class AbstractShape {
   readonly backgroundColorKey: string;
   readonly strokeColor: string;
   readonly strokeColorKey: string;
+  readonly markedColor: string = 'purple';
   constructor(
     type: string,
     backgroundColor: string = ColorPaletteGroup.group['Hintergrund']
@@ -95,7 +96,7 @@ export class Line extends AbstractShape implements Shape {
       ctx.lineTo(this.to.x, this.to.y);
       ctx.stroke();
     } else {
-      ctx.fillStyle = 'purple';
+      ctx.fillStyle = this.markedColor;
       ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
       ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
     }
@@ -127,7 +128,7 @@ export class Circle extends AbstractShape implements Shape {
       ctx.fill();
       ctx.stroke();
     } else {
-      ctx.fillStyle = 'purple';
+      ctx.fillStyle = this.markedColor;
       ctx.fillRect(this.center.x - 5, this.center.y + this.radius - 5, 10, 10);
       ctx.fillRect(this.center.x - 5, this.center.y - this.radius - 5, 10, 10);
       ctx.fillRect(this.center.x - 5 - this.radius, this.center.y, 10, 10);
@@ -182,7 +183,7 @@ export class Rectangle extends AbstractShape implements Shape {
 
       ctx.fill();
     } else {
-      ctx.fillStyle = 'purple';
+      ctx.fillStyle = this.markedColor;
       ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
       ctx.fillRect(this.from.x - 5, this.to.y - 5, 10, 10);
       ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
@@ -224,7 +225,7 @@ export class Triangle extends AbstractShape implements Shape {
       ctx.strokeStyle = this.strokeColor;
       ctx.stroke();
     } else {
-      ctx.fillStyle = 'purple';
+      ctx.fillStyle = this.markedColor;
       ctx.fillRect(this.p1.x - 5, this.p1.y - 5, 10, 10);
       ctx.fillRect(this.p2.x - 5, this.p2.y - 5, 10, 10);
       ctx.fillRect(this.p3.x - 5, this.p3.y - 5, 10, 10);
