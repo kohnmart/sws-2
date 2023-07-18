@@ -21,8 +21,8 @@ const checkPointInRectangle = (x, y, from, to) => {
     const distanceToBottom = Math.abs(y - end_y);
     if (distanceToLeft <= Math.abs(end_x - start_x) &&
         distanceToRight <= Math.abs(end_x - start_x) &&
-        distanceToTop <= end_y - start_y &&
-        distanceToBottom <= end_y - start_y) {
+        distanceToTop <= Math.abs(end_y - start_y) &&
+        distanceToBottom <= Math.abs(end_y - start_y)) {
         return true;
     }
     return false;
