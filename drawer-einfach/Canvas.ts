@@ -23,9 +23,7 @@ export class Canvas implements ShapeManager {
 
     canvasDomElement.addEventListener('mousedown', (event) => {
       if (event.button === 0) {
-        if (event.altKey && event.ctrlKey) {
-          createMouseHandler('handleAltWithSelection').call(this, event);
-        } else if (event.altKey) {
+        if (event.altKey) {
           /* Execute Selector-Alt-Event */
           createMouseHandler('handleAlt').call(this, event);
         } else if (event.ctrlKey) {
@@ -90,8 +88,21 @@ export class Canvas implements ShapeManager {
   }
 
   removeShapeWithId(id: number, redraw: boolean = true): this {
-    delete this.shapes[id];
+    for (const key in this.shapes) {
+      if (this.shapes[key].id === id) {
+        delete this.shapes[key];
+      }
+    }
+
     return redraw ? this.draw() : this;
+  }
+
+  getShapeById(id: number): Shape {
+    for (const key in this.shapes) {
+      if (this.shapes[key].id === id) {
+        return this.shapes[key];
+      }
+    }
   }
 
   getShapes() {

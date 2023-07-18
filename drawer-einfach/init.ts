@@ -34,6 +34,11 @@ function init() {
     getShapes() {
       return canvas.getShapes();
     },
+
+    getShapeById(id: number) {
+      return canvas.getShapeById(id);
+    },
+
     getCtx() {
       return canvas.getCanvasRenderingContext();
     },

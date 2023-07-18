@@ -27,6 +27,9 @@ function init() {
         getShapes() {
             return canvas.getShapes();
         },
+        getShapeById(id) {
+            return canvas.getShapeById(id);
+        },
         getCtx() {
             return canvas.getCanvasRenderingContext();
         },

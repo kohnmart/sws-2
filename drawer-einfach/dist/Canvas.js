@@ -9,10 +9,7 @@ export class Canvas {
         canvasDomElement.addEventListener('mouseup', createMouseHandler('handleMouseUp'));
         canvasDomElement.addEventListener('mousedown', (event) => {
             if (event.button === 0) {
-                if (event.altKey && event.ctrlKey) {
-                    createMouseHandler('handleAltWithSelection').call(this, event);
-                }
-                else if (event.altKey) {
+                if (event.altKey) {
                     /* Execute Selector-Alt-Event */
                     createMouseHandler('handleAlt').call(this, event);
                 }
@@ -69,8 +66,19 @@ export class Canvas {
         return redraw ? this.draw() : this;
     }
     removeShapeWithId(id, redraw = true) {
-        delete this.shapes[id];
+        for (const key in this.shapes) {
+            if (this.shapes[key].id === id) {
+                delete this.shapes[key];
+            }
+        }
         return redraw ? this.draw() : this;
+    }
+    getShapeById(id) {
+        for (const key in this.shapes) {
+            if (this.shapes[key].id === id) {
+                return this.shapes[key];
+            }
+        }
     }
     getShapes() {
         return this.shapes;

@@ -20,6 +20,7 @@ export interface SelectorManager {
   draw(): void;
   updateOrder(n: number, dir: boolean): void;
   removeShapeWithId(id: number, redraw?: boolean): void;
+  getShapeById(id: number): Shape;
 }
 
 export interface ShapeFactory {

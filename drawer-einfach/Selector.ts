@@ -103,12 +103,18 @@ export class Selector implements ShapeFactory {
 
     const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
       this.slm.updateOrder(this.shapesSelected[0], false);
+      this.slm
+        .getShapeById(this.shapesSelected[0])
+        .draw(this.slm.getCtx(), true);
     });
 
     const shapeMoveBackwardItem = menuApi.createItem(
       'Shape nach hinten',
       () => {
         this.slm.updateOrder(this.shapesSelected[0], true);
+        this.slm
+          .getShapeById(this.shapesSelected[0])
+          .draw(this.slm.getCtx(), true);
       }
     );
 
@@ -123,19 +129,12 @@ export class Selector implements ShapeFactory {
   /* ------------ HANDLER - SECTION ------------ */
 
   handleMouseDown(x: number, y: number) {
-    this.checkShapeCollision(x, y);
+    this.checkShapeCollision(x, y, false);
   }
 
   handleAlt(x: number, y: number) {
     if (this.shapeListId.length) {
       this.iterateShapesLevels();
-    }
-  }
-
-  handleAltWithSelection(x: number, y: number) {
-    console.log('CALL');
-    if (this.shapeListId.length) {
-      this.iterateShapesLevels(true);
     }
   }
 
@@ -168,11 +167,11 @@ export class Selector implements ShapeFactory {
    * shapes accordingly. The function also handles rendering
    * the selected shapes on the canvas.
    */
-  checkShapeCollision(x: number, y: number, isCrtl: boolean = false) {
+  checkShapeCollision(x: number, y: number, isCtrl: boolean) {
     const ctx = this.slm.getCtx();
     const shapes = this.slm.getShapes();
 
-    if (isCrtl) {
+    if (!isCtrl) {
       this.slm.draw();
       this.shapeListId = [];
       this.shapesSelected = [];
@@ -230,7 +229,7 @@ export class Selector implements ShapeFactory {
       this.shapeListIndexer = this.shapeListId.length - 2;
 
       /* If single selection */
-      if (!isCrtl) {
+      if (!isCtrl) {
         // Iterate over each shapes object
         this.slm.draw();
         for (const key in shapes) {
@@ -306,12 +305,10 @@ export class Selector implements ShapeFactory {
    * selecting and highlighting each shape one by one on the canvas.
    * It provides a way to cycle through the shapes and perform actions on the selected shape.
    */
-  iterateShapesLevels = (withSelection: boolean = false) => {
+  iterateShapesLevels = () => {
     const shapes = this.slm.getShapes();
     const ctx = this.slm.getCtx();
-    if (!withSelection) {
-      this.slm.draw();
-    }
+    this.slm.draw();
 
     // if indexer is smaller zero, take the last index
     if (this.shapeListIndexer < 0) {
@@ -332,9 +329,7 @@ export class Selector implements ShapeFactory {
       }
     }
 
-    if (!withSelection) {
-      this.shapesSelected = [];
-    }
+    this.shapesSelected = [];
     this.shapesSelected.push(idCurrent);
     this.shapeListIndexer--;
   };
