@@ -105,6 +105,14 @@ export class Canvas implements ShapeManager {
     }
   }
 
+  updateShape(shape: Shape) {
+    for (const key in this.shapes) {
+      if (this.shapes[key].id === shape.id) {
+        this.shapes[key] = shape;
+      }
+    }
+  }
+
   getShapes() {
     return this.shapes;
   }
