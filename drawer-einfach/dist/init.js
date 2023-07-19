@@ -42,6 +42,9 @@ function init() {
         removeShapeWithId(id, rd) {
             canvas.removeShapeWithId(id, rd);
         },
+        updateShape(shape) {
+            canvas.updateShape(shape);
+        },
     };
     const tools = [
         new LineFactory(sm),

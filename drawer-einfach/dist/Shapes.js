@@ -1,5 +1,5 @@
 import { ColorPaletteGroup } from './ColorPalette.js';
-class Point2D {
+export class Point2D {
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -155,6 +155,15 @@ export class Rectangle extends AbstractShape {
             ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
             ctx.fillRect(this.to.x - 5, this.from.y - 5, 10, 10);
         }
+    }
+    undraw(ctx) {
+        ctx.fillStyle = 'rgba(0,0,0,0)';
+        ctx.strokeStyle = 'rgba(0,0,0,0)';
+        ctx.beginPath();
+        ctx.strokeRect(this.from.x, this.from.y, this.to.x - this.from.x, this.to.y - this.from.y);
+        ctx.stroke();
+        ctx.fillRect(this.from.x, this.from.y, this.to.x - this.from.x, this.to.y - this.from.y);
+        ctx.fill();
     }
 }
 export class RectangleFactory extends AbstractFactory {

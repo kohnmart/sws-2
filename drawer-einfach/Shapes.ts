@@ -1,12 +1,12 @@
 import { ColorPaletteGroup } from './ColorPalette.js';
-import { PLT_TYPES, Shape, ShapeFactory, ShapeManager } from './types.js';
+import { Shape, ShapeFactory, ShapeManager } from './types.js';
 
-class Point2D {
+export class Point2D {
   constructor(readonly x: number, readonly y: number) {}
 }
 class AbstractShape {
   private static counter: number = 0;
-  readonly id: number;
+  id: number;
   readonly type: string;
   readonly backgroundColor: string;
   readonly backgroundColorKey: string;
@@ -189,6 +189,28 @@ export class Rectangle extends AbstractShape implements Shape {
       ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
       ctx.fillRect(this.to.x - 5, this.from.y - 5, 10, 10);
     }
+  }
+
+  undraw(ctx: CanvasRenderingContext2D) {
+    ctx.fillStyle = 'rgba(0,0,0,0)';
+    ctx.strokeStyle = 'rgba(0,0,0,0)';
+    ctx.beginPath();
+    ctx.strokeRect(
+      this.from.x,
+      this.from.y,
+      this.to.x - this.from.x,
+      this.to.y - this.from.y
+    );
+    ctx.stroke();
+
+    ctx.fillRect(
+      this.from.x,
+      this.from.y,
+      this.to.x - this.from.x,
+      this.to.y - this.from.y
+    );
+
+    ctx.fill();
   }
 }
 export class RectangleFactory

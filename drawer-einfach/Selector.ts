@@ -1,5 +1,5 @@
 import { SelectorManager, ShapeFactory, PLT_TYPES } from './types.js';
-import { Line, Rectangle, Triangle, Circle } from './Shapes.js';
+import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
 import MenuApi from './menuApi.js';
 import {
   checkLineIntersection,
@@ -16,6 +16,7 @@ export class Selector implements ShapeFactory {
   private shapeListId: number[] = [];
   private shapesSelected: number[] = [];
   private shapeListIndexer: number = 0;
+  private isTmpMovable = false;
   constructor(slm: SelectorManager) {
     this.slm = slm;
     this.menu = this.createMenu(new MenuApi());
@@ -88,7 +89,6 @@ export class Selector implements ShapeFactory {
         const shapes = this.slm.getShapes();
         this.shapesSelected.forEach((id: number) => {
           const shape = shapes[id];
-          console.log(shape);
           if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
             shape.backgroundColor = colorPicker.colorFormatAsRGBA();
             shape.backgroundColorKey = colorPicker.key;
@@ -130,6 +130,57 @@ export class Selector implements ShapeFactory {
 
   handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
+    if (this.shapesSelected.length === 1) {
+      this.isTmpMovable = true;
+    }
+  }
+  isRemoved: boolean = false;
+  handleMouseMove(x: number, y: number) {
+    if (this.isTmpMovable) {
+      const type = this.slm.getShapeById(this.shapesSelected[0]).type;
+
+      this.slm.draw();
+      switch (type) {
+        case 'line':
+          const line = this.slm.getShapeById(this.shapesSelected[0]) as Line;
+          const lineNew = new Line(
+            new Point2D(x, y),
+            new Point2D(
+              x + Math.abs(line.to.x - line.from.x),
+              y - Math.abs(line.to.y - line.from.y)
+            )
+          );
+          lineNew.draw(this.slm.getCtx(), true);
+          lineNew.id = line.id;
+          this.slm.updateShape(lineNew);
+          break;
+        case 'rectangle':
+          const rect = this.slm.getShapeById(
+            this.shapesSelected[0]
+          ) as Rectangle;
+          const rectNew = new Rectangle(
+            new Point2D(x, y),
+            new Point2D(
+              x + Math.abs(rect.to.x - rect.from.x),
+              y + Math.abs(rect.to.y - rect.from.y)
+            )
+          );
+          rectNew.draw(this.slm.getCtx(), true);
+          rectNew.id = rect.id;
+          this.slm.updateShape(rectNew);
+          break;
+
+        case 'circle':
+          const circle = this.slm.getShapeById(
+            this.shapesSelected[0]
+          ) as Circle;
+          const circleNew = new Circle(new Point2D(x, y), circle.radius);
+          circleNew.draw(this.slm.getCtx(), true);
+          circleNew.id = circle.id;
+          this.slm.updateShape(circleNew);
+          break;
+      }
+    }
   }
 
   handleAlt(x: number, y: number) {
@@ -147,13 +198,9 @@ export class Selector implements ShapeFactory {
   }
 
   handleMouseUp() {
-    // Currently no logic
-    return;
-  }
-
-  handleMouseMove() {
-    // Currently no logic
-    return;
+    if (this.isTmpMovable) {
+      this.isTmpMovable = false;
+    }
   }
 
   /* -------------------------------------- */

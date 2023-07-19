@@ -80,6 +80,13 @@ export class Canvas {
             }
         }
     }
+    updateShape(shape) {
+        for (const key in this.shapes) {
+            if (this.shapes[key].id === shape.id) {
+                this.shapes[key] = shape;
+            }
+        }
+    }
     getShapes() {
         return this.shapes;
     }

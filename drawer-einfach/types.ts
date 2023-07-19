@@ -21,6 +21,7 @@ export interface SelectorManager {
   updateOrder(n: number, dir: boolean): void;
   removeShapeWithId(id: number, redraw?: boolean): void;
   getShapeById(id: number): Shape;
+  updateShape(shape: Shape): void;
 }
 
 export interface ShapeFactory {
