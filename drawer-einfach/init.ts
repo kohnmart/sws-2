@@ -51,6 +51,10 @@ function init() {
     removeShapeWithId(id, rd) {
       canvas.removeShapeWithId(id, rd);
     },
+
+    updateShape(shape: Shape) {
+      canvas.updateShape(shape);
+    },
   };
 
   const tools: ShapeFactory[] = [
