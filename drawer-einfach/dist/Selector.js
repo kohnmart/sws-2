@@ -1,5 +1,5 @@
 import { PLT_TYPES } from './types.js';
-import { Line, Rectangle, Circle, Point2D } from './Shapes.js';
+import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
 import MenuApi from './menuApi.js';
 import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from './shapesInteractionUtils.js';
 import { ColorPaletteGroup } from './ColorPalette.js';
@@ -147,30 +147,31 @@ export class Selector {
     handleMouseMove(x, y) {
         if (this.isTmpMovable) {
             const type = this.slm.getShapeById(this.shapesSelected[0]).type;
+            let shape, newShape;
             this.slm.draw();
             switch (type) {
                 case 'line':
-                    const line = this.slm.getShapeById(this.shapesSelected[0]);
-                    const lineNew = new Line(new Point2D(x, y), new Point2D(x + Math.abs(line.to.x - line.from.x), y - Math.abs(line.to.y - line.from.y)));
-                    lineNew.draw(this.slm.getCtx(), true);
-                    lineNew.id = line.id;
-                    this.slm.updateShape(lineNew);
+                    shape = this.slm.getShapeById(this.shapesSelected[0]);
+                    newShape = new Line(new Point2D(x, y), new Point2D(x + Math.abs(shape.to.x - shape.from.x), y - Math.abs(shape.to.y - shape.from.y)));
                     break;
                 case 'rectangle':
-                    const rect = this.slm.getShapeById(this.shapesSelected[0]);
-                    const rectNew = new Rectangle(new Point2D(x, y), new Point2D(x + Math.abs(rect.to.x - rect.from.x), y + Math.abs(rect.to.y - rect.from.y)));
-                    rectNew.draw(this.slm.getCtx(), true);
-                    rectNew.id = rect.id;
-                    this.slm.updateShape(rectNew);
+                    shape = this.slm.getShapeById(this.shapesSelected[0]);
+                    newShape = new Rectangle(new Point2D(x, y), new Point2D(x + Math.abs(shape.to.x - shape.from.x), y + Math.abs(shape.to.y - shape.from.y)));
                     break;
                 case 'circle':
-                    const circle = this.slm.getShapeById(this.shapesSelected[0]);
-                    const circleNew = new Circle(new Point2D(x, y), circle.radius);
-                    circleNew.draw(this.slm.getCtx(), true);
-                    circleNew.id = circle.id;
-                    this.slm.updateShape(circleNew);
+                    shape = this.slm.getShapeById(this.shapesSelected[0]);
+                    newShape = new Circle(new Point2D(x, y), shape.radius);
+                    break;
+                case 'triangle':
+                    shape = this.slm.getShapeById(this.shapesSelected[0]);
+                    newShape = new Triangle(new Point2D(x, y), new Point2D(x + Math.abs(shape.p2.x - shape.p1.x), y + Math.abs(shape.p2.y - shape.p1.y)), new Point2D(x + Math.abs(shape.p3.x - shape.p1.x), y + Math.abs(shape.p3.y - shape.p1.y)));
                     break;
             }
+            newShape.backgroundColor = shape.backgroundColor;
+            newShape.strokeColor = shape.strokeColor;
+            newShape.draw(this.slm.getCtx(), true);
+            newShape.id = shape.id;
+            this.slm.updateShape(newShape);
         }
     }
     handleAlt(x, y) {

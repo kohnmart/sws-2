@@ -138,48 +138,56 @@ export class Selector implements ShapeFactory {
   handleMouseMove(x: number, y: number) {
     if (this.isTmpMovable) {
       const type = this.slm.getShapeById(this.shapesSelected[0]).type;
-
+      let shape: Line | Rectangle | Triangle | Circle,
+        newShape: Line | Rectangle | Triangle | Circle;
       this.slm.draw();
       switch (type) {
         case 'line':
-          const line = this.slm.getShapeById(this.shapesSelected[0]) as Line;
-          const lineNew = new Line(
+          shape = this.slm.getShapeById(this.shapesSelected[0]) as Line;
+          newShape = new Line(
             new Point2D(x, y),
             new Point2D(
-              x + Math.abs(line.to.x - line.from.x),
-              y - Math.abs(line.to.y - line.from.y)
+              x + Math.abs(shape.to.x - shape.from.x),
+              y - Math.abs(shape.to.y - shape.from.y)
             )
           );
-          lineNew.draw(this.slm.getCtx(), true);
-          lineNew.id = line.id;
-          this.slm.updateShape(lineNew);
           break;
         case 'rectangle':
-          const rect = this.slm.getShapeById(
-            this.shapesSelected[0]
-          ) as Rectangle;
-          const rectNew = new Rectangle(
+          shape = this.slm.getShapeById(this.shapesSelected[0]) as Rectangle;
+          newShape = new Rectangle(
             new Point2D(x, y),
             new Point2D(
-              x + Math.abs(rect.to.x - rect.from.x),
-              y + Math.abs(rect.to.y - rect.from.y)
+              x + Math.abs(shape.to.x - shape.from.x),
+              y + Math.abs(shape.to.y - shape.from.y)
             )
           );
-          rectNew.draw(this.slm.getCtx(), true);
-          rectNew.id = rect.id;
-          this.slm.updateShape(rectNew);
           break;
 
         case 'circle':
-          const circle = this.slm.getShapeById(
-            this.shapesSelected[0]
-          ) as Circle;
-          const circleNew = new Circle(new Point2D(x, y), circle.radius);
-          circleNew.draw(this.slm.getCtx(), true);
-          circleNew.id = circle.id;
-          this.slm.updateShape(circleNew);
+          shape = this.slm.getShapeById(this.shapesSelected[0]) as Circle;
+          newShape = new Circle(new Point2D(x, y), shape.radius);
+          break;
+
+        case 'triangle':
+          shape = this.slm.getShapeById(this.shapesSelected[0]) as Triangle;
+          newShape = new Triangle(
+            new Point2D(x, y),
+            new Point2D(
+              x + Math.abs(shape.p2.x - shape.p1.x),
+              y + Math.abs(shape.p2.y - shape.p1.y)
+            ),
+            new Point2D(
+              x + Math.abs(shape.p3.x - shape.p1.x),
+              y + Math.abs(shape.p3.y - shape.p1.y)
+            )
+          );
           break;
       }
+      newShape.backgroundColor = shape.backgroundColor;
+      newShape.strokeColor = shape.strokeColor;
+      newShape.draw(this.slm.getCtx(), true);
+      newShape.id = shape.id;
+      this.slm.updateShape(newShape);
     }
   }
 

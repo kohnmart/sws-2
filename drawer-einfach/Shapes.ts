@@ -8,9 +8,9 @@ class AbstractShape {
   private static counter: number = 0;
   id: number;
   readonly type: string;
-  readonly backgroundColor: string;
+  backgroundColor: string;
   readonly backgroundColorKey: string;
-  readonly strokeColor: string;
+  strokeColor: string;
   readonly strokeColorKey: string;
   readonly markedColor: string = 'purple';
   constructor(
