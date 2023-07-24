@@ -9,9 +9,9 @@ export interface Shape {
 }
 
 export interface ShapeManager {
-  addShape(shape: Shape, redraw?: boolean): this;
-  removeShape(shape: Shape, redraw?: boolean): this;
-  removeShapeWithId(id: number, redraw?: boolean): this;
+  addShape(shape: Shape, redraw?: boolean): void;
+  removeShape(shape: Shape, redraw?: boolean): void;
+  removeShapeWithId(id: number, redraw?: boolean): void;
 }
 
 export interface SelectorManager {
@@ -41,4 +41,20 @@ export type ColorValue = {
 export enum PLT_TYPES {
   Outline = 'Outline',
   Hintergrund = 'Hintergrund',
+}
+
+export enum CanvasEventType {
+  DRAW,
+  CLEAR,
+  ADD_SHAPE,
+  REMOVE_SHAPE,
+  REMOVE_SHAPE_WITH_ID,
+  UPDATE_SHAPE,
+  UPDATE_SHAPES_ORDER,
+  TOOL_ACTION,
+}
+
+export interface CanvasEvent {
+  type: CanvasEventType;
+  data?: any;
 }
