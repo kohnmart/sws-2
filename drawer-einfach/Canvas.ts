@@ -206,7 +206,6 @@ export class Canvas implements ShapeManager {
     // Implementieren Sie die Logik, um die Ereignisse auszuführen und das Programm entsprechend zu aktualisieren
 
     // Zum Beispiel könnten Sie eine Schleife verwenden, um jedes Ereignis auszuführen:
-    console.log(events[0]);
     for (const event of events) {
       switch (event.type) {
         case CanvasEventType.ADD_SHAPE:
@@ -237,7 +236,8 @@ export class Canvas implements ShapeManager {
             this.addShape(shape, event.data.redraw);
           }
           break;
-        // ... (weitere Cases) ...
+        case CanvasEventType.REMOVE_SHAPE:
+          this.removeShape(shape, true);
       }
     }
 

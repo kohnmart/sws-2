@@ -184,7 +184,8 @@ export class Canvas {
                         this.addShape(shape, event.data.redraw);
                     }
                     break;
-                // ... (weitere Cases) ...
+                case CanvasEventType.REMOVE_SHAPE:
+                    this.removeShape(shape, true);
             }
         }
         // ... (nachfolgender Code) ...
