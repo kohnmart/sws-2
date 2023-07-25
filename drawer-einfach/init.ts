@@ -65,7 +65,7 @@ function init() {
     new Selector(slm),
   ];
   const toolArea = new ToolArea(tools, menu[0]);
-  canvas = new Canvas(canvasDomElm, toolArea, tools);
+  canvas = new Canvas(canvasDomElm, toolArea);
   canvas.draw();
 }
 init();

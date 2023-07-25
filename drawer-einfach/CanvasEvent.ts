@@ -35,7 +35,6 @@ export class ToolEventSubscription {
     eventDispatcher.subscribe((event: CanvasEvent) => {
       switch (event.type) {
         case CanvasEventType.TOOL_ACTION:
-          console.log(event.data);
           const shape = event.data;
           shape.method.call(shape.tool, shape.x, shape.y);
           break;
@@ -56,11 +55,14 @@ export class CanvasEventSubscription {
     eventDispatcher.subscribe((event: CanvasEvent) => {
       switch (event.type) {
         case CanvasEventType.ADD_SHAPE:
-          this.handleAddShape(event.data.shape);
+          this.handleAddShape(event.data.shape, event.data.redraw);
           break;
         case CanvasEventType.REMOVE_SHAPE:
-          this.handleRemoveShape(event.data.shape);
+          console.log(event);
+          this.handleRemoveShape(event.data.id, event.data.redraw);
           break;
+        case CanvasEventType.REMOVE_SHAPE_WITH_ID:
+          this.handleRemoveShapeWithId(event.data.id, event.data.redraw);
         case CanvasEventType.UPDATE_SHAPE:
           this.handleUpdateShape(event.data.shape);
           break;
@@ -79,9 +81,9 @@ export class CanvasEventSubscription {
     return redraw ? this.canvas.draw() : this.canvas;
   }
 
-  handleRemoveShape(shape: Shape, redraw: boolean = true): Canvas {
+  handleRemoveShape(id: number, redraw: boolean = true): Canvas {
     const shapes = this.canvas.getShapes();
-    const id = shape.id;
+    console.log('SHAPE: ' + id);
     delete shapes[id];
     return redraw ? this.canvas.draw() : this.canvas;
   }
