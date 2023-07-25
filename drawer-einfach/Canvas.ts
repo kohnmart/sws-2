@@ -3,9 +3,11 @@ import { ToolArea } from './ToolArea.js';
 import {
   CanvasEventDispatcher,
   CanvasEventSubscription,
+  EventStream,
   ToolEventDispatcher,
   ToolEventSubscription,
 } from './CanvasEvent.js';
+import { Line, Rectangle, Circle, Triangle } from './Shapes.js';
 
 export class Canvas implements ShapeManager {
   private ctx: CanvasRenderingContext2D;
@@ -14,12 +16,12 @@ export class Canvas implements ShapeManager {
   private height: number;
 
   /* EVENTS */
+  private eventStream: EventStream = new EventStream();
   private eventDispatcher: CanvasEventDispatcher = new CanvasEventDispatcher();
   private toolEventDispatcher: ToolEventDispatcher;
   private toolEventSubscription: ToolEventSubscription;
   private canvasEventSubscription: CanvasEventSubscription =
     new CanvasEventSubscription(this, this.eventDispatcher);
-
   private isCreatingShape: boolean = false;
 
   constructor(canvasDomElement: HTMLCanvasElement, toolarea: ToolArea) {
@@ -32,6 +34,11 @@ export class Canvas implements ShapeManager {
     this.toolEventSubscription = new ToolEventSubscription(
       this.toolEventDispatcher
     );
+
+    const el = document.getElementById('load-event-stream-btn');
+    el.addEventListener('click', () => {
+      this.loadEventStream();
+    });
 
     this.ctx = canvasDomElement.getContext('2d');
     canvasDomElement.addEventListener(
@@ -113,6 +120,8 @@ export class Canvas implements ShapeManager {
       data: { shape: shape, redraw: redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
+    this.eventStream.addEvent(canvasEvent);
+    this.displayEventStream();
   }
 
   removeShape(shape: Shape, redraw: boolean = true): void {
@@ -121,6 +130,7 @@ export class Canvas implements ShapeManager {
       data: { id: shape.id, redraw: redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
+    this.eventStream.addEvent(canvasEvent);
   }
 
   removeShapeWithId(id: number, redraw: boolean = true): void {
@@ -129,6 +139,7 @@ export class Canvas implements ShapeManager {
       data: { id, redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
+    this.eventStream.addEvent(canvasEvent);
   }
 
   updateShape(shape: Shape) {
@@ -137,6 +148,7 @@ export class Canvas implements ShapeManager {
       data: { shape },
     };
     this.eventDispatcher.dispatch(canvasEvent);
+    this.eventStream.addEvent(canvasEvent);
   }
 
   updateShapesOrder(shapeId: number, moveUp: boolean) {
@@ -145,6 +157,7 @@ export class Canvas implements ShapeManager {
       data: { id: shapeId, moveUp: moveUp },
     };
     this.eventDispatcher.dispatch(canvasEvent);
+    this.eventStream.addEvent(canvasEvent);
   }
 
   /******* HELPER METHODS *******/
@@ -167,5 +180,70 @@ export class Canvas implements ShapeManager {
         return this.shapes[key];
       }
     }
+  }
+  /* EVENT DISPLAY */
+  displayEventStream() {
+    const textArea = document.getElementById(
+      'event-stream-textarea'
+    ) as HTMLTextAreaElement;
+    textArea.value = this.eventStream
+      .getEvents()
+      .map((event) => JSON.stringify(event))
+      .join('\n');
+  }
+
+  loadEventStream() {
+    console.log('CALL');
+    const textArea = document.getElementById(
+      'event-stream-textarea'
+    ) as HTMLTextAreaElement;
+    const eventStreamContent = textArea.value;
+    const events = eventStreamContent
+      .split('\n')
+      .map((event) => JSON.parse(event.trim()));
+
+    // Führen Sie die Ereignisse in Ihrem Programm aus, um die "Zeitreise" zu realisieren
+    // Implementieren Sie die Logik, um die Ereignisse auszuführen und das Programm entsprechend zu aktualisieren
+
+    // Zum Beispiel könnten Sie eine Schleife verwenden, um jedes Ereignis auszuführen:
+    console.log(events[0]);
+    for (const event of events) {
+      switch (event.type) {
+        case CanvasEventType.ADD_SHAPE:
+          const shapeData = event.data.shape;
+          const shapeType = shapeData.type;
+          let shape;
+          switch (shapeType) {
+            case 'line':
+              shape = new Line(shapeData.from, shapeData.to);
+              break;
+            case 'rectangle':
+              shape = new Rectangle(shapeData.from, shapeData.to);
+              break;
+            case 'circle':
+              shape = new Circle(shapeData.center, shapeData.radius);
+              break;
+            case 'triangle':
+              shape = new Triangle(shapeData.p1, shapeData.p2, shapeData.p3);
+              break;
+            default:
+              break;
+          }
+          if (shape) {
+            shape.backgroundColor = shapeData.backgroundColor;
+            shape.backgroundColorKey = shapeData.backgroundColorKey;
+            shape.strokeColor = shapeData.strokeColor;
+            shape.strokeColorKey = shapeData.strokeColorKey;
+            this.addShape(shape, event.data.redraw);
+          }
+          break;
+        // ... (weitere Cases) ...
+      }
+    }
+
+    // ... (nachfolgender Code) ...
+
+    // Nachdem alle Ereignisse ausgeführt wurden, aktualisieren Sie die Darstellung der Zeichenfläche
+    //this.draw();
   }
 }

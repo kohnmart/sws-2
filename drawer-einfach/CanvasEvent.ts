@@ -1,6 +1,30 @@
 import { Canvas } from './Canvas';
 import { CanvasEvent, CanvasEventType, Shape } from './types.js';
 
+export class CanvasEventManager implements CanvasEvent {
+  type: CanvasEventType;
+  data?: any;
+  timestamp: number;
+
+  constructor(type: CanvasEventType, data?: any) {
+    this.type = type;
+    this.data = data;
+    this.timestamp = Date.now();
+  }
+}
+
+export class EventStream {
+  private events: CanvasEvent[] = [];
+
+  addEvent(event: CanvasEvent) {
+    this.events.push(event);
+  }
+
+  getEvents(): CanvasEvent[] {
+    return this.events;
+  }
+}
+
 export class CanvasEventDispatcher {
   private subscribers: ((event: CanvasEvent) => void)[] = [];
 
@@ -58,7 +82,6 @@ export class CanvasEventSubscription {
           this.handleAddShape(event.data.shape, event.data.redraw);
           break;
         case CanvasEventType.REMOVE_SHAPE:
-          console.log(event);
           this.handleRemoveShape(event.data.id, event.data.redraw);
           break;
         case CanvasEventType.REMOVE_SHAPE_WITH_ID:
@@ -78,12 +101,12 @@ export class CanvasEventSubscription {
   handleAddShape(shape: Shape, redraw: boolean = true): Canvas {
     const shapes = this.canvas.getShapes();
     shapes[shape.id] = shape;
+    this.canvas.setShapes(shapes);
     return redraw ? this.canvas.draw() : this.canvas;
   }
 
   handleRemoveShape(id: number, redraw: boolean = true): Canvas {
     const shapes = this.canvas.getShapes();
-    console.log('SHAPE: ' + id);
     delete shapes[id];
     return redraw ? this.canvas.draw() : this.canvas;
   }
