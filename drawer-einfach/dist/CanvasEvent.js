@@ -31,6 +31,7 @@ export class ToolEventSubscription {
         eventDispatcher.subscribe((event) => {
             switch (event.type) {
                 case CanvasEventType.TOOL_ACTION:
+                    console.log(event.data);
                     const shape = event.data;
                     shape.method.call(shape.tool, shape.x, shape.y);
                     break;
@@ -59,7 +60,6 @@ export class CanvasEventSubscription {
                 case CanvasEventType.UPDATE_SHAPES_ORDER:
                     this.handleUpdateShapesOrder(event.data.shapeId, event.data.moveUp);
                     break;
-                // Add more cases for other event types if needed
                 default:
                     break;
             }
