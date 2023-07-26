@@ -78,9 +78,33 @@ export class Canvas {
     }
     /******* DISPATCHER METHODS *******/
     addShape(shape, redraw = true) {
+        // Je nach Shape-Typ ein neues Shape-Objekt erstellen
+        let shapeCopy;
+        if (shape instanceof Line) {
+            const line = shape;
+            shapeCopy = new Line(line.from, line.to);
+        }
+        else if (shape instanceof Rectangle) {
+            const rectangle = shape;
+            shapeCopy = new Rectangle(rectangle.from, rectangle.to);
+        }
+        else if (shape instanceof Circle) {
+            const circle = shape;
+            shapeCopy = new Circle(circle.center, circle.radius);
+        }
+        else if (shape instanceof Triangle) {
+            const triangle = shape;
+            shapeCopy = new Triangle(triangle.p1, triangle.p2, triangle.p3);
+        }
+        else {
+            console.error('Unknown Shape-Typ');
+            return;
+        }
+        // Die Eigenschaften von shape auf shapeCopy kopieren
+        Object.assign(shapeCopy, shape);
         const canvasEvent = {
             type: CanvasEventType.ADD_SHAPE,
-            data: { shape: shape, redraw: redraw },
+            data: { shape: shapeCopy, redraw: redraw },
         };
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
@@ -92,15 +116,21 @@ export class Canvas {
             data: { id: shape.id, redraw: redraw },
         };
         this.eventDispatcher.dispatch(canvasEvent);
-        this.eventStream.addEvent(canvasEvent);
+        this.eventStream.removeLastEvent();
     }
-    removeShapeWithId(id, redraw = true) {
+    removeShapeWithId(isTemp, id, redraw = true) {
         const canvasEvent = {
             type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
             data: { id: id, redraw: redraw },
         };
         this.eventDispatcher.dispatch(canvasEvent);
-        this.eventStream.addEvent(canvasEvent);
+        if (isTemp) {
+            this.eventStream.removeLastEvent();
+        }
+        else {
+            this.eventStream.addEvent(canvasEvent);
+            this.displayEventStream();
+        }
     }
     updateShape(shape) {
         const canvasEvent = {
@@ -138,10 +168,11 @@ export class Canvas {
     /* EVENT DISPLAY */
     displayEventStream() {
         const textArea = document.getElementById('event-stream-textarea');
-        textArea.value = this.eventStream
+        const eventsJSON = this.eventStream
             .getEvents()
             .map((event) => JSON.stringify(event))
             .join('\n');
+        textArea.value = eventsJSON;
     }
     loadEventStream() {
         const textArea = document.getElementById('event-stream-textarea');
@@ -149,9 +180,6 @@ export class Canvas {
         const events = eventStreamContent
             .split('\n')
             .map((event) => JSON.parse(event.trim()));
-        // Führen Sie die Ereignisse in Ihrem Programm aus, um die "Zeitreise" zu realisieren
-        // Implementieren Sie die Logik, um die Ereignisse auszuführen und das Programm entsprechend zu aktualisieren
-        // Zum Beispiel könnten Sie eine Schleife verwenden, um jedes Ereignis auszuführen:
         for (const event of events) {
             switch (event.type) {
                 case CanvasEventType.ADD_SHAPE:
@@ -186,11 +214,19 @@ export class Canvas {
                     this.removeShape(event.data.id, event.data.redraw);
                     break;
                 case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-                    this.removeShapeWithId(event.data.id, event.data.redraw);
+                    this.removeShapeWithId(false, event.data.id, event.data.redraw);
+                    break;
+                case CanvasEventType.UPDATE_SHAPE:
+                    this.updateShape(event.data.shape);
+                    break;
+                case CanvasEventType.UPDATE_SHAPES_ORDER:
+                    this.updateShapesOrder(event.data.id, event.data.moveUp);
+                    break;
+                default:
                     break;
             }
         }
-        //this.draw();
+        this.draw();
     }
 }
 //# sourceMappingURL=Canvas.js.map

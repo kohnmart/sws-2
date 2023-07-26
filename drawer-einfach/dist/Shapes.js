@@ -23,36 +23,43 @@ class AbstractFactory {
     constructor(shapeManager) {
         this.shapeManager = shapeManager;
         this.tmpShape = null;
+        this.isDrawing = false; // Neue Eigenschaft, um zu überprüfen, ob ein Shape gezeichnet wird
     }
     handleMouseDown(x, y) {
         this.from = new Point2D(x, y);
+        this.isDrawing = true; // Setzen Sie isDrawing auf true, um den Zeichnungsvorgang zu starten
     }
     handleMouseUp(x, y) {
-        // Abort the drawing process if `this.from` is undefined
+        // Beenden Sie den Zeichnungsvorgang, wenn `this.from` nicht definiert ist
         if (!this.from) {
             return;
         }
-        // remove the temp line, if there was one
+        // Entfernen Sie das temporäre Shape, wenn eines vorhanden ist
         if (this.tmpShape) {
-            this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
+            this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
+            this.tmpShape = null;
         }
+        // Fügen Sie das endgültige Shape hinzu
         this.shapeManager.addShape(this.createShape(this.from, new Point2D(x, y)));
-        this.from = undefined;
+        this.from = null;
+        this.isDrawing = false; // Setzen Sie isDrawing auf false, um den Zeichnungsvorgang zu beenden
     }
     handleMouseMove(x, y) {
-        // show temp circle only, if the start point is defined;
+        // Zeigen Sie das temporäre Shape nur an, wenn der Startpunkt definiert ist
         if (!this.from) {
             return;
         }
-        if (!this.tmpTo || this.tmpTo.x !== x || this.tmpTo.y !== y) {
-            this.tmpTo = new Point2D(x, y);
-            if (this.tmpShape) {
-                // remove the old temp line, if there was one
-                this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
+        if (this.isDrawing) {
+            if (!this.tmpTo || this.tmpTo.x !== x || this.tmpTo.y !== y) {
+                this.tmpTo = new Point2D(x, y);
+                if (this.tmpShape) {
+                    // Entfernen Sie das alte temporäre Shape, falls vorhanden
+                    this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
+                }
+                // Fügen Sie das neue temporäre Shape hinzu
+                this.tmpShape = this.createShape(this.from, this.tmpTo);
+                this.shapeManager.addShape(this.tmpShape);
             }
-            // adds a new temp line
-            this.tmpShape = this.createShape(this.from, new Point2D(x, y));
-            this.shapeManager.addShape(this.tmpShape);
         }
     }
     handleCtrl(x, y) {
@@ -210,7 +217,7 @@ export class TriangleFactory {
     }
     handleMouseDown(x, y) {
         if (this.tmpShape) {
-            this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
+            this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
             this.shapeManager.addShape(new Triangle(this.from, this.tmpTo, new Point2D(x, y)));
             this.from = undefined;
             this.tmpTo = undefined;
@@ -225,7 +232,7 @@ export class TriangleFactory {
     handleMouseUp(x, y) {
         // remove the temp line, if there was one
         if (this.tmpLine) {
-            this.shapeManager.removeShapeWithId(this.tmpLine.id, false);
+            this.shapeManager.removeShapeWithId(true, this.tmpLine.id, false);
             this.tmpLine = undefined;
             this.tmpTo = new Point2D(x, y);
             this.thirdPoint = new Point2D(x, y);
@@ -246,7 +253,7 @@ export class TriangleFactory {
                 this.thirdPoint = new Point2D(x, y);
                 if (this.tmpShape) {
                     // remove the old temp line, if there was one
-                    this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
+                    this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
                 }
                 // adds a new temp triangle
                 this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
@@ -259,7 +266,7 @@ export class TriangleFactory {
                 this.tmpTo = new Point2D(x, y);
                 if (this.tmpLine) {
                     // remove the old temp line, if there was one
-                    this.shapeManager.removeShapeWithId(this.tmpLine.id, false);
+                    this.shapeManager.removeShapeWithId(true, this.tmpLine.id, false);
                 }
                 // adds a new temp line
                 this.tmpLine = new Line(this.from, this.tmpTo);

@@ -39,8 +39,8 @@ function init() {
         updateOrder(n, dir) {
             canvas.updateShapesOrder(n, dir);
         },
-        removeShapeWithId(id, rd) {
-            canvas.removeShapeWithId(id, rd);
+        removeShapeWithId(isTemp, id, rd) {
+            canvas.removeShapeWithId(isTemp, id, rd);
         },
         updateShape(shape) {
             canvas.updateShape(shape);

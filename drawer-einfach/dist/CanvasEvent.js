@@ -11,12 +11,13 @@ export class EventStream {
         this.events = [];
     }
     addEvent(event) {
-        console.log('EVENT');
-        console.log(event);
         this.events.push(event);
     }
     getEvents() {
         return this.events;
+    }
+    removeLastEvent() {
+        this.events.pop();
     }
 }
 export class CanvasEventDispatcher {
@@ -64,7 +65,6 @@ export class ToolEventSubscription {
 export class CanvasEventSubscription {
     constructor(canvas, eventDispatcher) {
         this.canvas = canvas;
-        // Subscribe to the canvas event dispatcher
         eventDispatcher.subscribe((event) => {
             switch (event.type) {
                 case CanvasEventType.ADD_SHAPE:
@@ -75,6 +75,7 @@ export class CanvasEventSubscription {
                     break;
                 case CanvasEventType.REMOVE_SHAPE_WITH_ID:
                     this.handleRemoveShapeWithId(event.data.id, event.data.redraw);
+                    break;
                 case CanvasEventType.UPDATE_SHAPE:
                     this.handleUpdateShape(event.data.shape);
                     break;

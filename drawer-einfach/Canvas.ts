@@ -115,9 +115,31 @@ export class Canvas implements ShapeManager {
 
   /******* DISPATCHER METHODS *******/
   addShape(shape: Shape, redraw: boolean = true): void {
+    // Je nach Shape-Typ ein neues Shape-Objekt erstellen
+    let shapeCopy: Shape;
+    if (shape instanceof Line) {
+      const line = shape as Line;
+      shapeCopy = new Line(line.from, line.to);
+    } else if (shape instanceof Rectangle) {
+      const rectangle = shape as Rectangle;
+      shapeCopy = new Rectangle(rectangle.from, rectangle.to);
+    } else if (shape instanceof Circle) {
+      const circle = shape as Circle;
+      shapeCopy = new Circle(circle.center, circle.radius);
+    } else if (shape instanceof Triangle) {
+      const triangle = shape as Triangle;
+      shapeCopy = new Triangle(triangle.p1, triangle.p2, triangle.p3);
+    } else {
+      console.error('Unknown Shape-Typ');
+      return;
+    }
+
+    // Die Eigenschaften von shape auf shapeCopy kopieren
+    Object.assign(shapeCopy, shape);
+
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.ADD_SHAPE,
-      data: { shape: shape, redraw: redraw },
+      data: { shape: shapeCopy, redraw: redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
@@ -130,16 +152,21 @@ export class Canvas implements ShapeManager {
       data: { id: shape.id, redraw: redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
-    this.eventStream.addEvent(canvasEvent);
+    this.eventStream.removeLastEvent();
   }
 
-  removeShapeWithId(id: number, redraw: boolean = true): void {
+  removeShapeWithId(isTemp: boolean, id: number, redraw: boolean = true): void {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
       data: { id: id, redraw: redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
-    this.eventStream.addEvent(canvasEvent);
+    if (isTemp) {
+      this.eventStream.removeLastEvent();
+    } else {
+      this.eventStream.addEvent(canvasEvent);
+      this.displayEventStream();
+    }
   }
 
   updateShape(shape: Shape) {
@@ -186,10 +213,13 @@ export class Canvas implements ShapeManager {
     const textArea = document.getElementById(
       'event-stream-textarea'
     ) as HTMLTextAreaElement;
-    textArea.value = this.eventStream
+
+    const eventsJSON = this.eventStream
       .getEvents()
       .map((event) => JSON.stringify(event))
       .join('\n');
+
+    textArea.value = eventsJSON;
   }
 
   loadEventStream() {
@@ -201,10 +231,6 @@ export class Canvas implements ShapeManager {
       .split('\n')
       .map((event) => JSON.parse(event.trim()));
 
-    // Führen Sie die Ereignisse in Ihrem Programm aus, um die "Zeitreise" zu realisieren
-    // Implementieren Sie die Logik, um die Ereignisse auszuführen und das Programm entsprechend zu aktualisieren
-
-    // Zum Beispiel könnten Sie eine Schleife verwenden, um jedes Ereignis auszuführen:
     for (const event of events) {
       switch (event.type) {
         case CanvasEventType.ADD_SHAPE:
@@ -239,10 +265,18 @@ export class Canvas implements ShapeManager {
           this.removeShape(event.data.id, event.data.redraw);
           break;
         case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-          this.removeShapeWithId(event.data.id, event.data.redraw);
+          this.removeShapeWithId(false, event.data.id, event.data.redraw);
+          break;
+        case CanvasEventType.UPDATE_SHAPE:
+          this.updateShape(event.data.shape);
+          break;
+        case CanvasEventType.UPDATE_SHAPES_ORDER:
+          this.updateShapesOrder(event.data.id, event.data.moveUp);
+          break;
+        default:
           break;
       }
     }
-    //this.draw();
+    this.draw();
   }
 }

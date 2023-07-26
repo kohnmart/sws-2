@@ -11,7 +11,7 @@ export interface Shape {
 export interface ShapeManager {
   addShape(shape: Shape, redraw?: boolean): void;
   removeShape(shape: Shape, redraw?: boolean): void;
-  removeShapeWithId(id: number, redraw?: boolean): void;
+  removeShapeWithId(isTemp: boolean, id: number, redraw?: boolean): void;
 }
 
 export interface SelectorManager {
@@ -19,7 +19,7 @@ export interface SelectorManager {
   getCtx(): CanvasRenderingContext2D;
   draw(): void;
   updateOrder(n: number, dir: boolean): void;
-  removeShapeWithId(id: number, redraw?: boolean): void;
+  removeShapeWithId(isTemp: boolean, id: number, redraw?: boolean): void;
   getShapeById(id: number): Shape;
   updateShape(shape: Shape): void;
 }

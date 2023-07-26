@@ -28,7 +28,7 @@ export class Selector implements ShapeFactory {
     const deleteShapesItem = menuApi.createItem('Entfernen', (m: MenuApi) => {
       m.hide();
       this.shapesSelected.forEach((id: number) => {
-        this.slm.removeShapeWithId(id, true);
+        this.slm.removeShapeWithId(false, id, true);
       });
     });
     menu.addItems(deleteShapesItem);

@@ -15,7 +15,7 @@ export class Selector {
             const deleteShapesItem = menuApi.createItem('Entfernen', (m) => {
                 m.hide();
                 this.shapesSelected.forEach((id) => {
-                    this.slm.removeShapeWithId(id, true);
+                    this.slm.removeShapeWithId(false, id, true);
                 });
             });
             menu.addItems(deleteShapesItem);

@@ -34,42 +34,53 @@ abstract class AbstractFactory<T extends Shape> {
   private from: Point2D;
   private tmpTo: Point2D;
   private tmpShape: T = null;
+  private isDrawing: boolean = false; // Neue Eigenschaft, um zu überprüfen, ob ein Shape gezeichnet wird
   constructor(readonly shapeManager: ShapeManager) {}
 
   abstract createShape(from: Point2D, to: Point2D): T;
 
   handleMouseDown(x: number, y: number) {
     this.from = new Point2D(x, y);
+    this.isDrawing = true; // Setzen Sie isDrawing auf true, um den Zeichnungsvorgang zu starten
   }
 
   handleMouseUp(x: number, y: number) {
-    // Abort the drawing process if `this.from` is undefined
+    // Beenden Sie den Zeichnungsvorgang, wenn `this.from` nicht definiert ist
     if (!this.from) {
       return;
     }
 
-    // remove the temp line, if there was one
+    // Entfernen Sie das temporäre Shape, wenn eines vorhanden ist
     if (this.tmpShape) {
-      this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
+      this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
+      this.tmpShape = null;
     }
+
+    // Fügen Sie das endgültige Shape hinzu
     this.shapeManager.addShape(this.createShape(this.from, new Point2D(x, y)));
-    this.from = undefined;
+    this.from = null;
+    this.isDrawing = false; // Setzen Sie isDrawing auf false, um den Zeichnungsvorgang zu beenden
   }
 
   handleMouseMove(x: number, y: number) {
-    // show temp circle only, if the start point is defined;
+    // Zeigen Sie das temporäre Shape nur an, wenn der Startpunkt definiert ist
     if (!this.from) {
       return;
     }
-    if (!this.tmpTo || this.tmpTo.x !== x || this.tmpTo.y !== y) {
-      this.tmpTo = new Point2D(x, y);
-      if (this.tmpShape) {
-        // remove the old temp line, if there was one
-        this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
+
+    if (this.isDrawing) {
+      if (!this.tmpTo || this.tmpTo.x !== x || this.tmpTo.y !== y) {
+        this.tmpTo = new Point2D(x, y);
+
+        if (this.tmpShape) {
+          // Entfernen Sie das alte temporäre Shape, falls vorhanden
+          this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
+        }
+
+        // Fügen Sie das neue temporäre Shape hinzu
+        this.tmpShape = this.createShape(this.from, this.tmpTo);
+        this.shapeManager.addShape(this.tmpShape);
       }
-      // adds a new temp line
-      this.tmpShape = this.createShape(this.from, new Point2D(x, y));
-      this.shapeManager.addShape(this.tmpShape);
     }
   }
 
@@ -267,7 +278,7 @@ export class TriangleFactory implements ShapeFactory {
 
   handleMouseDown(x: number, y: number) {
     if (this.tmpShape) {
-      this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
+      this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
       this.shapeManager.addShape(
         new Triangle(this.from, this.tmpTo, new Point2D(x, y))
       );
@@ -284,7 +295,7 @@ export class TriangleFactory implements ShapeFactory {
   handleMouseUp(x: number, y: number) {
     // remove the temp line, if there was one
     if (this.tmpLine) {
-      this.shapeManager.removeShapeWithId(this.tmpLine.id, false);
+      this.shapeManager.removeShapeWithId(true, this.tmpLine.id, false);
       this.tmpLine = undefined;
       this.tmpTo = new Point2D(x, y);
       this.thirdPoint = new Point2D(x, y);
@@ -309,7 +320,7 @@ export class TriangleFactory implements ShapeFactory {
         this.thirdPoint = new Point2D(x, y);
         if (this.tmpShape) {
           // remove the old temp line, if there was one
-          this.shapeManager.removeShapeWithId(this.tmpShape.id, false);
+          this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
         }
         // adds a new temp triangle
         this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
@@ -321,7 +332,7 @@ export class TriangleFactory implements ShapeFactory {
         this.tmpTo = new Point2D(x, y);
         if (this.tmpLine) {
           // remove the old temp line, if there was one
-          this.shapeManager.removeShapeWithId(this.tmpLine.id, false);
+          this.shapeManager.removeShapeWithId(true, this.tmpLine.id, false);
         }
         // adds a new temp line
         this.tmpLine = new Line(this.from, this.tmpTo);
