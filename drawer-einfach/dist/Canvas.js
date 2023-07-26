@@ -97,7 +97,7 @@ export class Canvas {
     removeShapeWithId(id, redraw = true) {
         const canvasEvent = {
             type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
-            data: { id, redraw },
+            data: { id: id, redraw: redraw },
         };
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
@@ -144,7 +144,6 @@ export class Canvas {
             .join('\n');
     }
     loadEventStream() {
-        console.log('CALL');
         const textArea = document.getElementById('event-stream-textarea');
         const eventStreamContent = textArea.value;
         const events = eventStreamContent
@@ -153,7 +152,6 @@ export class Canvas {
         // Führen Sie die Ereignisse in Ihrem Programm aus, um die "Zeitreise" zu realisieren
         // Implementieren Sie die Logik, um die Ereignisse auszuführen und das Programm entsprechend zu aktualisieren
         // Zum Beispiel könnten Sie eine Schleife verwenden, um jedes Ereignis auszuführen:
-        console.log(events[0]);
         for (const event of events) {
             switch (event.type) {
                 case CanvasEventType.ADD_SHAPE:
@@ -185,11 +183,13 @@ export class Canvas {
                     }
                     break;
                 case CanvasEventType.REMOVE_SHAPE:
-                    this.removeShape(shape, true);
+                    this.removeShape(event.data.id, event.data.redraw);
+                    break;
+                case CanvasEventType.REMOVE_SHAPE_WITH_ID:
+                    this.removeShapeWithId(event.data.id, event.data.redraw);
+                    break;
             }
         }
-        // ... (nachfolgender Code) ...
-        // Nachdem alle Ereignisse ausgeführt wurden, aktualisieren Sie die Darstellung der Zeichenfläche
         //this.draw();
     }
 }

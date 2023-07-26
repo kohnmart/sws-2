@@ -136,7 +136,7 @@ export class Canvas implements ShapeManager {
   removeShapeWithId(id: number, redraw: boolean = true): void {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
-      data: { id, redraw },
+      data: { id: id, redraw: redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
@@ -193,7 +193,6 @@ export class Canvas implements ShapeManager {
   }
 
   loadEventStream() {
-    console.log('CALL');
     const textArea = document.getElementById(
       'event-stream-textarea'
     ) as HTMLTextAreaElement;
@@ -237,13 +236,13 @@ export class Canvas implements ShapeManager {
           }
           break;
         case CanvasEventType.REMOVE_SHAPE:
-          this.removeShape(shape, true);
+          this.removeShape(event.data.id, event.data.redraw);
+          break;
+        case CanvasEventType.REMOVE_SHAPE_WITH_ID:
+          this.removeShapeWithId(event.data.id, event.data.redraw);
+          break;
       }
     }
-
-    // ... (nachfolgender Code) ...
-
-    // Nachdem alle Ereignisse ausgeführt wurden, aktualisieren Sie die Darstellung der Zeichenfläche
     //this.draw();
   }
 }

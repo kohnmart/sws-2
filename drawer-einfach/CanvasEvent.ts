@@ -17,6 +17,8 @@ export class EventStream {
   private events: CanvasEvent[] = [];
 
   addEvent(event: CanvasEvent) {
+    console.log('EVENT');
+    console.log(event);
     this.events.push(event);
   }
 

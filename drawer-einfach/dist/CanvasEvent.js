@@ -11,6 +11,8 @@ export class EventStream {
         this.events = [];
     }
     addEvent(event) {
+        console.log('EVENT');
+        console.log(event);
         this.events.push(event);
     }
     getEvents() {

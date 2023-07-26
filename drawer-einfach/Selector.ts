@@ -136,7 +136,7 @@ export class Selector implements ShapeFactory {
   }
   isRemoved: boolean = false;
   handleMouseMove(x: number, y: number) {
-    if (this.isTmpMovable) {
+    /*if (this.isTmpMovable) {
       const type = this.slm.getShapeById(this.shapesSelected[0]).type;
       let shape: Line | Rectangle | Triangle | Circle,
         newShape: Line | Rectangle | Triangle | Circle;
@@ -187,8 +187,8 @@ export class Selector implements ShapeFactory {
       newShape.strokeColor = shape.strokeColor;
       newShape.draw(this.slm.getCtx(), true);
       newShape.id = shape.id;
-      this.slm.updateShape(newShape);
-    }
+      this.slm.updateShape(newShape); 
+    } */
   }
 
   handleAlt(x: number, y: number) {
