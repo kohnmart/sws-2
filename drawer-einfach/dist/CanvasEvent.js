@@ -85,10 +85,29 @@ export class CanvasEventSubscription {
                 case CanvasEventType.UPDATE_SHAPES_ORDER:
                     this.handleUpdateShapesOrder(event.data.shapeId, event.data.moveUp);
                     break;
+                case CanvasEventType.CHANGE_COLOR:
+                    this.handleColorChange(event);
+                    break;
                 default:
                     break;
             }
         });
+    }
+    handleColorChange(event) {
+        const shapeId = event.data.id;
+        const colorType = event.data.colorType;
+        const newColor = event.data.newColor;
+        const shape = this.canvas.getShapeById(shapeId);
+        if (shape) {
+            if (colorType === 'backgroundColor') {
+                shape.backgroundColor = newColor;
+            }
+            else {
+                shape.strokeColor = newColor;
+            }
+            return this.canvas.draw();
+        }
+        return;
     }
     handleAddShape(shape, redraw = true) {
         const shapes = this.canvas.getShapes();

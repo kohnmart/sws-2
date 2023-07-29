@@ -169,6 +169,16 @@ export class Canvas implements ShapeManager {
     }
   }
 
+  updateShapeColor(shapeId: number, colorType: string, newColor: string) {
+    const canvasEvent = {
+      type: CanvasEventType.CHANGE_COLOR,
+      data: { id: shapeId, colorType: colorType, newColor: newColor },
+    };
+    this.eventDispatcher.dispatch(canvasEvent);
+    this.eventStream.addEvent(canvasEvent);
+    this.displayEventStream();
+  }
+
   updateShape(shape: Shape) {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.UPDATE_SHAPE,
@@ -176,6 +186,7 @@ export class Canvas implements ShapeManager {
     };
     this.eventDispatcher.dispatch(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
+    this.displayEventStream();
   }
 
   updateShapesOrder(shapeId: number, moveUp: boolean) {
@@ -261,6 +272,7 @@ export class Canvas implements ShapeManager {
             shape.backgroundColorKey = shapeData.backgroundColorKey;
             shape.strokeColor = shapeData.strokeColor;
             shape.strokeColorKey = shapeData.strokeColorKey;
+            shape.id = shapeData.id;
             this.addShape(shape, event.data.redraw);
           }
           break;

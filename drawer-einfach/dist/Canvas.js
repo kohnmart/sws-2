@@ -132,6 +132,15 @@ export class Canvas {
             this.displayEventStream();
         }
     }
+    updateShapeColor(shapeId, colorType, newColor) {
+        const canvasEvent = {
+            type: CanvasEventType.CHANGE_COLOR,
+            data: { id: shapeId, colorType: colorType, newColor: newColor },
+        };
+        this.eventDispatcher.dispatch(canvasEvent);
+        this.eventStream.addEvent(canvasEvent);
+        this.displayEventStream();
+    }
     updateShape(shape) {
         const canvasEvent = {
             type: CanvasEventType.UPDATE_SHAPE,
@@ -139,6 +148,7 @@ export class Canvas {
         };
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
+        this.displayEventStream();
     }
     updateShapesOrder(shapeId, moveUp) {
         const canvasEvent = {
@@ -209,7 +219,6 @@ export class Canvas {
                         shape.backgroundColorKey = shapeData.backgroundColorKey;
                         shape.strokeColor = shapeData.strokeColor;
                         shape.strokeColorKey = shapeData.strokeColorKey;
-                        console.log('SHAPE ID: ' + shape.id);
                         shape.id = shapeData.id;
                         this.addShape(shape, event.data.redraw);
                     }

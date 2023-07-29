@@ -13,5 +13,6 @@ export var CanvasEventType;
     CanvasEventType[CanvasEventType["UPDATE_SHAPE"] = 5] = "UPDATE_SHAPE";
     CanvasEventType[CanvasEventType["UPDATE_SHAPES_ORDER"] = 6] = "UPDATE_SHAPES_ORDER";
     CanvasEventType[CanvasEventType["TOOL_ACTION"] = 7] = "TOOL_ACTION";
+    CanvasEventType[CanvasEventType["CHANGE_COLOR"] = 8] = "CHANGE_COLOR";
 })(CanvasEventType || (CanvasEventType = {}));
 //# sourceMappingURL=types.js.map

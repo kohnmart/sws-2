@@ -1,4 +1,4 @@
-import { PLT_TYPES } from './types.js';
+import { PLT_TYPES, } from './types.js';
 import MenuApi from './menuApi.js';
 import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from './shapesInteractionUtils.js';
 import { ColorPaletteGroup } from './ColorPalette.js';
@@ -77,10 +77,12 @@ export class Selector {
                     if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
                         shape.backgroundColor = colorPicker.colorFormatAsRGBA();
                         shape.backgroundColorKey = colorPicker.key;
+                        this.slm.updateShapeColor(id, 'backgroundColor', shape.backgroundColor);
                     }
                     else {
                         shape.strokeColor = colorPicker.colorFormatAsRGBA();
                         shape.strokeColorKey = colorPicker.key;
+                        this.slm.updateShapeColor(id, 'strokeColor', shape.strokeColor);
                     }
                     this.slm.draw();
                 });

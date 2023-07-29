@@ -1,3 +1,5 @@
+import { EventStream } from './CanvasEvent';
+
 export interface Shape {
   readonly id: number;
   readonly type: string;
@@ -22,6 +24,7 @@ export interface SelectorManager {
   removeShapeWithId(isTemp: boolean, id: number, redraw?: boolean): void;
   getShapeById(id: number): Shape;
   updateShape(shape: Shape): void;
+  updateShapeColor(shapeId: number, colorType: string, newColor: string): void;
 }
 
 export interface ShapeFactory {
@@ -52,6 +55,7 @@ export enum CanvasEventType {
   UPDATE_SHAPE,
   UPDATE_SHAPES_ORDER,
   TOOL_ACTION,
+  CHANGE_COLOR,
 }
 
 export interface CanvasEvent {

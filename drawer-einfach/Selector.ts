@@ -1,5 +1,5 @@
 import { SelectorManager, ShapeFactory, PLT_TYPES } from './types.js';
-import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
+import { Line, Rectangle, Triangle, Circle } from './Shapes.js';
 import MenuApi from './menuApi.js';
 import {
   checkLineIntersection,
@@ -92,9 +92,15 @@ export class Selector implements ShapeFactory {
           if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
             shape.backgroundColor = colorPicker.colorFormatAsRGBA();
             shape.backgroundColorKey = colorPicker.key;
+            this.slm.updateShapeColor(
+              id,
+              'backgroundColor',
+              shape.backgroundColor
+            );
           } else {
             shape.strokeColor = colorPicker.colorFormatAsRGBA();
             shape.strokeColorKey = colorPicker.key;
+            this.slm.updateShapeColor(id, 'strokeColor', shape.strokeColor);
           }
           this.slm.draw();
         });

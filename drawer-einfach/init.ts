@@ -39,6 +39,10 @@ function init() {
       return canvas.getShapeById(id);
     },
 
+    updateShapeColor(shapeId, colorType, newColor): void {
+      return canvas.updateShapeColor(shapeId, colorType, newColor);
+    },
+
     getCtx() {
       return canvas.getCanvasRenderingContext();
     },
