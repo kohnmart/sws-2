@@ -172,6 +172,7 @@ export class Canvas {
             .getEvents()
             .map((event) => JSON.stringify(event))
             .join('\n');
+        textArea.value = '';
         textArea.value = eventsJSON;
     }
     loadEventStream() {
@@ -180,6 +181,7 @@ export class Canvas {
         const events = eventStreamContent
             .split('\n')
             .map((event) => JSON.parse(event.trim()));
+        this.eventStream.clearEvents();
         for (const event of events) {
             switch (event.type) {
                 case CanvasEventType.ADD_SHAPE:
@@ -207,6 +209,8 @@ export class Canvas {
                         shape.backgroundColorKey = shapeData.backgroundColorKey;
                         shape.strokeColor = shapeData.strokeColor;
                         shape.strokeColorKey = shapeData.strokeColorKey;
+                        console.log('SHAPE ID: ' + shape.id);
+                        shape.id = shapeData.id;
                         this.addShape(shape, event.data.redraw);
                     }
                     break;

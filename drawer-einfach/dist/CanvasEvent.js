@@ -16,6 +16,9 @@ export class EventStream {
     getEvents() {
         return this.events;
     }
+    clearEvents() {
+        this.events = [];
+    }
     removeLastEvent() {
         this.events.pop();
     }
@@ -28,8 +31,8 @@ export class CanvasEventDispatcher {
         this.subscribers.push(callback);
     }
     dispatch(event) {
-        for (const subscribers of this.subscribers) {
-            subscribers(event);
+        for (const subscriber of this.subscribers) {
+            subscriber(event);
         }
     }
 }
@@ -41,8 +44,8 @@ export class ToolEventDispatcher {
         this.subscribers.push(callback);
     }
     dispatch(event) {
-        for (const subscribers of this.subscribers) {
-            subscribers(event);
+        for (const subscriber of this.subscribers) {
+            subscriber(event);
         }
     }
 }
@@ -96,6 +99,7 @@ export class CanvasEventSubscription {
     handleRemoveShape(id, redraw = true) {
         const shapes = this.canvas.getShapes();
         delete shapes[id];
+        this.canvas.setShapes(shapes);
         return redraw ? this.canvas.draw() : this.canvas;
     }
     handleRemoveShapeWithId(id, redraw = true) {
@@ -122,59 +126,32 @@ export class CanvasEventSubscription {
                 shapes[key] = shape;
             }
         }
+        // Redraw the canvas after updating the shape
+        this.canvas.draw();
     }
-    /** Explanation:
-     Use of Map and Object.entries: The this.shapes object is converted into
-     a Map using Object.entries, which allows for efficient manipulation of
-     key-value pairs. This is beneficial when dealing with a large number of shape objects.
-     
-     Finding the index of the shape: The shapeIndex is determined by finding the index in
-     the shapeKeys array where the shape's ID matches the given shapeId. This index
-     is used to determine the current position of the shape in the z-order.
-     
-     Swapping positions within the Map: If moveUp is true and the shape is
-     not already at the top, or if moveUp is false and the shape is not already at
-     the bottom, the positions of the current shape and the adjacent shape
-     are swapped within the Map using Map.set().
-     
-     Updating the original shapes object:
-     The modified shapesMap is converted back to an object using Object.fromEntries(), and the
-     this.shapes object is updated with the new order of shapes.
-     
-     Redrawing the canvas: Finally, the draw() method is called to redraw the canvas
-     with the updated shape order, reflecting the changes made to the z-order.
-  
-     ~ Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map?retiredLocale=de
-     ~ Ref: https://www.digitalocean.com/community/tutorials/understanding-map-and-set-objects-in-javascript
-     ~ Ref: https://javascript.info/map-set
-     ~ Ref: https://de.wikipedia.org/wiki/Z-Ordnung
-     *
-     */
     handleUpdateShapesOrder(shapeId, moveUp) {
         const shapes = this.canvas.getShapes();
-        const shapesMap = new Map(Object.entries(shapes));
-        const shapeKeys = Array.from(shapesMap.keys());
-        const shapeIndex = shapeKeys.findIndex((key) => shapesMap.get(key).id === shapeId);
+        const shapeKeys = Object.keys(shapes);
+        const shapeIndex = shapeKeys.findIndex((key) => shapes[key].id === shapeId);
         if (moveUp && shapeIndex > 0) {
             const currentShapeKey = shapeKeys[shapeIndex];
             const previousShapeKey = shapeKeys[shapeIndex - 1];
-            // Swap the positions within the Map
-            const tempShape = shapesMap.get(currentShapeKey);
-            shapesMap.set(currentShapeKey, shapesMap.get(previousShapeKey));
-            shapesMap.set(previousShapeKey, tempShape);
+            // Swap the positions within the shapes object
+            [shapes[currentShapeKey], shapes[previousShapeKey]] = [
+                shapes[previousShapeKey],
+                shapes[currentShapeKey],
+            ];
         }
         else if (!moveUp && shapeIndex < shapeKeys.length - 1) {
             const currentShapeKey = shapeKeys[shapeIndex];
             const nextShapeKey = shapeKeys[shapeIndex + 1];
-            // Swap the positions within the Map
-            const tempShape = shapesMap.get(currentShapeKey);
-            shapesMap.set(currentShapeKey, shapesMap.get(nextShapeKey));
-            shapesMap.set(nextShapeKey, tempShape);
+            // Swap the positions within the shapes object
+            [shapes[currentShapeKey], shapes[nextShapeKey]] = [
+                shapes[nextShapeKey],
+                shapes[currentShapeKey],
+            ];
         }
-        // Update the original shapes object with the modified order
-        const shapesNew = Object.fromEntries(shapesMap);
-        this.canvas.setShapes(shapesNew);
-        // Redraw to new shape order
+        // Redraw the canvas after updating the z-order
         this.canvas.draw();
     }
 }

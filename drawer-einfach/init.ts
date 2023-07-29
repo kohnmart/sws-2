@@ -25,8 +25,8 @@ function init() {
     removeShape(s, rd) {
       return canvas.removeShape(s, rd);
     },
-    removeShapeWithId(id, rd) {
-      return canvas.removeShapeWithId(id, rd);
+    removeShapeWithId(isTemp, id, rd) {
+      return canvas.removeShapeWithId(isTemp, id, rd);
     },
   };
 

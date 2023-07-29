@@ -219,6 +219,7 @@ export class Canvas implements ShapeManager {
       .map((event) => JSON.stringify(event))
       .join('\n');
 
+    textArea.value = '';
     textArea.value = eventsJSON;
   }
 
@@ -230,6 +231,8 @@ export class Canvas implements ShapeManager {
     const events = eventStreamContent
       .split('\n')
       .map((event) => JSON.parse(event.trim()));
+
+    this.eventStream.clearEvents();
 
     for (const event of events) {
       switch (event.type) {
