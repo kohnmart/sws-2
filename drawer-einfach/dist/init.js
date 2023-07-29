@@ -45,8 +45,8 @@ function init() {
         removeShapeWithId(isTemp, id, rd) {
             canvas.removeShapeWithId(isTemp, id, rd);
         },
-        updateShape(shape) {
-            canvas.updateShape(shape);
+        updateShape(shape, isTemp) {
+            canvas.updateShape(shape, isTemp);
         },
     };
     const tools = [

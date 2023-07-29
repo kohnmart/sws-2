@@ -1,4 +1,5 @@
-import { Canvas } from './Canvas';
+import { Canvas } from './Canvas.js';
+import { Rectangle } from './Shapes.js';
 import { CanvasEvent, CanvasEventType, Shape } from './types.js';
 
 export class CanvasEventManager {
@@ -71,7 +72,6 @@ export class ToolEventSubscription {
           const shape = event.data;
           shape.method.call(shape.tool, shape.x, shape.y);
           break;
-        // Weitere Ereignisse für das Tool hier hinzufügen
         default:
           break;
       }
@@ -163,7 +163,7 @@ export class CanvasEventSubscription {
     const shapes = this.canvas.getShapes();
     for (const key in shapes) {
       if (shapes[key].id === shape.id) {
-        shapes[key] = shape;
+        shapes[key] = shape as Shape;
       }
     }
     // Redraw the canvas after updating the shape

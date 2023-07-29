@@ -79,27 +79,7 @@ export class Canvas {
     /******* DISPATCHER METHODS *******/
     addShape(shape, redraw = true) {
         // Je nach Shape-Typ ein neues Shape-Objekt erstellen
-        let shapeCopy;
-        if (shape instanceof Line) {
-            const line = shape;
-            shapeCopy = new Line(line.from, line.to);
-        }
-        else if (shape instanceof Rectangle) {
-            const rectangle = shape;
-            shapeCopy = new Rectangle(rectangle.from, rectangle.to);
-        }
-        else if (shape instanceof Circle) {
-            const circle = shape;
-            shapeCopy = new Circle(circle.center, circle.radius);
-        }
-        else if (shape instanceof Triangle) {
-            const triangle = shape;
-            shapeCopy = new Triangle(triangle.p1, triangle.p2, triangle.p3);
-        }
-        else {
-            console.error('Unknown Shape-Typ');
-            return;
-        }
+        const shapeCopy = this.copyShape(shape);
         // Die Eigenschaften von shape auf shapeCopy kopieren
         Object.assign(shapeCopy, shape);
         const canvasEvent = {
@@ -141,14 +121,19 @@ export class Canvas {
         this.eventStream.addEvent(canvasEvent);
         this.displayEventStream();
     }
-    updateShape(shape) {
+    updateShape(shape, isTemp) {
+        const shapeCopy = this.copyShape(shape);
+        // Die Eigenschaften von shape auf shapeCopy kopieren
+        Object.assign(shapeCopy, shape);
         const canvasEvent = {
             type: CanvasEventType.UPDATE_SHAPE,
-            data: { shape },
+            data: { shape: shapeCopy, isTemp: isTemp },
         };
         this.eventDispatcher.dispatch(canvasEvent);
-        this.eventStream.addEvent(canvasEvent);
-        this.displayEventStream();
+        if (!isTemp) {
+            this.eventStream.addEvent(canvasEvent);
+            this.displayEventStream();
+        }
     }
     updateShapesOrder(shapeId, moveUp) {
         const canvasEvent = {
@@ -159,6 +144,31 @@ export class Canvas {
         this.eventStream.addEvent(canvasEvent);
     }
     /******* HELPER METHODS *******/
+    copyShape(shape) {
+        console.log(shape);
+        let shapeCopy;
+        if (shape.type === 'line') {
+            const line = shape;
+            shapeCopy = new Line(line.from, line.to);
+        }
+        else if (shape.type === 'rectangle') {
+            const rectangle = shape;
+            shapeCopy = new Rectangle(rectangle.from, rectangle.to);
+        }
+        else if (shape.type === 'circle') {
+            const circle = shape;
+            shapeCopy = new Circle(circle.center, circle.radius);
+        }
+        else if (shape.type === 'triangle') {
+            const triangle = shape;
+            shapeCopy = new Triangle(triangle.p1, triangle.p2, triangle.p3);
+        }
+        else {
+            console.error('Unknown Shape-Typ');
+            return;
+        }
+        return shapeCopy;
+    }
     getShapes() {
         return this.shapes;
     }
@@ -230,7 +240,7 @@ export class Canvas {
                     this.removeShapeWithId(false, event.data.id, event.data.redraw);
                     break;
                 case CanvasEventType.UPDATE_SHAPE:
-                    this.updateShape(event.data.shape);
+                    this.updateShape(event.data.shape, event.data.isTemp);
                     break;
                 case CanvasEventType.UPDATE_SHAPES_ORDER:
                     this.updateShapesOrder(event.data.id, event.data.moveUp);

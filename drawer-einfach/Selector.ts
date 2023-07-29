@@ -1,5 +1,5 @@
-import { SelectorManager, ShapeFactory, PLT_TYPES } from './types.js';
-import { Line, Rectangle, Triangle, Circle } from './Shapes.js';
+import { SelectorManager, ShapeFactory, PLT_TYPES, Shape } from './types.js';
+import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
 import MenuApi from './menuApi.js';
 import {
   checkLineIntersection,
@@ -141,8 +141,9 @@ export class Selector implements ShapeFactory {
     }
   }
   isRemoved: boolean = false;
+  tempShape: Shape;
   handleMouseMove(x: number, y: number) {
-    /*if (this.isTmpMovable) {
+    if (this.isTmpMovable) {
       const type = this.slm.getShapeById(this.shapesSelected[0]).type;
       let shape: Line | Rectangle | Triangle | Circle,
         newShape: Line | Rectangle | Triangle | Circle;
@@ -193,8 +194,9 @@ export class Selector implements ShapeFactory {
       newShape.strokeColor = shape.strokeColor;
       newShape.draw(this.slm.getCtx(), true);
       newShape.id = shape.id;
-      this.slm.updateShape(newShape); 
-    } */
+      this.slm.updateShape(newShape, true);
+      this.tempShape = newShape;
+    }
   }
 
   handleAlt(x: number, y: number) {
@@ -214,6 +216,7 @@ export class Selector implements ShapeFactory {
   handleMouseUp() {
     if (this.isTmpMovable) {
       this.isTmpMovable = false;
+      this.slm.updateShape(this.tempShape, false);
     }
   }
 

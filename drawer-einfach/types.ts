@@ -23,7 +23,7 @@ export interface SelectorManager {
   updateOrder(n: number, dir: boolean): void;
   removeShapeWithId(isTemp: boolean, id: number, redraw?: boolean): void;
   getShapeById(id: number): Shape;
-  updateShape(shape: Shape): void;
+  updateShape(shape: Shape, isTemp: boolean): void;
   updateShapeColor(shapeId: number, colorType: string, newColor: string): void;
 }
 

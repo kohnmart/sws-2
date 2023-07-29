@@ -56,8 +56,8 @@ function init() {
       canvas.removeShapeWithId(isTemp, id, rd);
     },
 
-    updateShape(shape: Shape) {
-      canvas.updateShape(shape);
+    updateShape(shape: Shape, isTemp: boolean) {
+      canvas.updateShape(shape, isTemp);
     },
   };
 

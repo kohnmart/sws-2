@@ -58,7 +58,6 @@ export class ToolEventSubscription {
                     const shape = event.data;
                     shape.method.call(shape.tool, shape.x, shape.y);
                     break;
-                // Weitere Ereignisse für das Tool hier hinzufügen
                 default:
                     break;
             }
