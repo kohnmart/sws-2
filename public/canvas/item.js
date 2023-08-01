@@ -42,3 +42,4 @@ export class ItemRadio extends Item {
         this.element.append(this.inputElement, this.labelElement);
     }
 }
+//# sourceMappingURL=item.js.map

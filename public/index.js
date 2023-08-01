@@ -18,8 +18,17 @@ wss.on('connection', (ws) => {
         // Handle client disconnection
     });
 });
-// Start the server
+app.get('/', function (req, res) {
+    res.sendFile('index.html', { root: 'public' });
+});
+app.get('/canvas/', function (req, res) {
+    res.sendFile('canvas.html', { root: './public' });
+});
+app.get('/overview', function (req, res) {
+    res.sendFile('overview.html', { root: 'public' });
+});
 const port = 3000;
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+//# sourceMappingURL=index.js.map

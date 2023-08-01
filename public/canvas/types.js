@@ -15,3 +15,4 @@ export var CanvasEventType;
     CanvasEventType[CanvasEventType["TOOL_ACTION"] = 7] = "TOOL_ACTION";
     CanvasEventType[CanvasEventType["CHANGE_COLOR"] = 8] = "CHANGE_COLOR";
 })(CanvasEventType || (CanvasEventType = {}));
+//# sourceMappingURL=types.js.map

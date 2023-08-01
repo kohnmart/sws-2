@@ -65,3 +65,4 @@ export default {
     checkShapeColorsConsistency,
 };
 export { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, };
+//# sourceMappingURL=shapesInteractionUtils.js.map

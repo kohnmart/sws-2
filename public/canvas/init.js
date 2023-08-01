@@ -61,3 +61,4 @@ function init() {
     canvas.draw();
 }
 init();
+//# sourceMappingURL=init.js.map

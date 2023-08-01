@@ -275,3 +275,4 @@ export class TriangleFactory {
         }
     }
 }
+//# sourceMappingURL=Shapes.js.map
