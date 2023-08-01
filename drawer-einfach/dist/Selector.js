@@ -9,7 +9,7 @@ export class Selector {
         this.shapeListId = [];
         this.shapesSelected = [];
         this.shapeListIndexer = 0;
-        this.isTmpMovable = false;
+        this.isMoving = false;
         /* ------------ CREATE - MENU ------------ */
         this.createMenu = (menuApi) => {
             const menu = menuApi.createMenu();
@@ -104,7 +104,6 @@ export class Selector {
             menu.addItems(shapeMoveForwardItem, separator, shapeMoveBackwardItem);
             return menu;
         };
-        this.isRemoved = false;
         /**
          * This method is used to iterate through the shapes in a cyclic manner,
          * selecting and highlighting each shape one by one on the canvas.
@@ -143,14 +142,15 @@ export class Selector {
     handleMouseDown(x, y) {
         this.checkShapeCollision(x, y, false);
         if (this.shapesSelected.length === 1) {
-            this.isTmpMovable = true;
+            this.isMoving = true;
+            this.selectedShape = this.slm.getShapeById(this.shapesSelected[0]);
+            this.selectedShape.draw(this.slm.getCtx(), true);
         }
     }
     handleMouseMove(x, y) {
-        if (this.isTmpMovable) {
+        if (this.isMoving && this.selectedShape) {
             const type = this.slm.getShapeById(this.shapesSelected[0]).type;
             let shape, newShape;
-            this.slm.draw();
             switch (type) {
                 case 'line':
                     shape = this.slm.getShapeById(this.shapesSelected[0]);
@@ -168,13 +168,15 @@ export class Selector {
                     shape = this.slm.getShapeById(this.shapesSelected[0]);
                     newShape = new Triangle(new Point2D(x, y), new Point2D(x + Math.abs(shape.p2.x - shape.p1.x), y + Math.abs(shape.p2.y - shape.p1.y)), new Point2D(x + Math.abs(shape.p3.x - shape.p1.x), y + Math.abs(shape.p3.y - shape.p1.y)));
                     break;
+                default:
+                    break;
             }
             newShape.backgroundColor = shape.backgroundColor;
             newShape.strokeColor = shape.strokeColor;
             newShape.draw(this.slm.getCtx(), true);
             newShape.id = shape.id;
             this.slm.updateShape(newShape, true);
-            this.tempShape = newShape;
+            this.selectedShape = newShape;
         }
     }
     handleAlt(x, y) {
@@ -189,9 +191,10 @@ export class Selector {
         this.menu.show(x, y);
     }
     handleMouseUp() {
-        if (this.isTmpMovable) {
-            this.isTmpMovable = false;
-            this.slm.updateShape(this.tempShape, false);
+        if (this.isMoving && this.selectedShape) {
+            this.isMoving = false;
+            this.slm.updateShape(this.selectedShape, false);
+            this.selectedShape.draw(this.slm.getCtx(), true);
         }
     }
     /* -------------------------------------- */

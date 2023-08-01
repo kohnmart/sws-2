@@ -16,7 +16,8 @@ export class Selector implements ShapeFactory {
   private shapeListId: number[] = [];
   private shapesSelected: number[] = [];
   private shapeListIndexer: number = 0;
-  private isTmpMovable = false;
+  private isMoving = false;
+  private selectedShape: Line | Rectangle | Triangle | Circle;
   constructor(slm: SelectorManager) {
     this.slm = slm;
     this.menu = this.createMenu(new MenuApi());
@@ -137,17 +138,22 @@ export class Selector implements ShapeFactory {
   handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
     if (this.shapesSelected.length === 1) {
-      this.isTmpMovable = true;
+      this.isMoving = true;
+      this.selectedShape = this.slm.getShapeById(this.shapesSelected[0]) as
+        | Line
+        | Rectangle
+        | Triangle
+        | Circle;
+
+      this.selectedShape.draw(this.slm.getCtx(), true);
     }
   }
-  isRemoved: boolean = false;
-  tempShape: Shape;
+
   handleMouseMove(x: number, y: number) {
-    if (this.isTmpMovable) {
+    if (this.isMoving && this.selectedShape) {
       const type = this.slm.getShapeById(this.shapesSelected[0]).type;
       let shape: Line | Rectangle | Triangle | Circle,
         newShape: Line | Rectangle | Triangle | Circle;
-      this.slm.draw();
       switch (type) {
         case 'line':
           shape = this.slm.getShapeById(this.shapesSelected[0]) as Line;
@@ -189,13 +195,15 @@ export class Selector implements ShapeFactory {
             )
           );
           break;
+        default:
+          break;
       }
       newShape.backgroundColor = shape.backgroundColor;
       newShape.strokeColor = shape.strokeColor;
       newShape.draw(this.slm.getCtx(), true);
       newShape.id = shape.id;
       this.slm.updateShape(newShape, true);
-      this.tempShape = newShape;
+      this.selectedShape = newShape;
     }
   }
 
@@ -214,9 +222,10 @@ export class Selector implements ShapeFactory {
   }
 
   handleMouseUp() {
-    if (this.isTmpMovable) {
-      this.isTmpMovable = false;
-      this.slm.updateShape(this.tempShape, false);
+    if (this.isMoving && this.selectedShape) {
+      this.isMoving = false;
+      this.slm.updateShape(this.selectedShape, false);
+      this.selectedShape.draw(this.slm.getCtx(), true);
     }
   }
 

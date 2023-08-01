@@ -79,7 +79,7 @@ export class Canvas {
     /******* DISPATCHER METHODS *******/
     addShape(shape, redraw = true) {
         // Je nach Shape-Typ ein neues Shape-Objekt erstellen
-        const shapeCopy = this.copyShape(shape);
+        const shapeCopy = this.createShapeCopy(shape);
         // Die Eigenschaften von shape auf shapeCopy kopieren
         Object.assign(shapeCopy, shape);
         const canvasEvent = {
@@ -122,7 +122,7 @@ export class Canvas {
         this.displayEventStream();
     }
     updateShape(shape, isTemp) {
-        const shapeCopy = this.copyShape(shape);
+        const shapeCopy = this.createShapeCopy(shape);
         // Die Eigenschaften von shape auf shapeCopy kopieren
         Object.assign(shapeCopy, shape);
         const canvasEvent = {
@@ -142,10 +142,10 @@ export class Canvas {
         };
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
+        this.displayEventStream();
     }
     /******* HELPER METHODS *******/
-    copyShape(shape) {
-        console.log(shape);
+    createShapeCopy(shape) {
         let shapeCopy;
         if (shape.type === 'line') {
             const line = shape;

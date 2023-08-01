@@ -82,7 +82,7 @@ export class CanvasEventSubscription {
                     this.handleUpdateShape(event.data.shape);
                     break;
                 case CanvasEventType.UPDATE_SHAPES_ORDER:
-                    this.handleUpdateShapesOrder(event.data.shapeId, event.data.moveUp);
+                    this.handleUpdateShapesOrder(event.data.id, event.data.moveUp);
                     break;
                 case CanvasEventType.CHANGE_COLOR:
                     this.handleColorChange(event);
@@ -144,7 +144,6 @@ export class CanvasEventSubscription {
                 shapes[key] = shape;
             }
         }
-        // Redraw the canvas after updating the shape
         this.canvas.draw();
     }
     handleUpdateShapesOrder(shapeId, moveUp) {
@@ -169,7 +168,6 @@ export class CanvasEventSubscription {
                 shapes[currentShapeKey],
             ];
         }
-        // Redraw the canvas after updating the z-order
         this.canvas.draw();
     }
 }

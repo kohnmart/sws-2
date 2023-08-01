@@ -117,7 +117,7 @@ export class Canvas implements ShapeManager {
   addShape(shape: Shape, redraw: boolean = true): void {
     // Je nach Shape-Typ ein neues Shape-Objekt erstellen
 
-    const shapeCopy = this.copyShape(shape);
+    const shapeCopy = this.createShapeCopy(shape);
 
     // Die Eigenschaften von shape auf shapeCopy kopieren
     Object.assign(shapeCopy, shape);
@@ -165,7 +165,7 @@ export class Canvas implements ShapeManager {
   }
 
   updateShape(shape: Shape, isTemp: boolean) {
-    const shapeCopy = this.copyShape(shape);
+    const shapeCopy = this.createShapeCopy(shape);
 
     // Die Eigenschaften von shape auf shapeCopy kopieren
     Object.assign(shapeCopy, shape);
@@ -188,11 +188,12 @@ export class Canvas implements ShapeManager {
     };
     this.eventDispatcher.dispatch(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
+    this.displayEventStream();
   }
 
   /******* HELPER METHODS *******/
 
-  copyShape(shape: Shape) {
+  createShapeCopy(shape: Shape) {
     let shapeCopy: Shape;
     if (shape.type === 'line') {
       const line = shape as Line;
