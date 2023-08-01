@@ -127,4 +127,3 @@ export default class MenuApi {
     }
 }
 MenuApi.id = 'menu';
-//# sourceMappingURL=menuApi.js.map

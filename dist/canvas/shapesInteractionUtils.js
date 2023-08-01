@@ -21,8 +21,8 @@ const checkPointInRectangle = (x, y, from, to) => {
     const distanceToBottom = Math.abs(y - end_y);
     if (distanceToLeft <= Math.abs(end_x - start_x) &&
         distanceToRight <= Math.abs(end_x - start_x) &&
-        distanceToTop <= end_y - start_y &&
-        distanceToBottom <= end_y - start_y) {
+        distanceToTop <= Math.abs(end_y - start_y) &&
+        distanceToBottom <= Math.abs(end_y - start_y)) {
         return true;
     }
     return false;
@@ -45,11 +45,23 @@ const checkPointInCircle = (x, y, center, radius) => {
     }
     return false;
 };
+const checkShapeColorsConsistency = (shapes, list, bg, str) => {
+    const val = [false, false];
+    list.forEach((id) => {
+        if (shapes[id].backgroundColorKey !== bg && val[0] != true) {
+            val[0] = true;
+        }
+        if (shapes[id].strokeColorKey !== str && val[1] != true) {
+            val[1] = true;
+        }
+    });
+    return val;
+};
 export default {
     checkLineIntersection,
     checkPointInCircle,
     checkPointInRectangle,
     checkPointInTriangle,
+    checkShapeColorsConsistency,
 };
-export { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, };
-//# sourceMappingURL=ShapesInteraction.js.map
+export { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, };

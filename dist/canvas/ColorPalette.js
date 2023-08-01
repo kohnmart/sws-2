@@ -68,4 +68,3 @@ export class ColorPicker {
         return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
     }
 }
-//# sourceMappingURL=ColorPalette.js.map
