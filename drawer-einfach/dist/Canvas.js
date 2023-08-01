@@ -78,9 +78,7 @@ export class Canvas {
     }
     /******* DISPATCHER METHODS *******/
     addShape(shape, redraw = true) {
-        // Je nach Shape-Typ ein neues Shape-Objekt erstellen
         const shapeCopy = this.createShapeCopy(shape);
-        // Die Eigenschaften von shape auf shapeCopy kopieren
         Object.assign(shapeCopy, shape);
         const canvasEvent = {
             type: CanvasEventType.ADD_SHAPE,
@@ -206,24 +204,7 @@ export class Canvas {
             switch (event.type) {
                 case CanvasEventType.ADD_SHAPE:
                     const shapeData = event.data.shape;
-                    const shapeType = shapeData.type;
-                    let shape;
-                    switch (shapeType) {
-                        case 'line':
-                            shape = new Line(shapeData.from, shapeData.to);
-                            break;
-                        case 'rectangle':
-                            shape = new Rectangle(shapeData.from, shapeData.to);
-                            break;
-                        case 'circle':
-                            shape = new Circle(shapeData.center, shapeData.radius);
-                            break;
-                        case 'triangle':
-                            shape = new Triangle(shapeData.p1, shapeData.p2, shapeData.p3);
-                            break;
-                        default:
-                            break;
-                    }
+                    const shape = this.createShapeCopy(shapeData);
                     if (shape) {
                         shape.backgroundColor = shapeData.backgroundColor;
                         shape.backgroundColorKey = shapeData.backgroundColorKey;

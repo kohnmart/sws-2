@@ -115,11 +115,7 @@ export class Canvas implements ShapeManager {
 
   /******* DISPATCHER METHODS *******/
   addShape(shape: Shape, redraw: boolean = true): void {
-    // Je nach Shape-Typ ein neues Shape-Objekt erstellen
-
     const shapeCopy = this.createShapeCopy(shape);
-
-    // Die Eigenschaften von shape auf shapeCopy kopieren
     Object.assign(shapeCopy, shape);
 
     const canvasEvent: CanvasEvent = {
@@ -234,7 +230,6 @@ export class Canvas implements ShapeManager {
     }
   }
   /* EVENT DISPLAY */
-
   displayEventStream() {
     const textArea = document.getElementById(
       'event-stream-textarea'
@@ -263,25 +258,9 @@ export class Canvas implements ShapeManager {
     for (const event of events) {
       switch (event.type) {
         case CanvasEventType.ADD_SHAPE:
-          const shapeData = event.data.shape;
-          const shapeType = shapeData.type;
-          let shape;
-          switch (shapeType) {
-            case 'line':
-              shape = new Line(shapeData.from, shapeData.to);
-              break;
-            case 'rectangle':
-              shape = new Rectangle(shapeData.from, shapeData.to);
-              break;
-            case 'circle':
-              shape = new Circle(shapeData.center, shapeData.radius);
-              break;
-            case 'triangle':
-              shape = new Triangle(shapeData.p1, shapeData.p2, shapeData.p3);
-              break;
-            default:
-              break;
-          }
+          const shapeData: Line | Circle | Rectangle | Triangle =
+            event.data.shape;
+          const shape = this.createShapeCopy(shapeData);
           if (shape) {
             shape.backgroundColor = shapeData.backgroundColor;
             shape.backgroundColorKey = shapeData.backgroundColorKey;

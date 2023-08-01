@@ -1,8 +1,8 @@
-import { EventStream } from './CanvasEvent';
+import { ToolArea } from './ToolArea';
 
 export interface Shape {
-  readonly id: number;
   readonly type: string;
+  id: number;
   backgroundColor: string;
   backgroundColorKey: string;
   strokeColor: string;
@@ -60,5 +60,17 @@ export enum CanvasEventType {
 
 export interface CanvasEvent {
   type: CanvasEventType;
-  data?: any;
+  data?: {
+    id?: number;
+    shape?: Shape;
+    redraw?: boolean;
+    moveUp?: boolean;
+    isTemp?: boolean;
+    colorType?: string;
+    newColor?: string;
+    method?: Function;
+    tool?: ShapeFactory;
+    x?: number;
+    y?: number;
+  };
 }

@@ -1,10 +1,9 @@
 import { Canvas } from './Canvas.js';
-import { Rectangle } from './Shapes.js';
 import { CanvasEvent, CanvasEventType, Shape } from './types.js';
 
 export class CanvasEventManager {
   type: CanvasEventType;
-  data?: any;
+  data?: { shape: Shape; redraw: boolean; moveUp: boolean };
   timestamp: number;
   isTemporary: boolean;
 
