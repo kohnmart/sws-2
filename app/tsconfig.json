@@ -8,6 +8,6 @@
     "esModuleInterop": true,
     "moduleResolution":"node",
   },
-  "include": ["./index.ts", "./canvas/*"],
+  "include": ["./index.ts", "./canvas/*", "./canvas/client/*"],
   "exclude": ["../../node_modules"]
 }
