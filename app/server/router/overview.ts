@@ -1,12 +1,20 @@
 // overview.ts
 import express from 'express';
 import { checkHostExists } from '../middleware/host';
-import { addCanvasQuery } from '../db/setup';
+import { addCanvasQuery, getAllCanvasQuery } from '../db/setup';
 const indexRouter = express.Router();
 
 // Define a route for the overview page
-indexRouter.get('/', function (req, res) {
+indexRouter.get('/', checkHostExists, async (req, res) => {
   res.sendFile('index.html', { root: 'public' });
+});
+
+indexRouter.get('/all-canvas', checkHostExists, async (req, res) => {
+  const canvasList = await getAllCanvasQuery();
+  if (canvasList) {
+    res.status(200).json({ list: canvasList });
+  }
+  res.status(400).json({ message: 'Cant fetch canvas list' });
 });
 
 indexRouter.post('/create-canvas', checkHostExists, async (req, res) => {
