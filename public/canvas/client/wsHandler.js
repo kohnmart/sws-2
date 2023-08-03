@@ -1,5 +1,5 @@
 // Establish WebSocket connection to the server
-const ws = new WebSocket('ws://localhost:3000/canvas');
+const ws = new WebSocket('ws://localhost:3000/canvas/channel');
 const wsInit = () => {
     // When the WebSocket connection is established, receive the client ID from the server
     ws.onopen = () => {
