@@ -19,4 +19,3 @@ const wsInit = () => {
 };
 wsInit();
 export default wsInit;
-//# sourceMappingURL=wsHandler.js.map
