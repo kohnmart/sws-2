@@ -39,7 +39,7 @@ const checkPointInTriangle = (x, y, p1, p2, p3) => {
     return false;
 };
 const checkPointInCircle = (x, y, center, radius) => {
-    const distance = Math.sqrt(Math.pow((x - center.x), 2) + Math.pow((y - center.y), 2));
+    const distance = Math.sqrt((x - center.x) ** 2 + (y - center.y) ** 2);
     if (distance <= radius) {
         return true;
     }
@@ -65,4 +65,3 @@ export default {
     checkShapeColorsConsistency,
 };
 export { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, };
-//# sourceMappingURL=shapesInteractionUtils.js.map

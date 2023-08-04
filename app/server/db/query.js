@@ -1,9 +1,15 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 // Create a new instance of SQLite database
-const db = new sqlite3.Database('database.db');
-// Function to execute a SQL query and return a Promise
-const runQuery = (query, params = []) => {
+// const db = new sqlite3.Database('./app/server/db/database.db');
+const connectToDatabase = async () => {
+    return open({
+        filename: './app/server/db/database.db',
+        driver: sqlite3.Database,
+    });
+};
+const runQuery = async (query, params = []) => {
+    const db = await connectToDatabase();
     return new Promise((resolve, reject) => {
         db.run(query, params, function (err) {
             if (err) {
@@ -11,14 +17,16 @@ const runQuery = (query, params = []) => {
             }
             else {
                 resolve(this);
-                console.log(this);
             }
+            // Close the database connection after the query has finished executing
+            db.close();
         });
     });
 };
 // Function to get a single row from the database and return a Promise
 const getQuery = (query, params = []) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+        const db = await connectToDatabase();
         db.get(query, params, function (err, row) {
             if (err) {
                 reject(err);
@@ -27,13 +35,7 @@ const getQuery = (query, params = []) => {
                 resolve(row);
             }
         });
-    });
-};
-//connect
-const connectToDatabase = () => {
-    return open({
-        filename: 'path/to/your/database.db',
-        driver: sqlite3.Database,
+        db.close();
     });
 };
 export default { runQuery, getQuery };

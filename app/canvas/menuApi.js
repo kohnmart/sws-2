@@ -4,8 +4,7 @@ export default class MenuApi {
     constructor() {
         /* create new menu and append functionality */
         this.createMenu = () => {
-            var _a;
-            (_a = document.getElementById('menu-display')) === null || _a === void 0 ? void 0 : _a.appendChild(this.ulList);
+            document.getElementById('menu-display')?.appendChild(this.ulList);
             this.hide();
             return this;
         };
@@ -54,10 +53,10 @@ export default class MenuApi {
         this.show = (x, y) => {
             /* clear ul-list */
             const parent = document.getElementById('menu-display');
-            parent === null || parent === void 0 ? void 0 : parent.childNodes[0].remove();
+            parent?.childNodes[0].remove();
             this.ulList = document.createElement('ul');
             this.ulList.id = MenuApi.id;
-            parent === null || parent === void 0 ? void 0 : parent.appendChild(this.ulList);
+            parent?.appendChild(this.ulList);
             /* render items as elements in ul-list */
             this.itemList.forEach((item) => {
                 item.render();
@@ -93,7 +92,6 @@ export default class MenuApi {
             }
             /* ADD ALL MAIN COLORS TO THE PALETTES */
             colorTypes.forEach((type) => {
-                var _a;
                 for (const key in colorOptions) {
                     if (colorOptions.hasOwnProperty(key)) {
                         const { name, value } = colorOptions[key];
@@ -101,7 +99,7 @@ export default class MenuApi {
                     }
                 }
                 /* SET THE DEFAULT COLOR */
-                if (((_a = defaultColor === null || defaultColor === void 0 ? void 0 : defaultColor[type]) === null || _a === void 0 ? void 0 : _a.type) === type) {
+                if (defaultColor?.[type]?.type === type) {
                     ColorPaletteGroup.group[type].setDefaultColor(defaultColor[type].key);
                 }
             });
@@ -127,4 +125,3 @@ export default class MenuApi {
     }
 }
 MenuApi.id = 'menu';
-//# sourceMappingURL=menuApi.js.map

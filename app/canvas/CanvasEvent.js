@@ -171,4 +171,3 @@ export class CanvasEventSubscription {
         this.canvas.draw();
     }
 }
-//# sourceMappingURL=CanvasEvent.js.map

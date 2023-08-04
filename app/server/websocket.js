@@ -19,4 +19,3 @@ const startWebSocketServer = (server) => {
     });
 };
 export default startWebSocketServer;
-//# sourceMappingURL=websocket.js.map

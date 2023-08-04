@@ -233,4 +233,3 @@ export class Canvas {
         this.draw();
     }
 }
-//# sourceMappingURL=Canvas.js.map

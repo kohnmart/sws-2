@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { checkHostExistsQuery, addHostQuery } from '../db/setup';
+import { checkHostExistsQuery, addHostQuery } from '../db/setup.js';
 
 const checkHostExists = async (
   req: Request,

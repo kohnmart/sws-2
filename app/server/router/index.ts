@@ -1,13 +1,8 @@
 // overview.ts
 import express from 'express';
-import { checkHostExists } from '../middleware/host';
-import { addCanvasQuery, getAllCanvasQuery } from '../db/setup';
+import { checkHostExists } from '../middleware/host.js';
+import { addCanvasQuery, getAllCanvasQuery } from '../db/setup.js';
 const indexRouter = express.Router();
-
-// Define a route for the overview page
-indexRouter.get('/', checkHostExists, async (req, res) => {
-  res.sendFile('index.html', { root: 'public' });
-});
 
 indexRouter.get('/all-canvas', async (req, res) => {
   const canvasList = await getAllCanvasQuery();
@@ -18,7 +13,7 @@ indexRouter.get('/all-canvas', async (req, res) => {
 });
 
 indexRouter.post('/create', checkHostExists, async (req, res) => {
-  const canvasId = await addCanvasQuery(req.params.host_id);
+  const canvasId = await addCanvasQuery(req.body.host_id, req.body.name);
   if (canvasId) {
     return res.redirect(`/canvas/${canvasId}`);
   }

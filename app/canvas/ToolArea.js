@@ -30,4 +30,3 @@ export class ToolArea {
         return this.selectedShape;
     }
 }
-//# sourceMappingURL=ToolArea.js.map

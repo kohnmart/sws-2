@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>canvas-overview</title>
+  </head>
+  <body>
+    <h1>Canvas Overview</h1>
+    <div>
+      <ul id="canvas-list"></ul>
+    </div>
+    <div>
+      <form action="">
+        <input type="text" />
+        <input type="submit" />
+      </form>
+    </div>
+  </body>
+</html>
+<script>
+  async function fetchCanvases() {
+    try {
+      const response = await fetch('/api/all-canvas'); // Replace with your API endpoint
+      const data = await response.json();
+
+      const canvasList = document.getElementById('canvas-list');
+      data.forEach((canvas) => {
+        const li = document.createElement('li');
+        li.textContent = canvas.name; // Adjust the property to match your data structure
+        canvasList.appendChild(li);
+      });
+    } catch (error) {
+      console.error('Error fetching canvases:', error);
+    }
+  }
+  fetchCanvases();
+</script>
