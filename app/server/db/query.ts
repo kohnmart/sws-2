@@ -12,32 +12,29 @@ const connectToDatabase = async () => {
 
 const runQuery = async (query: string, params: any[] = []): Promise<any> => {
   const db = await connectToDatabase();
-  return new Promise((resolve, reject) => {
-    db.run(query, params, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this);
-      }
+  db.run(query, params, function (err) {
+    if (err) {
+      throw err;
+    } else {
+      console.log(this);
+    }
 
-      // Close the database connection after the query has finished executing
-      db.close();
-    });
+    // Close the database connection after the query has finished executing
+    db.close();
   });
 };
 
 // Function to get a single row from the database and return a Promise
-const getQuery = (query: string, params: any[] = []): Promise<any> => {
-  return new Promise(async (resolve, reject) => {
-    const db = await connectToDatabase();
-    db.get(query, params, function (err, row) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(row);
-      }
-    });
+const getQuery = async (query: string, params: any[] = []) => {
+  const db = await connectToDatabase();
+  db.all(query, params, function (err, rows) {
+    if (err) {
+      throw err;
+    }
     db.close();
+    return rows;
+
+    // Close the database connection after the query has finished executing
   });
 };
 

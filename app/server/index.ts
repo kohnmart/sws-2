@@ -11,6 +11,7 @@ import { createDatabaseQuery } from './db/setup.js';
 const app = express();
 
 /* APP USE */
+app.use(express.json());
 app.use(cors());
 app.use(express.static('./canvas'));
 app.use('/api', indexRouter);

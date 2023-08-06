@@ -6,12 +6,14 @@ const indexRouter = express.Router();
 indexRouter.get('/all-canvas', async (req, res) => {
     const canvasList = await getAllCanvasQuery();
     if (canvasList) {
-        res.status(200).json({ list: canvasList });
+        res.json({ status: 200, list: canvasList });
     }
-    res.status(400).json({ message: 'Cant fetch canvas list' });
+    else {
+        res.json({ status: 400, message: 'Cannot fetch canvas list' });
+    }
 });
 indexRouter.post('/create', checkHostExists, async (req, res) => {
-    const canvasId = await addCanvasQuery(req.body.host_id, req.body.name);
+    const canvasId = await addCanvasQuery(req.body.hostId, req.body.name);
     if (canvasId) {
         return res.redirect(`/canvas/${canvasId}`);
     }

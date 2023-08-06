@@ -11,28 +11,74 @@
       <ul id="canvas-list"></ul>
     </div>
     <div>
-      <form action="">
-        <input type="text" />
+      <form id="canvas-form">
+        <label for="name">Name:</label>
+        <input name="name" type="text" />
         <input type="submit" />
       </form>
     </div>
   </body>
 </html>
 <script>
-  async function fetchCanvases() {
-    try {
-      const response = await fetch('/api/all-canvas'); // Replace with your API endpoint
-      const data = await response.json();
+  // Fetch the canvas list from the server
+  fetch('api/all-canvas')
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === 200) {
+        const canvasList = data.list;
 
-      const canvasList = document.getElementById('canvas-list');
-      data.forEach((canvas) => {
-        const li = document.createElement('li');
-        li.textContent = canvas.name; // Adjust the property to match your data structure
-        canvasList.appendChild(li);
-      });
-    } catch (error) {
-      console.error('Error fetching canvases:', error);
+        // Loop through the canvasList and create list items
+        const listItems = canvasList.map((canvas) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `Canvas ID: ${canvas.canvas_id}, Host ID: ${canvas.host_id}, Name: ${canvas.name}`;
+          return listItem;
+        });
+
+        // Append the list items to the canvasListElement
+        listItems.forEach((listItem) => {
+          canvasListElement.appendChild(listItem);
+        });
+      } else {
+        // Handle the error case
+        console.error(data.message);
+      }
+    })
+    .catch((error) => {
+      console.error('An error occurred:', error);
+    });
+
+  const createNewCanvas = async (event) => {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    const formData = new FormData(canvasForm);
+    formData.append('host_id', hostId || ''); // Append host_id to form data
+
+    const obj = {
+      name: formData.get('name'),
+      hostId: formData.get('host_id'),
+    };
+
+    const response = await fetch('api/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(obj), // Send JSON data in the request body
+    });
+
+    if (response.ok) {
+      // Handle success
+      console.log('Form submitted successfully teter');
+      // Refresh the page or perform other actions
+    } else {
+      // Handle error
+      console.error('Form submission failed');
     }
-  }
-  fetchCanvases();
+  };
+
+  // Attach the event listener to the form
+  const canvasForm = document.getElementById('canvas-form');
+  const hostId = localStorage.getItem('host_id');
+  canvasForm.addEventListener('submit', createNewCanvas);
 </script>

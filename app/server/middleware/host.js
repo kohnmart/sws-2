@@ -1,11 +1,19 @@
 import { checkHostExistsQuery, addHostQuery } from '../db/setup.js';
 const checkHostExists = async (req, res, next) => {
-    const host_id = req.params.host_id;
+    const hostId = req.body.hostId;
     try {
-        const hostExists = await checkHostExistsQuery(host_id);
-        if (!hostExists) {
+        if (hostId) {
+            const hostExists = await checkHostExistsQuery(hostId);
+            if (!hostExists) {
+                const id = await addHostQuery();
+                req.body.hostId = id;
+                console.log(req.body.hostId);
+            }
+        }
+        else {
             const id = await addHostQuery();
-            req.params.host_id = id;
+            req.body.hostId = id;
+            console.log(req.body.hostId);
         }
         next();
     }
