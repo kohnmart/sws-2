@@ -3,7 +3,8 @@ import { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 const startWebSocketServer = (server) => {
     const wss = new WebSocketServer({ server });
-    wss.on('connection', (ws) => {
+    const channels = {};
+    wss.on('connection', (ws, req) => {
         console.log('WebSocket client connected');
         // Assign a unique ID to the client and send it back
         const clientId = uuidv4();
@@ -11,6 +12,21 @@ const startWebSocketServer = (server) => {
         ws.on('message', (message) => {
             console.log('Received message:', message);
             // Handle received message
+            try {
+                const raw = message.toString();
+                const request = JSON.parse(raw);
+                if (request.command === 'registerForCanvas') {
+                    const canvasId = request.canvasId;
+                    const response = {
+                        canvasId: canvasId,
+                        eventsForCanvas: {},
+                    };
+                    ws.send(JSON.stringify(response));
+                }
+            }
+            catch (error) {
+                console.error('Error processing message:', error);
+            }
         });
         ws.on('close', () => {
             console.log('WebSocket client disconnected');
