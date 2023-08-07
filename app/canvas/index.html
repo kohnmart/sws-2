@@ -11,53 +11,59 @@
       <ul id="canvas-list"></ul>
     </div>
     <div>
+      <p>Erstelle ein neues Canvas:</p>
       <form id="canvas-form">
         <label for="name">Name:</label>
         <input name="name" type="text" />
-        <input type="submit" />
+        <input type="submit" value="Erstellen" />
       </form>
     </div>
   </body>
 </html>
 <script>
+  const canvasForm = document.getElementById('canvas-form');
+  const canvasListElement = document.getElementById('canvas-list');
+
   // Fetch the canvas list from the server
-  fetch('api/all-canvas')
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === 200) {
-        const canvasList = data.list;
+  const fetchCanvases = async () => {
+    fetch('api/all-canvas')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+          const canvasList = data.list;
+          // Loop through the canvasList and create list items
+          const listItems = canvasList.map((canvas) => {
+            const liContainer = document.createElement('li');
+            const listItem = document.createElement('button');
+            listItem.innerHTML = `${canvas.name}`;
+            liContainer.appendChild(listItem);
+            return liContainer;
+          });
 
-        // Loop through the canvasList and create list items
-        const listItems = canvasList.map((canvas) => {
-          const listItem = document.createElement('li');
-          listItem.textContent = `Name: ${canvas.name}`;
-          return listItem;
-        });
-
-        // Append the list items to the canvasListElement
-        listItems.forEach((listItem) => {
-          canvasListElement.appendChild(listItem);
-        });
-      } else {
-        // Handle the error case
-        console.error(data.message);
-      }
-    })
-    .catch((error) => {
-      console.error('An error occurred:', error);
-    });
+          // Append the list items to the canvasListElement
+          listItems.forEach((listItem) => {
+            canvasListElement.appendChild(listItem);
+          });
+        } else {
+          // Handle the error case
+          console.error(data.message);
+        }
+      })
+      .catch((error) => {
+        console.error('An error occurred:', error);
+      });
+  };
 
   const createNewCanvas = async (event) => {
     event.preventDefault(); // Prevent the form from submitting normally
 
     const formData = new FormData(canvasForm);
-    formData.append('host_id', hostId || ''); // Append host_id to form data
+    formData.append('hostId', localStorage.getItem('hostId') || ''); // Append host_id to form data
 
     const obj = {
       name: formData.get('name'),
-      hostId: formData.get('host_id'),
+      hostId: formData.get('hostId'),
     };
-    let res;
     const response = await fetch('api/create', {
       method: 'POST',
       headers: {
@@ -70,8 +76,13 @@
     if (response.ok) {
       // Handle success
       const body = await response.json();
-      localStorage.setItem('hostId', body.hostId);
       console.log('Form submitted successfully');
+      // Set the hostId in localStorage
+      localStorage.setItem('hostId', body.msg.hostId);
+
+      const btn = document.createElement('button');
+      btn.innerHTML = obj.name;
+      canvasListElement.appendChild(btn);
       // Refresh the page or perform other actions
     } else {
       // Handle error
@@ -79,9 +90,7 @@
     }
   };
 
-  // Attach the event listener to the form
-  const canvasForm = document.getElementById('canvas-form');
-  const canvasListElement = document.getElementById('canvas-list');
-  const hostId = localStorage.getItem('hostId');
+  // init
   canvasForm.addEventListener('submit', createNewCanvas);
+  fetchCanvases();
 </script>

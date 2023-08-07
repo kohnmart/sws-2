@@ -39,7 +39,7 @@ const addCanvasQuery = async (
 };
 
 const checkHostExistsQuery = async (hostId: string): Promise<boolean> => {
-  const query = 'SELECT name FROM host WHERE host_id = ?';
+  const query = 'SELECT host_id FROM host WHERE host_id = ?';
   const row = await getQuery(query, [hostId]);
   return row !== null;
 };
@@ -68,7 +68,6 @@ const getCanvasStreamQuery = async (canvasId: string): Promise<any> => {
 const getAllCanvasQuery = async (): Promise<any> => {
   const query = 'SELECT * FROM canvas';
   const res = await getQuery(query);
-  console.log(res);
   return res;
 };
 

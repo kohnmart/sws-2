@@ -6,7 +6,8 @@ const checkHostExists = async (
   res: Response,
   next: NextFunction
 ) => {
-  const hostId = req.body.hostId;
+  const hostId: string = req.body.hostId;
+  console.log(hostId);
   try {
     if (hostId) {
       const hostExists = await checkHostExistsQuery(hostId);
