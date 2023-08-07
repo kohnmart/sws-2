@@ -2,28 +2,31 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import startWebSocketServer from './websocket.js'; // Import the WebSocket server module
-
-/* ROUTER */
 import indexRouter from './router/index.js';
 import canvasRouter from './router/canvas.js';
 import { createDatabaseQuery } from './db/setup.js';
+import path from 'path';
 
 const app = express();
 
 /* APP USE */
 app.use(express.json());
 app.use(cors());
-app.use(express.static('./canvas'));
-app.use('/api', indexRouter);
-app.use('/api/canvas', canvasRouter);
-const server = http.createServer(app);
 
-startWebSocketServer(server);
+// Serve static files from the "canvas" directory
+app.use('/api', indexRouter);
+app.use('/canvas', canvasRouter);
+app.use('/canvas', express.static('app/canvas'));
 
 // Define a route for the index page
 app.get('/', (req, res) => {
-  res.sendFile('index.html', { root: 'app/canvas' });
+  res.sendFile('index.html', { root: '/' });
 });
+
+const server = http.createServer(app);
+
+// Start the WebSocket server
+startWebSocketServer(server);
 
 const port = 3000;
 server.listen(port, () => {

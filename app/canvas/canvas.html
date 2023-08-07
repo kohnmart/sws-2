@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Zeichenpogramm</title>
     <link rel="stylesheet" href="style.css" type="text/css" />
     <script src="client/wsHandler.js" type="module"></script>
-    <script src="types.js" type="module"></script>
-    <script src="Shapes.js" type="module"></script>
-    <script src="ToolArea.js" type="module"></script>
-    <script src="Canvas.js" type="module"></script>
-    <script src="init.js" type="module"></script>
+    <script src="client/types.js" type="module"></script>
+    <script src="client/Shapes.js" type="module"></script>
+    <script src="client/ToolArea.js" type="module"></script>
+    <script src="client/Canvas.js" type="module"></script>
+    <script src="client/init.js" type="module"></script>
+  </head>
+  <body>
+    <p>
+      Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus. Haben Sie eines
+      ausgewählt, können Sie mit der Maus die entsprechenden Figuren zeichen.
+      Typischerweise, indem Sie die Maus drücken, dann mit gedrückter Maustaste
+      die Form bestimmen, und dann anschließend die Maustaste loslassen.
+    </p>
 
-<body>
-
-<p>Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus.
-Haben Sie eines ausgewählt, können Sie mit der Maus
-die entsprechenden Figuren zeichen. Typischerweise, indem
-Sie die Maus drücken, dann mit gedrückter Maustaste die
-Form bestimmen, und dann anschließend die Maustaste loslassen.
-</p>
-
-<ul class="tools"></ul>
-<canvas id="drawArea" width="900" height="800"></canvas>
-<div id="eventstream">
-<button id="load-event-stream-btn">Event-Stream laden</button>
-<textarea id="event-stream-textarea"></textarea>
-</div>
-<div id="menu-display"></div>
-</body>
+    <ul class="tools"></ul>
+    <canvas id="drawArea" width="900" height="800"></canvas>
+    <div id="eventstream">
+      <button id="load-event-stream-btn">Event-Stream laden</button>
+      <textarea id="event-stream-textarea"></textarea>
+    </div>
+    <div id="menu-display"></div>
+  </body>
 </html>

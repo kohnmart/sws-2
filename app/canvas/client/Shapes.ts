@@ -1,5 +1,5 @@
 import { ColorPaletteGroup } from './ColorPalette.js';
-import { Shape, ShapeFactory, ShapeManager } from './types.js';
+import { Shape, ShapeFactory, ShapeManager } from './client/types.js/index.js';
 
 export class Point2D {
   constructor(readonly x: number, readonly y: number) {}

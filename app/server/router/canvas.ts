@@ -4,7 +4,6 @@ import { checkCanvasExistsQuery } from '../db/setup.js';
 const canvasRouter = express.Router();
 
 canvasRouter.get('/:id', async (req, res) => {
-  console.log(req.params.id);
   const exists = await checkCanvasExistsQuery(req.params.id);
   if (exists) {
     res.sendFile('canvas.html', { root: 'app/canvas' });

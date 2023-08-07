@@ -1,5 +1,9 @@
 import { Canvas } from './Canvas.js';
-import { CanvasEvent, CanvasEventType, Shape } from './types.js';
+import {
+  CanvasEvent,
+  CanvasEventType,
+  Shape,
+} from './client/types.js/index.js';
 
 export class CanvasEventManager {
   type: CanvasEventType;
