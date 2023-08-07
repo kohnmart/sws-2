@@ -24,6 +24,16 @@
   const canvasForm = document.getElementById('canvas-form');
   const canvasListElement = document.getElementById('canvas-list');
 
+  const createCanvasButton = (id) => {
+    const btn = document.createElement('button');
+    btn.innerHTML = id;
+    btn.addEventListener('click', () => {
+      // Redirect to the canvas page using the canvas ID
+      window.location.href = `/api/canvas/${id}`;
+    });
+    return btn;
+  };
+
   // Fetch the canvas list from the server
   const fetchCanvases = async () => {
     fetch('api/all-canvas')
@@ -34,7 +44,7 @@
           // Loop through the canvasList and create list items
           const listItems = canvasList.map((canvas) => {
             const liContainer = document.createElement('li');
-            const listItem = document.createElement('button');
+            const listItem = createCanvasButton(canvas.canvas_id);
             listItem.innerHTML = `${canvas.name}`;
             liContainer.appendChild(listItem);
             return liContainer;
@@ -54,7 +64,7 @@
       });
   };
 
-  const createNewCanvas = async (event) => {
+  const createCanvasInstance = async (event) => {
     event.preventDefault(); // Prevent the form from submitting normally
 
     const formData = new FormData(canvasForm);
@@ -80,8 +90,7 @@
       // Set the hostId in localStorage
       localStorage.setItem('hostId', body.msg.hostId);
 
-      const btn = document.createElement('button');
-      btn.innerHTML = obj.name;
+      const btn = createCanvasButton(body.msg.canvasId);
       canvasListElement.appendChild(btn);
       // Refresh the page or perform other actions
     } else {
@@ -91,6 +100,6 @@
   };
 
   // init
-  canvasForm.addEventListener('submit', createNewCanvas);
+  canvasForm.addEventListener('submit', createCanvasInstance);
   fetchCanvases();
 </script>

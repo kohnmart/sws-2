@@ -1,14 +1,15 @@
 // overview.ts
 import express from 'express';
-import { checkCanvasExistsQuery, } from '../db/setup.js';
+import { checkCanvasExistsQuery } from '../db/setup.js';
 const canvasRouter = express.Router();
 canvasRouter.get('/:id', async (req, res) => {
+    console.log(req.params.id);
     const exists = await checkCanvasExistsQuery(req.params.id);
     if (exists) {
-        return res.redirect(req.url);
+        res.sendFile('canvas.html', { root: 'app/canvas' });
     }
     else {
-        return res.redirect('/');
+        res.status(404).send('Canvas not found');
     }
 });
 export default canvasRouter;
