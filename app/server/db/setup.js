@@ -42,10 +42,10 @@ const checkCanvasExistsQuery = async (id) => {
     return row !== null;
 };
 const addHostQuery = async () => {
-    const query = 'INSERT INTO host (host_id) VALUES (?) RETURNING host_id';
-    const res = await runQuery(query, [uuidv4()]);
-    console.log('RES:' + res);
-    return res;
+    const query = 'INSERT INTO host (host_id) VALUES (?)';
+    const id = uuidv4();
+    await runQuery(query, [id]);
+    return id;
 };
 const getCanvasStreamQuery = async (canvasId) => {
     const query = 'SELECT canvas_id, host_id, eventstream FROM canvas WHERE canvas_id = ?';
@@ -55,6 +55,7 @@ const getCanvasStreamQuery = async (canvasId) => {
 const getAllCanvasQuery = async () => {
     const query = 'SELECT * FROM canvas';
     const res = await getQuery(query);
+    console.log(res);
     return res;
 };
 export default {

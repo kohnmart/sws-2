@@ -18,6 +18,7 @@ const checkHostExists = async (
     } else {
       const id = await addHostQuery();
       req.body.hostId = id;
+      console.log('TEST');
       console.log(req.body.hostId);
     }
 

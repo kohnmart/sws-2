@@ -15,7 +15,9 @@ indexRouter.get('/all-canvas', async (req, res) => {
 indexRouter.post('/create', checkHostExists, async (req, res) => {
     const canvasId = await addCanvasQuery(req.body.hostId, req.body.name);
     if (canvasId) {
-        return res.redirect(`/canvas/${canvasId}`);
+        return res
+            .status(200)
+            .json({ msg: { hostId: req.body.hostId, canvasId: canvasId } });
     }
     return res.status(400).json({ msg: 'error on canvas creation' });
 });

@@ -30,7 +30,7 @@
         // Loop through the canvasList and create list items
         const listItems = canvasList.map((canvas) => {
           const listItem = document.createElement('li');
-          listItem.textContent = `Canvas ID: ${canvas.canvas_id}, Host ID: ${canvas.host_id}, Name: ${canvas.name}`;
+          listItem.textContent = `Name: ${canvas.name}`;
           return listItem;
         });
 
@@ -57,7 +57,7 @@
       name: formData.get('name'),
       hostId: formData.get('host_id'),
     };
-
+    let res;
     const response = await fetch('api/create', {
       method: 'POST',
       headers: {
@@ -69,7 +69,9 @@
 
     if (response.ok) {
       // Handle success
-      console.log('Form submitted successfully teter');
+      const body = await response.json();
+      localStorage.setItem('hostId', body.hostId);
+      console.log('Form submitted successfully');
       // Refresh the page or perform other actions
     } else {
       // Handle error
@@ -79,6 +81,7 @@
 
   // Attach the event listener to the form
   const canvasForm = document.getElementById('canvas-form');
-  const hostId = localStorage.getItem('host_id');
+  const canvasListElement = document.getElementById('canvas-list');
+  const hostId = localStorage.getItem('hostId');
   canvasForm.addEventListener('submit', createNewCanvas);
 </script>

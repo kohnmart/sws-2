@@ -52,10 +52,10 @@ const checkCanvasExistsQuery = async (id: string): Promise<boolean> => {
 };
 
 const addHostQuery = async (): Promise<string> => {
-  const query = 'INSERT INTO host (host_id) VALUES (?) RETURNING host_id';
-  const res = await runQuery(query, [uuidv4()]);
-  console.log('RES:' + res);
-  return res;
+  const query = 'INSERT INTO host (host_id) VALUES (?)';
+  const id = uuidv4();
+  await runQuery(query, [id]);
+  return id;
 };
 
 const getCanvasStreamQuery = async (canvasId: string): Promise<any> => {
@@ -68,6 +68,7 @@ const getCanvasStreamQuery = async (canvasId: string): Promise<any> => {
 const getAllCanvasQuery = async (): Promise<any> => {
   const query = 'SELECT * FROM canvas';
   const res = await getQuery(query);
+  console.log(res);
   return res;
 };
 
