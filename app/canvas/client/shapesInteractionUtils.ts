@@ -1,4 +1,4 @@
-import { Shape } from './client/types';
+import { Shape } from './types';
 
 const checkLineIntersection = (
   x: number,

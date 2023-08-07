@@ -1,9 +1,4 @@
-import {
-  CanvasEvent,
-  CanvasEventType,
-  Shape,
-  ShapeManager,
-} from './client/types.js/index.js';
+import { CanvasEvent, CanvasEventType, Shape, ShapeManager } from './types.js';
 import { ToolArea } from './ToolArea.js';
 import {
   CanvasEventDispatcher,

@@ -5,7 +5,6 @@ import startWebSocketServer from './websocket.js'; // Import the WebSocket serve
 import indexRouter from './router/index.js';
 import canvasRouter from './router/canvas.js';
 import { createDatabaseQuery } from './db/setup.js';
-import path from 'path';
 
 const app = express();
 
@@ -20,7 +19,7 @@ app.use('/canvas', express.static('app/canvas'));
 
 // Define a route for the index page
 app.get('/', (req, res) => {
-  res.sendFile('index.html', { root: '/' });
+  res.sendFile('index.html', { root: 'app/canvas' });
 });
 
 const server = http.createServer(app);

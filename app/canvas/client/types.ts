@@ -1,5 +1,3 @@
-import { ToolArea } from './ToolArea';
-
 export interface Shape {
   readonly type: string;
   id: number;

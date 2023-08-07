@@ -1,9 +1,4 @@
-import {
-  SelectorManager,
-  ShapeFactory,
-  PLT_TYPES,
-  Shape,
-} from './client/types.js/index.js';
+import { SelectorManager, ShapeFactory, PLT_TYPES, Shape } from './types.js';
 import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
 import MenuApi from './menuApi.js';
 import {

@@ -1,9 +1,4 @@
-import {
-  ShapeFactory,
-  ShapeManager,
-  SelectorManager,
-  Shape,
-} from './client/types.js/index.js';
+import { ShapeFactory, ShapeManager, SelectorManager, Shape } from './types.js';
 import {
   CircleFactory,
   LineFactory,

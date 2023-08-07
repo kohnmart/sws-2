@@ -15,7 +15,7 @@ app.use('/canvas', canvasRouter);
 app.use('/canvas', express.static('app/canvas'));
 // Define a route for the index page
 app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: '/' });
+    res.sendFile('index.html', { root: 'app/canvas' });
 });
 const server = http.createServer(app);
 // Start the WebSocket server
