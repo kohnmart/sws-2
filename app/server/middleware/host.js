@@ -1,4 +1,4 @@
-import { checkHostExistsQuery, addHostQuery } from '../db/setup.js';
+import { checkHostExistsQuery, addHostQuery } from '../db/query.js';
 const checkHostExists = async (req, res, next) => {
     const hostId = req.body.hostId;
     console.log(hostId);

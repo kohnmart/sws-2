@@ -1,7 +1,7 @@
 // overview.ts
 import express from 'express';
 import { checkHostExists } from '../middleware/host.js';
-import { addCanvasQuery, getAllCanvasQuery } from '../db/setup.js';
+import { addCanvasQuery, getAllCanvasQuery } from '../db/query.js';
 const indexRouter = express.Router();
 
 indexRouter.get('/all-canvas', async (req, res) => {

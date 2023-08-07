@@ -1,6 +1,6 @@
 // overview.ts
 import express from 'express';
-import { checkCanvasExistsQuery } from '../db/setup.js';
+import { checkCanvasExistsQuery } from '../db/query.js';
 const canvasRouter = express.Router();
 canvasRouter.get('/:id', async (req, res) => {
     const exists = await checkCanvasExistsQuery(req.params.id);

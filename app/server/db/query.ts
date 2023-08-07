@@ -1,44 +1,63 @@
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
+import { v4 as uuidv4 } from 'uuid';
+import { getQuery, runQuery } from './abstractQuery.js';
 
-// Create a new instance of SQLite database
-// const db = new sqlite3.Database('./app/server/db/database.db');
-const connectToDatabase = async () => {
-  return open({
-    filename: './app/server/db/database.db',
-    driver: sqlite3.Database,
-  });
+// Function to add a new canvas to the database
+const addCanvasQuery = async (
+  hostId: string,
+  canvasName: string
+): Promise<string> => {
+  const query =
+    'INSERT INTO CANVAS (canvas_id, host_id, name, eventstream) VALUES (?, ? , ? ,?)';
+  const res = await runQuery(query, [uuidv4(), hostId, canvasName, '{}']);
+  return res;
 };
 
-const runQuery = async (query: string, params: any[] = []): Promise<any> => {
-  const db = await connectToDatabase();
-
-  try {
-    const result = await db.run(query, params);
-    console.log(result);
-    return result;
-  } catch (error) {
-    throw error;
-  } finally {
-    // Close the database connection after the query has finished executing
-    db.close();
-  }
+const checkHostExistsQuery = async (hostId: string): Promise<boolean> => {
+  const query = 'SELECT host_id FROM host WHERE host_id = ?';
+  const row = await getQuery(query, [hostId]);
+  return row !== null;
 };
 
-// Function to get a single row from the database and return a Promise
-const getQuery = async (query: string, params: any[] = []) => {
-  const db = await connectToDatabase();
-  try {
-    const result = await db.all(query, params);
-    console.log(result);
-    return result;
-  } catch (error) {
-    throw error;
-  } finally {
-    // Close the database connection after the query has finished executing
-    db.close();
-  }
+const checkCanvasExistsQuery = async (id: string): Promise<boolean> => {
+  const query =
+    'SELECT canvas_id FROM canvas WHERE canvas_id = ? AND host_id = ?';
+  const row = await getQuery(query, [id]);
+  return row !== null;
 };
 
-export default { runQuery, getQuery };
-export { runQuery, getQuery };
+const addHostQuery = async (): Promise<string> => {
+  const query = 'INSERT INTO host (host_id) VALUES (?)';
+  const id = uuidv4();
+  await runQuery(query, [id]);
+  return id;
+};
+
+const getCanvasStreamQuery = async (canvasId: string): Promise<any> => {
+  const query =
+    'SELECT canvas_id, host_id, eventstream FROM canvas WHERE canvas_id = ?';
+  const res = await getQuery(query, [canvasId]);
+  return res;
+};
+
+const getAllCanvasQuery = async (): Promise<any> => {
+  const query = 'SELECT * FROM canvas';
+  const res = await getQuery(query);
+  return res;
+};
+
+export default {
+  addCanvasQuery,
+  checkHostExistsQuery,
+  checkCanvasExistsQuery,
+  addHostQuery,
+  getCanvasStreamQuery,
+  getAllCanvasQuery,
+};
+export {
+  addCanvasQuery,
+  checkHostExistsQuery,
+  checkCanvasExistsQuery,
+  addHostQuery,
+  getCanvasStreamQuery,
+  getAllCanvasQuery,
+};
