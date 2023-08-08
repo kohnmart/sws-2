@@ -52,12 +52,15 @@ abstract class AbstractFactory<T extends Shape> {
 
     // Entfernen Sie das temporäre Shape, wenn eines vorhanden ist
     if (this.tmpShape) {
-      this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
+      this.shapeManager.removeShapeWithId(false, this.tmpShape.id, false);
       this.tmpShape = null;
     }
 
     // Fügen Sie das endgültige Shape hinzu
-    this.shapeManager.addShape(this.createShape(this.from, new Point2D(x, y)));
+    this.shapeManager.addShape(
+      false,
+      this.createShape(this.from, new Point2D(x, y))
+    );
     this.from = null;
     this.isDrawing = false; // Setzen Sie isDrawing auf false, um den Zeichnungsvorgang zu beenden
   }
@@ -79,7 +82,7 @@ abstract class AbstractFactory<T extends Shape> {
 
         // Fügen Sie das neue temporäre Shape hinzu
         this.tmpShape = this.createShape(this.from, this.tmpTo);
-        this.shapeManager.addShape(this.tmpShape);
+        this.shapeManager.addShape(true, this.tmpShape);
       }
     }
   }
@@ -280,6 +283,7 @@ export class TriangleFactory implements ShapeFactory {
     if (this.tmpShape) {
       this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
       this.shapeManager.addShape(
+        true,
         new Triangle(this.from, this.tmpTo, new Point2D(x, y))
       );
       this.from = undefined;
@@ -300,7 +304,7 @@ export class TriangleFactory implements ShapeFactory {
       this.tmpTo = new Point2D(x, y);
       this.thirdPoint = new Point2D(x, y);
       this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
-      this.shapeManager.addShape(this.tmpShape);
+      this.shapeManager.addShape(true, this.tmpShape);
     }
   }
 
@@ -324,7 +328,7 @@ export class TriangleFactory implements ShapeFactory {
         }
         // adds a new temp triangle
         this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
-        this.shapeManager.addShape(this.tmpShape);
+        this.shapeManager.addShape(true, this.tmpShape);
       }
     } else {
       // no second point fixed, update tmp line
@@ -336,7 +340,7 @@ export class TriangleFactory implements ShapeFactory {
         }
         // adds a new temp line
         this.tmpLine = new Line(this.from, this.tmpTo);
-        this.shapeManager.addShape(this.tmpLine);
+        this.shapeManager.addShape(true, this.tmpLine);
       }
     }
   }

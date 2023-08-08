@@ -78,13 +78,8 @@ const createCanvasButton = (id) => {
     return btn;
 };
 let websocket;
-const leaveCanvas = () => {
-    document.getElementById('canvas-container').style.display = 'none';
-    document.getElementById('index-container').style.display = 'block';
-    if (websocket) {
-        websocket.close();
-        console.log('websocket connection closed');
-    }
+export const wsSend = (eventLog) => {
+    websocket.send(eventLog);
 };
 const enterCanvas = async (id) => {
     fetch(`/canvas/${id}`)
@@ -108,6 +103,14 @@ const enterCanvas = async (id) => {
             console.log('Cant open canvas');
         }
     });
+};
+const leaveCanvas = () => {
+    document.getElementById('canvas-container').style.display = 'none';
+    document.getElementById('index-container').style.display = 'block';
+    if (websocket) {
+        websocket.close();
+        console.log('websocket connection closed');
+    }
 };
 // Fetch the canvas list from the server
 const fetchCanvases = async () => {

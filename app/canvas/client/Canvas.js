@@ -77,7 +77,7 @@ export class Canvas {
         return this;
     }
     /******* DISPATCHER METHODS *******/
-    addShape(shape, redraw = true) {
+    addShape(isTemp, shape, redraw = true) {
         const shapeCopy = this.createShapeCopy(shape);
         Object.assign(shapeCopy, shape);
         const canvasEvent = {
@@ -85,8 +85,10 @@ export class Canvas {
             data: { shape: shapeCopy, redraw: redraw },
         };
         this.eventDispatcher.dispatch(canvasEvent);
-        this.eventStream.addEvent(canvasEvent);
-        this.displayEventStream();
+        if (!isTemp) {
+            this.eventStream.addEvent(canvasEvent);
+            this.displayEventStream();
+        }
     }
     removeShape(shape, redraw = true) {
         const canvasEvent = {
@@ -101,6 +103,7 @@ export class Canvas {
             type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
             data: { id: id, redraw: redraw },
         };
+        console.log(isTemp);
         this.eventDispatcher.dispatch(canvasEvent);
         if (isTemp) {
             this.eventStream.removeLastEvent();
@@ -190,6 +193,8 @@ export class Canvas {
             .getEvents()
             .map((event) => JSON.stringify(event))
             .join('\n');
+        console.log('EVENT');
+        console.log(eventsJSON);
         textArea.value = '';
         textArea.value = eventsJSON;
     }
@@ -211,7 +216,7 @@ export class Canvas {
                         shape.strokeColor = shapeData.strokeColor;
                         shape.strokeColorKey = shapeData.strokeColorKey;
                         shape.id = shapeData.id;
-                        this.addShape(shape, event.data.redraw);
+                        this.addShape(false, shape, event.data.redraw);
                     }
                     break;
                 case CanvasEventType.REMOVE_SHAPE:

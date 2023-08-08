@@ -1,3 +1,4 @@
+import { json } from 'stream/consumers';
 import init from './init.js';
 import { wsInstance, wsConnection } from './wsHandler.js';
 
@@ -99,6 +100,10 @@ const createCanvasButton = (id: string) => {
 };
 
 let websocket: WebSocket;
+
+export const wsSend = (eventLog: string) => {
+  websocket.send(eventLog);
+};
 
 const enterCanvas = async (id: string) => {
   fetch(`/canvas/${id}`)

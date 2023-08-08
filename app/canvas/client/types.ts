@@ -9,7 +9,7 @@ export interface Shape {
 }
 
 export interface ShapeManager {
-  addShape(shape: Shape, redraw?: boolean): void;
+  addShape(isTemp: boolean, shape: Shape, redraw?: boolean): void;
   removeShape(shape: Shape, redraw?: boolean): void;
   removeShapeWithId(isTemp: boolean, id: number, redraw?: boolean): void;
 }

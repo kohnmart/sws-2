@@ -13,8 +13,8 @@ function init() {
     // Anyway, we do not want the two to have references on each other
     let canvas;
     const sm = {
-        addShape(s, rd) {
-            return canvas.addShape(s, rd);
+        addShape(isTemp, s, rd) {
+            return canvas.addShape(isTemp, s, rd);
         },
         removeShape(s, rd) {
             return canvas.removeShape(s, rd);

@@ -1,4 +1,5 @@
 import { Canvas } from './Canvas.js';
+import { wsSend } from './index.js';
 import { CanvasEvent, CanvasEventType, Shape } from './types.js';
 
 export class CanvasEventManager {
@@ -19,6 +20,7 @@ export class EventStream {
 
   addEvent(event: CanvasEvent) {
     this.events.push(event);
+    wsSend(JSON.stringify(event));
   }
 
   getEvents(): CanvasEvent[] {
