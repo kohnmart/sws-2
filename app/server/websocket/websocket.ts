@@ -1,49 +1,70 @@
 // websocket.ts
-import { WebSocketServer } from 'ws';
+import { WebSocket, WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
+import { Server } from 'http';
 
-const startWebSocketServer = (server) => {
+const startWebSocketServer = (server: Server) => {
   const wss = new WebSocketServer({ server });
 
-  const channels = {};
-
+  const channels = [];
+  const eventStream = [];
   wss.on('connection', (ws, req) => {
     console.log('WebSocket client connected');
 
     // Assign a unique ID to the client and send it back
     const clientId = uuidv4();
-    ws.send(JSON.stringify({ type: 'clientId', clientId }));
+    //ws.send(JSON.stringify({ type: 'clientId', clientId }));
 
     ws.on('message', (message) => {
-      console.log('Received message:', message);
+      const msg = message.toString();
+      console.log('Received message:', msg);
 
       try {
         const request = JSON.parse(message.toString());
 
-        if (request.command === 'registerForCanvas') {
-          const canvasId = request.canvasId;
+        switch (request.command) {
+          case WsEvents.registerForCanvas:
+            // init channels/eventstream array
+            channels[request.canvasId] = channels[request.canvasId] || [];
+            eventStream[request.canvasId] = eventStream[request.canvasId] || [];
 
-          // Initialize the events array for the canvas
-          channels[canvasId] = channels[canvasId] || [];
+            // register the websocket client for the canvas
+            channels[request.canvasId].push(ws);
 
-          // Register the WebSocket client for the canvas
-          channels[canvasId].push(ws);
+            // return current state of canvas
+            const response = {
+              clientId: clientId,
+              canvasId: request.canvasId,
+              eventStream: eventStream,
+            };
 
-          const response = {
-            canvasId: canvasId,
-            eventsForCanvas: [],
-          };
+            ws.send(JSON.stringify(response));
+            break;
 
-          ws.send(JSON.stringify(response));
-        } else if (request.command === 'unregisterForCanvas') {
-          const canvasId = request.canvasId;
+          case WsEvents.unregisterForCanvas:
+            if (channels[request.canvasId]) {
+              // filter client and remove from channel
+              channels[request.canvasId] = channels[request.canvasId].filter(
+                (client: WebSocket) => client !== ws
+              );
+            }
+            break;
 
-          // Remove the WebSocket client from the canvas
-          if (channels[canvasId]) {
-            channels[canvasId] = channels[canvasId].filter(
-              (client) => client !== ws
-            );
-          }
+          case WsEvents.addShape:
+            broadcastToCanvas(request.canvasId, request);
+            break;
+
+          case WsEvents.removeShapeWithId:
+            broadcastToCanvas(request.canvasId, request);
+            break;
+
+          case WsEvents.selectShape:
+            broadcastToCanvas(request.canvasId, request);
+            break;
+
+          case WsEvents.unselectShape:
+            broadcastToCanvas(request.canvasId, request);
+            break;
         }
       } catch (error) {
         console.error('Error processing message:', error);
@@ -56,20 +77,30 @@ const startWebSocketServer = (server) => {
       // Remove the WebSocket client from all channels
       for (const canvasId in channels) {
         channels[canvasId] = channels[canvasId].filter(
-          (client) => client !== ws
+          (client: WebSocket) => client !== ws
         );
       }
     });
   });
 
   // Broadcast changes to all connected clients for a specific canvas
-  function broadcastToCanvas(canvasId, message) {
+  function broadcastToCanvas(canvasId: string, event: string) {
     if (channels[canvasId]) {
-      channels[canvasId].forEach((client) => {
-        client.send(JSON.stringify(message));
+      channels[canvasId].forEach((client: WebSocket) => {
+        eventStream[channels[canvasId]].push(event);
+        client.send(JSON.stringify(event));
       });
     }
   }
 };
+
+enum WsEvents {
+  registerForCanvas = 'registerForCanvas',
+  unregisterForCanvas = 'unregisterForCanvas',
+  addShape = 'addShape',
+  removeShapeWithId = 'removeShapeWithId',
+  selectShape = 'selectShape',
+  unselectShape = 'unselectShape',
+}
 
 export default startWebSocketServer;
