@@ -8,7 +8,7 @@ const startWebSocketServer = (server: Server) => {
 
   const channels = [];
   const eventStream = [];
-  wss.on('connection', (ws, req) => {
+  wss.on('connection', (ws) => {
     console.log('WebSocket client connected');
 
     // Assign a unique ID to the client and send it back
@@ -17,7 +17,7 @@ const startWebSocketServer = (server: Server) => {
 
     ws.on('message', (message) => {
       const msg = message.toString();
-      console.log('Received message:', msg);
+      //console.log('Received message:', msg);
 
       try {
         const request = JSON.parse(message.toString());

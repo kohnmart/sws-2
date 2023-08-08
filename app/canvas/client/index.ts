@@ -1,4 +1,3 @@
-import { json } from 'stream/consumers';
 import init from './init.js';
 import { wsInstance, wsConnection } from './wsHandler.js';
 
@@ -100,9 +99,13 @@ const createCanvasButton = (id: string) => {
 };
 
 let websocket: WebSocket;
-
+let canvasId: string;
 export const wsSend = (eventLog: string) => {
   websocket.send(eventLog);
+};
+
+export const getCanvasId = () => {
+  return canvasId;
 };
 
 const enterCanvas = async (id: string) => {
@@ -115,7 +118,8 @@ const enterCanvas = async (id: string) => {
         // Disable overview - html
         document.getElementById('index-container').style.display = 'none';
         document.body.appendChild(createCanvasContainer());
-
+        // set current canvasId
+        canvasId = id;
         //establisch websocket connection
         websocket = wsInstance(id);
         wsConnection(websocket, id);

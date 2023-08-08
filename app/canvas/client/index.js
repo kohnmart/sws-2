@@ -78,8 +78,12 @@ const createCanvasButton = (id) => {
     return btn;
 };
 let websocket;
+let canvasId;
 export const wsSend = (eventLog) => {
     websocket.send(eventLog);
+};
+export const getCanvasId = () => {
+    return canvasId;
 };
 const enterCanvas = async (id) => {
     fetch(`/canvas/${id}`)
@@ -91,6 +95,8 @@ const enterCanvas = async (id) => {
             // Disable overview - html
             document.getElementById('index-container').style.display = 'none';
             document.body.appendChild(createCanvasContainer());
+            // set current canvasId
+            canvasId = id;
             //establisch websocket connection
             websocket = wsInstance(id);
             wsConnection(websocket, id);

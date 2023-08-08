@@ -5,14 +5,14 @@ const startWebSocketServer = (server) => {
     const wss = new WebSocketServer({ server });
     const channels = [];
     const eventStream = [];
-    wss.on('connection', (ws, req) => {
+    wss.on('connection', (ws) => {
         console.log('WebSocket client connected');
         // Assign a unique ID to the client and send it back
         const clientId = uuidv4();
         //ws.send(JSON.stringify({ type: 'clientId', clientId }));
         ws.on('message', (message) => {
             const msg = message.toString();
-            console.log('Received message:', msg);
+            //console.log('Received message:', msg);
             try {
                 const request = JSON.parse(message.toString());
                 switch (request.command) {

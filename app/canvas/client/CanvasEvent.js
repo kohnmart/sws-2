@@ -1,4 +1,4 @@
-import { wsSend } from './index.js';
+import { getCanvasId, wsSend } from './index.js';
 import { CanvasEventType } from './types.js';
 export class CanvasEventManager {
     constructor(type, data) {
@@ -13,7 +13,12 @@ export class EventStream {
     }
     addEvent(event) {
         this.events.push(event);
-        wsSend(JSON.stringify(event));
+        const requestEvent = {
+            command: event.type,
+            canvasId: getCanvasId(),
+            data: event.data,
+        };
+        wsSend(JSON.stringify(requestEvent));
     }
     getEvents() {
         return this.events;
