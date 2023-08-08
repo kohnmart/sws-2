@@ -28,7 +28,7 @@ const wsInit = () => {
     const data = JSON.parse(event.data);
     console.log('Incoming...');
     console.log(data);
-    if (data.type === 'clientId') {
+    if (data.type === 'registration') {
       const clientId = data.clientId;
       console.log('Received client ID:', clientId);
       // Do something with the client ID, e.g., use it to identify the client on the canvas page

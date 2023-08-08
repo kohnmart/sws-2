@@ -16,7 +16,7 @@ const startWebSocketServer = (server) => {
             try {
                 const request = JSON.parse(message.toString());
                 switch (request.command) {
-                    case WsEvents.registerForCanvas:
+                    case WsEvents.REGISTER_FOR_CANVAS:
                         // init channels/eventstream array
                         channels[request.canvasId] = channels[request.canvasId] || [];
                         eventStream[request.canvasId] = eventStream[request.canvasId] || [];
@@ -24,28 +24,29 @@ const startWebSocketServer = (server) => {
                         channels[request.canvasId].push(ws);
                         // return current state of canvas
                         const response = {
+                            type: 'registration',
                             clientId: clientId,
                             canvasId: request.canvasId,
                             eventStream: eventStream,
                         };
                         ws.send(JSON.stringify(response));
                         break;
-                    case WsEvents.unregisterForCanvas:
+                    case WsEvents.UNREGISTER_FOR_CANVAS:
                         if (channels[request.canvasId]) {
                             // filter client and remove from channel
                             channels[request.canvasId] = channels[request.canvasId].filter((client) => client !== ws);
                         }
                         break;
-                    case WsEvents.addShape:
+                    case WsEvents.ADD_SHAPE:
                         broadcastToCanvas(request.canvasId, request);
                         break;
-                    case WsEvents.removeShapeWithId:
+                    case WsEvents.REMOVE_SHAPE_WITH_ID:
                         broadcastToCanvas(request.canvasId, request);
                         break;
-                    case WsEvents.selectShape:
+                    case WsEvents.SELECT_SHAPE:
                         broadcastToCanvas(request.canvasId, request);
                         break;
-                    case WsEvents.unselectShape:
+                    case WsEvents.UNSELECT_SHAPE:
                         broadcastToCanvas(request.canvasId, request);
                         break;
                 }
@@ -74,11 +75,11 @@ const startWebSocketServer = (server) => {
 };
 var WsEvents;
 (function (WsEvents) {
-    WsEvents["registerForCanvas"] = "registerForCanvas";
-    WsEvents["unregisterForCanvas"] = "unregisterForCanvas";
-    WsEvents["addShape"] = "addShape";
-    WsEvents["removeShapeWithId"] = "removeShapeWithId";
-    WsEvents["selectShape"] = "selectShape";
-    WsEvents["unselectShape"] = "unselectShape";
+    WsEvents["REGISTER_FOR_CANVAS"] = "registerForCanvas";
+    WsEvents["UNREGISTER_FOR_CANVAS"] = "unregisterForCanvas";
+    WsEvents["ADD_SHAPE"] = "addShape";
+    WsEvents["REMOVE_SHAPE_WITH_ID"] = "removeShapeWithId";
+    WsEvents["SELECT_SHAPE"] = "selectShape";
+    WsEvents["UNSELECT_SHAPE"] = "unselectShape";
 })(WsEvents || (WsEvents = {}));
 export default startWebSocketServer;

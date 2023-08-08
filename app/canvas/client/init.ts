@@ -72,4 +72,5 @@ function init() {
   canvas = new Canvas(canvasDomElm, toolArea);
   canvas.draw();
 }
-init();
+
+export default init;
