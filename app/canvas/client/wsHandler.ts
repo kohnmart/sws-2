@@ -1,16 +1,10 @@
-// Get the current URL
-const currentUrl = window.location.href;
-
-// Split the URL by "/"
-const urlParts = currentUrl.split('/');
-
-// The last part should be the UUID
-const uuid = urlParts[urlParts.length - 1];
-
 // Use the UUID in your WebSocket connection
-const ws = new WebSocket(`ws://localhost:3000/canvas/${uuid}`);
 
-const wsInit = () => {
+const wsInstance = (id: string) => {
+  return new WebSocket(`ws://localhost:3000/canvas/${id}`);
+};
+
+const wsConnection = (ws: WebSocket, uuid: string) => {
   // When the WebSocket connection is established, receive the client ID from the server
   ws.onopen = () => {
     console.log('WebSocket connection established');
@@ -40,6 +34,5 @@ const wsInit = () => {
   };
 };
 
-wsInit();
-
-export default wsInit;
+export default { wsInstance, wsConnection };
+export { wsInstance, wsConnection };
