@@ -1,4 +1,5 @@
 import init from './init.js';
+import { wsInstance, wsConnection } from './wsHandler.js';
 const createIndexContainer = () => {
     const indexContainer = document.createElement('div');
     indexContainer.id = 'index-container';
@@ -35,6 +36,10 @@ const createIndexContainer = () => {
 const createCanvasContainer = () => {
     const canvasContainer = document.createElement('div');
     canvasContainer.id = 'canvas-container';
+    const returnButton = document.createElement('button');
+    returnButton.addEventListener('click', leaveCanvas);
+    returnButton.innerText = 'Leave Canvas';
+    canvasContainer.appendChild(returnButton);
     const paragraph = document.createElement('p');
     paragraph.textContent =
         'Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus. Haben Sie eines ausgewählt, können Sie mit der Maus die entsprechenden Figuren zeichnen. Typischerweise, indem Sie die Maus drücken, dann mit gedrückter Maustaste die Form bestimmen, und dann anschließend die Maustaste loslassen.';
@@ -72,6 +77,15 @@ const createCanvasButton = (id) => {
     btn.addEventListener('click', () => enterCanvas(id));
     return btn;
 };
+let websocket;
+const leaveCanvas = () => {
+    document.getElementById('canvas-container').style.display = 'none';
+    document.getElementById('index-container').style.display = 'block';
+    if (websocket) {
+        websocket.close();
+        console.log('websocket connection closed');
+    }
+};
 const enterCanvas = async (id) => {
     fetch(`/canvas/${id}`)
         .then((response) => response.json())
@@ -82,6 +96,9 @@ const enterCanvas = async (id) => {
             // Disable overview - html
             document.getElementById('index-container').style.display = 'none';
             document.body.appendChild(createCanvasContainer());
+            //establisch websocket connection
+            websocket = wsInstance(id);
+            wsConnection(websocket, id);
             // render canvas - html
             // now init canvas logic
             init();

@@ -1,4 +1,5 @@
 import init from './init.js';
+import { wsInstance, wsConnection } from './wsHandler.js';
 
 const createIndexContainer = () => {
   const indexContainer = document.createElement('div');
@@ -44,6 +45,11 @@ const createCanvasContainer = () => {
   const canvasContainer = document.createElement('div');
   canvasContainer.id = 'canvas-container';
 
+  const returnButton = document.createElement('button');
+  returnButton.addEventListener('click', leaveCanvas);
+  returnButton.innerText = 'Leave Canvas';
+  canvasContainer.appendChild(returnButton);
+
   const paragraph = document.createElement('p');
   paragraph.textContent =
     'Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus. Haben Sie eines ausgewählt, können Sie mit der Maus die entsprechenden Figuren zeichnen. Typischerweise, indem Sie die Maus drücken, dann mit gedrückter Maustaste die Form bestimmen, und dann anschließend die Maustaste loslassen.';
@@ -76,7 +82,6 @@ const createCanvasContainer = () => {
   const menuDisplayDiv = document.createElement('div');
   menuDisplayDiv.id = 'menu-display';
   canvasContainer.appendChild(menuDisplayDiv);
-
   return canvasContainer;
 };
 
@@ -93,6 +98,8 @@ const createCanvasButton = (id: string) => {
   return btn;
 };
 
+let websocket: WebSocket;
+
 const enterCanvas = async (id: string) => {
   fetch(`/canvas/${id}`)
     .then((response) => response.json())
@@ -103,6 +110,10 @@ const enterCanvas = async (id: string) => {
         // Disable overview - html
         document.getElementById('index-container').style.display = 'none';
         document.body.appendChild(createCanvasContainer());
+
+        //establisch websocket connection
+        websocket = wsInstance(id);
+        wsConnection(websocket, id);
         // render canvas - html
         // now init canvas logic
         init();
@@ -111,6 +122,15 @@ const enterCanvas = async (id: string) => {
         console.log('Cant open canvas');
       }
     });
+};
+
+const leaveCanvas = () => {
+  document.getElementById('canvas-container').style.display = 'none';
+  document.getElementById('index-container').style.display = 'block';
+  if (websocket) {
+    websocket.close();
+    console.log('websocket connection closed');
+  }
 };
 
 // Fetch the canvas list from the server
