@@ -1,4 +1,6 @@
 // Use the UUID in your WebSocket connection
+import { loadStream } from './init.js';
+import { CanvasEventType } from './types.js';
 const wsInstance = (id) => {
     return new WebSocket(`ws://localhost:3000/canvas/${id}`);
 };
@@ -15,13 +17,23 @@ const wsConnection = (ws, uuid) => {
         ws.send(JSON.stringify(requestForRegistration));
     };
     ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
+        const response = JSON.parse(event.data);
         console.log('Incoming...');
-        console.log(data);
-        if (data.type === 'registration') {
-            const clientId = data.clientId;
+        console.log(response);
+        if (response.type === 'registration') {
+            const clientId = response.clientId;
             console.log('Received client ID:', clientId);
-            // Do something with the client ID, e.g., use it to identify the client on the canvas page
+            // Do something with the client ID, e.g.,
+            // use it to identify the client on the canvas page
+            localStorage.setItem('clientId', clientId);
+            loadStream(response);
+        }
+        if (response.type === 'unregister') {
+            ws.close();
+            console.log('Unregister Successful');
+        }
+        if (response.type === CanvasEventType) {
+            console.log(response.data);
         }
     };
     ws.onclose = () => {

@@ -14,10 +14,6 @@ export class Canvas {
         this.height = height;
         this.toolEventDispatcher = new ToolEventDispatcher();
         this.toolEventSubscription = new ToolEventSubscription(this.toolEventDispatcher);
-        const el = document.getElementById('load-event-stream-btn');
-        el.addEventListener('click', () => {
-            this.loadEventStream();
-        });
         this.ctx = canvasDomElement.getContext('2d');
         canvasDomElement.addEventListener('mousemove', createMouseHandler('handleMouseMove', toolarea));
         canvasDomElement.addEventListener('mouseup', createMouseHandler('handleMouseUp', toolarea));
@@ -198,15 +194,21 @@ export class Canvas {
         textArea.value = '';
         textArea.value = eventsJSON;
     }
-    loadEventStream() {
-        const textArea = document.getElementById('event-stream-textarea');
+    loadEventStream(stream) {
+        /*const textArea = document.getElementById(
+          'event-stream-textarea'
+        ) as HTMLTextAreaElement;
         const eventStreamContent = textArea.value;
         const events = eventStreamContent
-            .split('\n')
-            .map((event) => JSON.parse(event.trim()));
-        this.eventStream.clearEvents();
-        for (const event of events) {
-            switch (event.type) {
+          .split('\n')
+          .map((event) => JSON.parse(event.trim()));
+    
+        this.eventStream.clearEvents();*/
+        console.log('STREAM');
+        console.log(stream);
+        const events = stream.eventStream;
+        events.forEach((event) => {
+            switch (event.command) {
                 case CanvasEventType.ADD_SHAPE:
                     const shapeData = event.data.shape;
                     const shape = this.createShapeCopy(shapeData);
@@ -234,7 +236,7 @@ export class Canvas {
                 default:
                     break;
             }
-        }
+        });
         this.draw();
     }
 }

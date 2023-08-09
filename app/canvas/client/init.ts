@@ -8,6 +8,7 @@ import {
 import { ToolArea } from './ToolArea.js';
 import { Canvas } from './Canvas.js';
 import { Selector } from './Selector.js';
+let canvas: Canvas;
 function init() {
   const canvasDomElm = document.getElementById('drawArea') as HTMLCanvasElement;
   const menu = document.getElementsByClassName('tools');
@@ -17,7 +18,6 @@ function init() {
   // on the toolbar, because the toolbar knows what tool is currently
   // selected.
   // Anyway, we do not want the two to have references on each other
-  let canvas: Canvas;
   const sm: ShapeManager = {
     addShape(isTemp, s, rd) {
       return canvas.addShape(isTemp, s, rd);
@@ -73,4 +73,10 @@ function init() {
   canvas.draw();
 }
 
-export default init;
+const loadStream = (stream: []) => {
+  return canvas.loadEventStream(stream);
+};
+
+export default { init, loadStream };
+
+export { init, loadStream };

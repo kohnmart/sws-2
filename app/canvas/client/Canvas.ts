@@ -35,11 +35,6 @@ export class Canvas implements ShapeManager {
       this.toolEventDispatcher
     );
 
-    const el = document.getElementById('load-event-stream-btn');
-    el.addEventListener('click', () => {
-      this.loadEventStream();
-    });
-
     this.ctx = canvasDomElement.getContext('2d');
     canvasDomElement.addEventListener(
       'mousemove',
@@ -250,8 +245,8 @@ export class Canvas implements ShapeManager {
     textArea.value = eventsJSON;
   }
 
-  loadEventStream() {
-    const textArea = document.getElementById(
+  loadEventStream(stream: any) {
+    /*const textArea = document.getElementById(
       'event-stream-textarea'
     ) as HTMLTextAreaElement;
     const eventStreamContent = textArea.value;
@@ -259,10 +254,12 @@ export class Canvas implements ShapeManager {
       .split('\n')
       .map((event) => JSON.parse(event.trim()));
 
-    this.eventStream.clearEvents();
-
-    for (const event of events) {
-      switch (event.type) {
+    this.eventStream.clearEvents();*/
+    console.log('STREAM');
+    console.log(stream);
+    const events = stream.eventStream;
+    events.forEach((event: any) => {
+      switch (event.command) {
         case CanvasEventType.ADD_SHAPE:
           const shapeData: Line | Circle | Rectangle | Triangle =
             event.data.shape;
@@ -291,7 +288,7 @@ export class Canvas implements ShapeManager {
         default:
           break;
       }
-    }
+    });
     this.draw();
   }
 }

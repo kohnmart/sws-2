@@ -23,6 +23,7 @@ export class EventStream {
     const requestEvent = {
       command: event.type,
       canvasId: getCanvasId(),
+      clientId: localStorage.getItem('clientId'),
       data: event.data,
     };
     wsSend(JSON.stringify(requestEvent));

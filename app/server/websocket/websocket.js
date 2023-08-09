@@ -1,53 +1,57 @@
 // websocket.ts
 import { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
+import { CanvasEventType } from '../../canvas/client/types.js';
 const startWebSocketServer = (server) => {
     const wss = new WebSocketServer({ server });
-    const channels = [];
-    const eventStream = [];
+    const channels = {};
     wss.on('connection', (ws) => {
         console.log('WebSocket client connected');
-        // Assign a unique ID to the client and send it back
-        const clientId = uuidv4();
-        //ws.send(JSON.stringify({ type: 'clientId', clientId }));
         ws.on('message', (message) => {
             const msg = message.toString();
-            //console.log('Received message:', msg);
+            console.log('Received message:', msg);
             try {
                 const request = JSON.parse(message.toString());
                 switch (request.command) {
                     case WsEvents.REGISTER_FOR_CANVAS:
-                        // init channels/eventstream array
-                        channels[request.canvasId] = channels[request.canvasId] || [];
-                        eventStream[request.canvasId] = eventStream[request.canvasId] || [];
-                        // register the websocket client for the canvas
-                        channels[request.canvasId].push(ws);
-                        // return current state of canvas
+                        // Generate UUID
+                        const clientId = uuidv4();
+                        // Initialize channels[request.canvasId] if not already
+                        if (!channels[request.canvasId]) {
+                            channels[request.canvasId] = {
+                                clientData: [],
+                                eventStream: [],
+                            };
+                        }
+                        // Register the websocket client for the canvas
+                        channels[request.canvasId].clientData.push({
+                            clientId,
+                            ws,
+                        });
+                        // Return current state of canvas
                         const response = {
                             type: 'registration',
                             clientId: clientId,
                             canvasId: request.canvasId,
-                            eventStream: eventStream,
+                            eventStream: channels[request.canvasId].eventStream,
                         };
                         ws.send(JSON.stringify(response));
                         break;
                     case WsEvents.UNREGISTER_FOR_CANVAS:
                         if (channels[request.canvasId]) {
-                            // filter client and remove from channel
-                            channels[request.canvasId] = channels[request.canvasId].filter((client) => client !== ws);
+                            // Filter client and remove from channel
+                            channels[request.canvasId].clientData = channels[request.canvasId].clientData.filter((channel) => channel.ws !== ws);
+                            const response = {
+                                type: 'unregister',
+                            };
+                            ws.send(JSON.stringify(response));
                         }
                         break;
-                    case WsEvents.ADD_SHAPE:
-                        broadcastToCanvas(request.canvasId, request);
-                        break;
-                    case WsEvents.REMOVE_SHAPE_WITH_ID:
-                        broadcastToCanvas(request.canvasId, request);
-                        break;
+                    case CanvasEventType.ADD_SHAPE:
+                    case CanvasEventType.REMOVE_SHAPE_WITH_ID:
                     case WsEvents.SELECT_SHAPE:
-                        broadcastToCanvas(request.canvasId, request);
-                        break;
                     case WsEvents.UNSELECT_SHAPE:
-                        broadcastToCanvas(request.canvasId, request);
+                        broadcastToCanvas(request.canvasId, request, request.clientId);
                         break;
                 }
             }
@@ -57,18 +61,18 @@ const startWebSocketServer = (server) => {
         });
         ws.on('close', () => {
             console.log('WebSocket client disconnected');
-            // Remove the WebSocket client from all channels
-            for (const canvasId in channels) {
-                channels[canvasId] = channels[canvasId].filter((client) => client !== ws);
-            }
         });
     });
     // Broadcast changes to all connected clients for a specific canvas
-    function broadcastToCanvas(canvasId, event) {
+    function broadcastToCanvas(canvasId, event, currentClientId) {
         if (channels[canvasId]) {
-            channels[canvasId].forEach((client) => {
-                eventStream[channels[canvasId]].push(event);
-                client.send(JSON.stringify(event));
+            // add to eventStream
+            channels[canvasId].eventStream.push(event);
+            // broadcast to all clients excluding acting client
+            channels[canvasId].clientData.forEach((client) => {
+                if (client.clientId !== currentClientId) {
+                    client.ws.send(JSON.stringify(event));
+                }
             });
         }
     }
@@ -77,8 +81,6 @@ var WsEvents;
 (function (WsEvents) {
     WsEvents["REGISTER_FOR_CANVAS"] = "registerForCanvas";
     WsEvents["UNREGISTER_FOR_CANVAS"] = "unregisterForCanvas";
-    WsEvents["ADD_SHAPE"] = "addShape";
-    WsEvents["REMOVE_SHAPE_WITH_ID"] = "removeShapeWithId";
     WsEvents["SELECT_SHAPE"] = "selectShape";
     WsEvents["UNSELECT_SHAPE"] = "unselectShape";
 })(WsEvents || (WsEvents = {}));

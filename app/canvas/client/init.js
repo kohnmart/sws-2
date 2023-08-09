@@ -2,6 +2,7 @@ import { CircleFactory, LineFactory, RectangleFactory, TriangleFactory, } from '
 import { ToolArea } from './ToolArea.js';
 import { Canvas } from './Canvas.js';
 import { Selector } from './Selector.js';
+let canvas;
 function init() {
     const canvasDomElm = document.getElementById('drawArea');
     const menu = document.getElementsByClassName('tools');
@@ -11,7 +12,6 @@ function init() {
     // on the toolbar, because the toolbar knows what tool is currently
     // selected.
     // Anyway, we do not want the two to have references on each other
-    let canvas;
     const sm = {
         addShape(isTemp, s, rd) {
             return canvas.addShape(isTemp, s, rd);
@@ -60,4 +60,8 @@ function init() {
     canvas = new Canvas(canvasDomElm, toolArea);
     canvas.draw();
 }
-export default init;
+const loadStream = (stream) => {
+    return canvas.loadEventStream(stream);
+};
+export default { init, loadStream };
+export { init, loadStream };

@@ -102,7 +102,7 @@ const enterCanvas = async (id) => {
             wsConnection(websocket, id);
             // render canvas - html
             // now init canvas logic
-            init();
+            init.init();
             createIndexContainer;
         }
         else {
@@ -114,8 +114,11 @@ const leaveCanvas = () => {
     document.getElementById('canvas-container').style.display = 'none';
     document.getElementById('index-container').style.display = 'block';
     if (websocket) {
-        websocket.close();
-        console.log('websocket connection closed');
+        const request = {
+            command: 'unregisterForCanvas',
+            canvasId: canvasId,
+        };
+        websocket.send(JSON.stringify(request));
     }
 };
 // Fetch the canvas list from the server
