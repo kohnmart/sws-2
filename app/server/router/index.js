@@ -17,7 +17,13 @@ indexRouter.post('/create', checkHostExists, async (req, res) => {
     if (canvasId) {
         return res
             .status(200)
-            .json({ msg: { hostId: req.body.hostId, canvasId: canvasId } });
+            .json({
+            msg: {
+                name: req.body.name,
+                hostId: req.body.hostId,
+                canvasId: canvasId,
+            },
+        });
     }
     return res.status(400).json({ msg: 'error on canvas creation' });
 });

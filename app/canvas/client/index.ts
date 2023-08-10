@@ -91,11 +91,27 @@ document.body.appendChild(createIndexContainer());
 const canvasForm = document.getElementById('canvas-form');
 const canvasListElement = document.getElementById('canvas-list');
 
-const createCanvasButton = (id: string) => {
+const createCanvasButton = (
+  canvasName: string,
+  canvasId: string,
+  hostId: string
+) => {
+  const container = document.createElement('div');
   const btn = document.createElement('button');
-  btn.innerHTML = id;
-  btn.addEventListener('click', () => enterCanvas(id));
-  return btn;
+  console.log('CANVASNAME: ' + canvasName);
+  btn.innerHTML = canvasName;
+  btn.addEventListener('click', () => enterCanvas(canvasId));
+
+  container.appendChild(btn);
+
+  if (hostId === localStorage.getItem('hostId')) {
+    const rmvButton = document.createElement('button');
+    rmvButton.innerHTML = 'remove';
+    rmvButton.addEventListener('click', () => removeCanvas(canvasId));
+    container.appendChild(rmvButton);
+  }
+
+  return container;
 };
 
 let websocket: WebSocket;
@@ -133,6 +149,19 @@ const enterCanvas = async (id: string) => {
     });
 };
 
+const removeCanvas = async (id: string) => {
+  fetch(`/canvas/remove/${id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.status === 200) {
+        document.getElementById(data.id).remove();
+      } else {
+        console.log('Cant delete canvas');
+      }
+    });
+};
+
 const leaveCanvas = () => {
   document.getElementById('canvas-container').style.display = 'none';
   document.getElementById('index-container').style.display = 'block';
@@ -153,13 +182,18 @@ const fetchCanvases = async () => {
     .then((data) => {
       if (data.status === 200) {
         const canvasList = data.list;
+        console.log(canvasList);
         // Loop through the canvasList and create list items
         const listItems = canvasList.map((canvas) => {
           const liContainer = document.createElement('li');
           liContainer.style.width = '200px';
           liContainer.style.margin = '2px';
-          const listItem = createCanvasButton(canvas.canvas_id);
-          listItem.innerHTML = `${canvas.name}`;
+          liContainer.id = canvas.canvas_id;
+          const listItem = createCanvasButton(
+            canvas.name,
+            canvas.canvas_id,
+            canvas.host_id
+          );
           liContainer.appendChild(listItem);
           return liContainer;
         });
@@ -204,7 +238,14 @@ const createCanvasInstance = async (event: Event) => {
     // Set the hostId in localStorage
     localStorage.setItem('hostId', body.msg.hostId);
 
-    const btn = createCanvasButton(body.msg.canvasId);
+    console.log('BODY');
+    console.log(body);
+
+    const btn = createCanvasButton(
+      body.msg.name,
+      body.msg.canvasId,
+      body.msg.hostId
+    );
     canvasListElement.appendChild(btn);
     // Refresh the page or perform other actions
   } else {
