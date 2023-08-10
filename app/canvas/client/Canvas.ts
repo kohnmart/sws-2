@@ -117,10 +117,13 @@ export class Canvas implements ShapeManager {
       type: CanvasEventType.ADD_SHAPE,
       data: { shape: shapeCopy, redraw: redraw },
     };
+
     this.eventDispatcher.dispatch(canvasEvent);
+
     if (!isTemp) {
+      console.log('ADD SHAPE');
       this.eventStream.addEvent(canvasEvent);
-      this.displayEventStream();
+      //this.displayEventStream();
     }
   }
 
@@ -255,14 +258,15 @@ export class Canvas implements ShapeManager {
       .map((event) => JSON.parse(event.trim()));
 
     this.eventStream.clearEvents();*/
-    console.log('STREAM');
-    console.log(stream);
     const events = stream.eventStream;
     events.forEach((event: any) => {
-      switch (event.command) {
+      console.log('EVENT');
+      console.log(event);
+      console.log(event.type);
+      switch (event.type) {
         case CanvasEventType.ADD_SHAPE:
           const shapeData: Line | Circle | Rectangle | Triangle =
-            event.data.shape;
+            event.eventStream.shape;
           const shape = this.createShapeCopy(shapeData);
           if (shape) {
             shape.backgroundColor = shapeData.backgroundColor;
@@ -270,20 +274,20 @@ export class Canvas implements ShapeManager {
             shape.strokeColor = shapeData.strokeColor;
             shape.strokeColorKey = shapeData.strokeColorKey;
             shape.id = shapeData.id;
-            this.addShape(false, shape, event.data.redraw);
+            this.addShape(true, shape, event.redraw);
           }
           break;
         case CanvasEventType.REMOVE_SHAPE:
-          this.removeShape(event.data.id, event.data.redraw);
+          this.removeShape(event.id, event.redraw);
           break;
         case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-          this.removeShapeWithId(false, event.data.id, event.data.redraw);
+          this.removeShapeWithId(false, event.id, event.redraw);
           break;
         case CanvasEventType.UPDATE_SHAPE:
-          this.updateShape(event.data.shape, event.data.isTemp);
+          this.updateShape(event.eventStream.shape, event.isTemp);
           break;
         case CanvasEventType.UPDATE_SHAPES_ORDER:
-          this.updateShapesOrder(event.data.id, event.data.moveUp);
+          this.updateShapesOrder(event.id, event.moveUp);
           break;
         default:
           break;

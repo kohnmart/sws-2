@@ -13,11 +13,12 @@ export class EventStream {
     }
     addEvent(event) {
         this.events.push(event);
+        console.log(event);
         const requestEvent = {
             command: event.type,
             canvasId: getCanvasId(),
             clientId: localStorage.getItem('clientId'),
-            data: event.data,
+            eventStream: event.data,
         };
         wsSend(JSON.stringify(requestEvent));
     }

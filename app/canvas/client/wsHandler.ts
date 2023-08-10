@@ -21,7 +21,7 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
   };
 
   ws.onmessage = (event) => {
-    const response = JSON.parse(event.data);
+    let response = JSON.parse(event.data);
     console.log('Incoming...');
     console.log(response);
     if (response.type === 'registration') {
@@ -39,8 +39,9 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
       console.log('Unregister Successful');
     }
 
-    if (response.type === CanvasEventType) {
-      console.log(response.data);
+    if (response.type === CanvasEventType.ADD_SHAPE) {
+      //response.eventStream[0].command = response.type;
+      loadStream(response);
     }
   };
 

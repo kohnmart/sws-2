@@ -68,7 +68,7 @@ const startWebSocketServer = (server: Server) => {
           case CanvasEventType.REMOVE_SHAPE_WITH_ID:
           case WsEvents.SELECT_SHAPE:
           case WsEvents.UNSELECT_SHAPE:
-            broadcastToCanvas(request.canvasId, request, request.clientId);
+            broadcastToCanvas(request);
             break;
         }
       } catch (error) {
@@ -82,18 +82,26 @@ const startWebSocketServer = (server: Server) => {
   });
 
   // Broadcast changes to all connected clients for a specific canvas
-  function broadcastToCanvas(
-    canvasId: string,
-    event: CanvasEvent,
-    currentClientId: string
-  ) {
-    if (channels[canvasId]) {
+  function broadcastToCanvas(request) {
+    if (channels[request.canvasId]) {
       // add to eventStream
-      channels[canvasId].eventStream.push(event);
       // broadcast to all clients excluding acting client
-      channels[canvasId].clientData.forEach((client) => {
-        if (client.clientId !== currentClientId) {
-          client.ws.send(JSON.stringify(event));
+
+      // Return current state of canvas
+      const response = {
+        type: request.command,
+        clientId: request.clientId,
+        canvasId: request.canvasId,
+        eventStream: request.eventStream,
+      };
+
+      channels[request.canvasId].eventStream.push(response);
+
+      channels[request.canvasId].clientData.forEach((client) => {
+        if (client.clientId !== request.clientId) {
+          client.ws.send(
+            JSON.stringify({ type: response.type, eventStream: [response] })
+          );
         }
       });
     }
