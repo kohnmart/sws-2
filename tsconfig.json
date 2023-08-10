@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "ES2022",
-    "target": "es2021",
+    "module": "ESNext",
+    "target": "ESNext",
     "outDir": "./app",
     "rootDir": "./app",
     "esModuleInterop": true,

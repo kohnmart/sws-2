@@ -1,6 +1,5 @@
 import init from './init.js';
 import { wsInstance, wsConnection } from './wsHandler.js';
-
 const createIndexContainer = () => {
   const indexContainer = document.createElement('div');
   indexContainer.id = 'index-container';

@@ -17,10 +17,8 @@ const checkHostExists = async (
         console.log(req.body.hostId);
       }
     } else {
-      const id = await addHostQuery();
-      req.body.hostId = id;
-      console.log('TEST');
-      console.log(req.body.hostId);
+      //const id = await addHostQuery();
+      //req.body.hostId = id;
     }
 
     next();

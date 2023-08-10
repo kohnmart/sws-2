@@ -1,6 +1,6 @@
 export class ToolArea {
+    selectedShape = undefined;
     constructor(shapesSelector, menu) {
-        this.selectedShape = undefined;
         const list = [];
         shapesSelector.forEach((shape) => {
             const listItem = document.createElement('li');

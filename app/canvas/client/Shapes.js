@@ -1,16 +1,24 @@
 import { ColorPaletteGroup } from './ColorPalette.js';
 export class Point2D {
+    x;
+    y;
     constructor(x, y) {
         this.x = x;
         this.y = y;
     }
 }
 class AbstractShape {
+    id;
+    type;
+    backgroundColor;
+    backgroundColorKey;
+    strokeColor;
+    strokeColorKey;
+    markedColor = 'purple';
     constructor(type, backgroundColor = ColorPaletteGroup.group['Hintergrund']
         .defaultRGBA, outlineColor = ColorPaletteGroup.group['Outline'].defaultRGBA, backgroundColorKey = ColorPaletteGroup.group['Hintergrund']
         .colorKey, strokeColorKey = ColorPaletteGroup.group['Outline'].colorKey) {
-        this.markedColor = 'purple';
-        this.id = AbstractShape.counter++;
+        this.id = localStorage.getItem('clientId') + '$' + Date.now();
         this.type = type;
         this.backgroundColor = backgroundColor;
         this.backgroundColorKey = backgroundColorKey;
@@ -18,12 +26,14 @@ class AbstractShape {
         this.strokeColorKey = strokeColorKey;
     }
 }
-AbstractShape.counter = 0;
 class AbstractFactory {
+    shapeManager;
+    from;
+    tmpTo;
+    tmpShape = null;
+    isDrawing = false; // Neue Eigenschaft, um zu überprüfen, ob ein Shape gezeichnet wird
     constructor(shapeManager) {
         this.shapeManager = shapeManager;
-        this.tmpShape = null;
-        this.isDrawing = false; // Neue Eigenschaft, um zu überprüfen, ob ein Shape gezeichnet wird
     }
     handleMouseDown(x, y) {
         this.from = new Point2D(x, y);
@@ -72,6 +82,8 @@ class AbstractFactory {
     }
 }
 export class Line extends AbstractShape {
+    from;
+    to;
     constructor(from, to) {
         super('line');
         this.from = from;
@@ -93,15 +105,17 @@ export class Line extends AbstractShape {
     }
 }
 export class LineFactory extends AbstractFactory {
+    label = 'Linie';
     constructor(shapeManager) {
         super(shapeManager);
-        this.label = 'Linie';
     }
     createShape(from, to) {
         return new Line(from, to);
     }
 }
 export class Circle extends AbstractShape {
+    center;
+    radius;
     constructor(center, radius) {
         super('circle');
         this.center = center;
@@ -127,9 +141,9 @@ export class Circle extends AbstractShape {
     }
 }
 export class CircleFactory extends AbstractFactory {
+    label = 'Kreis';
     constructor(shapeManager) {
         super(shapeManager);
-        this.label = 'Kreis';
     }
     createShape(from, to) {
         return new Circle(from, CircleFactory.computeRadius(from, to.x, to.y));
@@ -140,6 +154,8 @@ export class CircleFactory extends AbstractFactory {
     }
 }
 export class Rectangle extends AbstractShape {
+    from;
+    to;
     constructor(from, to) {
         super('rectangle');
         this.from = from;
@@ -174,15 +190,18 @@ export class Rectangle extends AbstractShape {
     }
 }
 export class RectangleFactory extends AbstractFactory {
+    label = 'Rechteck';
     constructor(shapeManager) {
         super(shapeManager);
-        this.label = 'Rechteck';
     }
     createShape(from, to) {
         return new Rectangle(from, to);
     }
 }
 export class Triangle extends AbstractShape {
+    p1;
+    p2;
+    p3;
     constructor(p1, p2, p3) {
         super('triangle');
         this.p1 = p1;
@@ -211,9 +230,15 @@ export class Triangle extends AbstractShape {
     }
 }
 export class TriangleFactory {
+    shapeManager;
+    label = 'Dreieck';
+    from;
+    tmpTo;
+    tmpLine;
+    thirdPoint;
+    tmpShape;
     constructor(shapeManager) {
         this.shapeManager = shapeManager;
-        this.label = 'Dreieck';
     }
     handleMouseDown(x, y) {
         if (this.tmpShape) {

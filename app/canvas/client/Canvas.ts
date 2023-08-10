@@ -136,7 +136,7 @@ export class Canvas implements ShapeManager {
     this.eventStream.removeLastEvent();
   }
 
-  removeShapeWithId(isTemp: boolean, id: number, redraw: boolean = true): void {
+  removeShapeWithId(isTemp: boolean, id: string, redraw: boolean = true): void {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
       data: { id: id, redraw: redraw },
@@ -151,7 +151,7 @@ export class Canvas implements ShapeManager {
     }
   }
 
-  updateShapeColor(shapeId: number, colorType: string, newColor: string) {
+  updateShapeColor(shapeId: string, colorType: string, newColor: string) {
     const canvasEvent = {
       type: CanvasEventType.CHANGE_COLOR,
       data: { id: shapeId, colorType: colorType, newColor: newColor },
@@ -178,7 +178,7 @@ export class Canvas implements ShapeManager {
     }
   }
 
-  updateShapesOrder(shapeId: number, moveUp: boolean) {
+  updateShapesOrder(shapeId: string, moveUp: boolean) {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.UPDATE_SHAPES_ORDER,
       data: { id: shapeId, moveUp: moveUp },
@@ -223,7 +223,7 @@ export class Canvas implements ShapeManager {
     this.shapes = shapes;
   }
 
-  getShapeById(id: number): Shape {
+  getShapeById(id: string): Shape {
     for (const key in this.shapes) {
       if (this.shapes[key].id === id) {
         return this.shapes[key];

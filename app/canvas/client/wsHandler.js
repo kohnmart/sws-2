@@ -33,7 +33,6 @@ const wsConnection = (ws, uuid) => {
             console.log('Unregister Successful');
         }
         if (response.type === CanvasEventType.ADD_SHAPE) {
-            //response.eventStream[0].command = response.type;
             loadStream(response);
         }
     };

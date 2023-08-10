@@ -1,6 +1,6 @@
 export interface Shape {
   readonly type: string;
-  id: number;
+  id: string;
   backgroundColor: string;
   backgroundColorKey: string;
   strokeColor: string;
@@ -11,18 +11,18 @@ export interface Shape {
 export interface ShapeManager {
   addShape(isTemp: boolean, shape: Shape, redraw?: boolean): void;
   removeShape(shape: Shape, redraw?: boolean): void;
-  removeShapeWithId(isTemp: boolean, id: number, redraw?: boolean): void;
+  removeShapeWithId(isTemp: boolean, id: string, redraw?: boolean): void;
 }
 
 export interface SelectorManager {
   getShapes(): { [p: number]: Shape };
   getCtx(): CanvasRenderingContext2D;
   draw(): void;
-  updateOrder(n: number, dir: boolean): void;
-  removeShapeWithId(isTemp: boolean, id: number, redraw?: boolean): void;
-  getShapeById(id: number): Shape;
+  updateOrder(n: string, dir: boolean): void;
+  removeShapeWithId(isTemp: boolean, id: string, redraw?: boolean): void;
+  getShapeById(id: string): Shape;
   updateShape(shape: Shape, isTemp: boolean): void;
-  updateShapeColor(shapeId: number, colorType: string, newColor: string): void;
+  updateShapeColor(shapeId: string, colorType: string, newColor: string): void;
 }
 
 export interface ShapeFactory {
@@ -59,7 +59,7 @@ export enum CanvasEventType {
 export interface CanvasEvent {
   type: CanvasEventType;
   data?: {
-    id?: number;
+    id?: string;
     shape?: Shape;
     redraw?: boolean;
     moveUp?: boolean;

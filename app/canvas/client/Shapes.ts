@@ -1,12 +1,10 @@
 import { ColorPaletteGroup } from './ColorPalette.js';
 import { Shape, ShapeFactory, ShapeManager } from './types.js';
-
 export class Point2D {
   constructor(readonly x: number, readonly y: number) {}
 }
 class AbstractShape {
-  private static counter: number = 0;
-  id: number;
+  id: string;
   readonly type: string;
   backgroundColor: string;
   readonly backgroundColorKey: string;
@@ -22,7 +20,7 @@ class AbstractShape {
       .colorKey,
     strokeColorKey: string = ColorPaletteGroup.group['Outline'].colorKey
   ) {
-    this.id = AbstractShape.counter++;
+    this.id = localStorage.getItem('clientId') + '$' + Date.now();
     this.type = type;
     this.backgroundColor = backgroundColor;
     this.backgroundColorKey = backgroundColorKey;

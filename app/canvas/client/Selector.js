@@ -4,139 +4,112 @@ import MenuApi from './menuApi.js';
 import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from './shapesInteractionUtils.js';
 import { ColorPaletteGroup } from './ColorPalette.js';
 export class Selector {
+    label = 'Select';
+    slm;
+    menu;
+    shapeListId = [];
+    shapesSelected = [];
+    shapeListIndexer = 0;
+    isMoving = false;
+    selectedShape;
     constructor(slm) {
-        this.label = 'Select';
-        this.shapeListId = [];
-        this.shapesSelected = [];
-        this.shapeListIndexer = 0;
-        this.isMoving = false;
-        /* ------------ CREATE - MENU ------------ */
-        this.createMenu = (menuApi) => {
-            const menu = menuApi.createMenu();
-            const deleteShapesItem = menuApi.createItem('Entfernen', (m) => {
-                m.hide();
-                this.shapesSelected.forEach((id) => {
-                    this.slm.removeShapeWithId(false, id, true);
-                });
-            });
-            menu.addItems(deleteShapesItem);
-            menuApi.createRadioOption(
-            /* DEFINE COLOR PALETTES */
-            [PLT_TYPES.Hintergrund, PLT_TYPES.Outline], 
-            /* DEFINE BASE COLORS */
-            {
-                red: {
-                    name: 'rot',
-                    value: { red: 255, green: 0, blue: 0, alpha: 1 },
-                },
-                green: {
-                    name: 'grün',
-                    value: { red: 0, green: 255, blue: 0, alpha: 1 },
-                },
-                yellow: {
-                    name: 'gelb',
-                    value: { red: 255, green: 255, blue: 0, alpha: 1 },
-                },
-                blue: {
-                    name: 'blau',
-                    value: { red: 0, green: 0, blue: 255, alpha: 1 },
-                },
-                black: {
-                    name: 'schwarz',
-                    value: { red: 0, green: 0, blue: 0, alpha: 1 },
-                },
-            }, 
-            /* SET DEFAULT COLORS */
-            {
-                Outline: {
-                    type: PLT_TYPES.Outline,
-                    key: 'black',
-                },
-                Hintergrund: {
-                    type: PLT_TYPES.Hintergrund,
-                    key: 'transparent',
-                },
-            }, 
-            /* SET SPECIAL COLORS */
-            {
-                transparent: {
-                    type: PLT_TYPES.Hintergrund,
-                    name: 'transparent',
-                    value: { red: 0, green: 0, blue: 0, alpha: 0 },
-                },
-            }, 
-            /* SET SHAPE CONSTRAINTS */
-            {
-                line: {
-                    type: PLT_TYPES.Hintergrund,
-                    shapeType: 'line',
-                },
-            }, (colorPicker) => {
-                const shapes = this.slm.getShapes();
-                this.shapesSelected.forEach((id) => {
-                    const shape = shapes[id];
-                    if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
-                        shape.backgroundColor = colorPicker.colorFormatAsRGBA();
-                        shape.backgroundColorKey = colorPicker.key;
-                        this.slm.updateShapeColor(id, 'backgroundColor', shape.backgroundColor);
-                    }
-                    else {
-                        shape.strokeColor = colorPicker.colorFormatAsRGBA();
-                        shape.strokeColorKey = colorPicker.key;
-                        this.slm.updateShapeColor(id, 'strokeColor', shape.strokeColor);
-                    }
-                    this.slm.draw();
-                });
-            });
-            const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
-                this.slm.updateOrder(this.shapesSelected[0], false);
-                this.slm
-                    .getShapeById(this.shapesSelected[0])
-                    .draw(this.slm.getCtx(), true);
-            });
-            const shapeMoveBackwardItem = menuApi.createItem('Shape nach hinten', () => {
-                this.slm.updateOrder(this.shapesSelected[0], true);
-                this.slm
-                    .getShapeById(this.shapesSelected[0])
-                    .draw(this.slm.getCtx(), true);
-            });
-            const separator = menuApi.createSeparator();
-            menu.addItems(shapeMoveForwardItem, separator, shapeMoveBackwardItem);
-            return menu;
-        };
-        /**
-         * This method is used to iterate through the shapes in a cyclic manner,
-         * selecting and highlighting each shape one by one on the canvas.
-         * It provides a way to cycle through the shapes and perform actions on the selected shape.
-         */
-        this.iterateShapesLevels = () => {
-            const shapes = this.slm.getShapes();
-            const ctx = this.slm.getCtx();
-            this.slm.draw();
-            // if indexer is smaller zero, take the last index
-            if (this.shapeListIndexer < 0) {
-                this.shapeListIndexer = this.shapeListId.length - 1;
-            }
-            const idCurrent = this.shapeListId[this.shapeListIndexer];
-            // Maybe this can be done even more efficiently
-            // Questionable on large amount of objects
-            for (const key in shapes) {
-                if (shapes.hasOwnProperty(key)) {
-                    const id = shapes[key].id;
-                    // Check if the current shape id matches the iteration level
-                    if (id === idCurrent) {
-                        // Draw the shape with ctx and true flag
-                        shapes[key].draw(ctx, true);
-                    }
-                }
-            }
-            this.shapesSelected = [];
-            this.shapesSelected.push(idCurrent);
-            this.shapeListIndexer--;
-        };
         this.slm = slm;
         this.menu = this.createMenu(new MenuApi());
     }
+    /* ------------ CREATE - MENU ------------ */
+    createMenu = (menuApi) => {
+        const menu = menuApi.createMenu();
+        const deleteShapesItem = menuApi.createItem('Entfernen', (m) => {
+            m.hide();
+            this.shapesSelected.forEach((id) => {
+                this.slm.removeShapeWithId(false, id, true);
+            });
+        });
+        menu.addItems(deleteShapesItem);
+        menuApi.createRadioOption(
+        /* DEFINE COLOR PALETTES */
+        [PLT_TYPES.Hintergrund, PLT_TYPES.Outline], 
+        /* DEFINE BASE COLORS */
+        {
+            red: {
+                name: 'rot',
+                value: { red: 255, green: 0, blue: 0, alpha: 1 },
+            },
+            green: {
+                name: 'grün',
+                value: { red: 0, green: 255, blue: 0, alpha: 1 },
+            },
+            yellow: {
+                name: 'gelb',
+                value: { red: 255, green: 255, blue: 0, alpha: 1 },
+            },
+            blue: {
+                name: 'blau',
+                value: { red: 0, green: 0, blue: 255, alpha: 1 },
+            },
+            black: {
+                name: 'schwarz',
+                value: { red: 0, green: 0, blue: 0, alpha: 1 },
+            },
+        }, 
+        /* SET DEFAULT COLORS */
+        {
+            Outline: {
+                type: PLT_TYPES.Outline,
+                key: 'black',
+            },
+            Hintergrund: {
+                type: PLT_TYPES.Hintergrund,
+                key: 'transparent',
+            },
+        }, 
+        /* SET SPECIAL COLORS */
+        {
+            transparent: {
+                type: PLT_TYPES.Hintergrund,
+                name: 'transparent',
+                value: { red: 0, green: 0, blue: 0, alpha: 0 },
+            },
+        }, 
+        /* SET SHAPE CONSTRAINTS */
+        {
+            line: {
+                type: PLT_TYPES.Hintergrund,
+                shapeType: 'line',
+            },
+        }, (colorPicker) => {
+            const shapes = this.slm.getShapes();
+            this.shapesSelected.forEach((id) => {
+                const shape = shapes[id];
+                if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
+                    shape.backgroundColor = colorPicker.colorFormatAsRGBA();
+                    shape.backgroundColorKey = colorPicker.key;
+                    this.slm.updateShapeColor(id, 'backgroundColor', shape.backgroundColor);
+                }
+                else {
+                    shape.strokeColor = colorPicker.colorFormatAsRGBA();
+                    shape.strokeColorKey = colorPicker.key;
+                    this.slm.updateShapeColor(id, 'strokeColor', shape.strokeColor);
+                }
+                this.slm.draw();
+            });
+        });
+        const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
+            this.slm.updateOrder(this.shapesSelected[0], false);
+            this.slm
+                .getShapeById(this.shapesSelected[0])
+                .draw(this.slm.getCtx(), true);
+        });
+        const shapeMoveBackwardItem = menuApi.createItem('Shape nach hinten', () => {
+            this.slm.updateOrder(this.shapesSelected[0], true);
+            this.slm
+                .getShapeById(this.shapesSelected[0])
+                .draw(this.slm.getCtx(), true);
+        });
+        const separator = menuApi.createSeparator();
+        menu.addItems(shapeMoveForwardItem, separator, shapeMoveBackwardItem);
+        return menu;
+    };
     /* -------------------------------------- */
     /* ------------ HANDLER - SECTION ------------ */
     handleMouseDown(x, y) {
@@ -303,4 +276,34 @@ export class Selector {
             }
         }
     }
+    /**
+     * This method is used to iterate through the shapes in a cyclic manner,
+     * selecting and highlighting each shape one by one on the canvas.
+     * It provides a way to cycle through the shapes and perform actions on the selected shape.
+     */
+    iterateShapesLevels = () => {
+        const shapes = this.slm.getShapes();
+        const ctx = this.slm.getCtx();
+        this.slm.draw();
+        // if indexer is smaller zero, take the last index
+        if (this.shapeListIndexer < 0) {
+            this.shapeListIndexer = this.shapeListId.length - 1;
+        }
+        const idCurrent = this.shapeListId[this.shapeListIndexer];
+        // Maybe this can be done even more efficiently
+        // Questionable on large amount of objects
+        for (const key in shapes) {
+            if (shapes.hasOwnProperty(key)) {
+                const id = shapes[key].id;
+                // Check if the current shape id matches the iteration level
+                if (id === idCurrent) {
+                    // Draw the shape with ctx and true flag
+                    shapes[key].draw(ctx, true);
+                }
+            }
+        }
+        this.shapesSelected = [];
+        this.shapesSelected.push(idCurrent);
+        this.shapeListIndexer--;
+    };
 }

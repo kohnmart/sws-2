@@ -27,7 +27,7 @@ const getCanvasStreamQuery = async (canvasId) => {
     const res = await getQuery(query, [canvasId]);
     return res;
 };
-const deleteCanvas = async (canvasId) => {
+const deleteCanvasQuery = async (canvasId) => {
     const query = 'DELETE FROM canvas WHERE canvas_id = ?';
     const res = await getQuery(query, [canvasId]);
     return res;
@@ -44,6 +44,6 @@ export default {
     addHostQuery,
     getCanvasStreamQuery,
     getAllCanvasQuery,
-    deleteCanvas,
+    deleteCanvasQuery,
 };
-export { addCanvasQuery, checkHostExistsQuery, checkCanvasExistsQuery, addHostQuery, getCanvasStreamQuery, getAllCanvasQuery, deleteCanvas, };
+export { addCanvasQuery, checkHostExistsQuery, checkCanvasExistsQuery, addHostQuery, getCanvasStreamQuery, getAllCanvasQuery, deleteCanvasQuery, };

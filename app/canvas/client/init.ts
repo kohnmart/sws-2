@@ -35,7 +35,7 @@ function init() {
       return canvas.getShapes();
     },
 
-    getShapeById(id: number) {
+    getShapeById(id: string) {
       return canvas.getShapeById(id);
     },
 
@@ -49,7 +49,7 @@ function init() {
     draw() {
       canvas.draw();
     },
-    updateOrder(n: number, dir: boolean) {
+    updateOrder(n: string, dir: boolean) {
       canvas.updateShapesOrder(n, dir);
     },
     removeShapeWithId(isTemp, id, rd) {

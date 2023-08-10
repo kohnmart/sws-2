@@ -2,13 +2,18 @@ import { CanvasEventType } from './types.js';
 import { CanvasEventDispatcher, CanvasEventSubscription, EventStream, ToolEventDispatcher, ToolEventSubscription, } from './CanvasEvent.js';
 import { Line, Rectangle, Circle, Triangle } from './Shapes.js';
 export class Canvas {
+    ctx;
+    shapes = {};
+    width;
+    height;
+    /* EVENTS */
+    eventStream = new EventStream();
+    eventDispatcher = new CanvasEventDispatcher();
+    toolEventDispatcher;
+    toolEventSubscription;
+    canvasEventSubscription = new CanvasEventSubscription(this, this.eventDispatcher);
+    isCreatingShape = false;
     constructor(canvasDomElement, toolarea) {
-        this.shapes = {};
-        /* EVENTS */
-        this.eventStream = new EventStream();
-        this.eventDispatcher = new CanvasEventDispatcher();
-        this.canvasEventSubscription = new CanvasEventSubscription(this, this.eventDispatcher);
-        this.isCreatingShape = false;
         const { width, height } = canvasDomElement.getBoundingClientRect();
         this.width = width;
         this.height = height;

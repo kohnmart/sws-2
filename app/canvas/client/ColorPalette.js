@@ -1,32 +1,37 @@
 import { Item, ItemRadio } from './item.js';
 export class ColorPaletteGroup {
+    static menuApi;
+    static group = {};
     static addColorPalette(key, palette) {
         ColorPaletteGroup.group[key] = palette;
     }
 }
-ColorPaletteGroup.group = {};
 export default class ColorPalette {
+    type;
+    item;
+    colors = [];
+    defaultRGBA;
+    colorKey;
+    shapeConstraints = [];
     constructor(type, menuApi) {
-        this.colors = [];
-        this.shapeConstraints = [];
-        this.addNewColor = (color) => {
-            this.colors.push(color);
-        };
-        // Set new default color initially
-        this.setDefaultColor = (key) => {
-            const color = this.colors.find((el) => el.key === key);
-            if (color) {
-                this.defaultRGBA = color.colorFormatAsRGBA();
-                this.colorKey = color.key;
-                color.radioButton.inputElement.checked = true;
-            }
-        };
         this.type = type;
         this.item = new Item('ul', menuApi);
         // create new sublist for colorpickers
         this.item.container.push(new Item('li', menuApi, type));
         menuApi.addItem(this.item);
     }
+    addNewColor = (color) => {
+        this.colors.push(color);
+    };
+    // Set new default color initially
+    setDefaultColor = (key) => {
+        const color = this.colors.find((el) => el.key === key);
+        if (color) {
+            this.defaultRGBA = color.colorFormatAsRGBA();
+            this.colorKey = color.key;
+            color.radioButton.inputElement.checked = true;
+        }
+    };
     // Set colorpicker to be the selected shapes color
     setColorPicker(shapeTypeConstraint, isSingleSelect, shapesColorKey) {
         this.colors.forEach((cl) => {
@@ -54,6 +59,10 @@ export default class ColorPalette {
     }
 }
 export class ColorPicker {
+    key;
+    colorValue;
+    radioButton;
+    paletteInstance;
     constructor(menuApi, paletteInstance, key, name, value, callback) {
         this.paletteInstance = paletteInstance;
         this.key = key;

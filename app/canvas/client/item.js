@@ -1,6 +1,9 @@
 export class Item {
+    static id = 'menu-item';
+    element;
+    container = [];
+    menuInstance;
     constructor(tagName, menuInstance, itemContent, callback) {
-        this.container = [];
         this.element = document.createElement(tagName);
         this.element.id = Item.id;
         this.menuInstance = menuInstance;
@@ -23,8 +26,10 @@ export class Item {
         this.menuInstance.ulList.appendChild(listElement);
     }
 }
-Item.id = 'menu-item';
 export class ItemRadio extends Item {
+    key;
+    inputElement;
+    labelElement;
     constructor(tagName, key, menuInstance) {
         super(tagName, menuInstance);
         this.key = key;

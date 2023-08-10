@@ -13,8 +13,8 @@ export class Selector implements ShapeFactory {
   public readonly label = 'Select';
   private readonly slm: SelectorManager;
   private readonly menu: MenuApi;
-  private shapeListId: number[] = [];
-  private shapesSelected: number[] = [];
+  private shapeListId: string[] = [];
+  private shapesSelected: string[] = [];
   private shapeListIndexer: number = 0;
   private isMoving = false;
   private selectedShape: Line | Rectangle | Triangle | Circle;
@@ -28,7 +28,7 @@ export class Selector implements ShapeFactory {
     const menu = menuApi.createMenu();
     const deleteShapesItem = menuApi.createItem('Entfernen', (m: MenuApi) => {
       m.hide();
-      this.shapesSelected.forEach((id: number) => {
+      this.shapesSelected.forEach((id: string) => {
         this.slm.removeShapeWithId(false, id, true);
       });
     });
@@ -88,7 +88,7 @@ export class Selector implements ShapeFactory {
 
       (colorPicker: ColorPicker) => {
         const shapes = this.slm.getShapes();
-        this.shapesSelected.forEach((id: number) => {
+        this.shapesSelected.forEach((id: string) => {
           const shape = shapes[id];
           if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
             shape.backgroundColor = colorPicker.colorFormatAsRGBA();

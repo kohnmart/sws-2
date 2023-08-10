@@ -1,30 +1,18 @@
 // overview.ts
 import express from 'express';
-import { checkCanvasExistsQuery, deleteCanvas } from '../db/query.js';
+import { deleteCanvasQuery } from '../db/query.js';
+import { canvasExists } from '../middleware/canvas.js';
 const canvasRouter = express.Router();
-canvasRouter.get('/:id', async (req, res) => {
-    const exists = await checkCanvasExistsQuery(req.params.id);
-    if (exists) {
-        res.json({ status: 200 });
-    }
-    else {
-        res.status(404).send('Canvas not found');
-    }
+canvasRouter.get('/:id', canvasExists, async (req, res) => {
+    res.json({ status: 200 });
 });
-canvasRouter.get('/remove/:id', async (req, res) => {
-    const exists = await checkCanvasExistsQuery(req.params.id);
-    if (exists) {
-        try {
-            await deleteCanvas(req.params.id);
-            console.log(req.params.id);
-            res.json({ status: 200, id: req.params.id });
-        }
-        catch {
-            console.log('Error on delete...');
-        }
+canvasRouter.get('/remove/:id', canvasExists, async (req, res) => {
+    try {
+        await deleteCanvasQuery(req.params.id);
+        res.json({ status: 200, id: req.params.id });
     }
-    else {
-        res.status(404).send('Canvas not found');
+    catch {
+        console.log('Error on delete...');
     }
 });
 export default canvasRouter;

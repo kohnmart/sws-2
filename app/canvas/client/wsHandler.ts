@@ -40,7 +40,6 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
     }
 
     if (response.type === CanvasEventType.ADD_SHAPE) {
-      //response.eventStream[0].command = response.type;
       loadStream(response);
     }
   };

@@ -1,6 +1,10 @@
 import { getCanvasId, wsSend } from './index.js';
 import { CanvasEventType } from './types.js';
 export class CanvasEventManager {
+    type;
+    data;
+    timestamp;
+    isTemporary;
     constructor(type, data) {
         this.type = type;
         this.data = data;
@@ -8,9 +12,7 @@ export class CanvasEventManager {
     }
 }
 export class EventStream {
-    constructor() {
-        this.events = [];
-    }
+    events = [];
     addEvent(event) {
         this.events.push(event);
         console.log(event);
@@ -33,9 +35,7 @@ export class EventStream {
     }
 }
 export class CanvasEventDispatcher {
-    constructor() {
-        this.subscribers = [];
-    }
+    subscribers = [];
     subscribe(callback) {
         this.subscribers.push(callback);
     }
@@ -46,9 +46,7 @@ export class CanvasEventDispatcher {
     }
 }
 export class ToolEventDispatcher {
-    constructor() {
-        this.subscribers = [];
-    }
+    subscribers = [];
     subscribe(callback) {
         this.subscribers.push(callback);
     }
@@ -74,6 +72,7 @@ export class ToolEventSubscription {
     }
 }
 export class CanvasEventSubscription {
+    canvas;
     constructor(canvas, eventDispatcher) {
         this.canvas = canvas;
         eventDispatcher.subscribe((event) => {

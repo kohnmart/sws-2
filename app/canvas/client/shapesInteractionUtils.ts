@@ -93,7 +93,7 @@ const checkShapeColorsConsistency = (
   shapes: {
     [p: number]: Shape;
   },
-  list: number[],
+  list: string[],
   bg: string,
   str: string
 ): boolean[] => {

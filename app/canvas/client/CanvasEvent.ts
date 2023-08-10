@@ -141,14 +141,14 @@ export class CanvasEventSubscription {
     return redraw ? this.canvas.draw() : this.canvas;
   }
 
-  handleRemoveShape(id: number, redraw: boolean = true): Canvas {
+  handleRemoveShape(id: string, redraw: boolean = true): Canvas {
     const shapes = this.canvas.getShapes();
     delete shapes[id];
     this.canvas.setShapes(shapes);
     return redraw ? this.canvas.draw() : this.canvas;
   }
 
-  handleRemoveShapeWithId(id: number, redraw: boolean = true): Canvas {
+  handleRemoveShapeWithId(id: string, redraw: boolean = true): Canvas {
     const shapes = this.canvas.getShapes();
     for (const key in shapes) {
       if (shapes[key].id === id) {
@@ -158,7 +158,7 @@ export class CanvasEventSubscription {
     return redraw ? this.canvas.draw() : this.canvas;
   }
 
-  handleGetShapeById(id: number): Shape {
+  handleGetShapeById(id: string): Shape {
     const shapes = this.canvas.getShapes();
     for (const key in shapes) {
       if (shapes[key].id === id) {
@@ -177,7 +177,7 @@ export class CanvasEventSubscription {
     this.canvas.draw();
   }
 
-  handleUpdateShapesOrder(shapeId: number, moveUp: boolean) {
+  handleUpdateShapesOrder(shapeId: string, moveUp: boolean) {
     const shapes = this.canvas.getShapes();
     const shapeKeys = Object.keys(shapes);
     const shapeIndex = shapeKeys.findIndex((key) => shapes[key].id === shapeId);
