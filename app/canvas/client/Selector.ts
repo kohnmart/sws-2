@@ -17,6 +17,7 @@ export class Selector implements ShapeFactory {
   private shapesSelected: string[] = [];
   private shapeListIndexer: number = 0;
   private isMoving = false;
+  private lastSelectedShapeId: string;
   private selectedShape: Line | Rectangle | Triangle | Circle;
   constructor(slm: SelectorManager) {
     this.slm = slm;
@@ -137,16 +138,21 @@ export class Selector implements ShapeFactory {
 
   handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
-    if (this.shapesSelected.length === 1) {
+    console.log('LIST');
+    console.log(this.shapesSelected.length);
+    if (this.shapesSelected.length) {
       this.isMoving = true;
       this.selectedShape = this.slm.getShapeById(this.shapesSelected[0]) as
         | Line
         | Rectangle
         | Triangle
         | Circle;
-
+      this.lastSelectedShapeId = this.shapesSelected[0];
       this.selectedShape.draw(this.slm.getCtx(), true);
       this.slm.selectShape(this.shapesSelected[0]);
+    } else {
+      console.log('CALL');
+      this.slm.unselectShape(this.lastSelectedShapeId);
     }
   }
 

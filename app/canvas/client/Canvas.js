@@ -90,6 +90,8 @@ export class Canvas {
             type: CanvasEventType.UNSELECT_SHAPE,
             data: { id: shapeId },
         };
+        console.log('CALL');
+        console.log(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
     }
     addShape(isTemp, shape, redraw = true) {
@@ -218,9 +220,12 @@ export class Canvas {
                     this.updateShapesOrder(event.id, event.moveUp);
                     break;
                 case CanvasEventType.SELECT_SHAPE:
-                    console.log(event.eventStream.id);
                     const selectedShape = this.getShapeById(event.eventStream.id);
                     selectedShape.draw(this.ctx, true);
+                    break;
+                case CanvasEventType.UNSELECT_SHAPE:
+                    console.log('UNSELECT');
+                    this.draw();
                     break;
                 default:
                     break;

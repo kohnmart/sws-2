@@ -11,6 +11,7 @@ export class Selector {
     shapesSelected = [];
     shapeListIndexer = 0;
     isMoving = false;
+    lastSelectedShapeId;
     selectedShape;
     constructor(slm) {
         this.slm = slm;
@@ -114,11 +115,18 @@ export class Selector {
     /* ------------ HANDLER - SECTION ------------ */
     handleMouseDown(x, y) {
         this.checkShapeCollision(x, y, false);
-        if (this.shapesSelected.length === 1) {
+        console.log('LIST');
+        console.log(this.shapesSelected.length);
+        if (this.shapesSelected.length) {
             this.isMoving = true;
             this.selectedShape = this.slm.getShapeById(this.shapesSelected[0]);
+            this.lastSelectedShapeId = this.shapesSelected[0];
             this.selectedShape.draw(this.slm.getCtx(), true);
             this.slm.selectShape(this.shapesSelected[0]);
+        }
+        else {
+            console.log('CALL');
+            this.slm.unselectShape(this.lastSelectedShapeId);
         }
     }
     handleMouseMove(x, y) {

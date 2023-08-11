@@ -71,7 +71,7 @@ function init() {
     },
 
     unselectShape(shapeId: string) {
-      canvas.selectShape(shapeId);
+      canvas.unselectShape(shapeId);
     },
   };
 

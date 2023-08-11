@@ -15,6 +15,7 @@ import {
   ToolEventSubscription,
 } from './CanvasEvent.js';
 import { Line, Rectangle, Circle, Triangle } from './Shapes.js';
+import canvas from '../../server/middleware/canvas.js';
 
 export class Canvas implements ShapeManager {
   private ctx: CanvasRenderingContext2D;
@@ -130,7 +131,8 @@ export class Canvas implements ShapeManager {
       type: CanvasEventType.UNSELECT_SHAPE,
       data: { id: shapeId },
     };
-
+    console.log('CALL');
+    console.log(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
   }
 
@@ -278,9 +280,12 @@ export class Canvas implements ShapeManager {
           this.updateShapesOrder(event.id, event.moveUp);
           break;
         case CanvasEventType.SELECT_SHAPE:
-          console.log(event.eventStream.id);
           const selectedShape = this.getShapeById(event.eventStream.id);
           selectedShape.draw(this.ctx, true);
+          break;
+        case CanvasEventType.UNSELECT_SHAPE:
+          console.log('UNSELECT');
+          this.draw();
           break;
         default:
           break;

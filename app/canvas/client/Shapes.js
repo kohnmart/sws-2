@@ -18,7 +18,7 @@ class AbstractShape {
     constructor(type, backgroundColor = ColorPaletteGroup.group['Hintergrund']
         .defaultRGBA, outlineColor = ColorPaletteGroup.group['Outline'].defaultRGBA, backgroundColorKey = ColorPaletteGroup.group['Hintergrund']
         .colorKey, strokeColorKey = ColorPaletteGroup.group['Outline'].colorKey) {
-        this.id = localStorage.getItem('clientId') + '$' + Date.now();
+        this.id = localStorage.getItem('clientId') + '--' + Date.now();
         this.type = type;
         this.backgroundColor = backgroundColor;
         this.backgroundColorKey = backgroundColorKey;

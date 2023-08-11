@@ -52,7 +52,7 @@ function init() {
             canvas.selectShape(shapeId);
         },
         unselectShape(shapeId) {
-            canvas.selectShape(shapeId);
+            canvas.unselectShape(shapeId);
         },
     };
     const tools = [
