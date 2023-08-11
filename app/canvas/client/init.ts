@@ -1,4 +1,10 @@
-import { ShapeFactory, ShapeManager, SelectorManager, Shape } from './types.js';
+import {
+  ShapeFactory,
+  ShapeManager,
+  SelectorManager,
+  Shape,
+  IStream,
+} from './types.js';
 import {
   CircleFactory,
   LineFactory,
@@ -73,7 +79,7 @@ function init() {
   canvas.draw();
 }
 
-const loadStream = (stream: []) => {
+const loadStream = (stream: IStream[]) => {
   return canvas.loadEventStream(stream);
 };
 

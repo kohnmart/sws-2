@@ -72,3 +72,36 @@ export interface CanvasEvent {
     y?: number;
   };
 }
+
+export interface IStream {
+  type: number;
+  clientId: string;
+  canvasId: string;
+  eventStream: IEventStream[];
+}
+
+interface IEventStream {
+  id: string;
+  shape?: Shape;
+  redraw?: boolean;
+  moveUp?: boolean;
+  isTemp?: boolean;
+  colorType?: string;
+  newColor?: string;
+  method?: Function;
+  tool?: ShapeFactory;
+  x?: number;
+  y?: number;
+}
+
+export interface IResponse {
+  type: string | CanvasEventType;
+  clientId: string;
+  canvasId: string;
+  eventStream: IStream[];
+}
+
+export enum Services {
+  REGISTRATION = 'registration',
+  UNREGISTER = 'unregister',
+}

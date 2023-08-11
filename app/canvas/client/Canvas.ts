@@ -1,4 +1,10 @@
-import { CanvasEvent, CanvasEventType, Shape, ShapeManager } from './types.js';
+import {
+  CanvasEvent,
+  CanvasEventType,
+  IStream,
+  Shape,
+  ShapeManager,
+} from './types.js';
 import { ToolArea } from './ToolArea.js';
 import {
   CanvasEventDispatcher,
@@ -133,7 +139,6 @@ export class Canvas implements ShapeManager {
       data: { id: shape.id, redraw: redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
-    this.eventStream.removeLastEvent();
   }
 
   removeShapeWithId(isTemp: boolean, id: string, redraw: boolean = true): void {
@@ -141,13 +146,11 @@ export class Canvas implements ShapeManager {
       type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
       data: { id: id, redraw: redraw },
     };
-    console.log(isTemp);
     this.eventDispatcher.dispatch(canvasEvent);
     if (isTemp) {
       this.eventStream.removeLastEvent();
     } else {
       this.eventStream.addEvent(canvasEvent);
-      this.displayEventStream();
     }
   }
 
@@ -158,7 +161,6 @@ export class Canvas implements ShapeManager {
     };
     this.eventDispatcher.dispatch(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
-    this.displayEventStream();
   }
 
   updateShape(shape: Shape, isTemp: boolean) {
@@ -174,7 +176,6 @@ export class Canvas implements ShapeManager {
     this.eventDispatcher.dispatch(canvasEvent);
     if (!isTemp) {
       this.eventStream.addEvent(canvasEvent);
-      this.displayEventStream();
     }
   }
 
@@ -185,7 +186,6 @@ export class Canvas implements ShapeManager {
     };
     this.eventDispatcher.dispatch(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
-    this.displayEventStream();
   }
 
   /******* HELPER METHODS *******/
@@ -230,39 +230,9 @@ export class Canvas implements ShapeManager {
       }
     }
   }
-  /* EVENT DISPLAY */
-  displayEventStream() {
-    const textArea = document.getElementById(
-      'event-stream-textarea'
-    ) as HTMLTextAreaElement;
 
-    const eventsJSON = this.eventStream
-      .getEvents()
-      .map((event) => JSON.stringify(event))
-      .join('\n');
-
-    console.log('EVENT');
-    console.log(eventsJSON);
-
-    textArea.value = '';
-    textArea.value = eventsJSON;
-  }
-
-  loadEventStream(stream: any) {
-    /*const textArea = document.getElementById(
-      'event-stream-textarea'
-    ) as HTMLTextAreaElement;
-    const eventStreamContent = textArea.value;
-    const events = eventStreamContent
-      .split('\n')
-      .map((event) => JSON.parse(event.trim()));
-
-    this.eventStream.clearEvents();*/
-    const events = stream.eventStream;
-    events.forEach((event: any) => {
-      console.log('EVENT');
-      console.log(event);
-      console.log(event.type);
+  loadEventStream(stream: IStream[]) {
+    stream.forEach((event: any) => {
       switch (event.type) {
         case CanvasEventType.ADD_SHAPE:
           const shapeData: Line | Circle | Rectangle | Triangle =

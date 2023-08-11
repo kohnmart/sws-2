@@ -1,4 +1,4 @@
-import { CanvasEventType } from './types.js';
+import { CanvasEventType, } from './types.js';
 import { CanvasEventDispatcher, CanvasEventSubscription, EventStream, ToolEventDispatcher, ToolEventSubscription, } from './CanvasEvent.js';
 import { Line, Rectangle, Circle, Triangle } from './Shapes.js';
 export class Canvas {
@@ -98,21 +98,18 @@ export class Canvas {
             data: { id: shape.id, redraw: redraw },
         };
         this.eventDispatcher.dispatch(canvasEvent);
-        this.eventStream.removeLastEvent();
     }
     removeShapeWithId(isTemp, id, redraw = true) {
         const canvasEvent = {
             type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
             data: { id: id, redraw: redraw },
         };
-        console.log(isTemp);
         this.eventDispatcher.dispatch(canvasEvent);
         if (isTemp) {
             this.eventStream.removeLastEvent();
         }
         else {
             this.eventStream.addEvent(canvasEvent);
-            this.displayEventStream();
         }
     }
     updateShapeColor(shapeId, colorType, newColor) {
@@ -122,7 +119,6 @@ export class Canvas {
         };
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
-        this.displayEventStream();
     }
     updateShape(shape, isTemp) {
         const shapeCopy = this.createShapeCopy(shape);
@@ -135,7 +131,6 @@ export class Canvas {
         this.eventDispatcher.dispatch(canvasEvent);
         if (!isTemp) {
             this.eventStream.addEvent(canvasEvent);
-            this.displayEventStream();
         }
     }
     updateShapesOrder(shapeId, moveUp) {
@@ -145,7 +140,6 @@ export class Canvas {
         };
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
-        this.displayEventStream();
     }
     /******* HELPER METHODS *******/
     createShapeCopy(shape) {
@@ -188,33 +182,10 @@ export class Canvas {
             }
         }
     }
-    /* EVENT DISPLAY */
-    displayEventStream() {
-        const textArea = document.getElementById('event-stream-textarea');
-        const eventsJSON = this.eventStream
-            .getEvents()
-            .map((event) => JSON.stringify(event))
-            .join('\n');
-        console.log('EVENT');
-        console.log(eventsJSON);
-        textArea.value = '';
-        textArea.value = eventsJSON;
-    }
     loadEventStream(stream) {
-        /*const textArea = document.getElementById(
-          'event-stream-textarea'
-        ) as HTMLTextAreaElement;
-        const eventStreamContent = textArea.value;
-        const events = eventStreamContent
-          .split('\n')
-          .map((event) => JSON.parse(event.trim()));
-    
-        this.eventStream.clearEvents();*/
-        const events = stream.eventStream;
-        events.forEach((event) => {
-            console.log('EVENT');
-            console.log(event);
-            console.log(event.type);
+        console.log('EVENTS');
+        console.log(stream);
+        stream.forEach((event) => {
             switch (event.type) {
                 case CanvasEventType.ADD_SHAPE:
                     const shapeData = event.eventStream.shape;
