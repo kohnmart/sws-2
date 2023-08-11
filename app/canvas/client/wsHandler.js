@@ -32,7 +32,7 @@ const wsConnection = (ws, uuid) => {
             case CanvasEventType.ADD_SHAPE:
                 loadStream(response.eventStream);
             case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-            //loadStream(response.eventStream);
+                loadStream(response.eventStream);
         }
     };
     ws.onclose = () => {

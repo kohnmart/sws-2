@@ -40,7 +40,7 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
         loadStream(response.eventStream);
 
       case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-      //loadStream(response.eventStream);
+        loadStream(response.eventStream);
     }
   };
 

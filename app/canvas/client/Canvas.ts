@@ -127,9 +127,7 @@ export class Canvas implements ShapeManager {
     this.eventDispatcher.dispatch(canvasEvent);
 
     if (!isTemp) {
-      console.log('ADD SHAPE');
       this.eventStream.addEvent(canvasEvent);
-      //this.displayEventStream();
     }
   }
 
@@ -142,14 +140,14 @@ export class Canvas implements ShapeManager {
   }
 
   removeShapeWithId(isTemp: boolean, id: string, redraw: boolean = true): void {
+    console.log('IS REMOVE');
+    console.log(`${isTemp} &&  ${id}`);
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
       data: { id: id, redraw: redraw },
     };
     this.eventDispatcher.dispatch(canvasEvent);
-    if (isTemp) {
-      this.eventStream.removeLastEvent();
-    } else {
+    if (!isTemp) {
       this.eventStream.addEvent(canvasEvent);
     }
   }
@@ -247,11 +245,13 @@ export class Canvas implements ShapeManager {
             this.addShape(true, shape, event.redraw);
           }
           break;
-        case CanvasEventType.REMOVE_SHAPE:
-          this.removeShape(event.id, event.redraw);
-          break;
         case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-          this.removeShapeWithId(false, event.id, event.redraw);
+          console.log(`EVENT ID: ${event}`);
+          this.removeShapeWithId(
+            true,
+            event.eventStream.id,
+            event.eventStream.redraw
+          );
           break;
         case CanvasEventType.UPDATE_SHAPE:
           this.updateShape(event.eventStream.shape, event.isTemp);
