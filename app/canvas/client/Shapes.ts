@@ -20,7 +20,7 @@ class AbstractShape {
       .colorKey,
     strokeColorKey: string = ColorPaletteGroup.group['Outline'].colorKey
   ) {
-    this.id = localStorage.getItem('clientId') + '$' + Date.now();
+    this.id = localStorage.getItem('clientId') + '--' + Date.now();
     this.type = type;
     this.backgroundColor = backgroundColor;
     this.backgroundColorKey = backgroundColorKey;

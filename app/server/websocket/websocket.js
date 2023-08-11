@@ -49,8 +49,8 @@ const startWebSocketServer = (server) => {
                         break;
                     case CanvasEventType.ADD_SHAPE:
                     case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-                    case WsEvents.SELECT_SHAPE:
-                    case WsEvents.UNSELECT_SHAPE:
+                    case CanvasEventType.SELECT_SHAPE:
+                    case CanvasEventType.UNSELECT_SHAPE:
                         broadcastToCanvas(request);
                         break;
                 }

@@ -1,6 +1,7 @@
 import {
   CanvasEvent,
   CanvasEventType,
+  IEventStream,
   IStream,
   Shape,
   ShapeManager,
@@ -115,6 +116,24 @@ export class Canvas implements ShapeManager {
   }
 
   /******* DISPATCHER METHODS *******/
+  selectShape(shapeId: string) {
+    const canvasEvent: CanvasEvent = {
+      type: CanvasEventType.SELECT_SHAPE,
+      data: { id: shapeId },
+    };
+
+    this.eventStream.addEvent(canvasEvent);
+  }
+
+  unselectShape(shapeId: string) {
+    const canvasEvent: CanvasEvent = {
+      type: CanvasEventType.UNSELECT_SHAPE,
+      data: { id: shapeId },
+    };
+
+    this.eventStream.addEvent(canvasEvent);
+  }
+
   addShape(isTemp: boolean, shape: Shape, redraw: boolean = true): void {
     const shapeCopy = this.createShapeCopy(shape);
     Object.assign(shapeCopy, shape);
@@ -140,8 +159,6 @@ export class Canvas implements ShapeManager {
   }
 
   removeShapeWithId(isTemp: boolean, id: string, redraw: boolean = true): void {
-    console.log('IS REMOVE');
-    console.log(`${isTemp} &&  ${id}`);
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
       data: { id: id, redraw: redraw },
@@ -242,16 +259,17 @@ export class Canvas implements ShapeManager {
             shape.strokeColor = shapeData.strokeColor;
             shape.strokeColorKey = shapeData.strokeColorKey;
             shape.id = shapeData.id;
-            this.addShape(true, shape, event.redraw);
+            this.addShape(true, shape, event.eventStream.redraw);
           }
+          this.draw();
           break;
         case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-          console.log(`EVENT ID: ${event}`);
           this.removeShapeWithId(
             true,
             event.eventStream.id,
             event.eventStream.redraw
           );
+          this.draw();
           break;
         case CanvasEventType.UPDATE_SHAPE:
           this.updateShape(event.eventStream.shape, event.isTemp);
@@ -259,10 +277,14 @@ export class Canvas implements ShapeManager {
         case CanvasEventType.UPDATE_SHAPES_ORDER:
           this.updateShapesOrder(event.id, event.moveUp);
           break;
+        case CanvasEventType.SELECT_SHAPE:
+          console.log(event.eventStream.id);
+          const selectedShape = this.getShapeById(event.eventStream.id);
+          selectedShape.draw(this.ctx, true);
+          break;
         default:
           break;
       }
     });
-    this.draw();
   }
 }

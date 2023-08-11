@@ -65,6 +65,14 @@ function init() {
     updateShape(shape: Shape, isTemp: boolean) {
       canvas.updateShape(shape, isTemp);
     },
+
+    selectShape(shapeId: string) {
+      canvas.selectShape(shapeId);
+    },
+
+    unselectShape(shapeId: string) {
+      canvas.selectShape(shapeId);
+    },
   };
 
   const tools: ShapeFactory[] = [

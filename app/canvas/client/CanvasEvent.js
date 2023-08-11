@@ -15,7 +15,6 @@ export class EventStream {
     events = [];
     addEvent(event) {
         this.events.push(event);
-        console.log(event);
         const requestEvent = {
             command: event.type,
             canvasId: getCanvasId(),

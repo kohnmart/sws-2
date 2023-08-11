@@ -48,6 +48,12 @@ function init() {
         updateShape(shape, isTemp) {
             canvas.updateShape(shape, isTemp);
         },
+        selectShape(shapeId) {
+            canvas.selectShape(shapeId);
+        },
+        unselectShape(shapeId) {
+            canvas.selectShape(shapeId);
+        },
     };
     const tools = [
         new LineFactory(sm),

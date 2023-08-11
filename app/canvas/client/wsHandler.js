@@ -33,6 +33,10 @@ const wsConnection = (ws, uuid) => {
                 loadStream(response.eventStream);
             case CanvasEventType.REMOVE_SHAPE_WITH_ID:
                 loadStream(response.eventStream);
+            case CanvasEventType.SELECT_SHAPE:
+                loadStream(response.eventStream);
+            case CanvasEventType.UNSELECT_SHAPE:
+                loadStream(response.eventStream);
         }
     };
     ws.onclose = () => {

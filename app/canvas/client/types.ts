@@ -23,6 +23,8 @@ export interface SelectorManager {
   getShapeById(id: string): Shape;
   updateShape(shape: Shape, isTemp: boolean): void;
   updateShapeColor(shapeId: string, colorType: string, newColor: string): void;
+  selectShape(shapeId: string): void;
+  unselectShape(shapeId: string): void;
 }
 
 export interface ShapeFactory {
@@ -54,6 +56,8 @@ export enum CanvasEventType {
   UPDATE_SHAPES_ORDER,
   TOOL_ACTION,
   CHANGE_COLOR,
+  SELECT_SHAPE,
+  UNSELECT_SHAPE,
 }
 
 export interface CanvasEvent {
@@ -80,7 +84,7 @@ export interface IStream {
   eventStream: IEventStream[];
 }
 
-interface IEventStream {
+export interface IEventStream {
   id: string;
   shape?: Shape;
   redraw?: boolean;

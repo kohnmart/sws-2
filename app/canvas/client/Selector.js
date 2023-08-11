@@ -118,6 +118,7 @@ export class Selector {
             this.isMoving = true;
             this.selectedShape = this.slm.getShapeById(this.shapesSelected[0]);
             this.selectedShape.draw(this.slm.getCtx(), true);
+            this.slm.selectShape(this.shapesSelected[0]);
         }
     }
     handleMouseMove(x, y) {

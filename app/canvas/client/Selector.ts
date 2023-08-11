@@ -146,6 +146,7 @@ export class Selector implements ShapeFactory {
         | Circle;
 
       this.selectedShape.draw(this.slm.getCtx(), true);
+      this.slm.selectShape(this.shapesSelected[0]);
     }
   }
 
