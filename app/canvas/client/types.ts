@@ -1,3 +1,5 @@
+import { Circle, Line, Rectangle, Triangle } from './Shapes';
+
 export interface Shape {
   readonly type: string;
   id: string;
@@ -5,6 +7,7 @@ export interface Shape {
   backgroundColorKey: string;
   strokeColor: string;
   strokeColorKey: string;
+  isBlockedByUserId: string | null;
   draw(ctx: CanvasRenderingContext2D, isSelected: boolean): void;
 }
 
@@ -21,6 +24,12 @@ export interface SelectorManager {
   updateOrder(n: string, dir: boolean): void;
   removeShapeWithId(isTemp: boolean, id: string, redraw?: boolean): void;
   getShapeById(id: string): Shape;
+  getShapeKeyById(id: string): string;
+  updateSingleShape(
+    shapeKey: string,
+    prop: string,
+    value: boolean | string
+  ): void;
   updateShape(shape: Shape, isTemp: boolean): void;
   updateShapeColor(shapeId: string, colorType: string, newColor: string): void;
   selectShape(shapeId: string): void;
@@ -74,6 +83,7 @@ export interface CanvasEvent {
     tool?: ShapeFactory;
     x?: number;
     y?: number;
+    isBlockedByUserId?: string | null;
   };
 }
 
@@ -81,11 +91,11 @@ export interface IStream {
   type: number;
   clientId: string;
   canvasId: string;
-  eventStream: IEventStream[];
+  events: IResponseEvent;
 }
 
 export interface IEventStream {
-  id: string;
+  id?: string;
   shape?: Shape;
   redraw?: boolean;
   moveUp?: boolean;
@@ -108,4 +118,22 @@ export interface IResponse {
 export enum Services {
   REGISTRATION = 'registration',
   UNREGISTER = 'unregister',
+}
+
+export interface IResponseEvent {
+  type: CanvasEventType;
+  eventStream?: {
+    id?: string;
+    shape?: Line | Rectangle | Circle | Triangle;
+    redraw?: boolean;
+    moveUp?: boolean;
+    isTemp?: boolean;
+    colorType?: string;
+    newColor?: string;
+    method?: Function;
+    tool?: ShapeFactory;
+    x?: number;
+    y?: number;
+    isBlockedByUserId?: string | null;
+  };
 }

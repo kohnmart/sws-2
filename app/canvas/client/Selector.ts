@@ -18,6 +18,7 @@ export class Selector implements ShapeFactory {
   private shapeListIndexer: number = 0;
   private isMoving = false;
   private lastSelectedShapeId: string;
+  private lastSelectedShapeKey: string;
   private selectedShape: Line | Rectangle | Triangle | Circle;
   constructor(slm: SelectorManager) {
     this.slm = slm;
@@ -138,22 +139,37 @@ export class Selector implements ShapeFactory {
 
   handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
-    console.log('LIST');
-    console.log(this.shapesSelected.length);
     if (this.shapesSelected.length) {
-      this.isMoving = true;
-      this.selectedShape = this.slm.getShapeById(this.shapesSelected[0]) as
-        | Line
-        | Rectangle
-        | Triangle
-        | Circle;
-      this.lastSelectedShapeId = this.shapesSelected[0];
-      this.selectedShape.draw(this.slm.getCtx(), true);
-      this.slm.selectShape(this.shapesSelected[0]);
+      if (
+        this.slm.getShapeById(this.shapesSelected[0]).isBlockedByUserId ===
+          localStorage.getItem('clientId') ||
+        this.slm.getShapeById(this.shapesSelected[0]).isBlockedByUserId == null
+      ) {
+        this.isMoving = true;
+        const shapeKey = this.slm.getShapeKeyById(this.shapesSelected[0]);
+        this.lastSelectedShapeKey = shapeKey;
+        this.lastSelectedShapeId = this.shapesSelected[0];
+        this.slm.updateSingleShape(
+          shapeKey,
+          'isBlockedByUserId',
+          localStorage.getItem('clientId')
+        );
+        this.slm.selectShape(this.shapesSelected[0]);
+      }
     } else {
-      console.log('CALL');
-      this.slm.unselectShape(this.lastSelectedShapeId);
+      if (
+        this.slm.getShapeById(this.lastSelectedShapeId).isBlockedByUserId ===
+        localStorage.getItem('clientId')
+      ) {
+        this.slm.updateSingleShape(
+          this.lastSelectedShapeKey,
+          'isBlockedByUserId',
+          null
+        );
+        this.slm.unselectShape(this.lastSelectedShapeId);
+      }
     }
+    this.slm.draw();
   }
 
   handleMouseMove(x: number, y: number) {

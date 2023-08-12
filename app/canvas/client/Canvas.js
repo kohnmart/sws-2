@@ -74,6 +74,13 @@ export class Canvas {
         this.ctx.fillStyle = 'black';
         for (let id in this.shapes) {
             this.shapes[id].draw(this.ctx, false);
+            console.log('isBlocked');
+            console.log(this.shapes[id].isBlockedByUserId);
+            if (this.shapes[id].isBlockedByUserId) {
+                {
+                    this.shapes[id].draw(this.ctx, true);
+                }
+            }
         }
         return this;
     }
@@ -81,17 +88,18 @@ export class Canvas {
     selectShape(shapeId) {
         const canvasEvent = {
             type: CanvasEventType.SELECT_SHAPE,
-            data: { id: shapeId },
+            data: {
+                id: shapeId,
+                isBlockedByUserId: localStorage.getItem('clientId'),
+            },
         };
         this.eventStream.addEvent(canvasEvent);
     }
     unselectShape(shapeId) {
         const canvasEvent = {
             type: CanvasEventType.UNSELECT_SHAPE,
-            data: { id: shapeId },
+            data: { id: shapeId, isBlockedByUserId: null },
         };
-        console.log('CALL');
-        console.log(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
     }
     addShape(isTemp, shape, redraw = true) {
@@ -144,6 +152,9 @@ export class Canvas {
             this.eventStream.addEvent(canvasEvent);
         }
     }
+    updateSingleShape(shapeKey, prop, value) {
+        this.shapes[shapeKey][prop] = value;
+    }
     updateShapesOrder(shapeId, moveUp) {
         const canvasEvent = {
             type: CanvasEventType.UPDATE_SHAPES_ORDER,
@@ -193,6 +204,13 @@ export class Canvas {
             }
         }
     }
+    getShapeKeyById(id) {
+        for (const key in this.shapes) {
+            if (this.shapes[key].id === id) {
+                return key;
+            }
+        }
+    }
     loadEventStream(stream) {
         stream.forEach((event) => {
             switch (event.type) {
@@ -207,29 +225,30 @@ export class Canvas {
                         shape.id = shapeData.id;
                         this.addShape(true, shape, event.eventStream.redraw);
                     }
-                    this.draw();
                     break;
                 case CanvasEventType.REMOVE_SHAPE_WITH_ID:
                     this.removeShapeWithId(true, event.eventStream.id, event.eventStream.redraw);
-                    this.draw();
                     break;
                 case CanvasEventType.UPDATE_SHAPE:
-                    this.updateShape(event.eventStream.shape, event.isTemp);
+                    this.updateShape(event.eventStream.shape, event.eventStream.isTemp);
                     break;
                 case CanvasEventType.UPDATE_SHAPES_ORDER:
-                    this.updateShapesOrder(event.id, event.moveUp);
+                    this.updateShapesOrder(event.eventStream.id, event.eventStream.moveUp);
                     break;
                 case CanvasEventType.SELECT_SHAPE:
-                    const selectedShape = this.getShapeById(event.eventStream.id);
-                    selectedShape.draw(this.ctx, true);
+                    const selectedShapeKey = this.getShapeKeyById(event.eventStream.id);
+                    this.shapes[selectedShapeKey].isBlockedByUserId =
+                        event.eventStream.isBlockedByUserId; // true
                     break;
                 case CanvasEventType.UNSELECT_SHAPE:
-                    console.log('UNSELECT');
-                    this.draw();
+                    const unselectedShape = this.getShapeKeyById(event.eventStream.id);
+                    this.shapes[unselectedShape].isBlockedByUserId =
+                        event.eventStream.isBlockedByUserId; // false
                     break;
                 default:
                     break;
             }
+            this.draw();
         });
     }
 }

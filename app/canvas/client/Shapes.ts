@@ -6,9 +6,11 @@ export class Point2D {
 class AbstractShape {
   id: string;
   readonly type: string;
+
   backgroundColor: string;
   readonly backgroundColorKey: string;
   strokeColor: string;
+  isBlockedByUserId: string | null;
   readonly strokeColorKey: string;
   readonly markedColor: string = 'purple';
   constructor(
@@ -18,9 +20,12 @@ class AbstractShape {
     outlineColor: string = ColorPaletteGroup.group['Outline'].defaultRGBA,
     backgroundColorKey: string = ColorPaletteGroup.group['Hintergrund']
       .colorKey,
-    strokeColorKey: string = ColorPaletteGroup.group['Outline'].colorKey
+    strokeColorKey: string = ColorPaletteGroup.group['Outline'].colorKey,
+
+    isBlockedByUserId: string | null = null
   ) {
     this.id = localStorage.getItem('clientId') + '--' + Date.now();
+    this.isBlockedByUserId = isBlockedByUserId;
     this.type = type;
     this.backgroundColor = backgroundColor;
     this.backgroundColorKey = backgroundColorKey;

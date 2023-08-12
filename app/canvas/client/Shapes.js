@@ -13,12 +13,14 @@ class AbstractShape {
     backgroundColor;
     backgroundColorKey;
     strokeColor;
+    isBlockedByUserId;
     strokeColorKey;
     markedColor = 'purple';
     constructor(type, backgroundColor = ColorPaletteGroup.group['Hintergrund']
         .defaultRGBA, outlineColor = ColorPaletteGroup.group['Outline'].defaultRGBA, backgroundColorKey = ColorPaletteGroup.group['Hintergrund']
-        .colorKey, strokeColorKey = ColorPaletteGroup.group['Outline'].colorKey) {
+        .colorKey, strokeColorKey = ColorPaletteGroup.group['Outline'].colorKey, isBlockedByUserId = null) {
         this.id = localStorage.getItem('clientId') + '--' + Date.now();
+        this.isBlockedByUserId = isBlockedByUserId;
         this.type = type;
         this.backgroundColor = backgroundColor;
         this.backgroundColorKey = backgroundColorKey;

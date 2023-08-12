@@ -1,7 +1,7 @@
 import {
   CanvasEvent,
   CanvasEventType,
-  IEventStream,
+  IResponseEvent,
   IStream,
   Shape,
   ShapeManager,
@@ -15,7 +15,6 @@ import {
   ToolEventSubscription,
 } from './CanvasEvent.js';
 import { Line, Rectangle, Circle, Triangle } from './Shapes.js';
-import canvas from '../../server/middleware/canvas.js';
 
 export class Canvas implements ShapeManager {
   private ctx: CanvasRenderingContext2D;
@@ -112,6 +111,13 @@ export class Canvas implements ShapeManager {
     this.ctx.fillStyle = 'black';
     for (let id in this.shapes) {
       this.shapes[id].draw(this.ctx, false);
+      console.log('isBlocked');
+      console.log(this.shapes[id].isBlockedByUserId);
+      if (this.shapes[id].isBlockedByUserId) {
+        {
+          this.shapes[id].draw(this.ctx, true);
+        }
+      }
     }
     return this;
   }
@@ -120,19 +126,19 @@ export class Canvas implements ShapeManager {
   selectShape(shapeId: string) {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.SELECT_SHAPE,
-      data: { id: shapeId },
+      data: {
+        id: shapeId,
+        isBlockedByUserId: localStorage.getItem('clientId'),
+      },
     };
-
     this.eventStream.addEvent(canvasEvent);
   }
 
   unselectShape(shapeId: string) {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.UNSELECT_SHAPE,
-      data: { id: shapeId },
+      data: { id: shapeId, isBlockedByUserId: null },
     };
-    console.log('CALL');
-    console.log(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
   }
 
@@ -196,6 +202,10 @@ export class Canvas implements ShapeManager {
     }
   }
 
+  updateSingleShape(shapeKey: string, prop: string, value: boolean | string) {
+    this.shapes[shapeKey][prop] = value;
+  }
+
   updateShapesOrder(shapeId: string, moveUp: boolean) {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.UPDATE_SHAPES_ORDER,
@@ -248,8 +258,16 @@ export class Canvas implements ShapeManager {
     }
   }
 
+  getShapeKeyById(id: string): string {
+    for (const key in this.shapes) {
+      if (this.shapes[key].id === id) {
+        return key;
+      }
+    }
+  }
+
   loadEventStream(stream: IStream[]) {
-    stream.forEach((event: any) => {
+    stream.forEach((event: IResponseEvent) => {
       switch (event.type) {
         case CanvasEventType.ADD_SHAPE:
           const shapeData: Line | Circle | Rectangle | Triangle =
@@ -263,7 +281,6 @@ export class Canvas implements ShapeManager {
             shape.id = shapeData.id;
             this.addShape(true, shape, event.eventStream.redraw);
           }
-          this.draw();
           break;
         case CanvasEventType.REMOVE_SHAPE_WITH_ID:
           this.removeShapeWithId(
@@ -271,25 +288,30 @@ export class Canvas implements ShapeManager {
             event.eventStream.id,
             event.eventStream.redraw
           );
-          this.draw();
           break;
         case CanvasEventType.UPDATE_SHAPE:
-          this.updateShape(event.eventStream.shape, event.isTemp);
+          this.updateShape(event.eventStream.shape, event.eventStream.isTemp);
           break;
         case CanvasEventType.UPDATE_SHAPES_ORDER:
-          this.updateShapesOrder(event.id, event.moveUp);
+          this.updateShapesOrder(
+            event.eventStream.id,
+            event.eventStream.moveUp
+          );
           break;
         case CanvasEventType.SELECT_SHAPE:
-          const selectedShape = this.getShapeById(event.eventStream.id);
-          selectedShape.draw(this.ctx, true);
+          const selectedShapeKey = this.getShapeKeyById(event.eventStream.id);
+          this.shapes[selectedShapeKey].isBlockedByUserId =
+            event.eventStream.isBlockedByUserId; // true
           break;
         case CanvasEventType.UNSELECT_SHAPE:
-          console.log('UNSELECT');
-          this.draw();
+          const unselectedShape = this.getShapeKeyById(event.eventStream.id);
+          this.shapes[unselectedShape].isBlockedByUserId =
+            event.eventStream.isBlockedByUserId; // false
           break;
         default:
           break;
       }
+      this.draw();
     });
   }
 }
