@@ -24,6 +24,7 @@ const wsConnection = (ws, uuid) => {
             case Services.REGISTRATION:
                 const clientId = response.clientId;
                 localStorage.setItem('clientId', clientId);
+                localStorage.setItem('randColor', response.markedColor);
                 loadStream(response.eventStream);
                 break;
             case Services.UNREGISTER:
