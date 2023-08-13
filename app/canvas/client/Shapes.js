@@ -15,7 +15,7 @@ class AbstractShape {
     strokeColor;
     isBlockedByUserId;
     strokeColorKey;
-    markedColor = 'purple';
+    markedColor = localStorage.getItem('randColor');
     constructor(type, backgroundColor = ColorPaletteGroup.group['Hintergrund']
         .defaultRGBA, outlineColor = ColorPaletteGroup.group['Outline'].defaultRGBA, backgroundColorKey = ColorPaletteGroup.group['Hintergrund']
         .colorKey, strokeColorKey = ColorPaletteGroup.group['Outline'].colorKey, isBlockedByUserId = null) {
@@ -91,7 +91,7 @@ export class Line extends AbstractShape {
         this.from = from;
         this.to = to;
     }
-    draw(ctx, isSelected) {
+    draw(ctx, isSelected, markedColor = this.markedColor) {
         if (!isSelected) {
             ctx.strokeStyle = this.strokeColor;
             ctx.beginPath();
@@ -100,7 +100,7 @@ export class Line extends AbstractShape {
             ctx.stroke();
         }
         else {
-            ctx.fillStyle = this.markedColor;
+            ctx.fillStyle = markedColor;
             ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
             ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
         }
@@ -123,7 +123,7 @@ export class Circle extends AbstractShape {
         this.center = center;
         this.radius = radius;
     }
-    draw(ctx, isSelected) {
+    draw(ctx, isSelected, markedColor = this.markedColor) {
         if (!isSelected) {
             ctx.fillStyle = this.backgroundColor;
             ctx.strokeStyle = this.strokeColor;
@@ -134,7 +134,7 @@ export class Circle extends AbstractShape {
             ctx.stroke();
         }
         else {
-            ctx.fillStyle = this.markedColor;
+            ctx.fillStyle = markedColor;
             ctx.fillRect(this.center.x - 5, this.center.y + this.radius - 5, 10, 10);
             ctx.fillRect(this.center.x - 5, this.center.y - this.radius - 5, 10, 10);
             ctx.fillRect(this.center.x - 5 - this.radius, this.center.y, 10, 10);
@@ -163,7 +163,7 @@ export class Rectangle extends AbstractShape {
         this.from = from;
         this.to = to;
     }
-    draw(ctx, isSelected) {
+    draw(ctx, isSelected, markedColor = this.markedColor) {
         if (!isSelected) {
             ctx.fillStyle = this.backgroundColor;
             ctx.strokeStyle = this.strokeColor;
@@ -174,7 +174,7 @@ export class Rectangle extends AbstractShape {
             ctx.fill();
         }
         else {
-            ctx.fillStyle = this.markedColor;
+            ctx.fillStyle = markedColor;
             ctx.fillRect(this.from.x - 5, this.from.y - 5, 10, 10);
             ctx.fillRect(this.from.x - 5, this.to.y - 5, 10, 10);
             ctx.fillRect(this.to.x - 5, this.to.y - 5, 10, 10);
@@ -210,7 +210,7 @@ export class Triangle extends AbstractShape {
         this.p2 = p2;
         this.p3 = p3;
     }
-    draw(ctx, isSelected) {
+    draw(ctx, isSelected, markedColor = this.markedColor) {
         if (!isSelected) {
             ctx.beginPath();
             ctx.moveTo(this.p1.x, this.p1.y);
@@ -224,7 +224,7 @@ export class Triangle extends AbstractShape {
             ctx.stroke();
         }
         else {
-            ctx.fillStyle = this.markedColor;
+            ctx.fillStyle = markedColor;
             ctx.fillRect(this.p1.x - 5, this.p1.y - 5, 10, 10);
             ctx.fillRect(this.p2.x - 5, this.p2.y - 5, 10, 10);
             ctx.fillRect(this.p3.x - 5, this.p3.y - 5, 10, 10);
