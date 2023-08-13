@@ -8,7 +8,12 @@ export interface Shape {
   strokeColor: string;
   strokeColorKey: string;
   isBlockedByUserId: string | null;
-  draw(ctx: CanvasRenderingContext2D, isSelected: boolean): void;
+  markedColor: string;
+  draw(
+    ctx: CanvasRenderingContext2D,
+    isSelected: boolean,
+    markedColor: string
+  ): void;
 }
 
 export interface ShapeManager {
@@ -84,6 +89,7 @@ export interface CanvasEvent {
     x?: number;
     y?: number;
     isBlockedByUserId?: string | null;
+    markedColor?: string;
   };
 }
 
@@ -112,6 +118,7 @@ export interface IResponse {
   type: string | CanvasEventType;
   clientId: string;
   canvasId: string;
+  markedColor: string;
   eventStream: IStream[];
 }
 
@@ -135,5 +142,6 @@ export interface IResponseEvent {
     x?: number;
     y?: number;
     isBlockedByUserId?: string | null;
+    markedColor?: string;
   };
 }
