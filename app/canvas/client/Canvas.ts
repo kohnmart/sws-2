@@ -110,12 +110,10 @@ export class Canvas implements ShapeManager {
     // draw shapes
     this.ctx.fillStyle = 'black';
     for (let id in this.shapes) {
-      this.shapes[id].draw(this.ctx, false);
-      console.log('isBlocked');
-      console.log(this.shapes[id].isBlockedByUserId);
+      this.shapes[id].draw(this.ctx, false, localStorage.getItem('randColor'));
       if (this.shapes[id].isBlockedByUserId) {
         {
-          this.shapes[id].draw(this.ctx, true);
+          this.shapes[id].draw(this.ctx, true, this.shapes[id].markedColor);
         }
       }
     }
@@ -129,6 +127,7 @@ export class Canvas implements ShapeManager {
       data: {
         id: shapeId,
         isBlockedByUserId: localStorage.getItem('clientId'),
+        markedColor: localStorage.getItem('randColor'),
       },
     };
     this.eventStream.addEvent(canvasEvent);
@@ -302,11 +301,16 @@ export class Canvas implements ShapeManager {
           const selectedShapeKey = this.getShapeKeyById(event.eventStream.id);
           this.shapes[selectedShapeKey].isBlockedByUserId =
             event.eventStream.isBlockedByUserId; // true
+
+          this.shapes[selectedShapeKey].markedColor =
+            event.eventStream.markedColor;
+
           break;
         case CanvasEventType.UNSELECT_SHAPE:
           const unselectedShape = this.getShapeKeyById(event.eventStream.id);
-          this.shapes[unselectedShape].isBlockedByUserId =
-            event.eventStream.isBlockedByUserId; // false
+          this.shapes[unselectedShape].isBlockedByUserId = null;
+          this.shapes[unselectedShape].markedColor =
+            localStorage.getItem('randColor');
           break;
         default:
           break;
