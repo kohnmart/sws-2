@@ -2,6 +2,7 @@
 import { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 import { CanvasEventType } from '../../canvas/client/types.js';
+import { getRandomColor } from '../helper/color.js';
 const startWebSocketServer = (server) => {
     const wss = new WebSocketServer({ server });
     const channels = {};
@@ -33,6 +34,7 @@ const startWebSocketServer = (server) => {
                             type: 'registration',
                             clientId: clientId,
                             canvasId: request.canvasId,
+                            markedColor: getRandomColor(),
                             eventStream: channels[request.canvasId].eventStream,
                         };
                         ws.send(JSON.stringify(response));
