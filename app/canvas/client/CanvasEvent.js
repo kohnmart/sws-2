@@ -23,15 +23,6 @@ export class EventStream {
         };
         wsSend(JSON.stringify(requestEvent));
     }
-    getEvents() {
-        return this.events;
-    }
-    clearEvents() {
-        this.events = [];
-    }
-    removeLastEvent() {
-        this.events.pop();
-    }
 }
 export class CanvasEventDispatcher {
     subscribers = [];
