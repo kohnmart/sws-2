@@ -4,7 +4,6 @@ import {
   IResponseEvent,
   IStream,
   Shape,
-  ShapeManager,
 } from './types.js';
 import { ToolArea } from './ToolArea.js';
 import {
