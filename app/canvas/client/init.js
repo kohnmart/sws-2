@@ -14,15 +14,15 @@ function init() {
     // Anyway, we do not want the two to have references on each other
     const sm = {
         addShape(isTemp, s, rd) {
-            return canvas.addShape(isTemp, s, rd);
+            return canvas.getEventSubscription().addShape(isTemp, s, rd);
         },
         removeShapeWithId(isTemp, id, rd) {
-            return canvas.removeShapeWithId(isTemp, id, rd);
+            return canvas.getEventSubscription().removeShapeWithId(isTemp, id, rd);
         },
     };
     const slm = {
         addShape(isTemp, shape, redraw) {
-            canvas.addShape(isTemp, shape, redraw);
+            canvas.getEventSubscription().addShape(isTemp, shape, redraw);
         },
         getShapes() {
             return canvas.getShapes();
@@ -34,7 +34,7 @@ function init() {
             return canvas.getShapeKeyById(id);
         },
         updateShapeColor(shape) {
-            return canvas.updateShapeColor(shape);
+            return canvas.getEventSubscription().updateShapeColor(shape);
         },
         getCtx() {
             return canvas.getCanvasRenderingContext();
@@ -43,16 +43,16 @@ function init() {
             canvas.draw();
         },
         updateOrder(n, dir, isReceiving) {
-            canvas.updateShapesOrder(n, dir, isReceiving);
+            canvas.getEventSubscription().updateShapesOrder(n, dir, isReceiving);
         },
         removeShapeWithId(isTemp, id, rd) {
-            canvas.removeShapeWithId(isTemp, id, rd);
+            canvas.getEventSubscription().removeShapeWithId(isTemp, id, rd);
         },
         selectShape(shapeId) {
-            canvas.selectShape(shapeId);
+            canvas.getEventSubscription().selectShape(shapeId);
         },
         unselectShape(shapeId) {
-            canvas.unselectShape(shapeId);
+            canvas.getEventSubscription().unselectShape(shapeId);
         },
     };
     const tools = [

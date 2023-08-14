@@ -1,3 +1,4 @@
+import { createShapeCopy } from './canvasHelper.js';
 import { getCanvasId, wsSend } from './index.js';
 import { CanvasEventType } from './types.js';
 export class CanvasEventManager {
@@ -63,8 +64,12 @@ export class ToolEventSubscription {
 }
 export class CanvasEventSubscription {
     canvas;
-    constructor(canvas, eventDispatcher) {
+    eventStream;
+    eventDispatcher;
+    constructor(canvas, eventDispatcher, evS) {
         this.canvas = canvas;
+        this.eventStream = evS;
+        this.eventDispatcher = eventDispatcher;
         eventDispatcher.subscribe((event) => {
             switch (event.type) {
                 case CanvasEventType.ADD_SHAPE:
@@ -167,5 +172,64 @@ export class CanvasEventSubscription {
             ];
         }
         this.canvas.draw();
+    }
+    /* DISPATCHER */
+    selectShape(shapeId) {
+        const canvasEvent = {
+            type: CanvasEventType.SELECT_SHAPE,
+            data: {
+                id: shapeId,
+                isBlockedByUserId: localStorage.getItem('clientId'),
+                markedColor: localStorage.getItem('randColor'),
+            },
+        };
+        this.eventStream.addEvent(canvasEvent);
+    }
+    unselectShape(shapeId) {
+        const canvasEvent = {
+            type: CanvasEventType.UNSELECT_SHAPE,
+            data: { id: shapeId, isBlockedByUserId: null },
+        };
+        this.eventStream.addEvent(canvasEvent);
+    }
+    addShape(isTemp, shape, redraw = true) {
+        const shapeCopy = createShapeCopy(shape);
+        Object.assign(shapeCopy, shape);
+        const canvasEvent = {
+            type: CanvasEventType.ADD_SHAPE,
+            data: { shape: shapeCopy, redraw: redraw },
+        };
+        this.eventDispatcher.dispatch(canvasEvent);
+        if (!isTemp) {
+            this.eventStream.addEvent(canvasEvent);
+        }
+    }
+    removeShapeWithId(isTemp, id, redraw = true) {
+        const canvasEvent = {
+            type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
+            data: { id: id, redraw: redraw },
+        };
+        this.eventDispatcher.dispatch(canvasEvent);
+        if (!isTemp) {
+            this.eventStream.addEvent(canvasEvent);
+        }
+    }
+    updateShapeColor(shape) {
+        const canvasEvent = {
+            type: CanvasEventType.ADD_SHAPE,
+            data: { shape: shape, redraw: true },
+        };
+        this.eventDispatcher.dispatch(canvasEvent);
+        this.eventStream.addEvent(canvasEvent);
+    }
+    updateShapesOrder(shapeId, moveUp, isReceiving = false) {
+        const canvasEvent = {
+            type: CanvasEventType.UPDATE_SHAPES_ORDER,
+            data: { id: shapeId, moveUp: moveUp },
+        };
+        this.eventDispatcher.dispatch(canvasEvent);
+        if (!isReceiving) {
+            this.eventStream.addEvent(canvasEvent);
+        }
     }
 }
