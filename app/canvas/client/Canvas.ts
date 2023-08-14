@@ -177,10 +177,6 @@ export class Canvas implements ShapeManager {
     this.eventStream.addEvent(canvasEvent);
   }
 
-  updateShapeProperty(shapeKey: string, prop: string, value: boolean | string) {
-    this.shapes[shapeKey][prop] = value;
-  }
-
   updateShapesOrder(
     shapeId: string,
     moveUp: boolean,

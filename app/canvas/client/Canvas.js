@@ -131,11 +131,7 @@ export class Canvas {
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
     }
-    updateShapeProperty(shapeKey, prop, value) {
-        this.shapes[shapeKey][prop] = value;
-    }
     updateShapesOrder(shapeId, moveUp, isReceiving = false) {
-        console.log('TEST');
         const canvasEvent = {
             type: CanvasEventType.UPDATE_SHAPES_ORDER,
             data: { id: shapeId, moveUp: moveUp },
