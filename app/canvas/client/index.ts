@@ -50,8 +50,10 @@ const createCanvasContainer = () => {
   canvasContainer.appendChild(returnButton);
 
   const paragraph = document.createElement('p');
-  paragraph.textContent =
-    'Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus. Haben Sie eines ausgewählt, können Sie mit der Maus die entsprechenden Figuren zeichnen. Typischerweise, indem Sie die Maus drücken, dann mit gedrückter Maustaste die Form bestimmen, und dann anschließend die Maustaste loslassen.';
+  paragraph.textContent = ` Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus. 
+    Haben Sie eines ausgewählt, können Sie mit der Maus die entsprechenden Figuren zeichnen. 
+    Typischerweise, indem Sie die Maus drücken, dann mit gedrückter Maustaste die Form bestimmen, 
+    und dann anschließend die Maustaste loslassen. `;
   canvasContainer.appendChild(paragraph);
 
   const toolsList = document.createElement('ul');
@@ -97,7 +99,6 @@ const createCanvasButton = (
 ) => {
   const container = document.createElement('div');
   const btn = document.createElement('button');
-  console.log('CANVASNAME: ' + canvasName);
   btn.innerHTML = canvasName;
   btn.addEventListener('click', () => enterCanvas(canvasId));
 
@@ -127,7 +128,6 @@ const enterCanvas = async (id: string) => {
   fetch(`/canvas/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       if (data.status === 200) {
         // open canvas
         // Disable overview - html
@@ -152,7 +152,6 @@ const removeCanvas = async (id: string) => {
   fetch(`/canvas/remove/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       if (data.status === 200) {
         document.getElementById(data.id).remove();
       } else {
@@ -181,7 +180,6 @@ const fetchCanvases = async () => {
     .then((data) => {
       if (data.status === 200) {
         const canvasList = data.list;
-        console.log(canvasList);
         // Loop through the canvasList and create list items
         const listItems = canvasList.map((canvas) => {
           const liContainer = document.createElement('li');
