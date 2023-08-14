@@ -37,12 +37,14 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
         ws.close();
         break;
 
-      case CanvasEventType.ADD_SHAPE:
-      case CanvasEventType.REMOVE_SHAPE_WITH_ID:
       case CanvasEventType.SELECT_SHAPE:
       case CanvasEventType.UNSELECT_SHAPE:
+      case CanvasEventType.ADD_SHAPE:
+      case CanvasEventType.REMOVE_SHAPE_WITH_ID:
       case CanvasEventType.UPDATE_SHAPES_ORDER:
         loadStream(response.eventStream);
+        break;
+      default:
         break;
     }
   };
