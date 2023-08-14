@@ -36,9 +36,6 @@ function init() {
         updateShapeColor(shape) {
             return canvas.updateShapeColor(shape);
         },
-        updateShapeProperty(shapeKey, prop, value) {
-            return canvas.updateShapeProperty(shapeKey, prop, value);
-        },
         getCtx() {
             return canvas.getCanvasRenderingContext();
         },
