@@ -143,8 +143,8 @@ export class Canvas {
         // Die Eigenschaften von shape auf shapeCopy kopieren
         Object.assign(shapeCopy, shape);
         const canvasEvent = {
-            type: CanvasEventType.UPDATE_SHAPE,
-            data: { shape: shapeCopy, isTemp: isTemp },
+            type: CanvasEventType.ADD_SHAPE,
+            data: { shape: shapeCopy, redraw: true },
         };
         this.eventDispatcher.dispatch(canvasEvent);
         if (!isTemp) {

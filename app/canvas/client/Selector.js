@@ -119,9 +119,9 @@ export class Selector {
         const clientId = localStorage.getItem('clientId');
         const shapeSelected = this.shapesSelected[0];
         if (shapeSelected) {
-            const selectedShape = this.slm.getShapeById(shapeSelected);
-            const isBlockedByCurrentUser = selectedShape.isBlockedByUserId === clientId ||
-                selectedShape.isBlockedByUserId == null;
+            this.selectedShape = this.slm.getShapeById(shapeSelected);
+            const isBlockedByCurrentUser = this.selectedShape.isBlockedByUserId === clientId ||
+                this.selectedShape.isBlockedByUserId == null;
             if (isBlockedByCurrentUser) {
                 if (this.lastSelectedShapeId &&
                     this.lastSelectedShapeId !== shapeSelected) {
@@ -149,6 +149,7 @@ export class Selector {
         this.slm.draw();
     }
     handleMouseMove(x, y) {
+        console;
         if (this.isMoving && this.selectedShape) {
             const type = this.slm.getShapeById(this.shapesSelected[0]).type;
             let shape, newShape;

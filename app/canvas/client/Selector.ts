@@ -144,10 +144,14 @@ export class Selector implements ShapeFactory {
     const shapeSelected = this.shapesSelected[0];
 
     if (shapeSelected) {
-      const selectedShape = this.slm.getShapeById(shapeSelected);
+      this.selectedShape = this.slm.getShapeById(shapeSelected) as
+        | Line
+        | Rectangle
+        | Triangle
+        | Circle;
       const isBlockedByCurrentUser =
-        selectedShape.isBlockedByUserId === clientId ||
-        selectedShape.isBlockedByUserId == null;
+        this.selectedShape.isBlockedByUserId === clientId ||
+        this.selectedShape.isBlockedByUserId == null;
 
       if (isBlockedByCurrentUser) {
         if (
@@ -192,6 +196,7 @@ export class Selector implements ShapeFactory {
   }
 
   handleMouseMove(x: number, y: number) {
+    console;
     if (this.isMoving && this.selectedShape) {
       const type = this.slm.getShapeById(this.shapesSelected[0]).type;
       let shape: Line | Rectangle | Triangle | Circle,

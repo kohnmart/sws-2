@@ -192,8 +192,8 @@ export class Canvas implements ShapeManager {
     Object.assign(shapeCopy, shape);
 
     const canvasEvent: CanvasEvent = {
-      type: CanvasEventType.UPDATE_SHAPE,
-      data: { shape: shapeCopy, isTemp: isTemp },
+      type: CanvasEventType.ADD_SHAPE,
+      data: { shape: shapeCopy, redraw: true },
     };
     this.eventDispatcher.dispatch(canvasEvent);
     if (!isTemp) {
