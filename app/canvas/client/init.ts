@@ -49,12 +49,16 @@ function init() {
       return canvas.getShapeKeyById(id);
     },
 
-    updateShapeColor(shapeId, colorType, newColor): void {
-      return canvas.updateShapeColor(shapeId, colorType, newColor);
+    updateShapeColor(shape: Shape): void {
+      return canvas.updateShapeColor(shape);
     },
 
-    updateSingleShape(shapeKey: string, prop: string, value: boolean | string) {
-      return canvas.updateSingleShape(shapeKey, prop, value);
+    updateShapeProperty(
+      shapeKey: string,
+      prop: string,
+      value: boolean | string
+    ) {
+      return canvas.updateShapeProperty(shapeKey, prop, value);
     },
 
     getCtx() {

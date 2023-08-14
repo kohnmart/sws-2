@@ -30,13 +30,13 @@ export interface SelectorManager {
   removeShapeWithId(isTemp: boolean, id: string, redraw?: boolean): void;
   getShapeById(id: string): Shape;
   getShapeKeyById(id: string): string;
-  updateSingleShape(
+  updateShapeProperty(
     shapeKey: string,
     prop: string,
     value: boolean | string
   ): void;
   updateShape(shape: Shape, isTemp: boolean): void;
-  updateShapeColor(shapeId: string, colorType: string, newColor: string): void;
+  updateShapeColor(shape: Shape): void;
   selectShape(shapeId: string): void;
   unselectShape(shapeId: string): void;
 }

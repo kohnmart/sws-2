@@ -176,10 +176,12 @@ export class Canvas implements ShapeManager {
     }
   }
 
-  updateShapeColor(shapeId: string, colorType: string, newColor: string) {
-    const canvasEvent = {
-      type: CanvasEventType.CHANGE_COLOR,
-      data: { id: shapeId, colorType: colorType, newColor: newColor },
+  updateShapeColor(shape: Shape) {
+    console.log('SHAPE');
+    console.log(shape);
+    const canvasEvent: CanvasEvent = {
+      type: CanvasEventType.ADD_SHAPE,
+      data: { shape: shape, redraw: true },
     };
     this.eventDispatcher.dispatch(canvasEvent);
     this.eventStream.addEvent(canvasEvent);
@@ -201,7 +203,7 @@ export class Canvas implements ShapeManager {
     }
   }
 
-  updateSingleShape(shapeKey: string, prop: string, value: boolean | string) {
+  updateShapeProperty(shapeKey: string, prop: string, value: boolean | string) {
     this.shapes[shapeKey][prop] = value;
   }
 

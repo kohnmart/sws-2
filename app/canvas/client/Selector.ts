@@ -95,15 +95,11 @@ export class Selector implements ShapeFactory {
           if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
             shape.backgroundColor = colorPicker.colorFormatAsRGBA();
             shape.backgroundColorKey = colorPicker.key;
-            this.slm.updateShapeColor(
-              id,
-              'backgroundColor',
-              shape.backgroundColor
-            );
+            this.slm.updateShapeColor(shape);
           } else {
             shape.strokeColor = colorPicker.colorFormatAsRGBA();
             shape.strokeColorKey = colorPicker.key;
-            this.slm.updateShapeColor(id, 'strokeColor', shape.strokeColor);
+            this.slm.updateShapeColor(shape);
           }
           this.slm.draw();
         });
@@ -159,7 +155,7 @@ export class Selector implements ShapeFactory {
           this.lastSelectedShapeId !== shapeSelected
         ) {
           // Unmark the previously selected shape by the current user
-          this.slm.updateSingleShape(
+          this.slm.updateShapeProperty(
             this.lastSelectedShapeKey,
             'isBlockedByUserId',
             null
@@ -169,7 +165,7 @@ export class Selector implements ShapeFactory {
 
         this.isMoving = true;
         const currentSelectedShapeKey = this.slm.getShapeKeyById(shapeSelected);
-        this.slm.updateSingleShape(
+        this.slm.updateShapeProperty(
           currentSelectedShapeKey,
           'isBlockedByUserId',
           clientId
@@ -184,7 +180,7 @@ export class Selector implements ShapeFactory {
       }
     } else if (this.lastSelectedShapeId) {
       // Unmark the last selected shape by the current user
-      this.slm.updateSingleShape(
+      this.slm.updateShapeProperty(
         this.lastSelectedShapeKey,
         'isBlockedByUserId',
         null

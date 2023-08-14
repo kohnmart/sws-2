@@ -86,12 +86,12 @@ export class Selector {
                 if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
                     shape.backgroundColor = colorPicker.colorFormatAsRGBA();
                     shape.backgroundColorKey = colorPicker.key;
-                    this.slm.updateShapeColor(id, 'backgroundColor', shape.backgroundColor);
+                    this.slm.updateShapeColor(shape);
                 }
                 else {
                     shape.strokeColor = colorPicker.colorFormatAsRGBA();
                     shape.strokeColorKey = colorPicker.key;
-                    this.slm.updateShapeColor(id, 'strokeColor', shape.strokeColor);
+                    this.slm.updateShapeColor(shape);
                 }
                 this.slm.draw();
             });
@@ -126,12 +126,12 @@ export class Selector {
                 if (this.lastSelectedShapeId &&
                     this.lastSelectedShapeId !== shapeSelected) {
                     // Unmark the previously selected shape by the current user
-                    this.slm.updateSingleShape(this.lastSelectedShapeKey, 'isBlockedByUserId', null);
+                    this.slm.updateShapeProperty(this.lastSelectedShapeKey, 'isBlockedByUserId', null);
                     this.slm.unselectShape(this.lastSelectedShapeId);
                 }
                 this.isMoving = true;
                 const currentSelectedShapeKey = this.slm.getShapeKeyById(shapeSelected);
-                this.slm.updateSingleShape(currentSelectedShapeKey, 'isBlockedByUserId', clientId);
+                this.slm.updateShapeProperty(currentSelectedShapeKey, 'isBlockedByUserId', clientId);
                 this.lastSelectedShapeKey = currentSelectedShapeKey;
                 this.lastSelectedShapeId = shapeSelected;
                 this.slm.selectShape(shapeSelected);
@@ -143,7 +143,7 @@ export class Selector {
         }
         else if (this.lastSelectedShapeId) {
             // Unmark the last selected shape by the current user
-            this.slm.updateSingleShape(this.lastSelectedShapeKey, 'isBlockedByUserId', null);
+            this.slm.updateShapeProperty(this.lastSelectedShapeKey, 'isBlockedByUserId', null);
             this.slm.unselectShape(this.lastSelectedShapeId);
         }
         this.slm.draw();
