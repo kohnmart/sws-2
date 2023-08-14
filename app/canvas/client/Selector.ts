@@ -223,10 +223,14 @@ export class Selector implements ShapeFactory {
       }
       newShape.backgroundColor = shape.backgroundColor;
       newShape.strokeColor = shape.strokeColor;
-      newShape.draw(this.slm.getCtx(), true);
       newShape.id = shape.id;
-      this.slm.addShape(false, newShape, true);
       this.selectedShape = newShape;
+      this.slm.addShape(true, this.selectedShape);
+      this.selectedShape.draw(
+        this.slm.getCtx(),
+        true,
+        localStorage.getItem('randColor')
+      );
     }
   }
 
@@ -249,6 +253,7 @@ export class Selector implements ShapeFactory {
       this.isMoving = false;
       this.slm.addShape(false, this.selectedShape, false);
       this.selectedShape.draw(this.slm.getCtx(), true);
+      this.slm.selectShape(this.shapesSelected[0]);
     }
   }
 
