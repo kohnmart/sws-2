@@ -16,14 +16,14 @@ function init() {
         addShape(isTemp, s, rd) {
             return canvas.addShape(isTemp, s, rd);
         },
-        removeShape(s, rd) {
-            return canvas.removeShape(s, rd);
-        },
         removeShapeWithId(isTemp, id, rd) {
             return canvas.removeShapeWithId(isTemp, id, rd);
         },
     };
     const slm = {
+        addShape(isTemp, shape, redraw) {
+            canvas.addShape(isTemp, shape, redraw);
+        },
         getShapes() {
             return canvas.getShapes();
         },
@@ -45,14 +45,11 @@ function init() {
         draw() {
             canvas.draw();
         },
-        updateOrder(n, dir) {
-            canvas.updateShapesOrder(n, dir);
+        updateOrder(n, dir, isReceiving) {
+            canvas.updateShapesOrder(n, dir, isReceiving);
         },
         removeShapeWithId(isTemp, id, rd) {
             canvas.removeShapeWithId(isTemp, id, rd);
-        },
-        updateShape(shape, isTemp) {
-            canvas.updateShape(shape, isTemp);
         },
         selectShape(shapeId) {
             canvas.selectShape(shapeId);

@@ -107,7 +107,7 @@ export class Selector implements ShapeFactory {
     );
 
     const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
-      this.slm.updateOrder(this.shapesSelected[0], false);
+      this.slm.updateOrder(this.shapesSelected[0], false, false);
       this.slm
         .getShapeById(this.shapesSelected[0])
         .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
@@ -116,7 +116,7 @@ export class Selector implements ShapeFactory {
     const shapeMoveBackwardItem = menuApi.createItem(
       'Shape nach hinten',
       () => {
-        this.slm.updateOrder(this.shapesSelected[0], true);
+        this.slm.updateOrder(this.shapesSelected[0], true, false);
         this.slm
           .getShapeById(this.shapesSelected[0])
           .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
@@ -245,7 +245,7 @@ export class Selector implements ShapeFactory {
       newShape.strokeColor = shape.strokeColor;
       newShape.draw(this.slm.getCtx(), true);
       newShape.id = shape.id;
-      this.slm.updateShape(newShape, true);
+      this.slm.addShape(false, newShape, true);
       this.selectedShape = newShape;
     }
   }
@@ -267,7 +267,7 @@ export class Selector implements ShapeFactory {
   handleMouseUp() {
     if (this.isMoving && this.selectedShape) {
       this.isMoving = false;
-      this.slm.updateShape(this.selectedShape, false);
+      this.slm.addShape(false, this.selectedShape, false);
       this.selectedShape.draw(this.slm.getCtx(), true);
     }
   }

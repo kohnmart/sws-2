@@ -157,14 +157,6 @@ export class Canvas implements ShapeManager {
     }
   }
 
-  removeShape(shape: Shape, redraw: boolean = true): void {
-    const canvasEvent: CanvasEvent = {
-      type: CanvasEventType.REMOVE_SHAPE,
-      data: { id: shape.id, redraw: redraw },
-    };
-    this.eventDispatcher.dispatch(canvasEvent);
-  }
-
   removeShapeWithId(isTemp: boolean, id: string, redraw: boolean = true): void {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
@@ -177,8 +169,6 @@ export class Canvas implements ShapeManager {
   }
 
   updateShapeColor(shape: Shape) {
-    console.log('SHAPE');
-    console.log(shape);
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.ADD_SHAPE,
       data: { shape: shape, redraw: true },
@@ -187,33 +177,25 @@ export class Canvas implements ShapeManager {
     this.eventStream.addEvent(canvasEvent);
   }
 
-  updateShape(shape: Shape, isTemp: boolean) {
-    const shapeCopy = this.createShapeCopy(shape);
-
-    // Die Eigenschaften von shape auf shapeCopy kopieren
-    Object.assign(shapeCopy, shape);
-
-    const canvasEvent: CanvasEvent = {
-      type: CanvasEventType.ADD_SHAPE,
-      data: { shape: shapeCopy, redraw: true },
-    };
-    this.eventDispatcher.dispatch(canvasEvent);
-    if (!isTemp) {
-      this.eventStream.addEvent(canvasEvent);
-    }
-  }
-
   updateShapeProperty(shapeKey: string, prop: string, value: boolean | string) {
     this.shapes[shapeKey][prop] = value;
   }
 
-  updateShapesOrder(shapeId: string, moveUp: boolean) {
+  updateShapesOrder(
+    shapeId: string,
+    moveUp: boolean,
+    isReceiving: boolean = false
+  ) {
     const canvasEvent: CanvasEvent = {
       type: CanvasEventType.UPDATE_SHAPES_ORDER,
       data: { id: shapeId, moveUp: moveUp },
     };
+
     this.eventDispatcher.dispatch(canvasEvent);
-    this.eventStream.addEvent(canvasEvent);
+
+    if (!isReceiving) {
+      this.eventStream.addEvent(canvasEvent);
+    }
   }
 
   /******* HELPER METHODS *******/
@@ -290,13 +272,11 @@ export class Canvas implements ShapeManager {
             event.eventStream.redraw
           );
           break;
-        case CanvasEventType.UPDATE_SHAPE:
-          this.updateShape(event.eventStream.shape, event.eventStream.isTemp);
-          break;
         case CanvasEventType.UPDATE_SHAPES_ORDER:
           this.updateShapesOrder(
             event.eventStream.id,
-            event.eventStream.moveUp
+            event.eventStream.moveUp,
+            true
           );
           break;
         case CanvasEventType.SELECT_SHAPE:

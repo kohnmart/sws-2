@@ -70,6 +70,7 @@ const startWebSocketServer = (server: Server) => {
           case CanvasEventType.REMOVE_SHAPE_WITH_ID:
           case CanvasEventType.SELECT_SHAPE:
           case CanvasEventType.UNSELECT_SHAPE:
+          case CanvasEventType.UPDATE_SHAPES_ORDER:
             broadcastToCanvas(request);
             break;
         }

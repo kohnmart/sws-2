@@ -28,15 +28,16 @@ function init() {
     addShape(isTemp, s, rd) {
       return canvas.addShape(isTemp, s, rd);
     },
-    removeShape(s, rd) {
-      return canvas.removeShape(s, rd);
-    },
     removeShapeWithId(isTemp, id, rd) {
       return canvas.removeShapeWithId(isTemp, id, rd);
     },
   };
 
   const slm: SelectorManager = {
+    addShape(isTemp: boolean, shape: Shape, redraw?: boolean) {
+      canvas.addShape(isTemp, shape, redraw);
+    },
+
     getShapes() {
       return canvas.getShapes();
     },
@@ -67,15 +68,11 @@ function init() {
     draw() {
       canvas.draw();
     },
-    updateOrder(n: string, dir: boolean) {
-      canvas.updateShapesOrder(n, dir);
+    updateOrder(n: string, dir: boolean, isReceiving: boolean) {
+      canvas.updateShapesOrder(n, dir, isReceiving);
     },
     removeShapeWithId(isTemp, id, rd) {
       canvas.removeShapeWithId(isTemp, id, rd);
-    },
-
-    updateShape(shape: Shape, isTemp: boolean) {
-      canvas.updateShape(shape, isTemp);
     },
 
     selectShape(shapeId: string) {

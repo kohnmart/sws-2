@@ -38,16 +38,12 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
         break;
 
       case CanvasEventType.ADD_SHAPE:
-        loadStream(response.eventStream);
-
       case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-        loadStream(response.eventStream);
-
       case CanvasEventType.SELECT_SHAPE:
-        loadStream(response.eventStream);
-
       case CanvasEventType.UNSELECT_SHAPE:
+      case CanvasEventType.UPDATE_SHAPES_ORDER:
         loadStream(response.eventStream);
+        break;
     }
   };
 

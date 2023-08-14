@@ -18,15 +18,15 @@ export interface Shape {
 
 export interface ShapeManager {
   addShape(isTemp: boolean, shape: Shape, redraw?: boolean): void;
-  removeShape(shape: Shape, redraw?: boolean): void;
   removeShapeWithId(isTemp: boolean, id: string, redraw?: boolean): void;
 }
 
 export interface SelectorManager {
+  addShape(isTemp: boolean, shape: Shape, redraw?: boolean): void;
   getShapes(): { [p: number]: Shape };
   getCtx(): CanvasRenderingContext2D;
   draw(): void;
-  updateOrder(n: string, dir: boolean): void;
+  updateOrder(n: string, dir: boolean, isReceiving: boolean): void;
   removeShapeWithId(isTemp: boolean, id: string, redraw?: boolean): void;
   getShapeById(id: string): Shape;
   getShapeKeyById(id: string): string;
@@ -35,7 +35,6 @@ export interface SelectorManager {
     prop: string,
     value: boolean | string
   ): void;
-  updateShape(shape: Shape, isTemp: boolean): void;
   updateShapeColor(shape: Shape): void;
   selectShape(shapeId: string): void;
   unselectShape(shapeId: string): void;

@@ -113,13 +113,6 @@ export class Canvas {
             this.eventStream.addEvent(canvasEvent);
         }
     }
-    removeShape(shape, redraw = true) {
-        const canvasEvent = {
-            type: CanvasEventType.REMOVE_SHAPE,
-            data: { id: shape.id, redraw: redraw },
-        };
-        this.eventDispatcher.dispatch(canvasEvent);
-    }
     removeShapeWithId(isTemp, id, redraw = true) {
         const canvasEvent = {
             type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
@@ -131,8 +124,6 @@ export class Canvas {
         }
     }
     updateShapeColor(shape) {
-        console.log('SHAPE');
-        console.log(shape);
         const canvasEvent = {
             type: CanvasEventType.ADD_SHAPE,
             data: { shape: shape, redraw: true },
@@ -140,29 +131,19 @@ export class Canvas {
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
     }
-    updateShape(shape, isTemp) {
-        const shapeCopy = this.createShapeCopy(shape);
-        // Die Eigenschaften von shape auf shapeCopy kopieren
-        Object.assign(shapeCopy, shape);
-        const canvasEvent = {
-            type: CanvasEventType.ADD_SHAPE,
-            data: { shape: shapeCopy, redraw: true },
-        };
-        this.eventDispatcher.dispatch(canvasEvent);
-        if (!isTemp) {
-            this.eventStream.addEvent(canvasEvent);
-        }
-    }
     updateShapeProperty(shapeKey, prop, value) {
         this.shapes[shapeKey][prop] = value;
     }
-    updateShapesOrder(shapeId, moveUp) {
+    updateShapesOrder(shapeId, moveUp, isReceiving = false) {
+        console.log('TEST');
         const canvasEvent = {
             type: CanvasEventType.UPDATE_SHAPES_ORDER,
             data: { id: shapeId, moveUp: moveUp },
         };
         this.eventDispatcher.dispatch(canvasEvent);
-        this.eventStream.addEvent(canvasEvent);
+        if (!isReceiving) {
+            this.eventStream.addEvent(canvasEvent);
+        }
     }
     /******* HELPER METHODS *******/
     createShapeCopy(shape) {
@@ -230,11 +211,8 @@ export class Canvas {
                 case CanvasEventType.REMOVE_SHAPE_WITH_ID:
                     this.removeShapeWithId(true, event.eventStream.id, event.eventStream.redraw);
                     break;
-                case CanvasEventType.UPDATE_SHAPE:
-                    this.updateShape(event.eventStream.shape, event.eventStream.isTemp);
-                    break;
                 case CanvasEventType.UPDATE_SHAPES_ORDER:
-                    this.updateShapesOrder(event.eventStream.id, event.eventStream.moveUp);
+                    this.updateShapesOrder(event.eventStream.id, event.eventStream.moveUp, true);
                     break;
                 case CanvasEventType.SELECT_SHAPE:
                     const selectedShapeKey = this.getShapeKeyById(event.eventStream.id);
