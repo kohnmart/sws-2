@@ -12,7 +12,6 @@ export class Selector {
     shapeListIndexer = 0;
     isMoving = false;
     lastSelectedShapeId;
-    lastSelectedShapeKey;
     selectedShape;
     constructor(slm) {
         this.slm = slm;
@@ -117,24 +116,19 @@ export class Selector {
     handleMouseDown(x, y) {
         this.checkShapeCollision(x, y, false);
         const clientId = localStorage.getItem('clientId');
-        const shapeSelected = this.shapesSelected[0];
-        if (shapeSelected) {
-            this.selectedShape = this.slm.getShapeById(shapeSelected);
+        const selectedShapeId = this.shapesSelected[0];
+        if (selectedShapeId) {
+            this.selectedShape = this.slm.getShapeById(selectedShapeId);
             const isBlockedByCurrentUser = this.selectedShape.isBlockedByUserId === clientId ||
                 this.selectedShape.isBlockedByUserId == null;
             if (isBlockedByCurrentUser) {
                 if (this.lastSelectedShapeId &&
-                    this.lastSelectedShapeId !== shapeSelected) {
-                    // Unmark the previously selected shape by the current user
-                    this.slm.updateShapeProperty(this.lastSelectedShapeKey, 'isBlockedByUserId', null);
+                    this.lastSelectedShapeId !== selectedShapeId) {
                     this.slm.unselectShape(this.lastSelectedShapeId);
                 }
                 this.isMoving = true;
-                const currentSelectedShapeKey = this.slm.getShapeKeyById(shapeSelected);
-                this.slm.updateShapeProperty(currentSelectedShapeKey, 'isBlockedByUserId', clientId);
-                this.lastSelectedShapeKey = currentSelectedShapeKey;
-                this.lastSelectedShapeId = shapeSelected;
-                this.slm.selectShape(shapeSelected);
+                this.lastSelectedShapeId = selectedShapeId;
+                this.slm.selectShape(selectedShapeId);
             }
             else {
                 // Reset shapesSelected to deselect the shape
@@ -143,7 +137,6 @@ export class Selector {
         }
         else if (this.lastSelectedShapeId) {
             // Unmark the last selected shape by the current user
-            this.slm.updateShapeProperty(this.lastSelectedShapeKey, 'isBlockedByUserId', null);
             this.slm.unselectShape(this.lastSelectedShapeId);
         }
         this.slm.draw();
