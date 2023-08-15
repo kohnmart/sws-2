@@ -1,7 +1,7 @@
-import { PLT_TYPES } from './types.js';
+import { PLT_TYPES } from '../../types/types.js';
 import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
 import MenuApi from './menuApi.js';
-import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from './shapesInteractionUtils.js';
+import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from '../helper/shapesInteractionUtils.js';
 import { ColorPaletteGroup } from './ColorPalette.js';
 export class Selector {
     label = 'Select';

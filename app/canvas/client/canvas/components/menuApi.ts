@@ -4,7 +4,7 @@ import ColorPalette, {
   ColorPaletteGroup,
 } from './ColorPalette.js';
 import { Selector } from './Selector.js';
-import { PLT_TYPES, ColorValue } from './types.js';
+import { PLT_TYPES, ColorValue } from '../../types/types.js';
 export default class MenuApi {
   static id: string = 'menu';
   itemList: Array<Item>;

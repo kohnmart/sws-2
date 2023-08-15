@@ -1,4 +1,9 @@
-import { Circle, Line, Rectangle, Triangle } from './Shapes';
+import {
+  Circle,
+  Line,
+  Rectangle,
+  Triangle,
+} from '../canvas/components/Shapes.js';
 
 export interface Shape {
   readonly type: string;

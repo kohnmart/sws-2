@@ -1,7 +1,7 @@
-import { CircleFactory, LineFactory, RectangleFactory, TriangleFactory, } from './Shapes.js';
-import { ToolArea } from './ToolArea.js';
-import { Canvas } from './Canvas.js';
-import { Selector } from './Selector.js';
+import { CircleFactory, LineFactory, RectangleFactory, TriangleFactory, } from '../components/Shapes.js';
+import { ToolArea } from '../components/ToolArea.js';
+import { Canvas } from '../pages/Canvas.js';
+import { Selector } from '../components/Selector.js';
 let canvas;
 function init() {
     const canvasDomElm = document.getElementById('drawArea');

@@ -1,6 +1,6 @@
 import { Item, ItemRadio } from './item.js';
 import MenuApi from './menuApi.js';
-import { PLT_TYPES, ColorValue } from './types.js';
+import { PLT_TYPES, ColorValue } from '../../types/types.js';
 
 export class ColorPaletteGroup {
   static menuApi: MenuApi;

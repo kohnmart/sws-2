@@ -1,5 +1,5 @@
-import init from './init.js';
-import { wsInstance, wsConnection } from './wsHandler.js';
+import init from '../init/init.js';
+import { wsInstance, wsConnection } from '../../wsService/wsHandler.js';
 const createIndexContainer = () => {
     const indexContainer = document.createElement('div');
     indexContainer.id = 'index-container';
@@ -115,9 +115,6 @@ const enterCanvas = async (id) => {
             //establisch websocket connection
             websocket = wsInstance(id);
             wsConnection(websocket, id);
-            // render canvas - html
-            // now init canvas logic
-            //createIndexContainer;
         }
         else {
             console.log('Cant open canvas');

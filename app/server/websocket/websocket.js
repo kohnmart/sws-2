@@ -1,7 +1,7 @@
 // websocket.ts
 import { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
-import { CanvasEventType } from '../../canvas/client/types.js';
+import { CanvasEventType, } from '../../canvas/client/types/types.js';
 import { getRandomColor } from '../helper/color.js';
 const startWebSocketServer = (server) => {
     const wss = new WebSocketServer({ server });

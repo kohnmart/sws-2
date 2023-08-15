@@ -4,18 +4,14 @@ import {
   IResponseEvent,
   IStream,
   Shape,
-} from './types.js';
-import { ToolArea } from './ToolArea.js';
-import {
-  CanvasEventDispatcher,
-  EventStream,
-  ToolEventDispatcher,
-  ToolEventSubscription,
-} from './CanvasEvent.js';
-import { Line, Rectangle, Circle, Triangle } from './Shapes.js';
-import { createShapeCopy } from './canvasHelper.js';
-import { CanvasEventSubscription } from './CanvasEventSubscription.js';
-
+} from '../../types/types.js';
+import { ToolArea } from '../components/ToolArea.js';
+import { EventStream } from '../event/EventStream.js';
+import { Line, Rectangle, Circle, Triangle } from '../components/Shapes.js';
+import { createShapeCopy } from '../helper/canvasHelper.js';
+import { CanvasEventSubscription } from '../event/CanvasEventSubscription.js';
+import { ToolEventSubscription } from '../event/ToolEventSubscription.js';
+import { EventDispatcher } from '../event/Event.js';
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
   private shapes: { [p: number]: Shape } = {};
@@ -24,8 +20,8 @@ export class Canvas {
 
   /* EVENTS */
   private eventStream: EventStream = new EventStream();
-  private eventDispatcher: CanvasEventDispatcher = new CanvasEventDispatcher();
-  private toolEventDispatcher: ToolEventDispatcher;
+  private eventDispatcher: EventDispatcher = new EventDispatcher();
+  private toolEventDispatcher: EventDispatcher;
   private toolEventSubscription: ToolEventSubscription;
   private canvasEventSubscription: CanvasEventSubscription =
     new CanvasEventSubscription(this, this.eventDispatcher, this.eventStream);
@@ -36,7 +32,7 @@ export class Canvas {
     this.width = width;
     this.height = height;
 
-    this.toolEventDispatcher = new ToolEventDispatcher();
+    this.toolEventDispatcher = new EventDispatcher();
 
     this.toolEventSubscription = new ToolEventSubscription(
       this.toolEventDispatcher

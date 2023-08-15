@@ -1,4 +1,4 @@
-import { ColorPaletteGroup } from './ColorPalette.js';
+import { ColorPaletteGroup } from '../components/ColorPalette.js';
 export class Point2D {
     x;
     y;

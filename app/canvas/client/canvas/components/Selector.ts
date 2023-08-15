@@ -1,4 +1,4 @@
-import { SelectorManager, ShapeFactory, PLT_TYPES } from './types.js';
+import { SelectorManager, ShapeFactory, PLT_TYPES } from '../../types/types.js';
 import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
 import MenuApi from './menuApi.js';
 import {
@@ -7,7 +7,7 @@ import {
   checkPointInRectangle,
   checkPointInTriangle,
   checkShapeColorsConsistency,
-} from './shapesInteractionUtils.js';
+} from '../helper/shapesInteractionUtils.js';
 import { ColorPicker, ColorPaletteGroup } from './ColorPalette.js';
 export class Selector implements ShapeFactory {
   public readonly label = 'Select';

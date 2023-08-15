@@ -1,7 +1,5 @@
-/******* HELPER METHODS *******/
-
-import { Line, Rectangle, Circle, Triangle } from './Shapes.js';
-import { Shape } from './types.js';
+import { Line, Rectangle, Circle, Triangle } from '../components/Shapes.js';
+import { Shape } from '../../types/types.js';
 
 export function createShapeCopy(shape: Shape) {
   let shapeCopy: Shape;

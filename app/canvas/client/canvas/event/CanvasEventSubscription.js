@@ -1,5 +1,5 @@
-import { createShapeCopy } from './canvasHelper.js';
-import { CanvasEventType } from './types.js';
+import { createShapeCopy } from '../helper/canvasHelper.js';
+import { CanvasEventType } from '../../types/types.js';
 export class CanvasEventSubscription {
     canvas;
     eventStream;

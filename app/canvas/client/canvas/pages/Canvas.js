@@ -1,7 +1,9 @@
-import { CanvasEventType, } from './types.js';
-import { CanvasEventDispatcher, EventStream, ToolEventDispatcher, ToolEventSubscription, } from './CanvasEvent.js';
-import { createShapeCopy } from './canvasHelper.js';
-import { CanvasEventSubscription } from './CanvasEventSubscription.js';
+import { CanvasEventType, } from '../../types/types.js';
+import { EventStream } from '../event/EventStream.js';
+import { createShapeCopy } from '../helper/canvasHelper.js';
+import { CanvasEventSubscription } from '../event/CanvasEventSubscription.js';
+import { ToolEventSubscription } from '../event/ToolEventSubscription.js';
+import { EventDispatcher } from '../event/Event.js';
 export class Canvas {
     ctx;
     shapes = {};
@@ -9,7 +11,7 @@ export class Canvas {
     height;
     /* EVENTS */
     eventStream = new EventStream();
-    eventDispatcher = new CanvasEventDispatcher();
+    eventDispatcher = new EventDispatcher();
     toolEventDispatcher;
     toolEventSubscription;
     canvasEventSubscription = new CanvasEventSubscription(this, this.eventDispatcher, this.eventStream);
@@ -18,7 +20,7 @@ export class Canvas {
         const { width, height } = canvasDomElement.getBoundingClientRect();
         this.width = width;
         this.height = height;
-        this.toolEventDispatcher = new ToolEventDispatcher();
+        this.toolEventDispatcher = new EventDispatcher();
         this.toolEventSubscription = new ToolEventSubscription(this.toolEventDispatcher);
         this.ctx = canvasDomElement.getContext('2d');
         canvasDomElement.addEventListener('mousemove', createMouseHandler('handleMouseMove', toolarea));

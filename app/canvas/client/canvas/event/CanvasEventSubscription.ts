@@ -1,7 +1,8 @@
-import { Canvas } from './Canvas.js';
-import { CanvasEventDispatcher, EventStream } from './CanvasEvent.js';
-import { createShapeCopy } from './canvasHelper.js';
-import { CanvasEvent, CanvasEventType, Shape } from './types.js';
+import { Canvas } from '../pages/Canvas.js';
+import { EventStream } from './EventStream.js';
+import { createShapeCopy } from '../helper/canvasHelper.js';
+import { CanvasEvent, CanvasEventType, Shape } from '../../types/types.js';
+import { EventDispatcher } from './Event.js';
 
 export class CanvasEventSubscription {
   private canvas: Canvas;
@@ -9,7 +10,7 @@ export class CanvasEventSubscription {
   private eventDispatcher;
   constructor(
     canvas: Canvas,
-    eventDispatcher: CanvasEventDispatcher,
+    eventDispatcher: EventDispatcher,
     evS: EventStream
   ) {
     this.canvas = canvas;
