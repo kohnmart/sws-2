@@ -1,6 +1,7 @@
 import { CanvasEventType, } from './types.js';
-import { CanvasEventDispatcher, CanvasEventSubscription, EventStream, ToolEventDispatcher, ToolEventSubscription, } from './CanvasEvent.js';
+import { CanvasEventDispatcher, EventStream, ToolEventDispatcher, ToolEventSubscription, } from './CanvasEvent.js';
 import { createShapeCopy } from './canvasHelper.js';
+import { CanvasEventSubscription } from './CanvasEventSubscription.js';
 export class Canvas {
     ctx;
     shapes = {};

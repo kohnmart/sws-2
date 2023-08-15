@@ -103,7 +103,13 @@ const enterCanvas = async (id) => {
             // open canvas
             // Disable overview - html
             document.getElementById('index-container').style.display = 'none';
-            document.body.appendChild(createCanvasContainer());
+            if (!document.getElementById('canvas-container')) {
+                document.body.appendChild(createCanvasContainer());
+                init.init();
+            }
+            else {
+                document.getElementById('canvas-container').style.display = 'block';
+            }
             // set current canvasId
             canvasId = id;
             //establisch websocket connection
@@ -111,8 +117,7 @@ const enterCanvas = async (id) => {
             wsConnection(websocket, id);
             // render canvas - html
             // now init canvas logic
-            init.init();
-            createIndexContainer;
+            //createIndexContainer;
         }
         else {
             console.log('Cant open canvas');
@@ -195,8 +200,6 @@ const createCanvasInstance = async (event) => {
         console.log('Form submitted successfully');
         // Set the hostId in localStorage
         localStorage.setItem('hostId', body.msg.hostId);
-        console.log('BODY');
-        console.log(body);
         const btn = createCanvasButton(body.msg.name, body.msg.canvasId, body.msg.hostId);
         canvasListElement.appendChild(btn);
         // Refresh the page or perform other actions

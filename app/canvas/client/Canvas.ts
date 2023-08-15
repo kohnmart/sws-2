@@ -8,13 +8,13 @@ import {
 import { ToolArea } from './ToolArea.js';
 import {
   CanvasEventDispatcher,
-  CanvasEventSubscription,
   EventStream,
   ToolEventDispatcher,
   ToolEventSubscription,
 } from './CanvasEvent.js';
 import { Line, Rectangle, Circle, Triangle } from './Shapes.js';
 import { createShapeCopy } from './canvasHelper.js';
+import { CanvasEventSubscription } from './CanvasEventSubscription.js';
 
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
