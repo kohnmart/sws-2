@@ -5,6 +5,7 @@ import { Server } from 'http';
 import {
   CanvasEvent,
   CanvasEventType,
+  Services,
 } from '../../canvas/client/types/types.js';
 import { getRandomColor } from '../helper/color.js';
 
@@ -44,7 +45,7 @@ const startWebSocketServer = (server: Server) => {
 
             // Return current state of canvas
             const response = {
-              type: 'registration',
+              type: Services.REGISTRATION,
               clientId: clientId,
               canvasId: request.canvasId,
               markedColor: getRandomColor(),
@@ -62,7 +63,7 @@ const startWebSocketServer = (server: Server) => {
               ].clientData.filter((channel: IWSClient) => channel.ws !== ws);
 
               const response = {
-                type: 'unregister',
+                type: Services.UNREGISTER,
               };
 
               ws.send(JSON.stringify(response));
