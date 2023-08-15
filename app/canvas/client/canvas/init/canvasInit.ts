@@ -15,7 +15,7 @@ import { ToolArea } from '../components/ToolArea.js';
 import { Canvas } from '../pages/Canvas.js';
 import { Selector } from '../components/Selector.js';
 let canvas: Canvas;
-function init() {
+function canvasInit() {
   const canvasDomElm = document.getElementById('drawArea') as HTMLCanvasElement;
   const menu = document.getElementsByClassName('tools');
   // Problem here: Factories needs a way to create new Shapes, so they
@@ -92,6 +92,6 @@ const loadStream = (stream: IStream[]) => {
   return canvas.loadEventStream(stream);
 };
 
-export default { init, loadStream };
+export default { canvasInit, loadStream };
 
-export { init, loadStream };
+export { canvasInit, loadStream };

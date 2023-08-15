@@ -3,7 +3,7 @@ import { ToolArea } from '../components/ToolArea.js';
 import { Canvas } from '../pages/Canvas.js';
 import { Selector } from '../components/Selector.js';
 let canvas;
-function init() {
+function canvasInit() {
     const canvasDomElm = document.getElementById('drawArea');
     const menu = document.getElementsByClassName('tools');
     // Problem here: Factories needs a way to create new Shapes, so they
@@ -69,5 +69,5 @@ function init() {
 const loadStream = (stream) => {
     return canvas.loadEventStream(stream);
 };
-export default { init, loadStream };
-export { init, loadStream };
+export default { canvasInit, loadStream };
+export { canvasInit, loadStream };

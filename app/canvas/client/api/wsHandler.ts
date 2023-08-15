@@ -1,5 +1,5 @@
 // Use the UUID in your WebSocket connection
-import { loadStream } from '../canvas/init/init.js';
+import { loadStream } from '../canvas/init/canvasInit.js';
 import { CanvasEventType, IResponse, Services } from '../types/types.js';
 
 const wsInstance = (id: string) => {

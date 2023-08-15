@@ -90,10 +90,6 @@ const startWebSocketServer = (server: Server) => {
   // Broadcast changes to all connected clients for a specific canvas
   function broadcastToCanvas(request) {
     if (channels[request.canvasId]) {
-      // add to eventStream
-      // broadcast to all clients excluding acting client
-
-      // Return current state of canvas
       const response = {
         type: request.command,
         clientId: request.clientId,

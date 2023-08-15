@@ -1,74 +1,6 @@
-import init from '../init/init.js';
-import { wsInstance, wsConnection } from '../../wsService/wsHandler.js';
-const createIndexContainer = () => {
-    const indexContainer = document.createElement('div');
-    indexContainer.id = 'index-container';
-    const heading = document.createElement('h1');
-    heading.textContent = 'Canvas Overview';
-    indexContainer.appendChild(heading);
-    const canvasListDiv = document.createElement('div');
-    const canvasList = document.createElement('ul');
-    canvasList.id = 'canvas-list';
-    canvasListDiv.appendChild(canvasList);
-    indexContainer.appendChild(canvasListDiv);
-    const createCanvasDiv = document.createElement('div');
-    const createCanvasParagraph = document.createElement('p');
-    createCanvasParagraph.textContent = 'Erstelle ein neues Canvas:';
-    createCanvasDiv.appendChild(createCanvasParagraph);
-    const canvasForm = document.createElement('form');
-    canvasForm.id = 'canvas-form';
-    const nameLabel = document.createElement('label');
-    nameLabel.textContent = 'Name:';
-    nameLabel.setAttribute('for', 'name');
-    const nameInput = document.createElement('input');
-    nameInput.name = 'name';
-    nameInput.type = 'text';
-    const submitInput = document.createElement('input');
-    submitInput.type = 'submit';
-    submitInput.value = 'Erstellen';
-    canvasForm.appendChild(nameLabel);
-    canvasForm.appendChild(nameInput);
-    canvasForm.appendChild(submitInput);
-    createCanvasDiv.appendChild(canvasForm);
-    indexContainer.appendChild(createCanvasDiv);
-    return indexContainer;
-};
-const createCanvasContainer = () => {
-    const canvasContainer = document.createElement('div');
-    canvasContainer.id = 'canvas-container';
-    const returnButton = document.createElement('button');
-    returnButton.addEventListener('click', leaveCanvas);
-    returnButton.innerText = 'Leave Canvas';
-    canvasContainer.appendChild(returnButton);
-    const paragraph = document.createElement('p');
-    paragraph.textContent = ` Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus. 
-    Haben Sie eines ausgewählt, können Sie mit der Maus die entsprechenden Figuren zeichnen. 
-    Typischerweise, indem Sie die Maus drücken, dann mit gedrückter Maustaste die Form bestimmen, 
-    und dann anschließend die Maustaste loslassen. `;
-    canvasContainer.appendChild(paragraph);
-    const toolsList = document.createElement('ul');
-    toolsList.className = 'tools';
-    canvasContainer.appendChild(toolsList);
-    const canvas = document.createElement('canvas');
-    canvas.id = 'drawArea';
-    canvas.width = 900;
-    canvas.height = 800;
-    canvasContainer.appendChild(canvas);
-    const eventStreamDiv = document.createElement('div');
-    eventStreamDiv.id = 'eventstream';
-    const loadEventStreamBtn = document.createElement('button');
-    loadEventStreamBtn.id = 'load-event-stream-btn';
-    loadEventStreamBtn.textContent = 'Event-Stream laden';
-    eventStreamDiv.appendChild(loadEventStreamBtn);
-    const eventStreamTextarea = document.createElement('textarea');
-    eventStreamTextarea.id = 'event-stream-textarea';
-    eventStreamDiv.appendChild(eventStreamTextarea);
-    canvasContainer.appendChild(eventStreamDiv);
-    const menuDisplayDiv = document.createElement('div');
-    menuDisplayDiv.id = 'menu-display';
-    canvasContainer.appendChild(menuDisplayDiv);
-    return canvasContainer;
-};
+import { canvasInit } from '../init/canvasInit.js';
+import { wsInstance, wsConnection } from '../../api/wsHandler.js';
+import { createIndexContainer, createCanvasContainer, } from './contextContainer.js';
 // Append the created index container to the body of the HTML document
 document.body.appendChild(createIndexContainer());
 const canvasForm = document.getElementById('canvas-form');
@@ -80,10 +12,10 @@ const createCanvasButton = (canvasName, canvasId, hostId) => {
     btn.addEventListener('click', () => enterCanvas(canvasId));
     container.appendChild(btn);
     if (hostId === localStorage.getItem('hostId')) {
-        const rmvButton = document.createElement('button');
-        rmvButton.innerHTML = 'remove';
-        rmvButton.addEventListener('click', () => removeCanvas(canvasId));
-        container.appendChild(rmvButton);
+        const removeButton = document.createElement('button');
+        removeButton.innerHTML = 'remove';
+        removeButton.addEventListener('click', () => removeCanvas(canvasId));
+        container.appendChild(removeButton);
     }
     return container;
 };
@@ -104,8 +36,9 @@ const enterCanvas = async (id) => {
             // Disable overview - html
             document.getElementById('index-container').style.display = 'none';
             if (!document.getElementById('canvas-container')) {
-                document.body.appendChild(createCanvasContainer());
-                init.init();
+                document.body.appendChild(createCanvasContainer(leaveCanvas));
+                // if container doesnt exist => first initialize canvas init once
+                canvasInit();
             }
             else {
                 document.getElementById('canvas-container').style.display = 'block';
@@ -175,7 +108,7 @@ const fetchCanvases = async () => {
         console.error('An error occurred:', error);
     });
 };
-const createCanvasInstance = async (event) => {
+const canvasSubmission = async (event) => {
     event.preventDefault(); // Prevent the form from submitting normally
     const formData = new FormData(canvasForm);
     formData.append('hostId', localStorage.getItem('hostId') || ''); // Append host_id to form data
@@ -207,5 +140,5 @@ const createCanvasInstance = async (event) => {
     }
 };
 /* init */
-canvasForm.addEventListener('submit', createCanvasInstance);
+canvasForm.addEventListener('submit', canvasSubmission);
 fetchCanvases();

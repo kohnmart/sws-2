@@ -185,7 +185,7 @@ export class Canvas {
         case CanvasEventType.SELECT_SHAPE:
           const selectedShapeKey = this.getShapeKeyById(event.eventStream.id);
           this.shapes[selectedShapeKey].isBlockedByUserId =
-            event.eventStream.isBlockedByUserId; // true
+            event.eventStream.isBlockedByUserId;
 
           this.shapes[selectedShapeKey].markedColor =
             event.eventStream.markedColor;

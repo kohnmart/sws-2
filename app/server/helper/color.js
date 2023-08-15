@@ -1,6 +1,6 @@
 export const getRandomColor = () => {
-    const minBrightness = 100; // Minimum brightness to ensure good contrast
-    const maxBrightness = 220; // Maximum brightness
+    const minBrightness = 150;
+    const maxBrightness = 255;
     const randomChannelValue = () => Math.floor(Math.random() * 256);
     const randomBrightness = () => Math.floor(Math.random() * (maxBrightness - minBrightness)) + minBrightness;
     const rgbaColor = `rgba(${randomChannelValue()}, ${randomChannelValue()}, ${randomChannelValue()}, ${randomBrightness() / 255})`;
