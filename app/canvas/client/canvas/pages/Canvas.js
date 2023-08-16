@@ -75,11 +75,11 @@ export class Canvas {
         this.ctx.stroke();
         // draw shapes
         this.ctx.fillStyle = 'black';
-        for (let id in this.shapes) {
-            this.shapes[id].draw(this.ctx, false, localStorage.getItem('randColor'));
-            if (this.shapes[id].isBlockedByUserId) {
+        for (const key in this.shapes) {
+            this.shapes[key].draw(this.ctx, false, this.shapes[key].markedColor);
+            if (this.shapes[key].isBlockedByUserId) {
                 {
-                    this.shapes[id].draw(this.ctx, true, this.shapes[id].markedColor);
+                    this.shapes[key].draw(this.ctx, true, this.shapes[key].markedColor);
                 }
             }
         }
@@ -143,6 +143,8 @@ export class Canvas {
                     break;
                 case CanvasEventType.SELECT_SHAPE:
                     const selectedShapeKey = this.getShapeKeyById(event.eventStream.id);
+                    console.log('SELECTSHAPEKEY');
+                    console.log(selectedShapeKey);
                     this.shapes[selectedShapeKey].isBlockedByUserId =
                         event.eventStream.isBlockedByUserId;
                     this.shapes[selectedShapeKey].markedColor =

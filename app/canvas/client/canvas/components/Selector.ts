@@ -137,7 +137,6 @@ export class Selector implements ShapeFactory {
 
     const clientId = localStorage.getItem('clientId');
     const selectedShapeId = this.shapesSelected[0];
-
     if (selectedShapeId) {
       this.selectedShape = this.slm.getShapeById(selectedShapeId) as
         | Line
@@ -169,10 +168,18 @@ export class Selector implements ShapeFactory {
         // Reset shapesSelected to deselect the shape
         this.shapesSelected = [];
       }
-    } else if (this.lastSelectedShapeId) {
-      // Unmark the last selected shape by the current user
-      this.slm.unselectShape(this.lastSelectedShapeId);
-      this.slm.updateShape(this.lastSelectedShapeId, 'isBlockedByUserId', null);
+    } else {
+      // Unmark selected shapes blocked by this.clientId
+      const shapes = this.slm.getShapes();
+      for (const key in shapes) {
+        if (shapes[key].isBlockedByUserId === clientId) {
+          this.slm.unselectShape(shapes[key].id);
+          this.slm.updateShape(shapes[key].id, 'isBlockedByUserId', null);
+        }
+      }
+      if (this.selectedShape) {
+        this.slm.unselectShape(this.selectedShape.id);
+      }
     }
     this.slm.draw();
   }
@@ -247,6 +254,24 @@ export class Selector implements ShapeFactory {
 
   handleCtrl(x: number, y: number) {
     this.checkShapeCollision(x, y, true);
+    const clientId = localStorage.getItem('clientId');
+    this.shapesSelected.forEach((shapeId) => {
+      this.selectedShape = this.slm.getShapeById(shapeId) as
+        | Line
+        | Rectangle
+        | Triangle
+        | Circle;
+      const isBlockedByCurrentUser =
+        this.selectedShape.isBlockedByUserId === clientId ||
+        this.selectedShape.isBlockedByUserId == null;
+
+      if (isBlockedByCurrentUser) {
+        this.isMoving = true;
+        this.lastSelectedShapeId = shapeId;
+        this.slm.selectShape(shapeId);
+        this.slm.updateShape(shapeId, 'isBlockedByUserId', clientId);
+      }
+    });
   }
 
   handleRightClick(x: number, y: number) {
@@ -257,8 +282,8 @@ export class Selector implements ShapeFactory {
     if (this.isMoving && this.selectedShape) {
       this.isMoving = false;
       this.slm.addShape(false, this.selectedShape, false);
-      this.selectedShape.draw(this.slm.getCtx(), true);
-      this.slm.selectShape(this.shapesSelected[0]);
+      //this.selectedShape.draw(this.slm.getCtx(), false);
+      this.slm.selectShape(this.selectedShape.id);
     }
   }
 

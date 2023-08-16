@@ -41,7 +41,7 @@ export interface SelectorManager {
   updateShape(
     shapeId: string,
     prop: string,
-    value: string | number | boolean
+    value: string | number | boolean | null
   ): void;
 }
 

@@ -137,10 +137,19 @@ export class Selector {
                 this.shapesSelected = [];
             }
         }
-        else if (this.lastSelectedShapeId) {
-            // Unmark the last selected shape by the current user
-            this.slm.unselectShape(this.lastSelectedShapeId);
-            this.slm.updateShape(this.lastSelectedShapeId, 'isBlockedByUserId', null);
+        else {
+            console.log('NOT HIT');
+            // Unmark selected shapes blocked by this.clientId
+            const shapes = this.slm.getShapes();
+            for (const key in shapes) {
+                if (shapes[key].isBlockedByUserId === clientId) {
+                    this.slm.unselectShape(shapes[key].id);
+                    this.slm.updateShape(shapes[key].id, 'isBlockedByUserId', null);
+                }
+            }
+            if (this.selectedShape) {
+                this.slm.unselectShape(this.selectedShape.id);
+            }
         }
         this.slm.draw();
     }
@@ -183,6 +192,18 @@ export class Selector {
     }
     handleCtrl(x, y) {
         this.checkShapeCollision(x, y, true);
+        const clientId = localStorage.getItem('clientId');
+        this.shapesSelected.forEach((shapeId) => {
+            this.selectedShape = this.slm.getShapeById(shapeId);
+            const isBlockedByCurrentUser = this.selectedShape.isBlockedByUserId === clientId ||
+                this.selectedShape.isBlockedByUserId == null;
+            if (isBlockedByCurrentUser) {
+                this.isMoving = true;
+                this.lastSelectedShapeId = shapeId;
+                this.slm.selectShape(shapeId);
+                this.slm.updateShape(shapeId, 'isBlockedByUserId', clientId);
+            }
+        });
     }
     handleRightClick(x, y) {
         this.menu.show(x, y);
@@ -191,8 +212,8 @@ export class Selector {
         if (this.isMoving && this.selectedShape) {
             this.isMoving = false;
             this.slm.addShape(false, this.selectedShape, false);
-            this.selectedShape.draw(this.slm.getCtx(), true);
-            this.slm.selectShape(this.shapesSelected[0]);
+            //this.selectedShape.draw(this.slm.getCtx(), false);
+            this.slm.selectShape(this.selectedShape.id);
         }
     }
     /* -------------------------------------- */
