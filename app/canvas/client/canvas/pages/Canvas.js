@@ -88,6 +88,15 @@ export class Canvas {
     getShapes() {
         return this.shapes;
     }
+    updateShape(shapeId, prop, value) {
+        for (const key in this.shapes) {
+            if (this.shapes[key].id === shapeId) {
+                this.shapes[key][prop] = value;
+                return;
+            }
+        }
+        return;
+    }
     getEventSubscription() {
         return this.canvasEventSubscription;
     }

@@ -33,6 +33,9 @@ function canvasInit() {
         getShapeKeyById(id) {
             return canvas.getShapeKeyById(id);
         },
+        updateShape(shapeId, prop, value) {
+            canvas.updateShape(shapeId, prop, value);
+        },
         updateShapeColor(shape) {
             return canvas.getEventSubscription().updateShapeColor(shape);
         },

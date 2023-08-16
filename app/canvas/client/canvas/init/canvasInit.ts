@@ -50,6 +50,14 @@ function canvasInit() {
       return canvas.getShapeKeyById(id);
     },
 
+    updateShape(
+      shapeId: string,
+      prop: string,
+      value: string | number | boolean
+    ) {
+      canvas.updateShape(shapeId, prop, value);
+    },
+
     updateShapeColor(shape: Shape): void {
       return canvas.getEventSubscription().updateShapeColor(shape);
     },

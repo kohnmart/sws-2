@@ -3,11 +3,12 @@ import { EventStream } from './EventStream.js';
 import { createShapeCopy } from '../helper/canvasHelper.js';
 import { CanvasEvent, CanvasEventType, Shape } from '../../types/types.js';
 import { EventDispatcher } from './Event.js';
+import { Rectangle } from '../components/Shapes.js';
 
 export class CanvasEventSubscription {
   private canvas: Canvas;
   private eventStream: EventStream;
-  private eventDispatcher;
+  private eventDispatcher: EventDispatcher;
   constructor(
     canvas: Canvas,
     eventDispatcher: EventDispatcher,
@@ -139,6 +140,7 @@ export class CanvasEventSubscription {
         markedColor: localStorage.getItem('randColor'),
       },
     };
+
     this.eventStream.addEvent(canvasEvent);
   }
 

@@ -1,7 +1,7 @@
 // websocket.ts
 import { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
-import { CanvasEventType, } from '../../canvas/client/types/types.js';
+import { CanvasEventType, Services, } from '../../canvas/client/types/types.js';
 import { getRandomColor } from '../helper/color.js';
 const startWebSocketServer = (server) => {
     const wss = new WebSocketServer({ server });
@@ -31,7 +31,7 @@ const startWebSocketServer = (server) => {
                         });
                         // Return current state of canvas
                         const response = {
-                            type: 'registration',
+                            type: Services.REGISTRATION,
                             clientId: clientId,
                             canvasId: request.canvasId,
                             markedColor: getRandomColor(),
@@ -44,7 +44,7 @@ const startWebSocketServer = (server) => {
                             // Filter client and remove from channel
                             channels[request.canvasId].clientData = channels[request.canvasId].clientData.filter((channel) => channel.ws !== ws);
                             const response = {
-                                type: 'unregister',
+                                type: Services.UNREGISTER,
                             };
                             ws.send(JSON.stringify(response));
                         }

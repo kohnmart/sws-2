@@ -38,6 +38,11 @@ export interface SelectorManager {
   updateShapeColor(shape: Shape): void;
   selectShape(shapeId: string): void;
   unselectShape(shapeId: string): void;
+  updateShape(
+    shapeId: string,
+    prop: string,
+    value: string | number | boolean
+  ): void;
 }
 
 export interface ShapeFactory {

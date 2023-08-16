@@ -125,10 +125,12 @@ export class Selector {
                 if (this.lastSelectedShapeId &&
                     this.lastSelectedShapeId !== selectedShapeId) {
                     this.slm.unselectShape(this.lastSelectedShapeId);
+                    this.slm.updateShape(this.lastSelectedShapeId, 'isBlockedByUserId', null);
                 }
                 this.isMoving = true;
                 this.lastSelectedShapeId = selectedShapeId;
                 this.slm.selectShape(selectedShapeId);
+                this.slm.updateShape(selectedShapeId, 'isBlockedByUserId', clientId);
             }
             else {
                 // Reset shapesSelected to deselect the shape
@@ -138,11 +140,11 @@ export class Selector {
         else if (this.lastSelectedShapeId) {
             // Unmark the last selected shape by the current user
             this.slm.unselectShape(this.lastSelectedShapeId);
+            this.slm.updateShape(this.lastSelectedShapeId, 'isBlockedByUserId', null);
         }
         this.slm.draw();
     }
     handleMouseMove(x, y) {
-        console;
         if (this.isMoving && this.selectedShape) {
             const type = this.slm.getShapeById(this.shapesSelected[0]).type;
             let shape, newShape;

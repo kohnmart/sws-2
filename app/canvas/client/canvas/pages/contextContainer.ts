@@ -64,20 +64,6 @@ export const createCanvasContainer = (leaveCanvasEvent: EventListener) => {
   canvas.height = 800;
   canvasContainer.appendChild(canvas);
 
-  const eventStreamDiv = document.createElement('div');
-  eventStreamDiv.id = 'eventstream';
-
-  const loadEventStreamBtn = document.createElement('button');
-  loadEventStreamBtn.id = 'load-event-stream-btn';
-  loadEventStreamBtn.textContent = 'Event-Stream laden';
-  eventStreamDiv.appendChild(loadEventStreamBtn);
-
-  const eventStreamTextarea = document.createElement('textarea');
-  eventStreamTextarea.id = 'event-stream-textarea';
-  eventStreamDiv.appendChild(eventStreamTextarea);
-
-  canvasContainer.appendChild(eventStreamDiv);
-
   const menuDisplayDiv = document.createElement('div');
   menuDisplayDiv.id = 'menu-display';
   canvasContainer.appendChild(menuDisplayDiv);

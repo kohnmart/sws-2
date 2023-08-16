@@ -120,6 +120,16 @@ export class Canvas {
     return this.shapes;
   }
 
+  updateShape(shapeId: string, prop: string, value: string | number | boolean) {
+    for (const key in this.shapes) {
+      if (this.shapes[key].id === shapeId) {
+        this.shapes[key][prop] = value;
+        return;
+      }
+    }
+    return;
+  }
+
   getEventSubscription() {
     return this.canvasEventSubscription;
   }
