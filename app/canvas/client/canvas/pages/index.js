@@ -12,10 +12,28 @@ const createCanvasButton = (canvasName, canvasId, hostId) => {
     btn.addEventListener('click', () => enterCanvas(canvasId));
     container.appendChild(btn);
     if (hostId === localStorage.getItem('hostId')) {
+        const dialogContainer = document.createElement('div');
         const removeButton = document.createElement('button');
+        const confirmButton = document.createElement('button');
+        confirmButton.innerHTML = 'confirm';
+        confirmButton.addEventListener('click', () => deleteCanvas(canvasId));
+        const cancelButton = document.createElement('button');
+        cancelButton.addEventListener('click', () => {
+            dialogContainer.style.display = 'none';
+            removeButton.style.display = 'block';
+        });
+        dialogContainer.appendChild(confirmButton);
+        dialogContainer.appendChild(cancelButton);
+        dialogContainer.style.display = 'none';
+        cancelButton.innerHTML = 'cancel';
         removeButton.innerHTML = 'remove';
-        removeButton.addEventListener('click', () => removeCanvas(canvasId));
+        removeButton.addEventListener('click', () => {
+            removeCanvas(canvasId);
+            dialogContainer.style.display = 'block';
+            removeButton.style.display = 'none';
+        });
         container.appendChild(removeButton);
+        container.appendChild(dialogContainer);
     }
     return container;
 };
@@ -55,11 +73,31 @@ const enterCanvas = async (id) => {
     });
 };
 const removeCanvas = async (id) => {
+    fetch(`/canvas/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+        if (data.status === 200) {
+            canvasId = id;
+            //establisch websocket connection
+            websocket = wsInstance(id);
+            wsConnection(websocket, id);
+        }
+        else {
+            console.log('Cant open canvas');
+        }
+    });
+};
+const deleteCanvas = async (id) => {
+    const requestEvent = {
+        command: 'host_disconnect',
+        canvasId: id,
+    };
+    websocket.send(JSON.stringify(requestEvent));
     fetch(`/canvas/remove/${id}`)
         .then((response) => response.json())
         .then((data) => {
         if (data.status === 200) {
-            document.getElementById(data.id).remove();
+            console.log('canvas deleted');
         }
         else {
             console.log('Cant delete canvas');

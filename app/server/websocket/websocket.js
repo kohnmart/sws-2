@@ -56,6 +56,29 @@ const startWebSocketServer = (server) => {
                     case CanvasEventType.UPDATE_SHAPES_ORDER:
                         broadcastToCanvas(request);
                         break;
+                    case WsEvents.HOST_DISCONNECT:
+                        if (channels[request.canvasId]) {
+                            // Iterate through all connected clients for the canvas
+                            channels[request.canvasId].clientData.forEach((client) => {
+                                const response = {
+                                    type: Services.HOST_DISCONNECT,
+                                    canvasId: request.canvasId,
+                                    message: 'All client has been disconnected.',
+                                };
+                                client.ws.send(JSON.stringify(response));
+                                client.ws.close(); // Close each client's WebSocket connection
+                            });
+                            // Clear the clientData and eventStream for the canvas
+                            channels[request.canvasId].clientData = [];
+                            channels[request.canvasId].eventStream = [];
+                            // Send a response to the host indicating that clients are disconnected
+                            const response = {
+                                type: Services.HOST_DISCONNECT,
+                                message: 'All clients have been disconnected.',
+                            };
+                            ws.send(JSON.stringify(response));
+                        }
+                        break;
                 }
             }
             catch (error) {
@@ -90,5 +113,6 @@ var WsEvents;
     WsEvents["UNREGISTER_FOR_CANVAS"] = "unregisterForCanvas";
     WsEvents["SELECT_SHAPE"] = "selectShape";
     WsEvents["UNSELECT_SHAPE"] = "unselectShape";
+    WsEvents["HOST_DISCONNECT"] = "host_disconnect";
 })(WsEvents || (WsEvents = {}));
 export default startWebSocketServer;

@@ -2,8 +2,8 @@
 import { clearShapesSelection, loadStream } from '../canvas/init/canvasInit.js';
 import { CanvasEventType, IResponse, Services } from '../types/types.js';
 
-const wsInstance = (id: string) => {
-  return new WebSocket(`ws://localhost:3000/canvas/${id}`);
+const wsInstance = (uuid: string) => {
+  return new WebSocket(`ws://localhost:3000/canvas/${uuid}`);
 };
 
 const wsConnection = (ws: WebSocket, uuid: string) => {
@@ -11,11 +11,9 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
   ws.onopen = () => {
     console.log('WebSocket connection established');
 
-    // sign up
-    const canvasId = uuid;
     const requestForRegistration = {
       command: 'registerForCanvas',
-      canvasId: canvasId,
+      canvasId: uuid,
     };
     ws.send(JSON.stringify(requestForRegistration));
   };
@@ -30,13 +28,29 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
         const clientId = response.clientId;
         localStorage.setItem('clientId', clientId);
         localStorage.setItem('randColor', response.markedColor);
-        loadStream(response.eventStream);
+        try {
+          loadStream(response.eventStream);
+        } catch {
+          console.log(
+            'Cant load stream. Either error or this client (host) has closed canvas object from outside.'
+          );
+        }
+
         break;
 
       case Services.UNREGISTER:
         // clear selected shapes before disconnecting
         clearShapesSelection();
         ws.close();
+        break;
+
+      case Services.HOST_DISCONNECT:
+        // "Redirecting" to overview page
+        if (document.getElementById('canvas-container')) {
+          document.getElementById('canvas-container').style.display = 'none';
+        }
+        document.getElementById('index-container').style.display = 'block';
+        document.getElementById(response.canvasId).remove();
         break;
 
       case CanvasEventType.SELECT_SHAPE:
@@ -52,6 +66,8 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
   };
 
   ws.onclose = () => {
+    //document.getElementById('canvas-container').style.display = 'none';
+    //document.getElementById('index-container').style.display = 'block';
     console.log('WebSocket connection closed');
   };
 };

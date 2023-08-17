@@ -21,4 +21,5 @@ export var Services;
 (function (Services) {
     Services["REGISTRATION"] = "registration";
     Services["UNREGISTER"] = "unregister";
+    Services["HOST_DISCONNECT"] = "host_disconnect";
 })(Services || (Services = {}));

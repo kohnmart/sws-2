@@ -129,6 +129,7 @@ export interface IResponse {
 export enum Services {
   REGISTRATION = 'registration',
   UNREGISTER = 'unregister',
+  HOST_DISCONNECT = 'host_disconnect',
 }
 
 export interface IResponseEvent {
