@@ -198,8 +198,6 @@ export class Canvas {
           break;
         case CanvasEventType.SELECT_SHAPE:
           const selectedShapeKey = this.getShapeKeyById(event.eventStream.id);
-          console.log('SELECTSHAPEKEY');
-          console.log(selectedShapeKey);
           this.shapes[selectedShapeKey].isBlockedByUserId =
             event.eventStream.isBlockedByUserId;
 

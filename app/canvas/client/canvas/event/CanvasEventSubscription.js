@@ -170,4 +170,12 @@ export class CanvasEventSubscription {
             this.eventStream.addEvent(canvasEvent);
         }
     }
+    clearBlockedByClientShapes() {
+        const shapes = this.canvas.getShapes();
+        for (const key in shapes) {
+            if (shapes[key].isBlockedByUserId === localStorage.getItem('clientId')) {
+                this.unselectShape(shapes[key].id);
+            }
+        }
+    }
 }
