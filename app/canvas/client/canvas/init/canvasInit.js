@@ -72,5 +72,8 @@ function canvasInit() {
 const loadStream = (stream) => {
     return canvas.loadEventStream(stream);
 };
-export default { canvasInit, loadStream };
-export { canvasInit, loadStream };
+const clearShapesSelection = () => {
+    return canvas.clearShapesSelection();
+};
+export default { canvasInit, loadStream, clearShapesSelection };
+export { canvasInit, loadStream, clearShapesSelection };

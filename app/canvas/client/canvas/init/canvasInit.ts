@@ -100,6 +100,10 @@ const loadStream = (stream: IStream[]) => {
   return canvas.loadEventStream(stream);
 };
 
-export default { canvasInit, loadStream };
+const clearShapesSelection = () => {
+  return canvas.clearShapesSelection();
+};
 
-export { canvasInit, loadStream };
+export default { canvasInit, loadStream, clearShapesSelection };
+
+export { canvasInit, loadStream, clearShapesSelection };

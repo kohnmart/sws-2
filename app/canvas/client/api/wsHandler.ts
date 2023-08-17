@@ -1,5 +1,5 @@
 // Use the UUID in your WebSocket connection
-import { loadStream } from '../canvas/init/canvasInit.js';
+import { clearShapesSelection, loadStream } from '../canvas/init/canvasInit.js';
 import { CanvasEventType, IResponse, Services } from '../types/types.js';
 
 const wsInstance = (id: string) => {
@@ -34,6 +34,8 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
         break;
 
       case Services.UNREGISTER:
+        // clear selected shapes before disconnecting
+        clearShapesSelection();
         ws.close();
         break;
 
