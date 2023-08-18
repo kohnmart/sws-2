@@ -1,112 +1,64 @@
 import { canvasInit } from '../init/canvasInit.js';
 import { wsInstance, wsConnection } from '../../api/wsHandler.js';
-import { createIndexContainer, createCanvasContainer, } from './contextContainer.js';
+import { createIndexContainer, createCanvasContainer, setActiveIndexContainer, setActiveCanvasContainer, switchActiveContainer, createListContainer, createCanvasButton, } from './components/contextContainer.js';
+import { getAllCanvases, getCanvasById, postCanvasSubmission, removeCanvasById, } from '../../api/fetch.js';
+let websocket;
+let canvasId;
 // Append the created index container to the body of the HTML document
 document.body.appendChild(createIndexContainer());
 const canvasForm = document.getElementById('canvas-form');
 const canvasListElement = document.getElementById('canvas-list');
-const createCanvasButton = (canvasName, canvasId, hostId) => {
-    const container = document.createElement('div');
-    const btn = document.createElement('button');
-    btn.innerHTML = canvasName;
-    btn.addEventListener('click', () => enterCanvas(canvasId));
-    container.appendChild(btn);
-    if (hostId === localStorage.getItem('hostId')) {
-        const dialogContainer = document.createElement('div');
-        const removeButton = document.createElement('button');
-        const confirmButton = document.createElement('button');
-        confirmButton.innerHTML = 'confirm';
-        confirmButton.addEventListener('click', () => deleteCanvas(canvasId));
-        const cancelButton = document.createElement('button');
-        cancelButton.addEventListener('click', () => {
-            dialogContainer.style.display = 'none';
-            removeButton.style.display = 'block';
-        });
-        dialogContainer.appendChild(confirmButton);
-        dialogContainer.appendChild(cancelButton);
-        dialogContainer.style.display = 'none';
-        cancelButton.innerHTML = 'cancel';
-        removeButton.innerHTML = 'remove';
-        removeButton.addEventListener('click', () => {
-            removeCanvas(canvasId);
-            dialogContainer.style.display = 'block';
-            removeButton.style.display = 'none';
-        });
-        container.appendChild(removeButton);
-        container.appendChild(dialogContainer);
-    }
-    return container;
-};
-let websocket;
-let canvasId;
 export const wsSend = (eventLog) => {
     websocket.send(eventLog);
 };
 export const getCanvasId = () => {
     return canvasId;
 };
-const enterCanvas = async (id) => {
-    fetch(`/canvas/${id}`)
-        .then((response) => response.json())
-        .then((data) => {
-        if (data.status === 200) {
-            // open canvas
-            // Disable overview - html
-            document.getElementById('index-container').style.display = 'none';
-            if (!document.getElementById('canvas-container')) {
-                document.body.appendChild(createCanvasContainer(leaveCanvas));
-                // if container doesnt exist => first initialize canvas init once
-                canvasInit();
-            }
-            else {
-                document.getElementById('canvas-container').style.display = 'block';
-            }
-            // set current canvasId
-            canvasId = id;
-            //establisch websocket connection
-            websocket = wsInstance(id);
-            wsConnection(websocket, id);
+export const joinCanvas = async (id) => {
+    /* query database */
+    const data = await getCanvasById(id);
+    if (data) {
+        setActiveIndexContainer(false);
+        /* if canvas container hasnt been initialized yet */
+        if (!document.getElementById('canvas-container')) {
+            document.body.appendChild(createCanvasContainer(leaveCanvas));
+            canvasInit();
         }
         else {
-            console.log('Cant open canvas');
+            setActiveCanvasContainer(true);
         }
-    });
+        /* store current canvas id */
+        canvasId = id;
+        //establisch websocket connection
+        websocket = wsInstance(id);
+        wsConnection(websocket, id);
+    }
+    else {
+        console.log('Cant open canvas');
+    }
 };
-const removeCanvas = async (id) => {
-    fetch(`/canvas/${id}`)
-        .then((response) => response.json())
-        .then((data) => {
-        if (data.status === 200) {
-            canvasId = id;
-            //establisch websocket connection
-            websocket = wsInstance(id);
-            wsConnection(websocket, id);
-        }
-        else {
-            console.log('Cant open canvas');
-        }
-    });
+export const removeCanvas = async (id) => {
+    const data = await getCanvasById(id);
+    if (data.status === 200) {
+        canvasId = id;
+        //establisch websocket connection
+        websocket = wsInstance(id);
+        wsConnection(websocket, id);
+    }
+    else {
+        console.log('Cant open canvas');
+    }
 };
-const deleteCanvas = async (id) => {
+export const deleteCanvas = async (id) => {
     const requestEvent = {
         command: 'host_disconnect',
         canvasId: id,
     };
     websocket.send(JSON.stringify(requestEvent));
-    fetch(`/canvas/remove/${id}`)
-        .then((response) => response.json())
-        .then((data) => {
-        if (data.status === 200) {
-            console.log('canvas deleted');
-        }
-        else {
-            console.log('Cant delete canvas');
-        }
-    });
+    await removeCanvasById(id);
 };
 const leaveCanvas = () => {
-    document.getElementById('canvas-container').style.display = 'none';
-    document.getElementById('index-container').style.display = 'block';
+    switchActiveContainer(true);
     if (websocket) {
         const request = {
             command: 'unregisterForCanvas',
@@ -117,51 +69,23 @@ const leaveCanvas = () => {
 };
 // Fetch the canvas list from the server
 const fetchCanvases = async () => {
-    fetch('api/all-canvas')
-        .then((response) => response.json())
-        .then((data) => {
-        if (data.status === 200) {
-            const canvasList = data.list;
-            // Loop through the canvasList and create list items
-            const listItems = canvasList.map((canvas) => {
-                const liContainer = document.createElement('li');
-                liContainer.style.width = '200px';
-                liContainer.style.margin = '2px';
-                liContainer.id = canvas.canvas_id;
-                const listItem = createCanvasButton(canvas.name, canvas.canvas_id, canvas.host_id);
-                liContainer.appendChild(listItem);
-                return liContainer;
-            });
-            // Append the list items to the canvasListElement
-            listItems.forEach((listItem) => {
-                canvasListElement.appendChild(listItem);
-            });
-        }
-        else {
-            // Handle the error case
-            console.error(data.message);
-        }
-    })
-        .catch((error) => {
-        console.error('An error occurred:', error);
-    });
+    const data = await getAllCanvases();
+    if (data.status === 200) {
+        // Loop through the canvasList and create list items
+        const listItems = createListContainer(data.content);
+        // Append the list items to the canvasListElement
+        listItems.forEach((listItem) => {
+            canvasListElement.appendChild(listItem);
+        });
+    }
+    else {
+        // Handle the error case
+        console.error(data.content);
+    }
 };
 const canvasSubmission = async (event) => {
     event.preventDefault(); // Prevent the form from submitting normally
-    const formData = new FormData(canvasForm);
-    formData.append('hostId', localStorage.getItem('hostId') || ''); // Append host_id to form data
-    const obj = {
-        name: formData.get('name'),
-        hostId: formData.get('hostId'),
-    };
-    const response = await fetch('api/create', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(obj), // Send JSON data in the request body
-    });
+    const response = await postCanvasSubmission();
     if (response.ok) {
         // Handle success
         const body = await response.json();
