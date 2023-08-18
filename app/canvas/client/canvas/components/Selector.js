@@ -327,11 +327,14 @@ export class Selector {
      */
     iterateShapesLevels = () => {
         const shapes = this.slm.getShapes();
-        const ctx = this.slm.getCtx();
         this.slm.draw();
         // if indexer is smaller zero, take the last index
         if (this.shapeListIndexer < 0) {
             this.shapeListIndexer = this.shapeListId.length - 1;
+        }
+        if (this.lastSelectedShapeId) {
+            this.slm.unselectShape(this.lastSelectedShapeId);
+            this.slm.updateShape(this.lastSelectedShapeId, 'isBlockedByUserId', null);
         }
         const idCurrent = this.shapeListId[this.shapeListIndexer];
         // Maybe this can be done even more efficiently
@@ -342,10 +345,13 @@ export class Selector {
                 // Check if the current shape id matches the iteration level
                 if (id === idCurrent) {
                     // Draw the shape with ctx and true flag
-                    shapes[key].draw(ctx, true, localStorage.getItem('randColor'));
+                    this.lastSelectedShapeId = id;
+                    this.slm.selectShape(idCurrent);
+                    this.slm.updateShape(idCurrent, 'isBlockedByUserId', localStorage.getItem('clientId'));
                 }
             }
         }
+        this.slm.draw();
         this.shapesSelected = [];
         this.shapesSelected.push(idCurrent);
         this.shapeListIndexer--;
