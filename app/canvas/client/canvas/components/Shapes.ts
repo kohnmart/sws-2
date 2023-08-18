@@ -315,15 +315,33 @@ export class TriangleFactory implements ShapeFactory {
     }
   }
 
+  p1: { x: number; y: number };
+  p3: { x: number; y: number };
+  tmpShapeId: string; // Use a separate variable to store the ID of the temporary shape
+
   handleMouseUp(x: number, y: number) {
-    // remove the temp line, if there was one
     if (this.tmpLine) {
       this.shapeManager.removeShapeWithId(true, this.tmpLine.id, false);
+      if (!this.thirdPoint) {
+        this.tmpTo = new Point2D(x, y);
+        this.thirdPoint = new Point2D(x, y);
+        this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
+        this.tmpShapeId = this.tmpShape.id; // Store the ID of the temporary shape
+        this.shapeManager.addShape(true, this.tmpShape, false);
+        this.p1 = this.from;
+        this.p3 = this.thirdPoint;
+      }
       this.tmpLine = undefined;
+    } else {
       this.tmpTo = new Point2D(x, y);
-      this.thirdPoint = new Point2D(x, y);
-      this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
-      this.shapeManager.addShape(true, this.tmpShape);
+      if (this.tmpShapeId) {
+        this.shapeManager.removeShapeWithId(true, this.tmpShapeId, false);
+        this.tmpShapeId = undefined; // Reset the temporary shape ID
+      }
+      this.shapeManager.addShape(
+        false,
+        new Triangle(this.p1, this.tmpTo, this.p3)
+      );
     }
   }
 

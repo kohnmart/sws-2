@@ -55,6 +55,7 @@ class AbstractFactory {
         this.shapeManager.addShape(false, this.createShape(this.from, new Point2D(x, y)));
         this.from = null;
         this.isDrawing = false; // Setzen Sie isDrawing auf false, um den Zeichnungsvorgang zu beenden
+        console.log('TESTER');
     }
     handleMouseMove(x, y) {
         // Zeigen Sie das temporäre Shape nur an, wenn der Startpunkt definiert ist
@@ -256,15 +257,30 @@ export class TriangleFactory {
             this.from = new Point2D(x, y);
         }
     }
+    p1;
+    p3;
+    tmpShapeId; // Use a separate variable to store the ID of the temporary shape
     handleMouseUp(x, y) {
-        // remove the temp line, if there was one
         if (this.tmpLine) {
             this.shapeManager.removeShapeWithId(true, this.tmpLine.id, false);
+            if (!this.thirdPoint) {
+                this.tmpTo = new Point2D(x, y);
+                this.thirdPoint = new Point2D(x, y);
+                this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
+                this.tmpShapeId = this.tmpShape.id; // Store the ID of the temporary shape
+                this.shapeManager.addShape(true, this.tmpShape, false);
+                this.p1 = this.from;
+                this.p3 = this.thirdPoint;
+            }
             this.tmpLine = undefined;
+        }
+        else {
             this.tmpTo = new Point2D(x, y);
-            this.thirdPoint = new Point2D(x, y);
-            this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
-            this.shapeManager.addShape(true, this.tmpShape);
+            if (this.tmpShapeId) {
+                this.shapeManager.removeShapeWithId(true, this.tmpShapeId, false);
+                this.tmpShapeId = undefined; // Reset the temporary shape ID
+            }
+            this.shapeManager.addShape(false, new Triangle(this.p1, this.tmpTo, this.p3));
         }
     }
     handleMouseMove(x, y) {
