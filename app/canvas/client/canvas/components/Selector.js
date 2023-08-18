@@ -135,19 +135,11 @@ export class Selector {
                 this.slm.selectShape(selectedShapeId);
                 this.slm.updateShape(selectedShapeId, 'isBlockedByUserId', clientId);
             }
-            else {
-                // Reset shapesSelected to deselect the shape
-                this.shapesSelected = [];
-            }
         }
-        else if (this.lastSelectedShapeId) {
-            // Unmark the last selected shape by the current user
-            const lastSelectedShape = this.slm.getShapeById(this.lastSelectedShapeId);
-            if (lastSelectedShape) {
-                this.slm.unselectShape(this.lastSelectedShapeId);
-                this.slm.updateShape(this.lastSelectedShapeId, 'isBlockedByUserId', null);
-            }
-            this.lastSelectedShapeId = null; // Reset lastSelectedShapeId
+        else {
+            this.lastSelectedShapeId = null;
+            this.shapesSelected = [];
+            this.selectedShape = null;
         }
         this.slm.draw();
     }
@@ -228,6 +220,12 @@ export class Selector {
         const ctx = this.slm.getCtx();
         const shapes = this.slm.getShapes();
         if (!isCtrl) {
+            console.log('MULTI-SELECTION');
+            console.log(this.shapesSelected);
+            this.shapesSelected.forEach((id) => {
+                this.slm.unselectShape(id);
+                this.slm.updateShape(id, 'isBlockedByUserId', null);
+            });
             this.slm.draw();
             this.shapeListId = [];
             this.shapesSelected = [];
