@@ -302,7 +302,7 @@ export class TriangleFactory implements ShapeFactory {
     if (this.tmpShape) {
       this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
       this.shapeManager.addShape(
-        true,
+        false,
         new Triangle(this.from, this.tmpTo, new Point2D(x, y))
       );
       this.from = undefined;
@@ -327,21 +327,20 @@ export class TriangleFactory implements ShapeFactory {
         this.thirdPoint = new Point2D(x, y);
         this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
         this.tmpShapeId = this.tmpShape.id; // Store the ID of the temporary shape
-        this.shapeManager.addShape(true, this.tmpShape, false);
+        //this.shapeManager.addShape(true, this.tmpShape, false);
         this.p1 = this.from;
         this.p3 = this.thirdPoint;
       }
       this.tmpLine = undefined;
-    } else {
+    } else if (this.tmpShape) {
       this.tmpTo = new Point2D(x, y);
-      if (this.tmpShapeId) {
-        this.shapeManager.removeShapeWithId(true, this.tmpShapeId, false);
-        this.tmpShapeId = undefined; // Reset the temporary shape ID
-      }
+      console.log(this.tmpShapeId);
+      this.shapeManager.removeShapeWithId(true, this.tmpShapeId, true);
       this.shapeManager.addShape(
         false,
         new Triangle(this.p1, this.tmpTo, this.p3)
       );
+      this.tmpShapeId = undefined; // Reset the temporary shape ID
     }
   }
 

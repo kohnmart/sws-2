@@ -55,7 +55,6 @@ class AbstractFactory {
         this.shapeManager.addShape(false, this.createShape(this.from, new Point2D(x, y)));
         this.from = null;
         this.isDrawing = false; // Setzen Sie isDrawing auf false, um den Zeichnungsvorgang zu beenden
-        console.log('TESTER');
     }
     handleMouseMove(x, y) {
         // Zeigen Sie das temporäre Shape nur an, wenn der Startpunkt definiert ist
@@ -246,7 +245,7 @@ export class TriangleFactory {
     handleMouseDown(x, y) {
         if (this.tmpShape) {
             this.shapeManager.removeShapeWithId(true, this.tmpShape.id, false);
-            this.shapeManager.addShape(true, new Triangle(this.from, this.tmpTo, new Point2D(x, y)));
+            this.shapeManager.addShape(false, new Triangle(this.from, this.tmpTo, new Point2D(x, y)));
             this.from = undefined;
             this.tmpTo = undefined;
             this.tmpLine = undefined;
@@ -268,19 +267,18 @@ export class TriangleFactory {
                 this.thirdPoint = new Point2D(x, y);
                 this.tmpShape = new Triangle(this.from, this.tmpTo, this.thirdPoint);
                 this.tmpShapeId = this.tmpShape.id; // Store the ID of the temporary shape
-                this.shapeManager.addShape(true, this.tmpShape, false);
+                //this.shapeManager.addShape(true, this.tmpShape, false);
                 this.p1 = this.from;
                 this.p3 = this.thirdPoint;
             }
             this.tmpLine = undefined;
         }
-        else {
+        else if (this.tmpShape) {
             this.tmpTo = new Point2D(x, y);
-            if (this.tmpShapeId) {
-                this.shapeManager.removeShapeWithId(true, this.tmpShapeId, false);
-                this.tmpShapeId = undefined; // Reset the temporary shape ID
-            }
+            console.log(this.tmpShapeId);
+            this.shapeManager.removeShapeWithId(true, this.tmpShapeId, true);
             this.shapeManager.addShape(false, new Triangle(this.p1, this.tmpTo, this.p3));
+            this.tmpShapeId = undefined; // Reset the temporary shape ID
         }
     }
     handleMouseMove(x, y) {
