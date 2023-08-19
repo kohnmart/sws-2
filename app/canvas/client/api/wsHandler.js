@@ -55,8 +55,6 @@ const wsConnection = (ws, uuid) => {
         }
     };
     ws.onclose = () => {
-        //document.getElementById('canvas-container').style.display = 'none';
-        //document.getElementById('index-container').style.display = 'block';
         console.log('WebSocket connection closed');
     };
 };
