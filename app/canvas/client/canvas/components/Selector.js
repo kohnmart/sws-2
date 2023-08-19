@@ -162,7 +162,9 @@ export class Selector {
                     break;
                 case 'triangle':
                     shape = this.slm.getShapeById(this.shapesSelected[0]);
-                    newShape = new Triangle(new Point2D(x, y), new Point2D(x + Math.abs(shape.p2.x - shape.p1.x), y + Math.abs(shape.p2.y - shape.p1.y)), new Point2D(x + Math.abs(shape.p3.x - shape.p1.x), y + Math.abs(shape.p3.y - shape.p1.y)));
+                    const deltaX = x - shape.p1.x;
+                    const deltaY = y - shape.p1.y;
+                    newShape = new Triangle(new Point2D(x, y), new Point2D(shape.p2.x + deltaX, shape.p2.y + deltaY), new Point2D(shape.p3.x + deltaX, shape.p3.y + deltaY));
                     break;
                 default:
                     break;
