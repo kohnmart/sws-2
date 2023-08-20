@@ -134,7 +134,6 @@ export class Selector implements ShapeFactory {
 
   handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
-
     const clientId = localStorage.getItem('clientId');
     const selectedShapeId = this.shapesSelected[0];
 
@@ -144,10 +143,11 @@ export class Selector implements ShapeFactory {
         | Rectangle
         | Triangle
         | Circle;
+
+      // Update the condition for isBlockedByCurrentUser
       const isBlockedByCurrentUser =
         this.selectedShape.isBlockedByUserId === clientId ||
         this.selectedShape.isBlockedByUserId == null;
-
       if (isBlockedByCurrentUser) {
         if (
           this.lastSelectedShapeId &&
@@ -165,7 +165,6 @@ export class Selector implements ShapeFactory {
             );
           }
         }
-
         this.isMoving = true;
         this.lastSelectedShapeId = selectedShapeId;
         this.slm.selectShape(selectedShapeId);
@@ -174,9 +173,7 @@ export class Selector implements ShapeFactory {
     } else {
       this.lastSelectedShapeId = null;
       this.shapesSelected = [];
-      this.selectedShape = null;
     }
-    this.slm.draw();
   }
 
   handleMouseMove(x: number, y: number) {
@@ -296,11 +293,12 @@ export class Selector implements ShapeFactory {
     const shapes = this.slm.getShapes();
 
     if (!isCtrl) {
-      console.log('MULTI-SELECTION');
-      console.log(this.shapesSelected);
       this.shapesSelected.forEach((id: string) => {
-        this.slm.unselectShape(id);
-        this.slm.updateShape(id, 'isBlockedByUserId', null);
+        const userId = this.slm.getShapeById(id).isBlockedByUserId;
+        if (userId === localStorage.getItem('clientId')) {
+          this.slm.unselectShape(id);
+          this.slm.updateShape(id, 'isBlockedByUserId', null);
+        }
       });
       this.slm.draw();
       this.shapeListId = [];
@@ -369,7 +367,7 @@ export class Selector implements ShapeFactory {
               // Add the id to the shapesSelected array
               this.shapesSelected.push(id);
               // Draw the shape with ctx and true flag
-              shapes[key].draw(ctx, true, localStorage.getItem('randColor'));
+              shapes[key].draw(ctx, true, shapes[key].markedColor);
               // Set color pickers
               ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(
                 shapes[key].type,
