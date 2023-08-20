@@ -274,6 +274,11 @@ export class Selector implements ShapeFactory {
       this.slm.addShape(false, this.selectedShape, false);
       //this.selectedShape.draw(this.slm.getCtx(), false);
       this.slm.selectShape(this.selectedShape.id);
+      this.slm.updateShape(
+        this.selectedShape.id,
+        'isBlockedByUserId',
+        localStorage.getItem('clientId')
+      );
     }
   }
 
