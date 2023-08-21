@@ -91,6 +91,7 @@ export const createListContainer = (canvases) => {
 };
 export const createCanvasButton = (canvasName, canvasId, hostId) => {
     const container = document.createElement('div');
+    container.classList.add('canvas-button-container');
     const btn = document.createElement('button');
     btn.innerHTML = canvasName;
     btn.addEventListener('click', () => joinCanvas(canvasId));
