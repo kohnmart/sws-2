@@ -45,9 +45,8 @@ export class CanvasEventSubscription {
             else {
                 shape.strokeColor = newColor;
             }
-            return this.canvas.draw();
+            this.canvas.draw();
         }
-        return;
     }
     handleAddShape(shape, redraw = true) {
         const shapes = this.canvas.getShapes();
@@ -92,24 +91,35 @@ export class CanvasEventSubscription {
         const shapeKeys = Object.keys(shapes);
         const shapeIndex = shapeKeys.findIndex((key) => shapes[key].id === shapeId);
         if (moveUp && shapeIndex > 0) {
+            const newShapeKeys = [...shapeKeys];
             const currentShapeKey = shapeKeys[shapeIndex];
             const previousShapeKey = shapeKeys[shapeIndex - 1];
-            // Swap the positions within the shapes object
-            [shapes[currentShapeKey], shapes[previousShapeKey]] = [
-                shapes[previousShapeKey],
-                shapes[currentShapeKey],
-            ];
+            // Swap the positions within the newShapeKeys array
+            newShapeKeys[shapeIndex] = previousShapeKey;
+            newShapeKeys[shapeIndex - 1] = currentShapeKey;
+            // Update the shapes object with the new order
+            const newShapes = {};
+            newShapeKeys.forEach((key) => {
+                newShapes[key] = shapes[key];
+            });
+            this.canvas.setShapes(newShapes);
+            this.canvas.draw();
         }
         else if (!moveUp && shapeIndex < shapeKeys.length - 1) {
+            const newShapeKeys = [...shapeKeys];
             const currentShapeKey = shapeKeys[shapeIndex];
             const nextShapeKey = shapeKeys[shapeIndex + 1];
-            // Swap the positions within the shapes object
-            [shapes[currentShapeKey], shapes[nextShapeKey]] = [
-                shapes[nextShapeKey],
-                shapes[currentShapeKey],
-            ];
+            // Swap the positions within the newShapeKeys array
+            newShapeKeys[shapeIndex] = nextShapeKey;
+            newShapeKeys[shapeIndex + 1] = currentShapeKey;
+            // Update the shapes object with the new order
+            const newShapes = {};
+            newShapeKeys.forEach((key) => {
+                newShapes[key] = shapes[key];
+            });
+            this.canvas.setShapes(newShapes);
+            this.canvas.draw();
         }
-        this.canvas.draw();
     }
     /* DISPATCHER */
     selectShape(shapeId) {
@@ -159,6 +169,7 @@ export class CanvasEventSubscription {
         };
         this.eventDispatcher.dispatch(canvasEvent);
         this.eventStream.addEvent(canvasEvent);
+        this.selectShape(shape.id);
     }
     updateShapesOrder(shapeId, moveUp, isReceiving = false) {
         const canvasEvent = {
