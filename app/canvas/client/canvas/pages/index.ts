@@ -113,7 +113,12 @@ const fetchCanvases = async () => {
 
 const canvasSubmission = async (event: Event) => {
   event.preventDefault(); // Prevent the form from submitting normally
+  const input = document.getElementById('name-submit') as HTMLInputElement;
 
+  if (input.value === '') {
+    console.log('empty string cant be inserted as set');
+    return;
+  }
   const response = await postCanvasSubmission();
 
   if (response.ok) {
@@ -129,6 +134,10 @@ const canvasSubmission = async (event: Event) => {
       data.content.hostId
     );
 
+    // clear input field
+    input.value = '';
+
+    // create new list element
     const listElement = document.createElement('li');
     listElement.style.width = '200px';
     listElement.style.margin = '2px';

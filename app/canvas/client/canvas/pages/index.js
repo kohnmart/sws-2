@@ -89,6 +89,11 @@ const fetchCanvases = async () => {
 };
 const canvasSubmission = async (event) => {
     event.preventDefault(); // Prevent the form from submitting normally
+    const input = document.getElementById('name-submit');
+    if (input.value === '') {
+        console.log('empty string cant be inserted as set');
+        return;
+    }
     const response = await postCanvasSubmission();
     if (response.ok) {
         // Handle success
@@ -97,6 +102,9 @@ const canvasSubmission = async (event) => {
         // Set the hostId in localStorage
         localStorage.setItem('hostId', data.content.hostId);
         const btn = createCanvasButton(data.content.name, data.content.canvasId, data.content.hostId);
+        // clear input field
+        input.value = '';
+        // create new list element
         const listElement = document.createElement('li');
         listElement.style.width = '200px';
         listElement.style.margin = '2px';
