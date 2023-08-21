@@ -96,10 +96,14 @@ export class Selector {
             });
         });
         const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
-            this.slm.updateOrder(this.shapesSelected[0], false, false);
-            this.slm
-                .getShapeById(this.shapesSelected[0])
-                .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+            console.log('SHAPE');
+            console.log(this.shapesSelected[0]);
+            if (this.shapesSelected[0]) {
+                this.slm.updateOrder(this.shapesSelected[0], false, false);
+                this.slm
+                    .getShapeById(this.shapesSelected[0])
+                    .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+            }
         });
         const shapeMoveBackwardItem = menuApi.createItem('Shape nach hinten', () => {
             this.slm.updateOrder(this.shapesSelected[0], true, false);
@@ -186,10 +190,7 @@ export class Selector {
         const clientId = localStorage.getItem('clientId');
         this.shapesSelected.forEach((shapeId) => {
             this.selectedShape = this.slm.getShapeById(shapeId);
-            const isBlockedByCurrentUser = this.selectedShape.isBlockedByUserId === clientId ||
-                this.selectedShape.isBlockedByUserId == null;
-            if (isBlockedByCurrentUser) {
-                this.isMoving = true;
+            if (this.selectedShape.isBlockedByUserId == null) {
                 this.lastSelectedShapeId = shapeId;
                 this.slm.selectShape(shapeId);
                 this.slm.updateShape(shapeId, 'isBlockedByUserId', clientId);
@@ -203,7 +204,6 @@ export class Selector {
         if (this.isMoving && this.selectedShape) {
             this.isMoving = false;
             this.slm.addShape(false, this.selectedShape, false);
-            //this.selectedShape.draw(this.slm.getCtx(), false);
             this.slm.selectShape(this.selectedShape.id);
             this.slm.updateShape(this.selectedShape.id, 'isBlockedByUserId', localStorage.getItem('clientId'));
         }
@@ -222,13 +222,22 @@ export class Selector {
         const ctx = this.slm.getCtx();
         const shapes = this.slm.getShapes();
         if (!isCtrl) {
-            this.shapesSelected.forEach((id) => {
-                const userId = this.slm.getShapeById(id).isBlockedByUserId;
-                if (userId === localStorage.getItem('clientId')) {
-                    this.slm.unselectShape(id);
-                    this.slm.updateShape(id, 'isBlockedByUserId', null);
-                }
-            });
+            try {
+                this.shapesSelected.forEach((id) => {
+                    const userId = this.slm.getShapeById(id).isBlockedByUserId;
+                    if (userId === localStorage.getItem('clientId')) {
+                        this.slm.unselectShape(id);
+                        this.slm.updateShape(id, 'isBlockedByUserId', null);
+                    }
+                });
+            }
+            catch {
+                console.log('ERROR ON SELECTION');
+                console.log(this.shapesSelected);
+                //this.shapeListId = [];
+                //this.shapesSelected = [];
+                //this.slm.setShapes({});
+            }
             this.slm.draw();
             this.shapeListId = [];
             this.shapesSelected = [];
