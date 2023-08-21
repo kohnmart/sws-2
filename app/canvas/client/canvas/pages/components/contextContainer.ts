@@ -107,11 +107,11 @@ export const createListContainer = (
     const liContainer = document.createElement('li');
     liContainer.style.width = '200px';
     liContainer.style.margin = '2px';
-    liContainer.id = canvas.canvasId;
+    liContainer.id = canvas.canvas_id;
     const listItem = createCanvasButton(
       canvas.name,
-      canvas.canvasId,
-      canvas.hostId
+      canvas.canvas_id,
+      canvas.host_id
     );
     liContainer.appendChild(listItem);
     return liContainer;

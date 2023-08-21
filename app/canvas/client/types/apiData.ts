@@ -6,8 +6,8 @@ export interface IResponse {
 
 export interface ICanvasData {
   name?: string;
-  canvasId?: string;
-  hostId?: string;
+  canvas_id?: string;
+  host_id?: string;
   msg?: string;
 }
 

@@ -2,7 +2,7 @@
 import { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 import { getRandomColor } from '../helper/color.js';
-import { EServices } from '../../canvas/client/types/services.js';
+import { EServices, EWsEvents } from '../../canvas/client/types/services.js';
 import { ECanvasEventType, } from '../../canvas/client/types/eventStream.js';
 const startWebSocketServer = (server) => {
     const wss = new WebSocketServer({ server });
@@ -15,7 +15,7 @@ const startWebSocketServer = (server) => {
             try {
                 const request = JSON.parse(message.toString());
                 switch (request.command) {
-                    case WsEvents.REGISTER_FOR_CANVAS:
+                    case EWsEvents.REGISTER_FOR_CANVAS:
                         // Generate UUID
                         const clientId = uuidv4();
                         // Initialize channels[request.canvasId] if not already
@@ -40,7 +40,7 @@ const startWebSocketServer = (server) => {
                         };
                         ws.send(JSON.stringify(response));
                         break;
-                    case WsEvents.UNREGISTER_FOR_CANVAS:
+                    case EWsEvents.UNREGISTER_FOR_CANVAS:
                         if (channels[request.canvasId]) {
                             // Filter client and remove from channel
                             channels[request.canvasId].clientData = channels[request.canvasId].clientData.filter((channel) => channel.ws !== ws);
@@ -57,7 +57,7 @@ const startWebSocketServer = (server) => {
                     case ECanvasEventType.UPDATE_SHAPES_ORDER:
                         broadcastToCanvas(request);
                         break;
-                    case WsEvents.HOST_DISCONNECT:
+                    case EWsEvents.HOST_DISCONNECT:
                         if (channels[request.canvasId]) {
                             // Iterate through all connected clients for the canvas
                             channels[request.canvasId].clientData.forEach((client) => {
@@ -108,12 +108,4 @@ const startWebSocketServer = (server) => {
         }
     }
 };
-var WsEvents;
-(function (WsEvents) {
-    WsEvents["REGISTER_FOR_CANVAS"] = "registerForCanvas";
-    WsEvents["UNREGISTER_FOR_CANVAS"] = "unregisterForCanvas";
-    WsEvents["SELECT_SHAPE"] = "selectShape";
-    WsEvents["UNSELECT_SHAPE"] = "unselectShape";
-    WsEvents["HOST_DISCONNECT"] = "host_disconnect";
-})(WsEvents || (WsEvents = {}));
 export default startWebSocketServer;

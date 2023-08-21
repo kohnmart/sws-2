@@ -17,7 +17,7 @@ import {
 } from '../../api/fetch.js';
 
 import { IResponse } from '../../types/apiData.js';
-import { EClient, WsEvents } from '../../types/services.js';
+import { EClient, EWsEvents } from '../../types/services.js';
 
 let websocket: WebSocket;
 let canvasId: string;
@@ -76,7 +76,7 @@ export const closeRemoveDialog = () => {
 
 export const disconnectClientsFromCanvas = async (id: string) => {
   const requestEvent = {
-    command: WsEvents.HOST_DISCONNECT,
+    command: EWsEvents.HOST_DISCONNECT,
     canvasId: id,
   };
   websocket.send(JSON.stringify(requestEvent));
@@ -88,7 +88,7 @@ const leaveCanvas = () => {
   switchActiveContainer(true);
   if (websocket) {
     const request = {
-      command: WsEvents.UNREGISTER_FOR_CANVAS,
+      command: EWsEvents.UNREGISTER_FOR_CANVAS,
       canvasId: canvasId,
     };
     websocket.send(JSON.stringify(request));

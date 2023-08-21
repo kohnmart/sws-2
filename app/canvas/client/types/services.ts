@@ -10,7 +10,7 @@ export enum EClient {
   RAND_COLOR = 'randColor',
 }
 
-export enum WsEvents {
+export enum EWsEvents {
   REGISTER_FOR_CANVAS = 'registerForCanvas',
   UNREGISTER_FOR_CANVAS = 'unregisterForCanvas',
   SELECT_SHAPE = 'selectShape',

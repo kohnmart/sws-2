@@ -4,6 +4,7 @@ import { CanvasEventSubscription } from '../event/CanvasEventSubscription.js';
 import { ToolEventSubscription } from '../event/ToolEventSubscription.js';
 import { EventDispatcher } from '../event/Event.js';
 import { ECanvasEventType, } from '../../types/eventStream.js';
+import { EClient } from '../../types/services.js';
 export class Canvas {
     ctx;
     shapes = {};
@@ -154,8 +155,7 @@ export class Canvas {
                 case ECanvasEventType.UNSELECT_SHAPE:
                     const unselectedShape = this.getShapeKeyById(event.eventStream.id);
                     this.shapes[unselectedShape].isBlockedByUserId = null;
-                    this.shapes[unselectedShape].markedColor =
-                        localStorage.getItem('randColor');
+                    this.shapes[unselectedShape].markedColor = localStorage.getItem(EClient.RAND_COLOR);
                     break;
                 default:
                     break;

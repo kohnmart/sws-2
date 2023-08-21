@@ -1,5 +1,6 @@
 import { createShapeCopy } from '../helper/canvasHelper.js';
 import { ECanvasEventType } from '../../types/eventStream.js';
+import { EClient } from '../../types/services.js';
 export class CanvasEventSubscription {
     canvas;
     eventStream;
@@ -127,8 +128,8 @@ export class CanvasEventSubscription {
             type: ECanvasEventType.SELECT_SHAPE,
             data: {
                 id: shapeId,
-                isBlockedByUserId: localStorage.getItem('clientId'),
-                markedColor: localStorage.getItem('randColor'),
+                isBlockedByUserId: localStorage.getItem(EClient.CLIENT_ID),
+                markedColor: localStorage.getItem(EClient.RAND_COLOR),
             },
         };
         this.eventStream.addEvent(canvasEvent);
@@ -184,7 +185,8 @@ export class CanvasEventSubscription {
     clearBlockedByClientShapes() {
         const shapes = this.canvas.getShapes();
         for (const key in shapes) {
-            if (shapes[key].isBlockedByUserId === localStorage.getItem('clientId')) {
+            if (shapes[key].isBlockedByUserId ===
+                localStorage.getItem(EClient.CLIENT_ID)) {
                 this.unselectShape(shapes[key].id);
             }
         }
