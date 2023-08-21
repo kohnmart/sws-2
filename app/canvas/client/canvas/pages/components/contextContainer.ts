@@ -4,9 +4,11 @@ import {
   disconnectClientsFromCanvas,
   openRemoveDialog,
   closeRemoveDialog,
+  leaveCanvas,
 } from '../index.js';
+import { handleURLLocation } from '../router/router.js';
 
-export const createIndexContainer = () => {
+export const createIndexContainer = (): HTMLDivElement => {
   const indexContainer = document.createElement('div');
   indexContainer.id = 'index-container';
 
@@ -55,12 +57,20 @@ export const setActiveIndexContainer = (isActive: boolean) => {
   }
 };
 
-export const createCanvasContainer = (leaveCanvasEvent: EventListener) => {
+export const createCanvasContainer = (): HTMLDivElement => {
   const canvasContainer = document.createElement('div');
   canvasContainer.id = 'canvas-container';
 
   const returnButton = document.createElement('button');
-  returnButton.addEventListener('click', leaveCanvasEvent);
+  returnButton.addEventListener('click', () => {
+    leaveCanvas();
+    const newURL = `/`;
+    history.pushState({}, '', newURL);
+    handleURLLocation();
+
+    // Update the visible URL in the address bar
+    window.history.replaceState({}, '', newURL);
+  });
   returnButton.innerText = 'Leave Canvas';
   canvasContainer.appendChild(returnButton);
 
@@ -85,19 +95,6 @@ export const createCanvasContainer = (leaveCanvasEvent: EventListener) => {
   menuDisplayDiv.id = 'menu-display';
   canvasContainer.appendChild(menuDisplayDiv);
   return canvasContainer;
-};
-
-export const setActiveCanvasContainer = (isActive: boolean) => {
-  if (isActive) {
-    document.getElementById('canvas-container').style.display = 'block';
-  } else {
-    document.getElementById('canvas-container').style.display = 'none';
-  }
-};
-
-export const switchActiveContainer = (isIndexActive: boolean) => {
-  setActiveIndexContainer(isIndexActive);
-  setActiveCanvasContainer(!isIndexActive);
 };
 
 export const createListContainer = (
@@ -127,7 +124,14 @@ export const createCanvasButton = (
   container.classList.add('canvas-button-container');
   const btn = document.createElement('button');
   btn.innerHTML = canvasName;
-  btn.addEventListener('click', () => joinCanvas(canvasId));
+  btn.addEventListener('click', () => {
+    const newURL = `/canvas/${canvasId}`;
+    history.pushState({}, '', newURL);
+    handleURLLocation();
+
+    // Update the visible URL in the address bar
+    window.history.replaceState({}, '', newURL);
+  });
 
   container.appendChild(btn);
 

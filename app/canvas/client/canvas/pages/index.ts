@@ -1,11 +1,5 @@
-import { canvasInit } from '../init/canvasInit.js';
 import { wsInstance, wsConnection } from '../../api/wsHandler.js';
 import {
-  createIndexContainer,
-  createCanvasContainer,
-  setActiveIndexContainer,
-  setActiveCanvasContainer,
-  switchActiveContainer,
   createListContainer,
   createCanvasButton,
 } from './components/contextContainer.js';
@@ -18,15 +12,10 @@ import {
 
 import { IResponse } from '../../types/apiData.js';
 import { EClient, EWsEvents } from '../../types/services.js';
+import { handleURLLocation } from './router/router.js';
 
 let websocket: WebSocket;
 let canvasId: string;
-
-// Append the created index container to the body of the HTML document
-document.body.appendChild(createIndexContainer());
-
-const canvasForm = document.getElementById('canvas-form');
-const canvasListElement = document.getElementById('canvas-list');
 
 export const wsSend = (eventLog: string) => {
   websocket.send(eventLog);
@@ -36,25 +25,20 @@ export const getCanvasId = () => {
   return canvasId;
 };
 
-export const joinCanvas = async (id: string) => {
+export const joinCanvas = async (id: string): Promise<boolean> => {
   /* query database */
   const data: IResponse = await getCanvasById(id);
   if (data) {
-    setActiveIndexContainer(false);
     /* if canvas container hasnt been initialized yet */
-    if (!document.getElementById('canvas-container')) {
-      document.body.appendChild(createCanvasContainer(leaveCanvas));
-      canvasInit();
-    } else {
-      setActiveCanvasContainer(true);
-    }
     /* store current canvas id */
     canvasId = id;
     //establisch websocket connection
     websocket = wsInstance(id);
     wsConnection(websocket, id);
+    return true;
   } else {
     console.log('Cant open canvas');
+    return false;
   }
 };
 
@@ -84,8 +68,7 @@ export const disconnectClientsFromCanvas = async (id: string) => {
   await removeCanvasById(id);
 };
 
-const leaveCanvas = () => {
-  switchActiveContainer(true);
+export const leaveCanvas = () => {
   if (websocket) {
     const request = {
       command: EWsEvents.UNREGISTER_FOR_CANVAS,
@@ -96,23 +79,19 @@ const leaveCanvas = () => {
 };
 
 // Fetch the canvas list from the server
-const fetchCanvases = async () => {
+export const fetchCanvases = async () => {
   const data: IResponse = await getAllCanvases();
   if (data.status === 200) {
     // Loop through the canvasList and create list items
-    const listItems = createListContainer(data.list.canvasList);
-
-    // Append the list items to the canvasListElement
-    listItems.forEach((listItem: HTMLElement) => {
-      canvasListElement.appendChild(listItem);
-    });
+    console.log(data);
+    return data.list.canvasList;
   } else {
     // Handle the error case
     console.error(data.content);
   }
 };
 
-const canvasSubmission = async (event: Event) => {
+export const canvasSubmission = async (event: Event) => {
   event.preventDefault(); // Prevent the form from submitting normally
   const input = document.getElementById('name-submit') as HTMLInputElement;
 
@@ -154,5 +133,6 @@ const canvasSubmission = async (event: Event) => {
 };
 
 /* init */
-canvasForm.addEventListener('submit', canvasSubmission);
-fetchCanvases();
+handleURLLocation();
+
+const canvasListElement = document.getElementById('canvas-list');
