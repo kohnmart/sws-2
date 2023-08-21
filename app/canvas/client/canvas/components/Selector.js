@@ -96,8 +96,6 @@ export class Selector {
             });
         });
         const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
-            console.log('SHAPE');
-            console.log(this.shapesSelected[0]);
             if (this.shapesSelected[0]) {
                 this.slm.updateOrder(this.shapesSelected[0], false, false);
                 this.slm
@@ -106,10 +104,12 @@ export class Selector {
             }
         });
         const shapeMoveBackwardItem = menuApi.createItem('Shape nach hinten', () => {
-            this.slm.updateOrder(this.shapesSelected[0], true, false);
-            this.slm
-                .getShapeById(this.shapesSelected[0])
-                .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+            if (this.shapesSelected[0]) {
+                this.slm.updateOrder(this.shapesSelected[0], true, false);
+                this.slm
+                    .getShapeById(this.shapesSelected[0])
+                    .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+            }
         });
         const separator = menuApi.createSeparator();
         menu.addItems(shapeMoveForwardItem, separator, shapeMoveBackwardItem);
