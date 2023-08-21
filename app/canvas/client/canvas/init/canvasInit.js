@@ -24,6 +24,9 @@ function canvasInit() {
         addShape(isTemp, shape, redraw) {
             canvas.getEventSubscription().addShape(isTemp, shape, redraw);
         },
+        setShapes(shapes) {
+            canvas.setShapes(shapes);
+        },
         getShapes() {
             return canvas.getShapes();
         },
@@ -37,7 +40,7 @@ function canvasInit() {
             canvas.updateShape(shapeId, prop, value);
         },
         updateShapeColor(shape) {
-            return canvas.getEventSubscription().updateShapeColor(shape);
+            canvas.getEventSubscription().updateShapeColor(shape);
         },
         getCtx() {
             return canvas.getCanvasRenderingContext();

@@ -38,6 +38,10 @@ function canvasInit() {
       canvas.getEventSubscription().addShape(isTemp, shape, redraw);
     },
 
+    setShapes(shapes: {}) {
+      canvas.setShapes(shapes);
+    },
+
     getShapes() {
       return canvas.getShapes();
     },
@@ -59,7 +63,7 @@ function canvasInit() {
     },
 
     updateShapeColor(shape: Shape): void {
-      return canvas.getEventSubscription().updateShapeColor(shape);
+      canvas.getEventSubscription().updateShapeColor(shape);
     },
 
     getCtx() {
