@@ -1,4 +1,4 @@
-import { joinCanvas, deleteCanvas, removeCanvas } from '../index.js';
+import { joinCanvas, disconnectClientsFromCanvas, openRemoveDialog, closeRemoveDialog, } from '../index.js';
 export const createIndexContainer = () => {
     const indexContainer = document.createElement('div');
     indexContainer.id = 'index-container';
@@ -103,10 +103,11 @@ export const createCanvasButton = (canvasName, canvasId, hostId) => {
         /* confirm button */
         const confirmButton = document.createElement('button');
         confirmButton.innerHTML = 'confirm';
-        confirmButton.addEventListener('click', () => deleteCanvas(canvasId));
+        confirmButton.addEventListener('click', () => disconnectClientsFromCanvas(canvasId));
         /* cancel button */
         const cancelButton = document.createElement('button');
         cancelButton.addEventListener('click', () => {
+            closeRemoveDialog();
             dialogContainer.style.display = 'none';
             removeButton.style.display = 'block';
         });
@@ -117,8 +118,8 @@ export const createCanvasButton = (canvasName, canvasId, hostId) => {
         /* cancel button */
         cancelButton.innerHTML = 'cancel';
         removeButton.innerHTML = 'remove';
+        removeButton.addEventListener('click', () => openRemoveDialog(canvasId));
         removeButton.addEventListener('click', () => {
-            removeCanvas(canvasId);
             dialogContainer.style.display = 'block';
             removeButton.style.display = 'none';
         });
