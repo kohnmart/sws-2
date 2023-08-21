@@ -24,9 +24,12 @@ export const getCanvasById = async (id) => {
     return await request(`/canvas/${id}`, T_CRUD.GET);
 };
 export const removeCanvasById = async (id) => {
-    const data = await request(`/canvas/remove/${id}`, T_CRUD.DELETE);
+    const data = await request(`/canvas/${id}`, T_CRUD.DELETE);
     if (data.status !== 200) {
         console.log('ERROR: Cant delete canvas');
+    }
+    else {
+        console.log('Successfully deleted.');
     }
 };
 export const getAllCanvases = async () => {

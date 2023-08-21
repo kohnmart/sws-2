@@ -29,9 +29,11 @@ export const getCanvasById = async (id: string): Promise<T_ApiData> => {
 };
 
 export const removeCanvasById = async (id: string) => {
-  const data = await request(`/canvas/remove/${id}`, T_CRUD.DELETE);
+  const data = await request(`/canvas/${id}`, T_CRUD.DELETE);
   if (data.status !== 200) {
     console.log('ERROR: Cant delete canvas');
+  } else {
+    console.log('Successfully deleted.');
   }
 };
 
