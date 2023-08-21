@@ -118,17 +118,24 @@ const canvasSubmission = async (event: Event) => {
 
   if (response.ok) {
     // Handle success
-    const body = await response.json();
+    const data = await response.json();
     console.log('Form submitted successfully');
     // Set the hostId in localStorage
-    localStorage.setItem('hostId', body.msg.hostId);
+    localStorage.setItem('hostId', data.content.hostId);
 
     const btn = createCanvasButton(
-      body.msg.name,
-      body.msg.canvasId,
-      body.msg.hostId
+      data.content.name,
+      data.content.canvasId,
+      data.content.hostId
     );
-    canvasListElement.appendChild(btn);
+
+    const listElement = document.createElement('li');
+    listElement.style.width = '200px';
+    listElement.style.margin = '2px';
+    listElement.id = data.content.canvasId;
+    listElement.appendChild(btn);
+
+    canvasListElement.appendChild(listElement);
     // Refresh the page or perform other actions
   } else {
     // Handle error
