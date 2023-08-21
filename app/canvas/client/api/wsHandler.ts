@@ -1,7 +1,7 @@
 // Use the UUID in your WebSocket connection
 import { clearShapesSelection, loadStream } from '../canvas/init/canvasInit.js';
 import { ECanvasEventType, IResponse } from '../types/eventStream.js';
-import { EClient, EServices, WsEvents } from '../types/services.js';
+import { EClient, EServices, EWsEvents } from '../types/services.js';
 
 const wsInstance = (uuid: string) => {
   return new WebSocket(`ws://localhost:3000/canvas/${uuid}`);
@@ -13,7 +13,7 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
     console.log('WebSocket connection established');
 
     const requestForRegistration = {
-      command: WsEvents.REGISTER_FOR_CANVAS,
+      command: EWsEvents.REGISTER_FOR_CANVAS,
       canvasId: uuid,
     };
     ws.send(JSON.stringify(requestForRegistration));
