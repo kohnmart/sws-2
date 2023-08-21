@@ -38,6 +38,7 @@ export interface SelectorManager {
   updateShapeColor(shape: Shape): void;
   selectShape(shapeId: string): void;
   unselectShape(shapeId: string): void;
+  setShapes(shapes: {}): void;
   updateShape(
     shapeId: string,
     prop: string,
