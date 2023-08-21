@@ -20,6 +20,7 @@ export const createIndexContainer = () => {
     nameLabel.textContent = 'Name:';
     nameLabel.setAttribute('for', 'name');
     const nameInput = document.createElement('input');
+    nameInput.id = 'name-submit';
     nameInput.name = 'name';
     nameInput.type = 'text';
     const submitInput = document.createElement('input');
