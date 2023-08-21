@@ -4,7 +4,7 @@ import ColorPalette, {
   ColorPaletteGroup,
 } from './ColorPalette.js';
 import { Selector } from './Selector.js';
-import { PLT_TYPES, ColorValue } from '../../types/types.js';
+import { EPLT_TYPES, TColorValue } from '../../types/color.js';
 export default class MenuApi {
   static id: string = 'menu';
   itemList: Array<Item>;
@@ -113,14 +113,14 @@ export default class MenuApi {
   };
 
   createRadioOption = (
-    colorTypes: PLT_TYPES[],
-    colorOptions: { [key: string]: { name: string; value: ColorValue } },
-    defaultColor: { [key: string]: { type: PLT_TYPES; key: string } },
+    colorTypes: EPLT_TYPES[],
+    colorOptions: { [key: string]: { name: string; value: TColorValue } },
+    defaultColor: { [key: string]: { type: EPLT_TYPES; key: string } },
     specialColor: {
-      [key: string]: { type: PLT_TYPES; name: string; value: ColorValue };
+      [key: string]: { type: EPLT_TYPES; name: string; value: TColorValue };
     },
     shapeConstraints: {
-      [key: string]: { type: PLT_TYPES; shapeType: string };
+      [key: string]: { type: EPLT_TYPES; shapeType: string };
     },
     callback?: (m: ColorPicker) => void
   ): void => {

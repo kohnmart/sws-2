@@ -1,5 +1,7 @@
 /* private abstract requests */
 
+import { ERequest, IResponse } from '../types/apiData.js';
+
 const request = async (url: string, requestType: string) => {
   return await fetch(url, { method: requestType })
     .then((response) => response.json())
@@ -24,12 +26,12 @@ const postRequest = async (url: string, objString: string) => {
 
 /* public requests */
 
-export const getCanvasById = async (id: string): Promise<T_ApiData> => {
-  return await request(`/canvas/${id}`, T_CRUD.GET);
+export const getCanvasById = async (id: string): Promise<IResponse> => {
+  return await request(`/canvas/${id}`, ERequest.GET);
 };
 
 export const removeCanvasById = async (id: string) => {
-  const data = await request(`/canvas/${id}`, T_CRUD.DELETE);
+  const data = await request(`/canvas/${id}`, ERequest.DELETE);
   if (data.status !== 200) {
     console.log('ERROR: Cant delete canvas');
   } else {
@@ -37,8 +39,8 @@ export const removeCanvasById = async (id: string) => {
   }
 };
 
-export const getAllCanvases = async (): Promise<T_ApiData> => {
-  return await request('api/all-canvas', T_CRUD.GET);
+export const getAllCanvases = async (): Promise<IResponse> => {
+  return await request('api/all-canvas', ERequest.GET);
 };
 
 export const postCanvasSubmission = async () => {
@@ -52,21 +54,3 @@ export const postCanvasSubmission = async () => {
   };
   return await postRequest('api/create', JSON.stringify(obj));
 };
-
-export type T_ApiData = {
-  status: number;
-  content?: any;
-};
-
-export type T_CanvasData = {
-  name: string;
-  canvas_id: string;
-  host_id: string;
-};
-
-enum T_CRUD {
-  GET = 'GET',
-  POST = 'POST',
-  DELETE = 'DELETE',
-  UPDATE = 'UPDATE',
-}

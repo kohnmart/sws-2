@@ -84,8 +84,8 @@ export const createListContainer = (canvases) => {
         const liContainer = document.createElement('li');
         liContainer.style.width = '200px';
         liContainer.style.margin = '2px';
-        liContainer.id = canvas.canvas_id;
-        const listItem = createCanvasButton(canvas.name, canvas.canvas_id, canvas.host_id);
+        liContainer.id = canvas.canvasId;
+        const listItem = createCanvasButton(canvas.name, canvas.canvasId, canvas.hostId);
         liContainer.appendChild(listItem);
         return liContainer;
     });

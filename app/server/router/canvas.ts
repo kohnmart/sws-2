@@ -11,7 +11,7 @@ canvasRouter.get('/:id', canvasExists, async (req, res) => {
 canvasRouter.delete('/:id', canvasExists, async (req, res) => {
   try {
     await deleteCanvasQuery(req.params.id);
-    res.json({ status: 200, content: req.params.id });
+    res.json({ status: 200, content: { id: req.params.id } });
   } catch {
     console.log('Error on delete...');
   }

@@ -1,5 +1,5 @@
 import { createShapeCopy } from '../helper/canvasHelper.js';
-import { CanvasEventType } from '../../types/types.js';
+import { ECanvasEventType } from '../../types/eventStream.js';
 export class CanvasEventSubscription {
     canvas;
     eventStream;
@@ -10,22 +10,22 @@ export class CanvasEventSubscription {
         this.eventDispatcher = eventDispatcher;
         eventDispatcher.subscribe((event) => {
             switch (event.type) {
-                case CanvasEventType.ADD_SHAPE:
+                case ECanvasEventType.ADD_SHAPE:
                     this.handleAddShape(event.data.shape, event.data.redraw);
                     break;
-                case CanvasEventType.REMOVE_SHAPE:
+                case ECanvasEventType.REMOVE_SHAPE:
                     this.handleRemoveShape(event.data.id, event.data.redraw);
                     break;
-                case CanvasEventType.REMOVE_SHAPE_WITH_ID:
+                case ECanvasEventType.REMOVE_SHAPE_WITH_ID:
                     this.handleRemoveShapeWithId(event.data.id, event.data.redraw);
                     break;
-                case CanvasEventType.UPDATE_SHAPE:
+                case ECanvasEventType.UPDATE_SHAPE:
                     this.handleUpdateShape(event.data.shape);
                     break;
-                case CanvasEventType.UPDATE_SHAPES_ORDER:
+                case ECanvasEventType.UPDATE_SHAPES_ORDER:
                     this.handleUpdateShapesOrder(event.data.id, event.data.moveUp);
                     break;
-                case CanvasEventType.CHANGE_COLOR:
+                case ECanvasEventType.CHANGE_COLOR:
                     this.handleColorChange(event);
                     break;
                 default:
@@ -124,7 +124,7 @@ export class CanvasEventSubscription {
     /* DISPATCHER */
     selectShape(shapeId) {
         const canvasEvent = {
-            type: CanvasEventType.SELECT_SHAPE,
+            type: ECanvasEventType.SELECT_SHAPE,
             data: {
                 id: shapeId,
                 isBlockedByUserId: localStorage.getItem('clientId'),
@@ -135,7 +135,7 @@ export class CanvasEventSubscription {
     }
     unselectShape(shapeId) {
         const canvasEvent = {
-            type: CanvasEventType.UNSELECT_SHAPE,
+            type: ECanvasEventType.UNSELECT_SHAPE,
             data: { id: shapeId, isBlockedByUserId: null },
         };
         this.eventStream.addEvent(canvasEvent);
@@ -144,7 +144,7 @@ export class CanvasEventSubscription {
         const shapeCopy = createShapeCopy(shape);
         Object.assign(shapeCopy, shape);
         const canvasEvent = {
-            type: CanvasEventType.ADD_SHAPE,
+            type: ECanvasEventType.ADD_SHAPE,
             data: { shape: shapeCopy, redraw: redraw },
         };
         this.eventDispatcher.dispatch(canvasEvent);
@@ -154,7 +154,7 @@ export class CanvasEventSubscription {
     }
     removeShapeWithId(isTemp, id, redraw = true) {
         const canvasEvent = {
-            type: CanvasEventType.REMOVE_SHAPE_WITH_ID,
+            type: ECanvasEventType.REMOVE_SHAPE_WITH_ID,
             data: { id: id, redraw: redraw },
         };
         this.eventDispatcher.dispatch(canvasEvent);
@@ -164,7 +164,7 @@ export class CanvasEventSubscription {
     }
     updateShapeColor(shape) {
         const canvasEvent = {
-            type: CanvasEventType.ADD_SHAPE,
+            type: ECanvasEventType.ADD_SHAPE,
             data: { shape: shape, redraw: true },
         };
         this.eventDispatcher.dispatch(canvasEvent);
@@ -173,7 +173,7 @@ export class CanvasEventSubscription {
     }
     updateShapesOrder(shapeId, moveUp, isReceiving = false) {
         const canvasEvent = {
-            type: CanvasEventType.UPDATE_SHAPES_ORDER,
+            type: ECanvasEventType.UPDATE_SHAPES_ORDER,
             data: { id: shapeId, moveUp: moveUp },
         };
         this.eventDispatcher.dispatch(canvasEvent);

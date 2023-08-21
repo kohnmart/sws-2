@@ -6,9 +6,9 @@ const indexRouter = express.Router();
 indexRouter.get('/all-canvas', async (req, res) => {
   const canvasList = await getAllCanvasQuery();
   if (canvasList) {
-    res.json({ status: 200, content: canvasList });
+    res.json({ status: 200, list: { canvasList } });
   } else {
-    res.json({ status: 400, content: 'Cannot fetch canvas list' });
+    res.json({ status: 400, content: { msg: 'Cannot fetch canvas list' } });
   }
 });
 
@@ -24,7 +24,10 @@ indexRouter.post('/create', checkHostExists, async (req, res) => {
       },
     });
   }
-  return res.json({ status: 400, content: 'error on canvas creation' });
+  return res.json({
+    status: 400,
+    content: { msg: 'error on canvas creation' },
+  });
 });
 
 export default indexRouter;

@@ -1,10 +1,9 @@
 import {
-  ShapeFactory,
-  ShapeManager,
-  SelectorManager,
+  IShapeFactory,
+  IShapeManager,
+  ISelectorManager,
   Shape,
-  IStream,
-} from '../../types/types.js';
+} from '../../types/shape.js';
 import {
   CircleFactory,
   LineFactory,
@@ -14,6 +13,7 @@ import {
 import { ToolArea } from '../components/ToolArea.js';
 import { Canvas } from '../pages/Canvas.js';
 import { Selector } from '../components/Selector.js';
+import { IStream } from '../../types/eventStream.js';
 let canvas: Canvas;
 function canvasInit() {
   const canvasDomElm = document.getElementById('drawArea') as HTMLCanvasElement;
@@ -24,7 +24,7 @@ function canvasInit() {
   // on the toolbar, because the toolbar knows what tool is currently
   // selected.
   // Anyway, we do not want the two to have references on each other
-  const sm: ShapeManager = {
+  const sm: IShapeManager = {
     addShape(isTemp, s, rd) {
       return canvas.getEventSubscription().addShape(isTemp, s, rd);
     },
@@ -33,7 +33,7 @@ function canvasInit() {
     },
   };
 
-  const slm: SelectorManager = {
+  const slm: ISelectorManager = {
     addShape(isTemp: boolean, shape: Shape, redraw?: boolean) {
       canvas.getEventSubscription().addShape(isTemp, shape, redraw);
     },
@@ -88,7 +88,7 @@ function canvasInit() {
     },
   };
 
-  const tools: ShapeFactory[] = [
+  const tools: IShapeFactory[] = [
     new LineFactory(sm),
     new CircleFactory(sm),
     new RectangleFactory(sm),

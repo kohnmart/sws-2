@@ -1,8 +1,9 @@
 // websocket.ts
 import { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
-import { CanvasEventType, Services, } from '../../canvas/client/types/types.js';
 import { getRandomColor } from '../helper/color.js';
+import { EServices } from '../../canvas/client/types/services.js';
+import { ECanvasEventType, } from '../../canvas/client/types/eventStream.js';
 const startWebSocketServer = (server) => {
     const wss = new WebSocketServer({ server });
     const channels = {};
@@ -31,7 +32,7 @@ const startWebSocketServer = (server) => {
                         });
                         // Return current state of canvas
                         const response = {
-                            type: Services.REGISTRATION,
+                            type: EServices.REGISTRATION,
                             clientId: clientId,
                             canvasId: request.canvasId,
                             markedColor: getRandomColor(),
@@ -44,16 +45,16 @@ const startWebSocketServer = (server) => {
                             // Filter client and remove from channel
                             channels[request.canvasId].clientData = channels[request.canvasId].clientData.filter((channel) => channel.ws !== ws);
                             const response = {
-                                type: Services.UNREGISTER,
+                                type: EServices.UNREGISTER,
                             };
                             ws.send(JSON.stringify(response));
                         }
                         break;
-                    case CanvasEventType.ADD_SHAPE:
-                    case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-                    case CanvasEventType.SELECT_SHAPE:
-                    case CanvasEventType.UNSELECT_SHAPE:
-                    case CanvasEventType.UPDATE_SHAPES_ORDER:
+                    case ECanvasEventType.ADD_SHAPE:
+                    case ECanvasEventType.REMOVE_SHAPE_WITH_ID:
+                    case ECanvasEventType.SELECT_SHAPE:
+                    case ECanvasEventType.UNSELECT_SHAPE:
+                    case ECanvasEventType.UPDATE_SHAPES_ORDER:
                         broadcastToCanvas(request);
                         break;
                     case WsEvents.HOST_DISCONNECT:
@@ -61,7 +62,7 @@ const startWebSocketServer = (server) => {
                             // Iterate through all connected clients for the canvas
                             channels[request.canvasId].clientData.forEach((client) => {
                                 const response = {
-                                    type: Services.HOST_DISCONNECT,
+                                    type: EServices.HOST_DISCONNECT,
                                     canvasId: request.canvasId,
                                     message: 'All client has been disconnected.',
                                 };
@@ -73,7 +74,7 @@ const startWebSocketServer = (server) => {
                             channels[request.canvasId].eventStream = [];
                             // Send a response to the host indicating that clients are disconnected
                             const response = {
-                                type: Services.HOST_DISCONNECT,
+                                type: EServices.HOST_DISCONNECT,
                                 message: 'All clients have been disconnected.',
                             };
                             ws.send(JSON.stringify(response));

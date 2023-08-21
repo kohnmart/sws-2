@@ -76,7 +76,8 @@ const fetchCanvases = async () => {
     const data = await getAllCanvases();
     if (data.status === 200) {
         // Loop through the canvasList and create list items
-        const listItems = createListContainer(data.content);
+        console.log(data.list.canvasList);
+        const listItems = createListContainer(data.list.canvasList);
         // Append the list items to the canvasListElement
         listItems.forEach((listItem) => {
             canvasListElement.appendChild(listItem);

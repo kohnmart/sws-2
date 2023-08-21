@@ -2,12 +2,12 @@
 import { WebSocket, WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 import { Server } from 'http';
-import {
-  CanvasEvent,
-  CanvasEventType,
-  Services,
-} from '../../canvas/client/types/types.js';
 import { getRandomColor } from '../helper/color.js';
+import { EServices, WsEvents } from '../../canvas/client/types/services.js';
+import {
+  ECanvasEventType,
+  ICanvasEvent,
+} from '../../canvas/client/types/eventStream.js';
 
 const startWebSocketServer = (server: Server) => {
   const wss = new WebSocketServer({ server });
@@ -45,7 +45,7 @@ const startWebSocketServer = (server: Server) => {
 
             // Return current state of canvas
             const response = {
-              type: Services.REGISTRATION,
+              type: EServices.REGISTRATION,
               clientId: clientId,
               canvasId: request.canvasId,
               markedColor: getRandomColor(),
@@ -63,18 +63,18 @@ const startWebSocketServer = (server: Server) => {
               ].clientData.filter((channel: IWSClient) => channel.ws !== ws);
 
               const response = {
-                type: Services.UNREGISTER,
+                type: EServices.UNREGISTER,
               };
 
               ws.send(JSON.stringify(response));
             }
             break;
 
-          case CanvasEventType.ADD_SHAPE:
-          case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-          case CanvasEventType.SELECT_SHAPE:
-          case CanvasEventType.UNSELECT_SHAPE:
-          case CanvasEventType.UPDATE_SHAPES_ORDER:
+          case ECanvasEventType.ADD_SHAPE:
+          case ECanvasEventType.REMOVE_SHAPE_WITH_ID:
+          case ECanvasEventType.SELECT_SHAPE:
+          case ECanvasEventType.UNSELECT_SHAPE:
+          case ECanvasEventType.UPDATE_SHAPES_ORDER:
             broadcastToCanvas(request);
             break;
 
@@ -83,7 +83,7 @@ const startWebSocketServer = (server: Server) => {
               // Iterate through all connected clients for the canvas
               channels[request.canvasId].clientData.forEach((client) => {
                 const response = {
-                  type: Services.HOST_DISCONNECT,
+                  type: EServices.HOST_DISCONNECT,
                   canvasId: request.canvasId,
                   message: 'All client has been disconnected.',
                 };
@@ -97,7 +97,7 @@ const startWebSocketServer = (server: Server) => {
 
               // Send a response to the host indicating that clients are disconnected
               const response = {
-                type: Services.HOST_DISCONNECT,
+                type: EServices.HOST_DISCONNECT,
                 message: 'All clients have been disconnected.',
               };
 
@@ -138,24 +138,16 @@ const startWebSocketServer = (server: Server) => {
   }
 };
 
-enum WsEvents {
-  REGISTER_FOR_CANVAS = 'registerForCanvas',
-  UNREGISTER_FOR_CANVAS = 'unregisterForCanvas',
-  SELECT_SHAPE = 'selectShape',
-  UNSELECT_SHAPE = 'unselectShape',
-  HOST_DISCONNECT = 'host_disconnect',
+interface IWSClient {
+  clientId: string;
+  ws: WebSocket;
 }
 
 interface IChannels {
   [canvasId: string]: {
     clientData: IWSClient[];
-    eventStream: CanvasEvent[];
+    eventStream: ICanvasEvent[];
   };
-}
-
-interface IWSClient {
-  clientId: string;
-  ws: WebSocket;
 }
 
 export default startWebSocketServer;

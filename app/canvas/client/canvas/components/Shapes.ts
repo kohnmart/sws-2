@@ -1,5 +1,5 @@
 import { ColorPaletteGroup } from '../components/ColorPalette.js';
-import { Shape, ShapeFactory, ShapeManager } from '../../types/types.js';
+import { Shape, IShapeFactory, IShapeManager } from '../../types/shape.js';
 export class Point2D {
   constructor(readonly x: number, readonly y: number) {}
 }
@@ -38,7 +38,7 @@ abstract class AbstractFactory<T extends Shape> {
   private tmpTo: Point2D;
   private tmpShape: T = null;
   private isDrawing: boolean = false; // Neue Eigenschaft, um zu überprüfen, ob ein Shape gezeichnet wird
-  constructor(readonly shapeManager: ShapeManager) {}
+  constructor(readonly shapeManager: IShapeManager) {}
 
   abstract createShape(from: Point2D, to: Point2D): T;
 
@@ -123,10 +123,13 @@ export class Line extends AbstractShape implements Shape {
     }
   }
 }
-export class LineFactory extends AbstractFactory<Line> implements ShapeFactory {
+export class LineFactory
+  extends AbstractFactory<Line>
+  implements IShapeFactory
+{
   public label: string = 'Linie';
 
-  constructor(shapeManager: ShapeManager) {
+  constructor(shapeManager: IShapeManager) {
     super(shapeManager);
   }
 
@@ -163,11 +166,11 @@ export class Circle extends AbstractShape implements Shape {
 }
 export class CircleFactory
   extends AbstractFactory<Circle>
-  implements ShapeFactory
+  implements IShapeFactory
 {
   public label: string = 'Kreis';
 
-  constructor(shapeManager: ShapeManager) {
+  constructor(shapeManager: IShapeManager) {
     super(shapeManager);
   }
 
@@ -244,10 +247,10 @@ export class Rectangle extends AbstractShape implements Shape {
 }
 export class RectangleFactory
   extends AbstractFactory<Rectangle>
-  implements ShapeFactory
+  implements IShapeFactory
 {
   public label: string = 'Rechteck';
-  constructor(shapeManager: ShapeManager) {
+  constructor(shapeManager: IShapeManager) {
     super(shapeManager);
   }
 
@@ -287,7 +290,7 @@ export class Triangle extends AbstractShape implements Shape {
     }
   }
 }
-export class TriangleFactory implements ShapeFactory {
+export class TriangleFactory implements IShapeFactory {
   public label: string = 'Dreieck';
 
   private from: Point2D;
@@ -296,7 +299,7 @@ export class TriangleFactory implements ShapeFactory {
   private thirdPoint: Point2D;
   private tmpShape: Triangle;
 
-  constructor(readonly shapeManager: ShapeManager) {}
+  constructor(readonly shapeManager: IShapeManager) {}
 
   handleMouseDown(x: number, y: number) {
     if (this.tmpShape) {

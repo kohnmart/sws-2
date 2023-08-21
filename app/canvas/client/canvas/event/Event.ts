@@ -1,13 +1,13 @@
-import { CanvasEvent } from '../../types/types.js';
+import { ICanvasEvent } from '../../types/eventStream.js';
 
 export class EventDispatcher {
-  private subscribers: ((event: CanvasEvent) => void)[] = [];
+  private subscribers: ((event: ICanvasEvent) => void)[] = [];
 
-  subscribe(callback: (event: CanvasEvent) => void) {
+  subscribe(callback: (event: ICanvasEvent) => void) {
     this.subscribers.push(callback);
   }
 
-  dispatch(event: CanvasEvent) {
+  dispatch(event: ICanvasEvent) {
     for (const subscriber of this.subscribers) {
       subscriber(event);
     }

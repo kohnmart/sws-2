@@ -1,10 +1,10 @@
+import { ICanvasData } from '../../../types/apiData.js';
 import {
   joinCanvas,
   disconnectClientsFromCanvas,
   openRemoveDialog,
   closeRemoveDialog,
 } from '../index.js';
-import { T_CanvasData } from '../../../api/fetch.js';
 
 export const createIndexContainer = () => {
   const indexContainer = document.createElement('div');
@@ -101,17 +101,17 @@ export const switchActiveContainer = (isIndexActive: boolean) => {
 };
 
 export const createListContainer = (
-  canvases: T_CanvasData[]
+  canvases: ICanvasData[]
 ): HTMLLIElement[] => {
-  return canvases.map((canvas: T_CanvasData) => {
+  return canvases.map((canvas: ICanvasData) => {
     const liContainer = document.createElement('li');
     liContainer.style.width = '200px';
     liContainer.style.margin = '2px';
-    liContainer.id = canvas.canvas_id;
+    liContainer.id = canvas.canvasId;
     const listItem = createCanvasButton(
       canvas.name,
-      canvas.canvas_id,
-      canvas.host_id
+      canvas.canvasId,
+      canvas.hostId
     );
     liContainer.appendChild(listItem);
     return liContainer;

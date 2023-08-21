@@ -1,6 +1,6 @@
 import { Item, ItemRadio } from './item.js';
 import MenuApi from './menuApi.js';
-import { PLT_TYPES, ColorValue } from '../../types/types.js';
+import { EPLT_TYPES, TColorValue } from '../../types/color.js';
 
 export class ColorPaletteGroup {
   static menuApi: MenuApi;
@@ -12,14 +12,14 @@ export class ColorPaletteGroup {
 }
 
 export default class ColorPalette {
-  public readonly type: PLT_TYPES;
+  public readonly type: EPLT_TYPES;
   public readonly item: Item;
   public readonly colors: ColorPicker[] = [];
   public defaultRGBA: string;
   public colorKey: string;
   public shapeConstraints: string[] = [];
 
-  constructor(type: PLT_TYPES, menuApi: MenuApi) {
+  constructor(type: EPLT_TYPES, menuApi: MenuApi) {
     this.type = type;
     this.item = new Item('ul', menuApi);
     // create new sublist for colorpickers
@@ -71,7 +71,7 @@ export default class ColorPalette {
 
 export class ColorPicker {
   public readonly key: string;
-  public readonly colorValue: ColorValue;
+  public readonly colorValue: TColorValue;
   public readonly radioButton: ItemRadio;
   public readonly paletteInstance: ColorPalette;
 
@@ -80,7 +80,7 @@ export class ColorPicker {
     paletteInstance: ColorPalette,
     key: string,
     name: string,
-    value: ColorValue,
+    value: TColorValue,
     callback: (m: ColorPicker) => void
   ) {
     this.paletteInstance = paletteInstance;

@@ -1,10 +1,3 @@
-import {
-  CanvasEvent,
-  CanvasEventType,
-  IResponseEvent,
-  IStream,
-  Shape,
-} from '../../types/types.js';
 import { ToolArea } from '../components/ToolArea.js';
 import { EventStream } from '../event/EventStream.js';
 import { Line, Rectangle, Circle, Triangle } from '../components/Shapes.js';
@@ -12,6 +5,14 @@ import { createShapeCopy } from '../helper/canvasHelper.js';
 import { CanvasEventSubscription } from '../event/CanvasEventSubscription.js';
 import { ToolEventSubscription } from '../event/ToolEventSubscription.js';
 import { EventDispatcher } from '../event/Event.js';
+import {
+  IStream,
+  IResponseEvent,
+  ECanvasEventType,
+  ICanvasEvent,
+} from '../../types/eventStream.js';
+import { Shape } from '../../types/shape.js';
+import { EClient } from '../../types/services.js';
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
   private shapes: { [p: number]: Shape } = {};
@@ -85,8 +86,8 @@ export class Canvas {
           if (tool && self.isCreatingShape) {
             // Form nur erstellen, wenn isCreatingShape true ist
             const m = tool[methodName];
-            const toolEvent: CanvasEvent = {
-              type: CanvasEventType.TOOL_ACTION,
+            const toolEvent: ICanvasEvent = {
+              type: ECanvasEventType.TOOL_ACTION,
               data: { tool: tool, method: m, x: x, y: y },
             };
             self.toolEventDispatcher.dispatch(toolEvent);
@@ -169,7 +170,7 @@ export class Canvas {
   loadEventStream(stream: IStream[]) {
     stream.forEach((event: IResponseEvent) => {
       switch (event.type) {
-        case CanvasEventType.ADD_SHAPE:
+        case ECanvasEventType.ADD_SHAPE:
           const shapeData: Line | Circle | Rectangle | Triangle =
             event.eventStream.shape;
           const shape = createShapeCopy(shapeData);
@@ -186,21 +187,21 @@ export class Canvas {
             );
           }
           break;
-        case CanvasEventType.REMOVE_SHAPE_WITH_ID:
+        case ECanvasEventType.REMOVE_SHAPE_WITH_ID:
           this.canvasEventSubscription.removeShapeWithId(
             true,
             event.eventStream.id,
             event.eventStream.redraw
           );
           break;
-        case CanvasEventType.UPDATE_SHAPES_ORDER:
+        case ECanvasEventType.UPDATE_SHAPES_ORDER:
           this.canvasEventSubscription.updateShapesOrder(
             event.eventStream.id,
             event.eventStream.moveUp,
             true
           );
           break;
-        case CanvasEventType.SELECT_SHAPE:
+        case ECanvasEventType.SELECT_SHAPE:
           const selectedShapeKey = this.getShapeKeyById(event.eventStream.id);
           this.shapes[selectedShapeKey].isBlockedByUserId =
             event.eventStream.isBlockedByUserId;
@@ -209,11 +210,12 @@ export class Canvas {
             event.eventStream.markedColor;
 
           break;
-        case CanvasEventType.UNSELECT_SHAPE:
+        case ECanvasEventType.UNSELECT_SHAPE:
           const unselectedShape = this.getShapeKeyById(event.eventStream.id);
           this.shapes[unselectedShape].isBlockedByUserId = null;
-          this.shapes[unselectedShape].markedColor =
-            localStorage.getItem('randColor');
+          this.shapes[unselectedShape].markedColor = localStorage.getItem(
+            EClient.RAND_COLOR
+          );
           break;
         default:
           break;

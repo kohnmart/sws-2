@@ -1,8 +1,8 @@
-import { ShapeFactory } from '../../types/types.js';
+import { IShapeFactory } from '../../types/shape.js';
 
 export class ToolArea {
-  private selectedShape: ShapeFactory = undefined;
-  constructor(shapesSelector: ShapeFactory[], menu: Element) {
+  private selectedShape: IShapeFactory = undefined;
+  constructor(shapesSelector: IShapeFactory[], menu: Element) {
     const list = [];
     shapesSelector.forEach((shape) => {
       const listItem = document.createElement('li');
@@ -15,7 +15,7 @@ export class ToolArea {
       });
     });
 
-    function selectTool(shape: ShapeFactory, activeListItem: HTMLElement) {
+    function selectTool(shape: IShapeFactory, activeListItem: HTMLElement) {
       // remove class from all elements
       list.forEach((item) => {
         item.classList.remove('marked');
@@ -31,7 +31,7 @@ export class ToolArea {
     }
   }
 
-  getSelectedTool(): ShapeFactory {
+  getSelectedTool(): IShapeFactory {
     return this.selectedShape;
   }
 }

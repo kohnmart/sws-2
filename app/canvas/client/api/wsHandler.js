@@ -1,6 +1,7 @@
 // Use the UUID in your WebSocket connection
 import { clearShapesSelection, loadStream } from '../canvas/init/canvasInit.js';
-import { CanvasEventType, Services } from '../types/types.js';
+import { ECanvasEventType } from '../types/eventStream.js';
+import { EServices } from '../types/services.js';
 const wsInstance = (uuid) => {
     return new WebSocket(`ws://localhost:3000/canvas/${uuid}`);
 };
@@ -19,7 +20,7 @@ const wsConnection = (ws, uuid) => {
         console.log('Incoming...');
         console.log(response);
         switch (response.type) {
-            case Services.REGISTRATION:
+            case EServices.REGISTRATION:
                 const clientId = response.clientId;
                 localStorage.setItem('clientId', clientId);
                 localStorage.setItem('randColor', response.markedColor);
@@ -30,12 +31,12 @@ const wsConnection = (ws, uuid) => {
                     console.log('Cant load stream. Either error or this client (host) has closed canvas object from outside.');
                 }
                 break;
-            case Services.UNREGISTER:
+            case EServices.UNREGISTER:
                 // clear selected shapes before disconnecting
                 clearShapesSelection();
                 ws.close();
                 break;
-            case Services.HOST_DISCONNECT:
+            case EServices.HOST_DISCONNECT:
                 // "Redirecting" to overview page
                 if (document.getElementById('canvas-container')) {
                     document.getElementById('canvas-container').style.display = 'none';
@@ -43,11 +44,11 @@ const wsConnection = (ws, uuid) => {
                 document.getElementById('index-container').style.display = 'block';
                 document.getElementById(response.canvasId).remove();
                 break;
-            case CanvasEventType.SELECT_SHAPE:
-            case CanvasEventType.UNSELECT_SHAPE:
-            case CanvasEventType.ADD_SHAPE:
-            case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-            case CanvasEventType.UPDATE_SHAPES_ORDER:
+            case ECanvasEventType.SELECT_SHAPE:
+            case ECanvasEventType.UNSELECT_SHAPE:
+            case ECanvasEventType.ADD_SHAPE:
+            case ECanvasEventType.REMOVE_SHAPE_WITH_ID:
+            case ECanvasEventType.UPDATE_SHAPES_ORDER:
                 loadStream(response.eventStream);
                 break;
             default:

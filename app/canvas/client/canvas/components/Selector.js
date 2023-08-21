@@ -1,8 +1,8 @@
-import { PLT_TYPES } from '../../types/types.js';
 import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
 import MenuApi from './menuApi.js';
 import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from '../helper/shapesInteractionUtils.js';
 import { ColorPaletteGroup } from './ColorPalette.js';
+import { EPLT_TYPES } from '../../types/color.js';
 export class Selector {
     label = 'Select';
     slm;
@@ -29,7 +29,7 @@ export class Selector {
         menu.addItems(deleteShapesItem);
         menuApi.createRadioOption(
         /* DEFINE COLOR PALETTES */
-        [PLT_TYPES.Hintergrund, PLT_TYPES.Outline], 
+        [EPLT_TYPES.Hintergrund, EPLT_TYPES.Outline], 
         /* DEFINE BASE COLORS */
         {
             red: {
@@ -56,18 +56,18 @@ export class Selector {
         /* SET DEFAULT COLORS */
         {
             Outline: {
-                type: PLT_TYPES.Outline,
+                type: EPLT_TYPES.Outline,
                 key: 'black',
             },
             Hintergrund: {
-                type: PLT_TYPES.Hintergrund,
+                type: EPLT_TYPES.Hintergrund,
                 key: 'transparent',
             },
         }, 
         /* SET SPECIAL COLORS */
         {
             transparent: {
-                type: PLT_TYPES.Hintergrund,
+                type: EPLT_TYPES.Hintergrund,
                 name: 'transparent',
                 value: { red: 0, green: 0, blue: 0, alpha: 0 },
             },
@@ -75,14 +75,14 @@ export class Selector {
         /* SET SHAPE CONSTRAINTS */
         {
             line: {
-                type: PLT_TYPES.Hintergrund,
+                type: EPLT_TYPES.Hintergrund,
                 shapeType: 'line',
             },
         }, (colorPicker) => {
             const shapes = this.slm.getShapes();
             this.shapesSelected.forEach((id) => {
                 const shape = shapes[id];
-                if (colorPicker.paletteInstance.type === PLT_TYPES.Hintergrund) {
+                if (colorPicker.paletteInstance.type === EPLT_TYPES.Hintergrund) {
                     shape.backgroundColor = colorPicker.colorFormatAsRGBA();
                     shape.backgroundColorKey = colorPicker.key;
                     this.slm.updateShapeColor(shape);
@@ -297,8 +297,8 @@ export class Selector {
                             // Draw the shape with ctx and true flag
                             shapes[key].draw(ctx, true, shapes[key].markedColor);
                             // Set color pickers
-                            ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(shapes[key].type, true, shapes[key].backgroundColorKey);
-                            ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(shapes[key].type, true, shapes[key].strokeColorKey);
+                            ColorPaletteGroup.group[EPLT_TYPES.Hintergrund].setColorPicker(shapes[key].type, true, shapes[key].backgroundColorKey);
+                            ColorPaletteGroup.group[EPLT_TYPES.Outline].setColorPicker(shapes[key].type, true, shapes[key].strokeColorKey);
                         }
                     }
                 }
@@ -315,17 +315,17 @@ export class Selector {
                 const consistent = checkShapeColorsConsistency(shapes, this.shapeListId, bgKey, strKey);
                 // check on selected background colors
                 if (!consistent[0]) {
-                    ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(shapes[firstId].type, true, bgKey);
+                    ColorPaletteGroup.group[EPLT_TYPES.Hintergrund].setColorPicker(shapes[firstId].type, true, bgKey);
                 }
                 else {
-                    ColorPaletteGroup.group[PLT_TYPES.Hintergrund].setColorPicker(shapes[firstId].type, false);
+                    ColorPaletteGroup.group[EPLT_TYPES.Hintergrund].setColorPicker(shapes[firstId].type, false);
                 }
                 // check on selected outline colors
                 if (!consistent[1]) {
-                    ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(shapes[firstId].type, true, strKey);
+                    ColorPaletteGroup.group[EPLT_TYPES.Outline].setColorPicker(shapes[firstId].type, true, strKey);
                 }
                 else {
-                    ColorPaletteGroup.group[PLT_TYPES.Outline].setColorPicker(shapes[firstId].type, false);
+                    ColorPaletteGroup.group[EPLT_TYPES.Outline].setColorPicker(shapes[firstId].type, false);
                 }
             }
         }

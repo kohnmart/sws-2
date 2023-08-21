@@ -1,5 +1,5 @@
 import { Line, Rectangle, Circle, Triangle } from '../components/Shapes.js';
-import { Shape } from '../../types/types.js';
+import { Shape } from '../../types/shape.js';
 
 export function createShapeCopy(shape: Shape) {
   let shapeCopy: Shape;

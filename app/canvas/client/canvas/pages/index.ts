@@ -10,12 +10,14 @@ import {
   createCanvasButton,
 } from './components/contextContainer.js';
 import {
-  T_ApiData,
   getAllCanvases,
   getCanvasById,
   postCanvasSubmission,
   removeCanvasById,
 } from '../../api/fetch.js';
+
+import { IResponse } from '../../types/apiData.js';
+import { EClient, WsEvents } from '../../types/services.js';
 
 let websocket: WebSocket;
 let canvasId: string;
@@ -36,7 +38,7 @@ export const getCanvasId = () => {
 
 export const joinCanvas = async (id: string) => {
   /* query database */
-  const data: T_ApiData = await getCanvasById(id);
+  const data: IResponse = await getCanvasById(id);
   if (data) {
     setActiveIndexContainer(false);
     /* if canvas container hasnt been initialized yet */
@@ -57,8 +59,7 @@ export const joinCanvas = async (id: string) => {
 };
 
 export const openRemoveDialog = async (id: string) => {
-  console.log(id);
-  const data: T_ApiData = await getCanvasById(id);
+  const data: IResponse = await getCanvasById(id);
   if (data) {
     canvasId = id;
     //establisch websocket connection
@@ -75,7 +76,7 @@ export const closeRemoveDialog = () => {
 
 export const disconnectClientsFromCanvas = async (id: string) => {
   const requestEvent = {
-    command: 'host_disconnect',
+    command: WsEvents.HOST_DISCONNECT,
     canvasId: id,
   };
   websocket.send(JSON.stringify(requestEvent));
@@ -87,7 +88,7 @@ const leaveCanvas = () => {
   switchActiveContainer(true);
   if (websocket) {
     const request = {
-      command: 'unregisterForCanvas',
+      command: WsEvents.UNREGISTER_FOR_CANVAS,
       canvasId: canvasId,
     };
     websocket.send(JSON.stringify(request));
@@ -96,10 +97,10 @@ const leaveCanvas = () => {
 
 // Fetch the canvas list from the server
 const fetchCanvases = async () => {
-  const data: T_ApiData = await getAllCanvases();
+  const data: IResponse = await getAllCanvases();
   if (data.status === 200) {
     // Loop through the canvasList and create list items
-    const listItems = createListContainer(data.content);
+    const listItems = createListContainer(data.list.canvasList);
 
     // Append the list items to the canvasListElement
     listItems.forEach((listItem: HTMLElement) => {
@@ -126,7 +127,7 @@ const canvasSubmission = async (event: Event) => {
     const data = await response.json();
     console.log('Form submitted successfully');
     // Set the hostId in localStorage
-    localStorage.setItem('hostId', data.content.hostId);
+    localStorage.setItem(EClient.HOST_ID, data.content.hostId);
 
     const btn = createCanvasButton(
       data.content.name,

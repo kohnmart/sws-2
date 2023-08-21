@@ -1,6 +1,7 @@
 // Use the UUID in your WebSocket connection
 import { clearShapesSelection, loadStream } from '../canvas/init/canvasInit.js';
-import { CanvasEventType, IResponse, Services } from '../types/types.js';
+import { ECanvasEventType, IResponse } from '../types/eventStream.js';
+import { EClient, EServices, WsEvents } from '../types/services.js';
 
 const wsInstance = (uuid: string) => {
   return new WebSocket(`ws://localhost:3000/canvas/${uuid}`);
@@ -12,7 +13,7 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
     console.log('WebSocket connection established');
 
     const requestForRegistration = {
-      command: 'registerForCanvas',
+      command: WsEvents.REGISTER_FOR_CANVAS,
       canvasId: uuid,
     };
     ws.send(JSON.stringify(requestForRegistration));
@@ -20,14 +21,14 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
 
   ws.onmessage = (event) => {
     const response: IResponse = JSON.parse(event.data);
-    console.log('Incoming...');
-    console.log(response);
+    //console.log('Incoming...');
+    //console.log(response);
 
     switch (response.type) {
-      case Services.REGISTRATION:
+      case EServices.REGISTRATION:
         const clientId = response.clientId;
-        localStorage.setItem('clientId', clientId);
-        localStorage.setItem('randColor', response.markedColor);
+        localStorage.setItem(EClient.CLIENT_ID, clientId);
+        localStorage.setItem(EClient.RAND_COLOR, response.markedColor);
         try {
           loadStream(response.eventStream);
         } catch {
@@ -38,13 +39,13 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
 
         break;
 
-      case Services.UNREGISTER:
+      case EServices.UNREGISTER:
         // clear selected shapes before disconnecting
         clearShapesSelection();
         ws.close();
         break;
 
-      case Services.HOST_DISCONNECT:
+      case EServices.HOST_DISCONNECT:
         // "Redirecting" to overview page
         if (document.getElementById('canvas-container')) {
           document.getElementById('canvas-container').style.display = 'none';
@@ -53,11 +54,11 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
         document.getElementById(response.canvasId).remove();
         break;
 
-      case CanvasEventType.SELECT_SHAPE:
-      case CanvasEventType.UNSELECT_SHAPE:
-      case CanvasEventType.ADD_SHAPE:
-      case CanvasEventType.REMOVE_SHAPE_WITH_ID:
-      case CanvasEventType.UPDATE_SHAPES_ORDER:
+      case ECanvasEventType.SELECT_SHAPE:
+      case ECanvasEventType.UNSELECT_SHAPE:
+      case ECanvasEventType.ADD_SHAPE:
+      case ECanvasEventType.REMOVE_SHAPE_WITH_ID:
+      case ECanvasEventType.UPDATE_SHAPES_ORDER:
         loadStream(response.eventStream);
         break;
       default:
