@@ -3,8 +3,9 @@ import { getQuery, runQuery } from './abstractQuery.js';
 // Function to add a new canvas to the database
 const addCanvasQuery = async (hostId, canvasName) => {
     const query = 'INSERT INTO CANVAS (canvas_id, host_id, name, eventstream) VALUES (?, ? , ? ,?)';
-    const res = await runQuery(query, [uuidv4(), hostId, canvasName, '{}']);
-    return res;
+    const id = uuidv4();
+    await runQuery(query, [id, hostId, canvasName, '{}']);
+    return id;
 };
 const checkHostExistsQuery = async (hostId) => {
     const query = 'SELECT host_id FROM host WHERE host_id = ?';

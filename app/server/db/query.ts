@@ -8,8 +8,9 @@ const addCanvasQuery = async (
 ): Promise<string> => {
   const query =
     'INSERT INTO CANVAS (canvas_id, host_id, name, eventstream) VALUES (?, ? , ? ,?)';
-  const res = await runQuery(query, [uuidv4(), hostId, canvasName, '{}']);
-  return res;
+  const id = uuidv4();
+  await runQuery(query, [id, hostId, canvasName, '{}']);
+  return id;
 };
 
 const checkHostExistsQuery = async (hostId: string): Promise<boolean> => {
