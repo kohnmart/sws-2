@@ -56,9 +56,10 @@ export const joinCanvas = async (id: string) => {
   }
 };
 
-export const removeCanvas = async (id: string) => {
+export const openRemoveDialog = async (id: string) => {
+  console.log(id);
   const data: T_ApiData = await getCanvasById(id);
-  if (data.status === 200) {
+  if (data) {
     canvasId = id;
     //establisch websocket connection
     websocket = wsInstance(id);
@@ -68,7 +69,11 @@ export const removeCanvas = async (id: string) => {
   }
 };
 
-export const deleteCanvas = async (id: string) => {
+export const closeRemoveDialog = () => {
+  websocket.close();
+};
+
+export const disconnectClientsFromCanvas = async (id: string) => {
   const requestEvent = {
     command: 'host_disconnect',
     canvasId: id,
