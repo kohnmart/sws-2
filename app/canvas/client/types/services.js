@@ -10,11 +10,11 @@ export var EClient;
     EClient["HOST_ID"] = "hostId";
     EClient["RAND_COLOR"] = "randColor";
 })(EClient || (EClient = {}));
-export var EWsEvents;
-(function (EWsEvents) {
-    EWsEvents["REGISTER_FOR_CANVAS"] = "registerForCanvas";
-    EWsEvents["UNREGISTER_FOR_CANVAS"] = "unregisterForCanvas";
-    EWsEvents["SELECT_SHAPE"] = "selectShape";
-    EWsEvents["UNSELECT_SHAPE"] = "unselectShape";
-    EWsEvents["HOST_DISCONNECT"] = "host_disconnect";
-})(EWsEvents || (EWsEvents = {}));
+export var EWebsocketEvents;
+(function (EWebsocketEvents) {
+    EWebsocketEvents["REGISTER_FOR_CANVAS"] = "registerForCanvas";
+    EWebsocketEvents["UNREGISTER_FOR_CANVAS"] = "unregisterForCanvas";
+    EWebsocketEvents["SELECT_SHAPE"] = "selectShape";
+    EWebsocketEvents["UNSELECT_SHAPE"] = "unselectShape";
+    EWebsocketEvents["HOST_DISCONNECT"] = "host_disconnect";
+})(EWebsocketEvents || (EWebsocketEvents = {}));
