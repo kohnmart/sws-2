@@ -49,14 +49,6 @@ export const createIndexContainer = (): HTMLDivElement => {
   return indexContainer;
 };
 
-export const setActiveIndexContainer = (isActive: boolean) => {
-  if (isActive) {
-    document.getElementById('index-container').style.display = 'block';
-  } else {
-    document.getElementById('index-container').style.display = 'none';
-  }
-};
-
 export const createCanvasContainer = (): HTMLDivElement => {
   const canvasContainer = document.createElement('div');
   canvasContainer.id = 'canvas-container';
@@ -75,10 +67,10 @@ export const createCanvasContainer = (): HTMLDivElement => {
   canvasContainer.appendChild(returnButton);
 
   const paragraph = document.createElement('p');
-  paragraph.textContent = ` Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus. 
+  paragraph.textContent = `Wählen Sie auf der linken Seite Ihr Zeichwerkzeug aus. 
     Haben Sie eines ausgewählt, können Sie mit der Maus die entsprechenden Figuren zeichnen. 
     Typischerweise, indem Sie die Maus drücken, dann mit gedrückter Maustaste die Form bestimmen, 
-    und dann anschließend die Maustaste loslassen. `;
+    und dann anschließend die Maustaste loslassen.`;
   canvasContainer.appendChild(paragraph);
 
   const toolsList = document.createElement('ul');
@@ -145,9 +137,10 @@ export const createCanvasButton = (
     /* confirm button */
     const confirmButton = document.createElement('button');
     confirmButton.innerHTML = 'confirm';
-    confirmButton.addEventListener('click', () =>
-      disconnectClientsFromCanvas(canvasId)
-    );
+    confirmButton.addEventListener('click', async () => {
+      document.getElementById(canvasId).remove();
+      await disconnectClientsFromCanvas(canvasId);
+    });
 
     /* cancel button */
     const cancelButton = document.createElement('button');
