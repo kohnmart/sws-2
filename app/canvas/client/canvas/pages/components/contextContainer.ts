@@ -1,6 +1,6 @@
 import { ICanvasData } from '../../../types/apiData.js';
+import { EClient } from '../../../types/services.js';
 import {
-  joinCanvas,
   disconnectClientsFromCanvas,
   openRemoveDialog,
   closeRemoveDialog,
@@ -135,7 +135,7 @@ export const createCanvasButton = (
 
   container.appendChild(btn);
 
-  if (hostId === localStorage.getItem('hostId')) {
+  if (hostId === localStorage.getItem(EClient.HOST_ID)) {
     /* dialog container */
     const dialogContainer = document.createElement('div');
 

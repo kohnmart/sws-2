@@ -1,3 +1,4 @@
+import { EClient } from '../../../types/services.js';
 import { disconnectClientsFromCanvas, openRemoveDialog, closeRemoveDialog, leaveCanvas, } from '../index.js';
 import { handleURLLocation } from '../router/router.js';
 export const createIndexContainer = () => {
@@ -99,7 +100,7 @@ export const createCanvasButton = (canvasName, canvasId, hostId) => {
         window.history.replaceState({}, '', newURL);
     });
     container.appendChild(btn);
-    if (hostId === localStorage.getItem('hostId')) {
+    if (hostId === localStorage.getItem(EClient.HOST_ID)) {
         /* dialog container */
         const dialogContainer = document.createElement('div');
         /* remove Button */
