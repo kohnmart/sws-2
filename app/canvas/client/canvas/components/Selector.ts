@@ -10,6 +10,7 @@ import {
 } from '../helper/shapesInteractionUtils.js';
 import { ColorPicker, ColorPaletteGroup } from './ColorPalette.js';
 import { EPLT_TYPES } from '../../types/color.js';
+import { EClient } from '../../types/services.js';
 export class Selector implements IShapeFactory {
   public readonly label = 'Select';
   private readonly slm: ISelectorManager;
@@ -139,7 +140,7 @@ export class Selector implements IShapeFactory {
 
   handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
-    const clientId = localStorage.getItem('clientId');
+    const clientId = localStorage.getItem(EClient.CLIENT_ID);
     const selectedShapeId = this.shapesSelected[0];
 
     if (selectedShapeId) {
@@ -249,7 +250,7 @@ export class Selector implements IShapeFactory {
 
   handleCtrl(x: number, y: number) {
     this.checkShapeCollision(x, y, true);
-    const clientId = localStorage.getItem('clientId');
+    const clientId = localStorage.getItem(EClient.CLIENT_ID);
     this.shapesSelected.forEach((shapeId) => {
       this.selectedShape = this.slm.getShapeById(shapeId) as
         | Line
@@ -260,7 +261,7 @@ export class Selector implements IShapeFactory {
       if (this.selectedShape.isBlockedByUserId == null) {
         this.lastSelectedShapeId = shapeId;
         this.slm.selectShape(shapeId);
-        this.slm.updateShape(shapeId, 'isBlockedByUserId', clientId);
+        this.slm.updateShape(shapeId, 'isBlockedByUserId', EClient.CLIENT_ID);
       }
     });
   }
@@ -277,7 +278,7 @@ export class Selector implements IShapeFactory {
       this.slm.updateShape(
         this.selectedShape.id,
         'isBlockedByUserId',
-        localStorage.getItem('clientId')
+        localStorage.getItem(EClient.CLIENT_ID)
       );
     }
   }
@@ -301,7 +302,7 @@ export class Selector implements IShapeFactory {
       try {
         this.shapesSelected.forEach((id: string) => {
           const userId = this.slm.getShapeById(id).isBlockedByUserId;
-          if (userId === localStorage.getItem('clientId')) {
+          if (userId === localStorage.getItem(EClient.CLIENT_ID)) {
             this.slm.unselectShape(id);
             this.slm.updateShape(id, 'isBlockedByUserId', null);
           }
@@ -447,7 +448,7 @@ export class Selector implements IShapeFactory {
    */
   iterateShapesLevels = () => {
     const shapes = this.slm.getShapes();
-    this.slm.draw();
+    //this.slm.draw();
 
     // if indexer is smaller zero, take the last index
     if (this.shapeListIndexer < 0) {
@@ -473,7 +474,7 @@ export class Selector implements IShapeFactory {
           this.slm.updateShape(
             idCurrent,
             'isBlockedByUserId',
-            localStorage.getItem('clientId')
+            localStorage.getItem(EClient.CLIENT_ID)
           );
         }
       }

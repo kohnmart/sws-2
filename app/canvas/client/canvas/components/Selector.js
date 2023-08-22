@@ -3,6 +3,7 @@ import MenuApi from './menuApi.js';
 import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from '../helper/shapesInteractionUtils.js';
 import { ColorPaletteGroup } from './ColorPalette.js';
 import { EPLT_TYPES } from '../../types/color.js';
+import { EClient } from '../../types/services.js';
 export class Selector {
     label = 'Select';
     slm;
@@ -119,7 +120,7 @@ export class Selector {
     /* ------------ HANDLER - SECTION ------------ */
     handleMouseDown(x, y) {
         this.checkShapeCollision(x, y, false);
-        const clientId = localStorage.getItem('clientId');
+        const clientId = localStorage.getItem(EClient.CLIENT_ID);
         const selectedShapeId = this.shapesSelected[0];
         if (selectedShapeId) {
             this.selectedShape = this.slm.getShapeById(selectedShapeId);
@@ -187,13 +188,13 @@ export class Selector {
     }
     handleCtrl(x, y) {
         this.checkShapeCollision(x, y, true);
-        const clientId = localStorage.getItem('clientId');
+        const clientId = localStorage.getItem(EClient.CLIENT_ID);
         this.shapesSelected.forEach((shapeId) => {
             this.selectedShape = this.slm.getShapeById(shapeId);
             if (this.selectedShape.isBlockedByUserId == null) {
                 this.lastSelectedShapeId = shapeId;
                 this.slm.selectShape(shapeId);
-                this.slm.updateShape(shapeId, 'isBlockedByUserId', clientId);
+                this.slm.updateShape(shapeId, 'isBlockedByUserId', EClient.CLIENT_ID);
             }
         });
     }
@@ -205,7 +206,7 @@ export class Selector {
             this.isMoving = false;
             this.slm.addShape(false, this.selectedShape, false);
             this.slm.selectShape(this.selectedShape.id);
-            this.slm.updateShape(this.selectedShape.id, 'isBlockedByUserId', localStorage.getItem('clientId'));
+            this.slm.updateShape(this.selectedShape.id, 'isBlockedByUserId', localStorage.getItem(EClient.CLIENT_ID));
         }
     }
     /* -------------------------------------- */
@@ -225,7 +226,7 @@ export class Selector {
             try {
                 this.shapesSelected.forEach((id) => {
                     const userId = this.slm.getShapeById(id).isBlockedByUserId;
-                    if (userId === localStorage.getItem('clientId')) {
+                    if (userId === localStorage.getItem(EClient.CLIENT_ID)) {
                         this.slm.unselectShape(id);
                         this.slm.updateShape(id, 'isBlockedByUserId', null);
                     }
@@ -337,7 +338,7 @@ export class Selector {
      */
     iterateShapesLevels = () => {
         const shapes = this.slm.getShapes();
-        this.slm.draw();
+        //this.slm.draw();
         // if indexer is smaller zero, take the last index
         if (this.shapeListIndexer < 0) {
             this.shapeListIndexer = this.shapeListId.length - 1;
@@ -357,7 +358,7 @@ export class Selector {
                     // Draw the shape with ctx and true flag
                     this.lastSelectedShapeId = id;
                     this.slm.selectShape(idCurrent);
-                    this.slm.updateShape(idCurrent, 'isBlockedByUserId', localStorage.getItem('clientId'));
+                    this.slm.updateShape(idCurrent, 'isBlockedByUserId', localStorage.getItem(EClient.CLIENT_ID));
                 }
             }
         }
