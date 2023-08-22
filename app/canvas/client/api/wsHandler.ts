@@ -1,7 +1,8 @@
 // Use the UUID in your WebSocket connection
 import { clearShapesSelection, loadStream } from '../canvas/init/canvasInit.js';
+import { handleURLLocation } from '../canvas/pages/router/router.js';
 import { ECanvasEventType, IResponse } from '../types/eventStream.js';
-import { EClient, EServices, EWsEvents } from '../types/services.js';
+import { EClient, EServices, EWebsocketEvents } from '../types/services.js';
 
 const wsInstance = (uuid: string) => {
   return new WebSocket(`ws://localhost:3000/canvas/${uuid}`);
@@ -13,7 +14,7 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
     console.log('WebSocket connection established');
 
     const requestForRegistration = {
-      command: EWsEvents.REGISTER_FOR_CANVAS,
+      command: EWebsocketEvents.REGISTER_FOR_CANVAS,
       canvasId: uuid,
     };
     ws.send(JSON.stringify(requestForRegistration));
@@ -36,7 +37,6 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
             'Cant load stream. Either error or this client (host) has closed canvas object from outside.'
           );
         }
-
         break;
 
       case EServices.UNREGISTER:
@@ -47,11 +47,9 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
 
       case EServices.HOST_DISCONNECT:
         // "Redirecting" to overview page
-        if (document.getElementById('canvas-container')) {
-          document.getElementById('canvas-container').style.display = 'none';
-        }
-        document.getElementById('index-container').style.display = 'block';
-        document.getElementById(response.canvasId).remove();
+        const newURL = `/`;
+        history.pushState({}, '', newURL);
+        handleURLLocation();
         break;
 
       case ECanvasEventType.SELECT_SHAPE:
