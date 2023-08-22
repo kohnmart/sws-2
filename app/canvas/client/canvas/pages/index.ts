@@ -62,6 +62,7 @@ export const disconnectClientsFromCanvas = async (id: string) => {
   const requestEvent = {
     command: EWebsocketEvents.HOST_DISCONNECT,
     canvasId: id,
+    clientId: localStorage.getItem(EClient.CLIENT_ID),
   };
   websocket.send(JSON.stringify(requestEvent));
 
