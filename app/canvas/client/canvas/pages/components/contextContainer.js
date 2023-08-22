@@ -1,4 +1,5 @@
 import { EClient } from '../../../types/services.js';
+import { clearShapesSelection } from '../../init/canvasInit.js';
 import { disconnectClientsFromCanvas, openRemoveDialog, closeRemoveDialog, leaveCanvas, } from '../index.js';
 import { handleURLLocation } from '../router/router.js';
 export const createIndexContainer = () => {
@@ -40,6 +41,7 @@ export const createCanvasContainer = () => {
     canvasContainer.id = 'canvas-container';
     const returnButton = document.createElement('button');
     returnButton.addEventListener('click', () => {
+        clearShapesSelection();
         leaveCanvas();
         const newURL = `/`;
         history.pushState({}, '', newURL);

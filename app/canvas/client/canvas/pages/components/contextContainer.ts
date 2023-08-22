@@ -1,5 +1,6 @@
 import { ICanvasData } from '../../../types/apiData.js';
 import { EClient } from '../../../types/services.js';
+import { clearShapesSelection } from '../../init/canvasInit.js';
 import {
   disconnectClientsFromCanvas,
   openRemoveDialog,
@@ -55,6 +56,7 @@ export const createCanvasContainer = (): HTMLDivElement => {
 
   const returnButton = document.createElement('button');
   returnButton.addEventListener('click', () => {
+    clearShapesSelection();
     leaveCanvas();
     const newURL = `/`;
     history.pushState({}, '', newURL);
