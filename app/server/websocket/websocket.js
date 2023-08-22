@@ -61,12 +61,14 @@ const startWebSocketServer = (server) => {
                         if (channels[request.canvasId]) {
                             // Iterate through all connected clients for the canvas
                             channels[request.canvasId].clientData.forEach((client) => {
-                                const response = {
-                                    type: EServices.HOST_DISCONNECT,
-                                    canvasId: request.canvasId,
-                                    message: 'All client has been disconnected.',
-                                };
-                                client.ws.send(JSON.stringify(response));
+                                if (client.clientId !== request.clientId) {
+                                    const response = {
+                                        type: EServices.HOST_DISCONNECT,
+                                        canvasId: request.canvasId,
+                                        message: 'All client has been disconnected.',
+                                    };
+                                    client.ws.send(JSON.stringify(response));
+                                }
                                 client.ws.close(); // Close each client's WebSocket connection
                             });
                             // Clear the clientData and eventStream for the canvas
