@@ -3,7 +3,6 @@ import MenuApi from './menuApi.js';
 import { checkLineIntersection, checkPointInCircle, checkPointInRectangle, checkPointInTriangle, checkShapeColorsConsistency, } from '../helper/shapesInteractionUtils.js';
 import { ColorPaletteGroup } from './ColorPalette.js';
 import { EPLT_TYPES } from '../../types/color.js';
-import { EClient } from '../../types/services.js';
 export class Selector {
     label = 'Select';
     slm;
@@ -97,20 +96,16 @@ export class Selector {
             });
         });
         const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
-            if (this.shapesSelected[0]) {
-                this.slm.updateOrder(this.shapesSelected[0], false, false);
-                this.slm
-                    .getShapeById(this.shapesSelected[0])
-                    .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
-            }
+            this.slm.updateOrder(this.shapesSelected[0], false, false);
+            this.slm
+                .getShapeById(this.shapesSelected[0])
+                .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
         });
         const shapeMoveBackwardItem = menuApi.createItem('Shape nach hinten', () => {
-            if (this.shapesSelected[0]) {
-                this.slm.updateOrder(this.shapesSelected[0], true, false);
-                this.slm
-                    .getShapeById(this.shapesSelected[0])
-                    .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
-            }
+            this.slm.updateOrder(this.shapesSelected[0], true, false);
+            this.slm
+                .getShapeById(this.shapesSelected[0])
+                .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
         });
         const separator = menuApi.createSeparator();
         menu.addItems(shapeMoveForwardItem, separator, shapeMoveBackwardItem);
@@ -120,7 +115,7 @@ export class Selector {
     /* ------------ HANDLER - SECTION ------------ */
     handleMouseDown(x, y) {
         this.checkShapeCollision(x, y, false);
-        const clientId = localStorage.getItem(EClient.CLIENT_ID);
+        const clientId = localStorage.getItem('clientId');
         const selectedShapeId = this.shapesSelected[0];
         if (selectedShapeId) {
             this.selectedShape = this.slm.getShapeById(selectedShapeId);
@@ -188,13 +183,16 @@ export class Selector {
     }
     handleCtrl(x, y) {
         this.checkShapeCollision(x, y, true);
-        const clientId = localStorage.getItem(EClient.CLIENT_ID);
+        const clientId = localStorage.getItem('clientId');
         this.shapesSelected.forEach((shapeId) => {
             this.selectedShape = this.slm.getShapeById(shapeId);
-            if (this.selectedShape.isBlockedByUserId == null) {
+            const isBlockedByCurrentUser = this.selectedShape.isBlockedByUserId === clientId ||
+                this.selectedShape.isBlockedByUserId == null;
+            if (isBlockedByCurrentUser) {
+                this.isMoving = true;
                 this.lastSelectedShapeId = shapeId;
                 this.slm.selectShape(shapeId);
-                this.slm.updateShape(shapeId, 'isBlockedByUserId', EClient.CLIENT_ID);
+                this.slm.updateShape(shapeId, 'isBlockedByUserId', clientId);
             }
         });
     }
@@ -205,8 +203,9 @@ export class Selector {
         if (this.isMoving && this.selectedShape) {
             this.isMoving = false;
             this.slm.addShape(false, this.selectedShape, false);
+            //this.selectedShape.draw(this.slm.getCtx(), false);
             this.slm.selectShape(this.selectedShape.id);
-            this.slm.updateShape(this.selectedShape.id, 'isBlockedByUserId', localStorage.getItem(EClient.CLIENT_ID));
+            this.slm.updateShape(this.selectedShape.id, 'isBlockedByUserId', localStorage.getItem('clientId'));
         }
     }
     /* -------------------------------------- */
@@ -223,22 +222,13 @@ export class Selector {
         const ctx = this.slm.getCtx();
         const shapes = this.slm.getShapes();
         if (!isCtrl) {
-            try {
-                this.shapesSelected.forEach((id) => {
-                    const userId = this.slm.getShapeById(id).isBlockedByUserId;
-                    if (userId === localStorage.getItem(EClient.CLIENT_ID)) {
-                        this.slm.unselectShape(id);
-                        this.slm.updateShape(id, 'isBlockedByUserId', null);
-                    }
-                });
-            }
-            catch {
-                console.log('ERROR ON SELECTION');
-                console.log(this.shapesSelected);
-                //this.shapeListId = [];
-                //this.shapesSelected = [];
-                //this.slm.setShapes({});
-            }
+            this.shapesSelected.forEach((id) => {
+                const userId = this.slm.getShapeById(id).isBlockedByUserId;
+                if (userId === localStorage.getItem('clientId')) {
+                    this.slm.unselectShape(id);
+                    this.slm.updateShape(id, 'isBlockedByUserId', null);
+                }
+            });
             this.slm.draw();
             this.shapeListId = [];
             this.shapesSelected = [];
@@ -338,7 +328,7 @@ export class Selector {
      */
     iterateShapesLevels = () => {
         const shapes = this.slm.getShapes();
-        //this.slm.draw();
+        this.slm.draw();
         // if indexer is smaller zero, take the last index
         if (this.shapeListIndexer < 0) {
             this.shapeListIndexer = this.shapeListId.length - 1;
@@ -358,7 +348,7 @@ export class Selector {
                     // Draw the shape with ctx and true flag
                     this.lastSelectedShapeId = id;
                     this.slm.selectShape(idCurrent);
-                    this.slm.updateShape(idCurrent, 'isBlockedByUserId', localStorage.getItem(EClient.CLIENT_ID));
+                    this.slm.updateShape(idCurrent, 'isBlockedByUserId', localStorage.getItem('clientId'));
                 }
             }
         }

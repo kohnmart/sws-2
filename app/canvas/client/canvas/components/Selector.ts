@@ -1,4 +1,3 @@
-import { ISelectorManager, IShapeFactory } from '../../types/shape.js';
 import { Line, Rectangle, Triangle, Circle, Point2D } from './Shapes.js';
 import MenuApi from './menuApi.js';
 import {
@@ -10,7 +9,7 @@ import {
 } from '../helper/shapesInteractionUtils.js';
 import { ColorPicker, ColorPaletteGroup } from './ColorPalette.js';
 import { EPLT_TYPES } from '../../types/color.js';
-import { EClient } from '../../types/services.js';
+import { IShapeFactory, ISelectorManager } from '../../types/shape.js';
 export class Selector implements IShapeFactory {
   public readonly label = 'Select';
   private readonly slm: ISelectorManager;
@@ -108,23 +107,19 @@ export class Selector implements IShapeFactory {
     );
 
     const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
-      if (this.shapesSelected[0]) {
-        this.slm.updateOrder(this.shapesSelected[0], false, false);
-        this.slm
-          .getShapeById(this.shapesSelected[0])
-          .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
-      }
+      this.slm.updateOrder(this.shapesSelected[0], false, false);
+      this.slm
+        .getShapeById(this.shapesSelected[0])
+        .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
     });
 
     const shapeMoveBackwardItem = menuApi.createItem(
       'Shape nach hinten',
       () => {
-        if (this.shapesSelected[0]) {
-          this.slm.updateOrder(this.shapesSelected[0], true, false);
-          this.slm
-            .getShapeById(this.shapesSelected[0])
-            .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
-        }
+        this.slm.updateOrder(this.shapesSelected[0], true, false);
+        this.slm
+          .getShapeById(this.shapesSelected[0])
+          .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
       }
     );
 
@@ -140,7 +135,7 @@ export class Selector implements IShapeFactory {
 
   handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
-    const clientId = localStorage.getItem(EClient.CLIENT_ID);
+    const clientId = localStorage.getItem('clientId');
     const selectedShapeId = this.shapesSelected[0];
 
     if (selectedShapeId) {
@@ -250,18 +245,22 @@ export class Selector implements IShapeFactory {
 
   handleCtrl(x: number, y: number) {
     this.checkShapeCollision(x, y, true);
-    const clientId = localStorage.getItem(EClient.CLIENT_ID);
+    const clientId = localStorage.getItem('clientId');
     this.shapesSelected.forEach((shapeId) => {
       this.selectedShape = this.slm.getShapeById(shapeId) as
         | Line
         | Rectangle
         | Triangle
         | Circle;
+      const isBlockedByCurrentUser =
+        this.selectedShape.isBlockedByUserId === clientId ||
+        this.selectedShape.isBlockedByUserId == null;
 
-      if (this.selectedShape.isBlockedByUserId == null) {
+      if (isBlockedByCurrentUser) {
+        this.isMoving = true;
         this.lastSelectedShapeId = shapeId;
         this.slm.selectShape(shapeId);
-        this.slm.updateShape(shapeId, 'isBlockedByUserId', EClient.CLIENT_ID);
+        this.slm.updateShape(shapeId, 'isBlockedByUserId', clientId);
       }
     });
   }
@@ -274,11 +273,12 @@ export class Selector implements IShapeFactory {
     if (this.isMoving && this.selectedShape) {
       this.isMoving = false;
       this.slm.addShape(false, this.selectedShape, false);
+      //this.selectedShape.draw(this.slm.getCtx(), false);
       this.slm.selectShape(this.selectedShape.id);
       this.slm.updateShape(
         this.selectedShape.id,
         'isBlockedByUserId',
-        localStorage.getItem(EClient.CLIENT_ID)
+        localStorage.getItem('clientId')
       );
     }
   }
@@ -299,21 +299,13 @@ export class Selector implements IShapeFactory {
     const shapes = this.slm.getShapes();
 
     if (!isCtrl) {
-      try {
-        this.shapesSelected.forEach((id: string) => {
-          const userId = this.slm.getShapeById(id).isBlockedByUserId;
-          if (userId === localStorage.getItem(EClient.CLIENT_ID)) {
-            this.slm.unselectShape(id);
-            this.slm.updateShape(id, 'isBlockedByUserId', null);
-          }
-        });
-      } catch {
-        console.log('ERROR ON SELECTION');
-        console.log(this.shapesSelected);
-        //this.shapeListId = [];
-        //this.shapesSelected = [];
-        //this.slm.setShapes({});
-      }
+      this.shapesSelected.forEach((id: string) => {
+        const userId = this.slm.getShapeById(id).isBlockedByUserId;
+        if (userId === localStorage.getItem('clientId')) {
+          this.slm.unselectShape(id);
+          this.slm.updateShape(id, 'isBlockedByUserId', null);
+        }
+      });
       this.slm.draw();
       this.shapeListId = [];
       this.shapesSelected = [];
@@ -448,7 +440,7 @@ export class Selector implements IShapeFactory {
    */
   iterateShapesLevels = () => {
     const shapes = this.slm.getShapes();
-    //this.slm.draw();
+    this.slm.draw();
 
     // if indexer is smaller zero, take the last index
     if (this.shapeListIndexer < 0) {
@@ -474,7 +466,7 @@ export class Selector implements IShapeFactory {
           this.slm.updateShape(
             idCurrent,
             'isBlockedByUserId',
-            localStorage.getItem(EClient.CLIENT_ID)
+            localStorage.getItem('clientId')
           );
         }
       }
