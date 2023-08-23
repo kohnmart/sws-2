@@ -123,6 +123,7 @@ export class Canvas {
     }
     clearShapesSelection() {
         this.canvasEventSubscription.clearBlockedByClientShapes();
+        this.shapes = {};
     }
     loadEventStream(stream) {
         stream.forEach((event) => {
