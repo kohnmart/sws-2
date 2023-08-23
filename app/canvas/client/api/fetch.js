@@ -1,12 +1,10 @@
 /* private abstract requests */
 import { ERequest } from '../types/apiData.js';
+import { EClient } from '../types/services.js';
 const request = async (url, requestType) => {
     return await fetch(url, { method: requestType })
         .then((response) => response.json())
         .then((data) => {
-        if (data.status === 200) {
-            return data;
-        }
         return data;
     });
 };
@@ -39,7 +37,7 @@ export const getAllCanvases = async () => {
 export const postCanvasSubmission = async () => {
     const canvasForm = document.getElementById('canvas-form');
     const formData = new FormData(canvasForm);
-    formData.append('hostId', localStorage.getItem('hostId') || ''); // Append host_id to form data
+    formData.append('hostId', localStorage.getItem(EClient.HOST_ID) || ''); // Append host_id to form data
     const obj = {
         name: formData.get('name'),
         hostId: formData.get('hostId'),
