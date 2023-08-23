@@ -41,7 +41,7 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
 
       case EServices.UNREGISTER:
         // clear selected shapes before disconnecting
-        clearShapesSelection();
+        //clearShapesSelection();
         ws.close();
         break;
 
