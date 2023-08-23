@@ -7,20 +7,14 @@ const checkHostExists = async (
   next: NextFunction
 ) => {
   const hostId: string = req.body.hostId;
-  console.log(hostId);
   try {
     if (hostId) {
       const hostExists = await checkHostExistsQuery(hostId);
       if (!hostExists) {
         const id = await addHostQuery();
         req.body.hostId = id;
-        console.log(req.body.hostId);
       }
-    } else {
-      //const id = await addHostQuery();
-      //req.body.hostId = id;
     }
-
     next();
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
