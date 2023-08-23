@@ -1,8 +1,8 @@
 import { Line, Rectangle, Circle, Triangle } from '../components/Shapes.js';
-import { Shape } from '../../types/shape.js';
+import { IShape } from '../../types/shape.js';
 
-export function createShapeCopy(shape: Shape) {
-  let shapeCopy: Shape;
+export function createShapeCopy(shape: IShape) {
+  let shapeCopy: IShape;
   if (shape.type === 'line') {
     const line = shape as Line;
     shapeCopy = new Line(line.from, line.to);
