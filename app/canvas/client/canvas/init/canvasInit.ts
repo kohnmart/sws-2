@@ -2,7 +2,7 @@ import {
   IShapeFactory,
   IShapeManager,
   ISelectorManager,
-  Shape,
+  IShape,
 } from '../../types/shape.js';
 import {
   CircleFactory,
@@ -34,7 +34,7 @@ function canvasInit() {
   };
 
   const slm: ISelectorManager = {
-    addShape(isTemp: boolean, shape: Shape, redraw?: boolean) {
+    addShape(isTemp: boolean, shape: IShape, redraw?: boolean) {
       canvas.getEventSubscription().addShape(isTemp, shape, redraw);
     },
 
@@ -62,7 +62,7 @@ function canvasInit() {
       canvas.updateShape(shapeId, prop, value);
     },
 
-    updateShapeColor(shape: Shape): void {
+    updateShapeColor(shape: IShape): void {
       canvas.getEventSubscription().updateShapeColor(shape);
     },
 

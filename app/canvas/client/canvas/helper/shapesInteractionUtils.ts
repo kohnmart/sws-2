@@ -1,4 +1,4 @@
-import { Shape } from '../../types/shape.js';
+import { IShape } from '../../types/shape.js';
 
 const checkLineIntersection = (
   x: number,
@@ -91,7 +91,7 @@ const checkPointInCircle = (
 
 const checkShapeColorsConsistency = (
   shapes: {
-    [p: number]: Shape;
+    [p: number]: IShape;
   },
   list: string[],
   bg: string,

@@ -6,7 +6,7 @@ export var EServices;
 })(EServices || (EServices = {}));
 export var EClient;
 (function (EClient) {
-    EClient["CLIENT_ID"] = "clientID";
+    EClient["CLIENT_ID"] = "clientId";
     EClient["HOST_ID"] = "hostId";
     EClient["RAND_COLOR"] = "randColor";
 })(EClient || (EClient = {}));

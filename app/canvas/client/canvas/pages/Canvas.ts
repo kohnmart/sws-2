@@ -11,11 +11,11 @@ import {
   ECanvasEventType,
   ICanvasEvent,
 } from '../../types/eventStream.js';
-import { Shape } from '../../types/shape.js';
+import { IShape } from '../../types/shape.js';
 import { EClient } from '../../types/services.js';
 export class Canvas {
   private ctx: CanvasRenderingContext2D;
-  private shapes: { [p: number]: Shape } = {};
+  private shapes: { [p: number]: IShape } = {};
   private width: number;
   private height: number;
 
@@ -143,11 +143,11 @@ export class Canvas {
     return this.ctx;
   }
 
-  setShapes(shapes: { [k: string]: Shape }) {
+  setShapes(shapes: { [k: string]: IShape }) {
     this.shapes = shapes;
   }
 
-  getShapeById(id: string): Shape {
+  getShapeById(id: string): IShape {
     for (const key in this.shapes) {
       if (this.shapes[key].id === id) {
         return this.shapes[key];

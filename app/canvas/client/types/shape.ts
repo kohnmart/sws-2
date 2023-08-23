@@ -1,4 +1,4 @@
-export interface Shape {
+export interface IShape {
   readonly type: string;
   id: string;
   backgroundColor: string;
@@ -15,20 +15,20 @@ export interface Shape {
 }
 
 export interface IShapeManager {
-  addShape(isTemp: boolean, shape: Shape, redraw?: boolean): void;
+  addShape(isTemp: boolean, shape: IShape, redraw?: boolean): void;
   removeShapeWithId(isTemp: boolean, id: string, redraw?: boolean): void;
 }
 
 export interface ISelectorManager {
-  addShape(isTemp: boolean, shape: Shape, redraw?: boolean): void;
-  getShapes(): { [p: number]: Shape };
+  addShape(isTemp: boolean, shape: IShape, redraw?: boolean): void;
+  getShapes(): { [p: number]: IShape };
   getCtx(): CanvasRenderingContext2D;
   draw(): void;
   updateOrder(n: string, dir: boolean, isReceiving: boolean): void;
   removeShapeWithId(isTemp: boolean, id: string, redraw?: boolean): void;
-  getShapeById(id: string): Shape;
+  getShapeById(id: string): IShape;
   getShapeKeyById(id: string): string;
-  updateShapeColor(shape: Shape): void;
+  updateShapeColor(shape: IShape): void;
   selectShape(shapeId: string): void;
   unselectShape(shapeId: string): void;
   setShapes(shapes: {}): void;

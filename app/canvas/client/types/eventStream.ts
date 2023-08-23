@@ -4,7 +4,7 @@ import {
   Rectangle,
   Triangle,
 } from '../canvas/components/Shapes.js';
-import { Shape, IShapeFactory } from './shape.js';
+import { IShape, IShapeFactory } from './shape.js';
 
 export interface IStream {
   type: number;
@@ -15,7 +15,7 @@ export interface IStream {
 
 export interface IEventStream {
   id?: string;
-  shape?: Shape;
+  shape?: IShape;
   redraw?: boolean;
   moveUp?: boolean;
   isTemp?: boolean;
@@ -70,7 +70,7 @@ export interface ICanvasEvent {
   type: ECanvasEventType;
   data?: {
     id?: string;
-    shape?: Shape;
+    shape?: IShape;
     redraw?: boolean;
     moveUp?: boolean;
     isTemp?: boolean;

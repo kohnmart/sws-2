@@ -5,7 +5,7 @@ export enum EServices {
 }
 
 export enum EClient {
-  CLIENT_ID = 'clientID',
+  CLIENT_ID = 'clientId',
   HOST_ID = 'hostId',
   RAND_COLOR = 'randColor',
 }
