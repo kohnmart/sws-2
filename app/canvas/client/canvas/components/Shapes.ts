@@ -1,5 +1,5 @@
 import { ColorPaletteGroup } from '../components/ColorPalette.js';
-import { Shape, IShapeFactory, IShapeManager } from '../../types/shape.js';
+import { IShape, IShapeFactory, IShapeManager } from '../../types/shape.js';
 export class Point2D {
   constructor(readonly x: number, readonly y: number) {}
 }
@@ -33,7 +33,7 @@ class AbstractShape {
     this.strokeColorKey = strokeColorKey;
   }
 }
-abstract class AbstractFactory<T extends Shape> {
+abstract class AbstractFactory<T extends IShape> {
   private from: Point2D;
   private tmpTo: Point2D;
   private tmpShape: T = null;
@@ -100,7 +100,7 @@ abstract class AbstractFactory<T extends Shape> {
     return;
   }
 }
-export class Line extends AbstractShape implements Shape {
+export class Line extends AbstractShape implements IShape {
   constructor(readonly from: Point2D, readonly to: Point2D) {
     super('line');
   }
@@ -137,7 +137,7 @@ export class LineFactory
     return new Line(from, to);
   }
 }
-export class Circle extends AbstractShape implements Shape {
+export class Circle extends AbstractShape implements IShape {
   constructor(readonly center: Point2D, readonly radius: number) {
     super('circle');
   }
@@ -184,7 +184,7 @@ export class CircleFactory
     return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
   }
 }
-export class Rectangle extends AbstractShape implements Shape {
+export class Rectangle extends AbstractShape implements IShape {
   constructor(readonly from: Point2D, readonly to: Point2D) {
     super('rectangle');
   }
@@ -258,7 +258,7 @@ export class RectangleFactory
     return new Rectangle(from, to);
   }
 }
-export class Triangle extends AbstractShape implements Shape {
+export class Triangle extends AbstractShape implements IShape {
   constructor(
     readonly p1: Point2D,
     readonly p2: Point2D,
