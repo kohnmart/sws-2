@@ -112,7 +112,11 @@ export class Selector implements IShapeFactory {
         this.slm.updateOrder(this.shapesSelected[0], false, false);
         this.slm
           .getShapeById(this.shapesSelected[0])
-          .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+          .draw(
+            this.slm.getCtx(),
+            true,
+            localStorage.getItem(EClient.RAND_COLOR)
+          );
       }
     });
 
@@ -123,7 +127,11 @@ export class Selector implements IShapeFactory {
           this.slm.updateOrder(this.shapesSelected[0], true, false);
           this.slm
             .getShapeById(this.shapesSelected[0])
-            .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+            .draw(
+              this.slm.getCtx(),
+              true,
+              localStorage.getItem(EClient.RAND_COLOR)
+            );
         }
       }
     );
@@ -140,7 +148,7 @@ export class Selector implements IShapeFactory {
 
   handleMouseDown(x: number, y: number) {
     this.checkShapeCollision(x, y, false);
-    const clientId = localStorage.getItem('clientId');
+    const clientId = localStorage.getItem(EClient.CLIENT_ID);
     const selectedShapeId = this.shapesSelected[0];
 
     if (selectedShapeId) {
@@ -250,7 +258,7 @@ export class Selector implements IShapeFactory {
 
   handleCtrl(x: number, y: number) {
     this.checkShapeCollision(x, y, true);
-    const clientId = localStorage.getItem('clientId');
+    const clientId = localStorage.getItem(EClient.CLIENT_ID);
     this.shapesSelected.forEach((shapeId) => {
       this.selectedShape = this.slm.getShapeById(shapeId) as
         | Line
@@ -309,10 +317,6 @@ export class Selector implements IShapeFactory {
         });
       } catch {
         console.log('ERROR ON SELECTION');
-        console.log(this.shapesSelected);
-        //this.shapeListId = [];
-        //this.shapesSelected = [];
-        //this.slm.setShapes({});
       }
       this.slm.draw();
       this.shapeListId = [];
