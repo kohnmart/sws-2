@@ -2,6 +2,7 @@ export enum EServices {
   REGISTRATION = 'registration',
   UNREGISTER = 'unregister',
   HOST_DISCONNECT = 'host_disconnect',
+  CLIENT_DISCONNECT = 'client_disconnect',
 }
 
 export enum EClient {
@@ -16,4 +17,5 @@ export enum EWebsocketEvents {
   SELECT_SHAPE = 'selectShape',
   UNSELECT_SHAPE = 'unselectShape',
   HOST_DISCONNECT = 'host_disconnect',
+  CLIENT_DISCONNECT = 'client_disconnect',
 }

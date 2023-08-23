@@ -3,6 +3,7 @@ export var EServices;
     EServices["REGISTRATION"] = "registration";
     EServices["UNREGISTER"] = "unregister";
     EServices["HOST_DISCONNECT"] = "host_disconnect";
+    EServices["CLIENT_DISCONNECT"] = "client_disconnect";
 })(EServices || (EServices = {}));
 export var EClient;
 (function (EClient) {
@@ -17,4 +18,5 @@ export var EWebsocketEvents;
     EWebsocketEvents["SELECT_SHAPE"] = "selectShape";
     EWebsocketEvents["UNSELECT_SHAPE"] = "unselectShape";
     EWebsocketEvents["HOST_DISCONNECT"] = "host_disconnect";
+    EWebsocketEvents["CLIENT_DISCONNECT"] = "client_disconnect";
 })(EWebsocketEvents || (EWebsocketEvents = {}));
