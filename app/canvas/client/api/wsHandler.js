@@ -18,8 +18,9 @@ const wsConnection = (ws, uuid) => {
     };
     ws.onmessage = (event) => {
         const response = JSON.parse(event.data);
-        //console.log('Incoming...');
-        //console.log(response);
+        /* DEBUG INCOMING MESSAGES */
+        console.log('Incoming...');
+        console.log(response);
         switch (response.type) {
             case EServices.REGISTRATION:
                 const clientId = response.clientId;
@@ -29,20 +30,20 @@ const wsConnection = (ws, uuid) => {
                     loadStream(response.eventStream);
                 }
                 catch {
-                    console.log('Cant load stream. Either error or this client (host) has closed canvas object from outside.');
+                    console.log('Cant load stream. Either error or this client (host) has closed canvas object from overview page.');
                 }
                 break;
             case EServices.UNREGISTER:
-                // clear selected shapes before disconnecting
-                //clearShapesSelection();
                 ws.close();
                 break;
             case EServices.HOST_DISCONNECT:
-                // "Redirecting" to overview page
+                // "Redirecting" all clients to overview page
                 const newURL = `/`;
                 history.pushState({}, '', newURL);
                 handleURLLocation();
                 break;
+            case ECanvasEventType.CLIENT_DISCONNECT:
+                console.log('client disconnecting...');
             case ECanvasEventType.SELECT_SHAPE:
             case ECanvasEventType.UNSELECT_SHAPE:
             case ECanvasEventType.ADD_SHAPE:

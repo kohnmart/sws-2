@@ -53,6 +53,9 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
         handleURLLocation();
         break;
 
+      case ECanvasEventType.CLIENT_DISCONNECT:
+        console.log('client disconnecting...');
+
       case ECanvasEventType.SELECT_SHAPE:
       case ECanvasEventType.UNSELECT_SHAPE:
       case ECanvasEventType.ADD_SHAPE:
