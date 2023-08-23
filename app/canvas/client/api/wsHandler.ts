@@ -1,5 +1,5 @@
 // Use the UUID in your WebSocket connection
-import { clearShapesSelection, loadStream } from '../canvas/init/canvasInit.js';
+import { loadStream } from '../canvas/init/canvasInit.js';
 import { handleURLLocation } from '../canvas/pages/router/router.js';
 import { ECanvasEventType, IResponse } from '../types/eventStream.js';
 import { EClient, EServices, EWebsocketEvents } from '../types/services.js';
@@ -22,6 +22,9 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
 
   ws.onmessage = (event) => {
     const response: IResponse = JSON.parse(event.data);
+
+    /* DEBUG INCOMING MESSAGES */
+
     //console.log('Incoming...');
     //console.log(response);
 
@@ -34,19 +37,17 @@ const wsConnection = (ws: WebSocket, uuid: string) => {
           loadStream(response.eventStream);
         } catch {
           console.log(
-            'Cant load stream. Either error or this client (host) has closed canvas object from outside.'
+            'Cant load stream. Either error or this client (host) has closed canvas object from overview page.'
           );
         }
         break;
 
       case EServices.UNREGISTER:
-        // clear selected shapes before disconnecting
-        //clearShapesSelection();
         ws.close();
         break;
 
       case EServices.HOST_DISCONNECT:
-        // "Redirecting" to overview page
+        // "Redirecting" all clients to overview page
         const newURL = `/`;
         history.pushState({}, '', newURL);
         handleURLLocation();
