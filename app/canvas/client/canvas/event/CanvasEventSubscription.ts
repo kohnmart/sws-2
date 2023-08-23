@@ -1,7 +1,7 @@
 import { Canvas } from '../pages/Canvas.js';
 import { EventStream } from './EventStream.js';
 import { createShapeCopy } from '../helper/canvasHelper.js';
-import { Shape } from '../../types/shape.js';
+import { IShape } from '../../types/shape.js';
 import { EventDispatcher } from './Event.js';
 import { ICanvasEvent, ECanvasEventType } from '../../types/eventStream.js';
 import { EClient } from '../../types/services.js';
@@ -59,9 +59,9 @@ export class CanvasEventSubscription {
     }
   }
 
-  handleAddShape(shape: Shape, redraw: boolean = true): Canvas {
+  handleAddShape(shape: IShape, redraw: boolean = true): Canvas {
     const shapes = this.canvas.getShapes();
-    shapes[shape.id] = shape as Shape;
+    shapes[shape.id] = shape as IShape;
     this.canvas.setShapes(shapes);
     return redraw ? this.canvas.draw() : this.canvas;
   }
@@ -83,7 +83,7 @@ export class CanvasEventSubscription {
     return redraw ? this.canvas.draw() : this.canvas;
   }
 
-  handleGetShapeById(id: string): Shape {
+  handleGetShapeById(id: string): IShape {
     const shapes = this.canvas.getShapes();
     for (const key in shapes) {
       if (shapes[key].id === id) {
@@ -92,11 +92,11 @@ export class CanvasEventSubscription {
     }
   }
 
-  handleUpdateShape(shape: Shape) {
+  handleUpdateShape(shape: IShape) {
     const shapes = this.canvas.getShapes();
     for (const key in shapes) {
       if (shapes[key].id === shape.id) {
-        shapes[key] = shape as Shape;
+        shapes[key] = shape as IShape;
       }
     }
     this.canvas.draw();
@@ -167,7 +167,7 @@ export class CanvasEventSubscription {
     this.eventStream.addEvent(canvasEvent);
   }
 
-  addShape(isTemp: boolean, shape: Shape, redraw: boolean = true): void {
+  addShape(isTemp: boolean, shape: IShape, redraw: boolean = true): void {
     const shapeCopy = createShapeCopy(shape);
     Object.assign(shapeCopy, shape);
 
@@ -194,7 +194,7 @@ export class CanvasEventSubscription {
     }
   }
 
-  updateShapeColor(shape: Shape) {
+  updateShapeColor(shape: IShape) {
     const canvasEvent: ICanvasEvent = {
       type: ECanvasEventType.ADD_SHAPE,
       data: { shape: shape, redraw: true },
@@ -222,11 +222,9 @@ export class CanvasEventSubscription {
 
   clearBlockedByClientShapes() {
     const shapes = this.canvas.getShapes();
+    const id = localStorage.getItem(EClient.CLIENT_ID);
     for (const key in shapes) {
-      if (
-        shapes[key].isBlockedByUserId ===
-        localStorage.getItem(EClient.CLIENT_ID)
-      ) {
+      if (shapes[key].isBlockedByUserId === id) {
         this.unselectShape(shapes[key].id);
       }
     }

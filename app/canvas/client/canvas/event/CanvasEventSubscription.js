@@ -184,9 +184,14 @@ export class CanvasEventSubscription {
     }
     clearBlockedByClientShapes() {
         const shapes = this.canvas.getShapes();
+        console.log('GET SHAPES');
+        console.log(shapes);
+        const id = localStorage.getItem(EClient.CLIENT_ID);
+        console.log('CLIENT ID');
+        console.log(id);
         for (const key in shapes) {
-            if (shapes[key].isBlockedByUserId ===
-                localStorage.getItem(EClient.CLIENT_ID)) {
+            if (shapes[key].isBlockedByUserId === id) {
+                console.log('TESTER IS SET');
                 this.unselectShape(shapes[key].id);
             }
         }
