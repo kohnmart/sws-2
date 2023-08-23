@@ -64,6 +64,7 @@ export enum ECanvasEventType {
   CHANGE_COLOR,
   SELECT_SHAPE,
   UNSELECT_SHAPE,
+  CLIENT_DISCONNECT,
 }
 
 export interface ICanvasEvent {

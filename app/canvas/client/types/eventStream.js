@@ -11,4 +11,5 @@ export var ECanvasEventType;
     ECanvasEventType[ECanvasEventType["CHANGE_COLOR"] = 8] = "CHANGE_COLOR";
     ECanvasEventType[ECanvasEventType["SELECT_SHAPE"] = 9] = "SELECT_SHAPE";
     ECanvasEventType[ECanvasEventType["UNSELECT_SHAPE"] = 10] = "UNSELECT_SHAPE";
+    ECanvasEventType[ECanvasEventType["CLIENT_DISCONNECT"] = 11] = "CLIENT_DISCONNECT";
 })(ECanvasEventType || (ECanvasEventType = {}));
