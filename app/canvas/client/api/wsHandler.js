@@ -19,8 +19,8 @@ const wsConnection = (ws, uuid) => {
     ws.onmessage = (event) => {
         const response = JSON.parse(event.data);
         /* DEBUG INCOMING MESSAGES */
-        console.log('Incoming...');
-        console.log(response);
+        //console.log('Incoming...');
+        //console.log(response);
         switch (response.type) {
             case EServices.REGISTRATION:
                 const clientId = response.clientId;

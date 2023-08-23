@@ -126,7 +126,7 @@ export class Canvas {
         this.shapes = {};
     }
     loadEventStream(stream) {
-        console.log(stream);
+        //console.log(stream);
         stream.forEach((event) => {
             switch (event.type) {
                 case ECanvasEventType.ADD_SHAPE:

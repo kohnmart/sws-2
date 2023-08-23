@@ -98,7 +98,6 @@ const startWebSocketServer = (server) => {
                     // Clear selection for this client in eventStream
                     const clientId = channel.clientData[index].clientId;
                     channel.eventStream.forEach((event) => {
-                        console.log(event['eventStream']);
                         if (event['eventStream']['isBlockedByUserId'] === clientId) {
                             event['eventStream']['isBlockedByUserId'] = null;
                         }
