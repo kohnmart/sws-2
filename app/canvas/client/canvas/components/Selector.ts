@@ -10,6 +10,7 @@ import {
 import { ColorPicker, ColorPaletteGroup } from './ColorPalette.js';
 import { EPLT_TYPES } from '../../types/color.js';
 import { IShapeFactory, ISelectorManager } from '../../types/shape.js';
+import { EClient } from '../../types/services.js';
 export class Selector implements IShapeFactory {
   public readonly label = 'Select';
   private readonly slm: ISelectorManager;
@@ -107,19 +108,23 @@ export class Selector implements IShapeFactory {
     );
 
     const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
-      this.slm.updateOrder(this.shapesSelected[0], false, false);
-      this.slm
-        .getShapeById(this.shapesSelected[0])
-        .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+      if (this.shapesSelected[0]) {
+        this.slm.updateOrder(this.shapesSelected[0], false, false);
+        this.slm
+          .getShapeById(this.shapesSelected[0])
+          .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+      }
     });
 
     const shapeMoveBackwardItem = menuApi.createItem(
       'Shape nach hinten',
       () => {
-        this.slm.updateOrder(this.shapesSelected[0], true, false);
-        this.slm
-          .getShapeById(this.shapesSelected[0])
-          .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+        if (this.shapesSelected[0]) {
+          this.slm.updateOrder(this.shapesSelected[0], true, false);
+          this.slm
+            .getShapeById(this.shapesSelected[0])
+            .draw(this.slm.getCtx(), true, localStorage.getItem('randColor'));
+        }
       }
     );
 
@@ -252,12 +257,8 @@ export class Selector implements IShapeFactory {
         | Rectangle
         | Triangle
         | Circle;
-      const isBlockedByCurrentUser =
-        this.selectedShape.isBlockedByUserId === clientId ||
-        this.selectedShape.isBlockedByUserId == null;
 
-      if (isBlockedByCurrentUser) {
-        this.isMoving = true;
+      if (this.selectedShape.isBlockedByUserId == null) {
         this.lastSelectedShapeId = shapeId;
         this.slm.selectShape(shapeId);
         this.slm.updateShape(shapeId, 'isBlockedByUserId', clientId);
@@ -273,12 +274,11 @@ export class Selector implements IShapeFactory {
     if (this.isMoving && this.selectedShape) {
       this.isMoving = false;
       this.slm.addShape(false, this.selectedShape, false);
-      //this.selectedShape.draw(this.slm.getCtx(), false);
       this.slm.selectShape(this.selectedShape.id);
       this.slm.updateShape(
         this.selectedShape.id,
         'isBlockedByUserId',
-        localStorage.getItem('clientId')
+        localStorage.getItem(EClient.CLIENT_ID)
       );
     }
   }
@@ -299,13 +299,21 @@ export class Selector implements IShapeFactory {
     const shapes = this.slm.getShapes();
 
     if (!isCtrl) {
-      this.shapesSelected.forEach((id: string) => {
-        const userId = this.slm.getShapeById(id).isBlockedByUserId;
-        if (userId === localStorage.getItem('clientId')) {
-          this.slm.unselectShape(id);
-          this.slm.updateShape(id, 'isBlockedByUserId', null);
-        }
-      });
+      try {
+        this.shapesSelected.forEach((id: string) => {
+          const userId = this.slm.getShapeById(id).isBlockedByUserId;
+          if (userId === localStorage.getItem(EClient.CLIENT_ID)) {
+            this.slm.unselectShape(id);
+            this.slm.updateShape(id, 'isBlockedByUserId', null);
+          }
+        });
+      } catch {
+        console.log('ERROR ON SELECTION');
+        console.log(this.shapesSelected);
+        //this.shapeListId = [];
+        //this.shapesSelected = [];
+        //this.slm.setShapes({});
+      }
       this.slm.draw();
       this.shapeListId = [];
       this.shapesSelected = [];
@@ -459,14 +467,15 @@ export class Selector implements IShapeFactory {
       if (shapes.hasOwnProperty(key)) {
         const id = shapes[key].id;
         // Check if the current shape id matches the iteration level
-        if (id === idCurrent) {
+        // Dont select if selected by other client
+        if (id === idCurrent && shapes[key].isBlockedByUserId == null) {
           // Draw the shape with ctx and true flag
           this.lastSelectedShapeId = id;
           this.slm.selectShape(idCurrent);
           this.slm.updateShape(
             idCurrent,
             'isBlockedByUserId',
-            localStorage.getItem('clientId')
+            localStorage.getItem(EClient.CLIENT_ID)
           );
         }
       }
