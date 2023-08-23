@@ -169,6 +169,7 @@ export class Canvas {
   }
 
   loadEventStream(stream: IStream[]) {
+    //console.log(stream);
     stream.forEach((event: IResponseEvent) => {
       switch (event.type) {
         case ECanvasEventType.ADD_SHAPE:
@@ -218,6 +219,18 @@ export class Canvas {
             EClient.RAND_COLOR
           );
           break;
+
+        case ECanvasEventType.CLIENT_DISCONNECT:
+          const clientId = event.eventStream.id;
+          for (const key in this.shapes) {
+            if (this.shapes[key].isBlockedByUserId === clientId) {
+              this.shapes[key].isBlockedByUserId = null;
+              this.shapes[key].markedColor = localStorage.getItem(
+                EClient.RAND_COLOR
+              );
+            }
+          }
+
         default:
           break;
       }
