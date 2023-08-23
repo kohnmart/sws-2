@@ -90,6 +90,37 @@ const startWebSocketServer = (server) => {
         });
         ws.on('close', () => {
             console.log('WebSocket client disconnected');
+            // Find and remove the client from the channels
+            Object.keys(channels).forEach((canvasId) => {
+                const channel = channels[canvasId];
+                const index = channel.clientData.findIndex((client) => client.ws === ws);
+                if (index !== -1) {
+                    // Clear selection for this client in eventStream
+                    const clientId = channel.clientData[index].clientId;
+                    channel.eventStream.forEach((event) => {
+                        console.log(event['eventStream']);
+                        if (event['eventStream']['isBlockedByUserId'] === clientId) {
+                            event['eventStream']['isBlockedByUserId'] = null;
+                        }
+                    });
+                    // Notify other clients to clear client selection as well
+                    const response = {
+                        type: ECanvasEventType.CLIENT_DISCONNECT,
+                        eventStream: [
+                            {
+                                type: ECanvasEventType.CLIENT_DISCONNECT,
+                                id: clientId,
+                            },
+                        ],
+                    };
+                    channel.clientData.forEach((client) => {
+                        client.ws.send(JSON.stringify(response));
+                    });
+                    // Remove the client from the clientData array
+                    channel.clientData.splice(index, 1);
+                }
+                channels[canvasId] = channel;
+            });
         });
     });
     // Broadcast changes to all connected clients for a specific canvas
