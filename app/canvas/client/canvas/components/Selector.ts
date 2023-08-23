@@ -108,7 +108,7 @@ export class Selector implements IShapeFactory {
     );
 
     const shapeMoveForwardItem = menuApi.createItem('Shape nach vorne', () => {
-      if (this.shapesSelected[0]) {
+      if (this.shapesSelected[0] !== '') {
         this.slm.updateOrder(this.shapesSelected[0], false, false);
         this.slm
           .getShapeById(this.shapesSelected[0])
@@ -123,7 +123,7 @@ export class Selector implements IShapeFactory {
     const shapeMoveBackwardItem = menuApi.createItem(
       'Shape nach hinten',
       () => {
-        if (this.shapesSelected[0]) {
+        if (this.shapesSelected[0] !== '') {
           this.slm.updateOrder(this.shapesSelected[0], true, false);
           this.slm
             .getShapeById(this.shapesSelected[0])
