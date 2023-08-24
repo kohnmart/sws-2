@@ -23,7 +23,7 @@ Overview:
 Canvas:
 
 - Shapes werden durch das Selektieren blockiert und können währenddessen nicht von anderen Nutzern verwendet werden
-    Dies gilt auch für die Multiselektion wie auch Alt-Klick-Iteration, dabei werden selektierte Shapes übersprungen bzw. ignoriert.
+    Dies gilt auch für die Multiselektion wie auch Alt-Klick-Iteration, dabei werden selektierte Shapesn übersprungen bzw. ignoriert.
 
 - Auflösen der Shape-Selektion wenn ein User das Canvas verlässt oder das Browser-Fenster schließt.
 
