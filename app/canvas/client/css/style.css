@@ -91,12 +91,19 @@ button {
     margin: 2%;
 }
 
+.button-small {
+    background-color: rgb(250, 127, 127);
+    width: 70px;
+    font-size: 12px;
+}
+
+
 .canvas-button-container {
     background-color: antiquewhite;
     display: inline-flex;
     padding: 2%;
     margin-top: 8%;
-    width: 500px;
+    width: 400px;
 }
 
 button:hover {
