@@ -99,6 +99,7 @@ export const createCanvasButton = (canvasName, canvasId, hostId) => {
         const dialogContainer = document.createElement('div');
         /* remove Button */
         const removeButton = document.createElement('button');
+        removeButton.className = 'button-small';
         /* confirm button */
         const confirmButton = document.createElement('button');
         confirmButton.innerHTML = 'confirm';

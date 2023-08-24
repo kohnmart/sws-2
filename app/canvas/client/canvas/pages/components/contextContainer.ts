@@ -135,6 +135,7 @@ export const createCanvasButton = (
 
     /* remove Button */
     const removeButton = document.createElement('button');
+    removeButton.className = 'button-small';
 
     /* confirm button */
     const confirmButton = document.createElement('button');
