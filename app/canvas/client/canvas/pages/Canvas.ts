@@ -169,7 +169,6 @@ export class Canvas {
   }
 
   loadEventStream(stream: IStream[]) {
-    //console.log(stream);
     stream.forEach((event: IResponseEvent) => {
       switch (event.type) {
         case ECanvasEventType.ADD_SHAPE:
