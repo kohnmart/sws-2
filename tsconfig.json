@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "./app",
+    "rootDir": "./app",
+    "esModuleInterop": true,
+    "moduleResolution":"node",
+  },
+  "include": ["./app/**/*"],
+  "exclude": ["./node_modules"]
+}

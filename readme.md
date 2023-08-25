@@ -1,19 +1,31 @@
-## Inbetriebnahme
+## Umsetzung des dritten Teils für Softwaresysteme 2
 
 ### Hinweis
 
-Lösung im ./dist Verzeichnis
+Features welche zusätzlich implementiert wurden aber nicht ausdrücklich im Aufgabentext gefordert wurden:
 
-### Erklärung zur ColorPicker/ColorMenu Funktionsweise
+#### Backend
 
-ColorMenu:
+- Datenmanagement mit SQLite
 
-Das ColorMenu besteht aus fünf Funktionen ("Entfernen", "Hintergrund-Palette", "Outline-Palette", "Shape nach vorne" und "Shape nach hinten"). Zu Beginn wird für die beiden Paletten die jeweilige Default-Farbe gesetzt. Aktuell (transparent/black). Jeder neu-angelegte Shape wird mit diesen Farben initialisert. Diese default-Farben sind fix und sollen aktuell nicht dynamisch geändert werden können.
+- Middleware (Host- und Canvas-Abfragen)
 
-Shape-Selektion und ColorPicker:
+- Rest API
 
-Durch das klicken auf einen Shape und anschließendes öffnen des Menus, werden die Farben auf die entsprechenden
-Color-Picker gesetzt. Sind mehrere Shapes ausgewählt, so wird überprüft ob deren Hintergrund/Outline Farben übereinstimmen. Ist dies nicht der Fall bzw. es gibt Differenz, wird für die jeweilige Palette die ColorPicker-Checker ausgesetzt. Bei Menu-Öffnung ohne ausgewählten Shape wird die default oder letzte gesetzt Farb-Konfiguration angezeigt.
+#### Frontend
+
+Overview:
+
+- Der Host kann bei der Canvas-Erstellung einen individuellen Namen vergeben (sowie Validierung auf leeres Input-Feld)
+
+- Der Host kann sein Canvas jederzeit wieder entfernen. Dadurch werden die Clients, welche sich zu dem Zeitpunkt auf dem Canvas befinden disconnected und auf die Overview-Page redirected.
+
+Canvas:
+
+- Shapes werden durch das Selektieren blockiert und können währenddessen nicht von anderen Nutzern verwendet werden
+    Dies gilt auch für die Multiselektion wie auch Alt-Klick-Iteration, dabei werden selektierte Shapesn übersprungen bzw. ignoriert.
+
+- Auflösen der Shape-Selektion wenn ein User das Canvas verlässt oder das Browser-Fenster schließt.
 
 ## Production
 
@@ -21,10 +33,6 @@ Color-Picker gesetzt. Sind mehrere Shapes ausgewählt, so wird überprüft ob de
 
 ``` npm install ```
 
-### Install live-server (globally)
+### Start server
 
-``` npm install -g live-server ```
-
-### Start Live-Server
-
-``` npm start ```
+``` npm run dev ```
